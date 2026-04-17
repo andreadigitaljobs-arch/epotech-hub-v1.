@@ -12,12 +12,12 @@ export function DesktopNav() {
     { name: "Dashboard", path: "/", icon: Home },
     { name: "Servicios Activos", path: "/proyectos", icon: Briefcase },
     { name: "Brief de Marca", path: "/brief", icon: Target },
+    { name: "Reporte de Avances", path: "/actividad", icon: Clock },
   ];
 
   const contentNav = [
     { name: "Guía de Grabación", path: "/manual", icon: Video },
     { name: "Inspiración", path: "/referencias", icon: PlaySquare },
-    { name: "Avances del Día", path: "/actividad", icon: Clock },
   ];
 
   return (

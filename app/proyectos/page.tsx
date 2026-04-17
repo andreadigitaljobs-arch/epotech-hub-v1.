@@ -134,14 +134,14 @@ export default function ServicesPage() {
           <div className="bg-[var(--accent)] p-2 rounded-xl shadow-lg">
             <Rocket size={18} className="text-white" />
           </div>
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Service Mastery Hub</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Progreso de proyectos</span>
         </div>
         <h1 className="text-4xl font-black tracking-tighter text-[var(--primary)]">
-          Servicios Master
+          Servicios Activos
         </h1>
         <p className="mt-3 text-sm font-medium text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          Resultados y entregables estratégicos para Epotech. 
-          Aquí puedes ver lo que hemos **logrado** automáticamente desde nuestra bitácora diaria.
+          Resultados y entregas para Epotech. 
+          Aquí puedes ver lo que hemos logrado paso a paso en cada proyecto.
         </p>
       </header>
 
@@ -344,7 +344,7 @@ export default function ServicesPage() {
                  </div>
                  <div>
                     <h3 className="text-3xl font-black tracking-tighter text-[var(--primary)] capitalize">{selectedService.name}</h3>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--accent)] mt-1">Historial de Avances Estratégicos</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--accent)] mt-1">Lo que hemos logrado hasta ahora</p>
                  </div>
               </div>
               <button 

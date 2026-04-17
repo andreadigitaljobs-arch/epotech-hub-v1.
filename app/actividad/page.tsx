@@ -59,7 +59,7 @@ export default function ActividadPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 min-h-[60vh]">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent" />
-        <p className="mt-4 font-black text-[var(--text-muted)] uppercase tracking-widest text-xs">Cargando portafolio...</p>
+        <p className="mt-4 font-black text-[var(--text-muted)] uppercase tracking-widest text-xs">Preparando información...</p>
       </div>
     );
   }
@@ -72,13 +72,13 @@ export default function ActividadPage() {
           <div className="bg-[var(--accent)] p-2 rounded-xl shadow-lg">
             <Archive size={18} className="text-white" />
           </div>
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Historial de Operaciones</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Actualizaciones Diarias</span>
         </div>
         <h1 className="text-4xl font-black tracking-tight text-[var(--primary)]">
-          Bitácora de Trabajo
+          Reporte de Avances
         </h1>
         <p className="mt-3 text-sm font-bold text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          Reporte detallado de progresos diarios. Transparencia total sobre los hitos alcanzados para Epotech.
+          Detalle diario de lo que hemos hecho para Epotech. Aquí registramos cada paso que damos.
         </p>
       </header>
 

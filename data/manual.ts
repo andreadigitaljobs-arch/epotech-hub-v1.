@@ -21,11 +21,11 @@ export const manual = {
       emoji: "👀",
       color: "cyan",
       items: [
-        { en: "Wide open shot of the full space", es: "1 video abierto del espacio completo", tooltip: "Párate en una esquina y graba de lejos mostrando todo el lugar (pared a pared) en 1x. Sin recortar nada, para dar contexto de dónde están." },
-        { en: "Video of the main problem", es: "1 video del problema principal", tooltip: "Acércate a la razón por la que te contrataron (ej. el techo roto, el piso negro, la mancha). Muestra el deterioro." },
-        { en: "2 close-up videos of the dirty/damaged area", es: "2 videos bien de cerca del área sucia o dañada", tooltip: "Literalmente pega el celular a 15-30cm del problema para que se note la peor textura posible." },
-        { en: "1 wide photo", es: "1 foto abierta", tooltip: "Foto general del espacio antes de tocar nada (como el video abierto, pero en foto nítida)." },
-        { en: "1 photo of the problem", es: "1 foto del problema", tooltip: "Foto macabea de la suciedad o daño. Mientras peor se vea, más fuerte será el impacto." },
+        { en: "1 video of the main problem", es: "1 video panorámico del espacio", tooltip: "Párate en una esquina y graba de lejos mostrando todo el lugar (pared a pared) en 1x. Sin recortar nada, para dar contexto de dónde están." },
+        { en: "Video of the main problem", es: "1 video del problema a resolver", tooltip: "Acércate a la razón por la que te contrataron (ej. el techo roto, el piso sucio). Muestra el estado inicial." },
+        { en: "2 close-up videos of the dirty/damaged area", es: "2 videos de cerca del área sucia", tooltip: "Pega el celular cerca del problema para que se note bien la suciedad o el daño." },
+        { en: "1 wide photo", es: "1 foto general", tooltip: "Foto de todo el espacio antes de empezar a trabajar." },
+        { en: "1 photo of the problem", es: "1 foto clara del problema real", tooltip: "Foto donde se aprecie claramente la suciedad o el daño. Mientras más real se vea, mejor será el resultado final." },
       ],
     },
     {
