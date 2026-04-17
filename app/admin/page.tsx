@@ -30,10 +30,11 @@ import {
   Zap,
   ArrowLeft,
   BarChart3,
-  Globe
+  Globe,
+  Sparkles
 } from "lucide-react";
 
-type View = "hedy" | "proyectos" | "estrategia" | "protocolo" | "bitacora" | "avisos" | "servicios";
+type View = "hedy" | "proyectos" | "estrategia" | "protocolo" | "bitacora" | "avisos" | "servicios" | "inspiracion";
 
 export default function AdminPage() {
   const [pin, setPin] = useState("");
