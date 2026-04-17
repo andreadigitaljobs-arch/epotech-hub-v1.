@@ -8,16 +8,6 @@ import { NavigationProgress } from "./NavigationProgress";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAdmin = pathname === "/admin";
-  
-  if (isAdmin) {
-    return (
-      <div className="min-h-[100dvh] bg-[var(--bg)]">
-        <NavigationProgress />
-        {children}
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-[var(--bg)] md:flex-row">

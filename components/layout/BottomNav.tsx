@@ -7,9 +7,6 @@ import { Home, ListTodo, Target, Video, Clock, PlaySquare, Briefcase } from "luc
 export function BottomNav() {
   const pathname = usePathname();
 
-  // Hide nav on admin panel — it's a team-only tool, not for the client
-  if (pathname === "/admin") return null;
-
   const tabs = [
     { name: "Inicio", path: "/", icon: Home },
     { name: "Guía", path: "/manual", icon: Video },
