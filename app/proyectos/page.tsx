@@ -70,17 +70,10 @@ export default function ServicesPage() {
                            service.name.includes('App') ? 'App de Seguimiento' : 
                            service.name.includes('Formulario') ? 'Formulario Inteligente' : 'Landing Page';
            
-           const { data: achievements } = await supabase
-             .from("actividad")
-             .select("logros")
-             .eq("categoria", category)
-             .order("fecha", { ascending: false })
-             .limit(3);
-           
-           // Flatten achievemnts
-           const recentLogros = achievements?.flatMap(a => a.logros).slice(0, 3) || ["En fase de planeación estratégica"];
-           
-           return { ...service, achievements: recentLogros, category };
+            // Reset achievements to empty initially as part of the nuclear purge
+            const recentLogros = ["En fase de planeación estratégica"];
+            
+            return { ...service, achievements: recentLogros, category };
         }));
         
         setServices(enrichedInfra);
