@@ -155,30 +155,36 @@ export default function AdminPage() {
   };
 
   const runStrategicReset = async () => {
-    if (!confirm("ESTA ACCIÓN ES IRREVERSIBLE. Se borrarán todos los proyectos demo, bitácora y chat, y los progresos volverán a 0%. ¿Proceder?")) return;
+    if (!confirm("⚠️ ATENCIÓN: Se borrarán TODOS los datos de Bitácora, Proyectos y Chat. ¿Deseas un escenario 100% limpio?")) return;
     setLoading(true);
     try {
-      // 1. Wipe demo tables
-      await supabase.from("actividad").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-      await supabase.from("proyectos").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-      await supabase.from("notificaciones").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-      await supabase.from("chat_history").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+      // 1. Limpieza de Tablas Transaccionales usando filtro universal
+      await supabase.from("actividad").delete().not("id", "is", null);
+      await supabase.from("proyectos").delete().not("id", "is", null);
+      await supabase.from("notificaciones").delete().not("id", "is", null);
+      await supabase.from("chat_history").delete().not("id", "is", null);
       
-      // 2. Reset progress
-      const freshInfra = estrategiaData.hub_infraestructura.map((s: any) => ({ ...s, progress: 0 }));
-      const freshSocial = { ...estrategiaData.hub_social_media, monthlyIdeas: [], observations: "" };
-      
-      const { id } = estrategiaData;
-      await supabase.from("config_estrategia").update({ 
-        hub_infraestructura: freshInfra,
-        hub_social_media: freshSocial 
-      }).eq("id", id);
+      // 2. Reset de Progreso e IA en Estrategia
+      const baseInfra = [
+        { id: "crm", name: "CRM Master", progress: 0, status: "active" },
+        { id: "app", name: "App de Marca", progress: 0, status: "active" },
+        { id: "forms", name: "Formulario Inteligente", progress: 0, status: "active" },
+        { id: "landing", name: "Landing Page", progress: 0, status: "active" }
+      ];
 
-      alert("Reset completado. El escenario está limpio.");
-      fetchInitialData();
+      const { data: current } = await supabase.from("config_estrategia").select("*").single();
+      if (current) {
+        await supabase.from("config_estrategia").update({ 
+          hub_infraestructura: baseInfra,
+          hub_social_media: { monthlyIdeas: [], observations: "IA Reiniciada. Esperando instrucciones." }
+        }).eq("id", current.id);
+      }
+
+      alert("🚀 Hub Limpio. Todo el historial y basura han sido eliminados.");
+      window.location.reload(); 
     } catch (err) {
       console.error(err);
-      alert("Error en el reset.");
+      alert("Error crítico durante la limpieza.");
     } finally {
       setLoading(false);
     }
