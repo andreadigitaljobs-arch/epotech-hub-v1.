@@ -113,34 +113,34 @@ export default function BrandBriefPage() {
       </section>
 
       {/* 3. PERFIL Y TONO */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 mt-10 md:mt-16">
-        <div className="space-y-4 md:space-y-5">
-          <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)] ml-1">Público Objetivo</h3>
-          <Card className="p-6 md:p-8 bg-white border border-gray-100 rounded-[20px] md:rounded-[28px] h-full flex flex-col shadow-sm">
-            <div className="flex items-center gap-3 mb-4">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 mt-12 md:mt-24 mb-16 md:mb-24">
+        <div className="space-y-6 md:space-y-8">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)] ml-1 opacity-80">Público Objetivo</h3>
+          <Card className="p-8 md:p-10 bg-white border border-gray-100 rounded-[32px] md:rounded-[40px] h-full flex flex-col shadow-sm">
+            <div className="flex items-center gap-4 mb-5">
               <Users className="text-[var(--primary)] w-5 h-5" />
-              <h4 className="text-sm md:text-base font-black text-[var(--primary)] text-nowrap">Perfil del Cliente</h4>
+              <h4 className="text-base md:text-lg font-black text-[var(--primary)]">Perfil del Cliente</h4>
             </div>
-            <p className="text-xs md:text-sm font-medium text-[var(--text-muted)] leading-relaxed">
+            <p className="text-sm md:text-base font-medium text-[var(--text-muted)] leading-relaxed md:leading-loose">
               {data.perfil_cliente}
             </p>
           </Card>
         </div>
 
-        <div className="space-y-4 md:space-y-5">
-          <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)] ml-1">Voz y Tono</h3>
-          <Card className="p-6 md:p-8 bg-[#0F172A] text-white rounded-[20px] md:rounded-[28px] h-full relative overflow-hidden shadow-xl">
-            <div className="absolute right-[-10px] bottom-[-10px] opacity-10">
-              <MessageSquare className="w-20 h-20 md:w-32 md:h-32" />
+        <div className="space-y-6 md:space-y-8">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)] ml-1 opacity-80">Voz y Tono</h3>
+          <div className="p-8 md:p-10 bg-[#0F172A] text-white rounded-[32px] md:rounded-[40px] h-full relative overflow-hidden shadow-2xl border border-white/5">
+            <div className="absolute right-[-15px] bottom-[-15px] opacity-10">
+              <MessageSquare className="w-24 h-24 md:w-40 md:h-40" />
             </div>
-            <div className="flex items-center gap-3 mb-4 relative z-10">
-              <MessageSquare className="text-[var(--accent)] w-5 h-5" />
-              <h4 className="text-sm md:text-base font-black text-white text-nowrap">Guía de Comunicación</h4>
+            <div className="flex items-center gap-4 mb-5 relative z-10">
+              <MessageSquare className="text-[var(--accent)] w-6 h-6" />
+              <h4 className="text-base md:text-lg font-black text-white">Guía de Comunicación</h4>
             </div>
-            <p className="text-xs md:text-sm font-medium text-white/90 leading-relaxed md:leading-loose relative z-10">
+            <p className="text-sm md:text-base font-medium text-white/90 leading-relaxed md:leading-loose relative z-10">
               {data.tono_voz}
             </p>
-          </Card>
+          </div>
         </div>
       </section>
 
