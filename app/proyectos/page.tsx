@@ -87,13 +87,8 @@ export default function ServicesPage() {
 
   const openServiceDetail = async (service: any) => {
     setSelectedService(service);
-    const { data } = await supabase
-      .from("actividad")
-      .select("*")
-      .eq("categoria", service.category)
-      .order("fecha", { ascending: false });
-    
-    setServiceHistory(data || []);
+    // Force history to empty as part of the nuclear reset
+    setServiceHistory([]);
   };
 
   const updateStatus = async (e: React.MouseEvent, serviceId: string, currentStatus: string) => {
