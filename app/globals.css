@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: #1B2E5E;
+    --primary-light: #2C427B;
+    --primary-dark: #0F1C3D;
+    
+    --accent: #2BBFCF;
+    --accent-light: #E8F9FB;
+    --accent-dark: #1A9CA9;
+    
+    --bg: #F0F4F8;
+    --surface: #FFFFFF;
+    
+    --text-main: #111827;
+    --text-muted: #6B7A99;
+    --text-inverse: #FFFFFF;
+    
+    --border: #E2E8F0;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg)] text-[var(--text-main)] antialiased selection:bg-[var(--accent-light)] selection:text-[var(--primary)];
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 font-semibold text-white shadow-md transition-all hover:bg-[var(--primary-light)] active:scale-95;
+  }
+  
+  .btn-accent {
+    @apply flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 font-semibold text-white shadow-md transition-all hover:bg-[var(--accent-dark)] active:scale-95;
+  }
+  
+  .btn-outline {
+    @apply flex items-center justify-center gap-2 rounded-xl border-2 border-[var(--primary)] bg-transparent px-4 py-3 font-semibold text-[var(--primary)] transition-all hover:bg-[var(--primary)] hover:text-white active:scale-95;
+  }
+  
+  .card-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.025);
+  }
+  
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-white/20;
+  }
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* ──────────────────────────────────────────
+   PAGE ENTRY ANIMATION (opacity only!
+   Transform kills fixed modal centering)
+────────────────────────────────────────── */
+@keyframes page-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.page-animate {
+  animation: page-enter 0.25s ease both;
+}
+
+/* ──────────────────────────────────────────
+   STAGGERED SECTIONS (slide up per section)
+────────────────────────────────────────── */
+@keyframes slide-up-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-animate > * {
+  animation: slide-up-in 0.35s ease both;
+}
+.page-animate > *:nth-child(1) { animation-delay: 0.05s; }
+.page-animate > *:nth-child(2) { animation-delay: 0.12s; }
+.page-animate > *:nth-child(3) { animation-delay: 0.18s; }
+.page-animate > *:nth-child(4) { animation-delay: 0.23s; }
+.page-animate > *:nth-child(5) { animation-delay: 0.27s; }
+
+/* ──────────────────────────────────────────
+   TOP NAVIGATION PROGRESS BAR
+────────────────────────────────────────── */
+@keyframes progress-bar {
+  from { width: 0%; opacity: 1; }
+  60%  { width: 75%; }
+  to   { width: 100%; opacity: 0; }
+}
+
+.nav-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), #a78bfa);
+  animation: progress-bar 0.5s ease-out forwards;
+  z-index: 9999;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+/* ──────────────────────────────────────────
+   MICRO INTERACTIONS
+────────────────────────────────────────── */
+a, button, [role="button"] {
+  transition: color 0.15s ease, background-color 0.15s ease,
+              border-color 0.15s ease, transform 0.15s ease,
+              box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+a:active, button:active, [role="button"]:active {
+  transform: scale(0.96);
+}
+
+/* Card hover lift */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+}
+
+/* ──────────────────────────────────────────
+   BOTTOM NAV ACTIVE PILL
+────────────────────────────────────────── */
+@keyframes nav-pill-in {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.nav-active-pill {
+  animation: nav-pill-in 0.3s cubic-bezier(0.34, 1.7, 0.64, 1) both;
+}
+
+/* ──────────────────────────────────────────
+   MODAL ANIMATIONS (rendered in body, fixed)
+────────────────────────────────────────── */
+@keyframes modal-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modal-panel-in {
+  from { opacity: 0; transform: scale(0.92) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
+}
+
+.modal-backdrop { animation: modal-backdrop-in 0.2s ease both; }
+.modal-panel    { animation: modal-panel-in 0.28s cubic-bezier(0.34, 1.3, 0.64, 1) both; }
