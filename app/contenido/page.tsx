@@ -212,16 +212,16 @@ function IdeasSection({ ideas }: { ideas: any[] }) {
 
 function AcademiaSection() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
        <TipCard 
           title="Ángulo de Oro" 
-          desc="Cámara a la altura del pecho. Da una sensación de poder y nitidez profesional."
-          icon={<Star size={16} className="text-amber-500 fill-amber-500" />}
+          desc="Cámara al pecho, no a los ojos. Da poder y nitidez."
+          icon={<Star size={14} className="text-amber-500 fill-amber-500" />}
        />
        <TipCard 
           title="Lente Limpio" 
-          desc="Limpia la cámara antes de cada toma. El secreto del brillo es un lente impecable."
-          icon={<Zap size={16} className="text-blue-500 fill-blue-500" />}
+          desc="Limpia la cámara antes de cada toma. Clave del brillo."
+          icon={<Zap size={14} className="text-blue-500 fill-blue-500" />}
        />
     </div>
   );
@@ -278,14 +278,14 @@ function SerieCard({ name, status, count }: any) {
 
 function TipCard({ title, desc, icon }: any) {
    return (
-      <Card className="p-5 border border-gray-100 rounded-2xl bg-white shadow-sm">
-         <div className="flex items-center gap-3 mb-3">
-            {icon}
-            <h4 className="text-[9px] font-black uppercase tracking-widest text-[var(--primary)]">{title}</h4>
+      <Card className="p-4 border border-gray-100 rounded-xl bg-white shadow-sm flex items-center gap-4">
+         <div className="bg-gray-50 p-2 rounded-lg shrink-0">{icon}</div>
+         <div className="space-y-0.5">
+            <h4 className="text-[9px] font-black uppercase text-[var(--primary)]">{title}</h4>
+            <p className="text-[10px] font-bold text-gray-400 opacity-90 italic leading-tight">
+               "{desc}"
+            </p>
          </div>
-         <p className="text-[10px] font-bold text-gray-500 leading-tight uppercase opacity-80 italic">
-            "{desc}"
-         </p>
       </Card>
    );
 }
