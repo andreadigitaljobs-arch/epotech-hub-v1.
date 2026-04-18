@@ -108,31 +108,37 @@ export default function ContenidoPage() {
         {activeTab === 'publicado' && <PublicadoSection publicaciones={publicaciones} />}
       </div>
 
-      {/* Script Detail Modal - Centered and Light */}
+      {/* Script Detail Modal - Centered and High Contrast */}
       {selectedScript && (
-        <div className="fixed inset-0 z-[100] bg-white/70 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
-           <Card className="w-full max-w-lg bg-white rounded-[32px] overflow-hidden shadow-[0_32px_64px_-12px_rgba(0,0,0,0.1)] border border-gray-100 flex flex-col max-h-[90vh]">
-              <div className="p-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+           {/* Overlay con tinte sutil para contraste */}
+           <div 
+            className="absolute inset-0 bg-slate-950/20 backdrop-blur-[2px]" 
+            onClick={() => setSelectedScript(null)}
+           />
+           
+           <Card className="w-full max-w-lg bg-white rounded-[32px] overflow-hidden shadow-[0_20px_70px_-10px_rgba(30,58,138,0.3)] border border-blue-100/50 flex flex-col max-h-[85vh] relative z-10">
+              <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                  <div>
-                    <span className="text-[7px] font-black text-blue-500 bg-blue-100/50 px-2 py-0.5 rounded-full uppercase tracking-[0.2em]">{selectedScript.tag}</span>
+                    <span className="text-[7px] font-black text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full uppercase tracking-[0.2em]">{selectedScript.tag}</span>
                     <h3 className="text-base font-black text-[var(--primary)] uppercase mt-1 leading-none tracking-tight">{selectedScript.title}</h3>
                  </div>
-                 <button onClick={() => setSelectedScript(null)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                    <X size={18} className="text-gray-400" />
+                 <button onClick={() => setSelectedScript(null)} className="p-2 hover:bg-blue-50 rounded-full transition-colors text-gray-400 hover:text-blue-500">
+                    <X size={20} />
                  </button>
               </div>
-              <div className="p-8 overflow-y-auto space-y-8 no-scrollbar flex-1">
+              <div className="p-8 overflow-y-auto space-y-8 no-scrollbar flex-1 bg-white">
                  {selectedScript.steps.map((s: any, i: number) => (
                     <div key={i} className="flex gap-4">
                        <div className="flex flex-col items-center gap-2 pt-1">
-                          <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+                          <div className="h-2.5 w-2.5 rounded-full bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.6)]"></div>
                           {i !== selectedScript.steps.length - 1 && <div className="w-0.5 flex-1 bg-gray-100 rounded-full"></div>}
                        </div>
                        <div className="space-y-3 pb-4">
-                          <h4 className="text-[9px] font-black text-gray-300 uppercase tracking-widest font-mono">{s.label}</h4>
-                          <p className="text-sm font-bold text-gray-700 italic leading-relaxed">"{s.txt}"</p>
-                          <div className="flex items-center gap-2 text-[8px] font-black text-blue-500 uppercase tracking-widest bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100/50">
-                             <Camera size={10} className="animate-pulse" /> GRABA: {s.action || "Clip de 5 segundos"}
+                          <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest font-mono">{s.label}</h4>
+                          <p className="text-sm font-bold text-[var(--primary)] italic leading-relaxed opacity-90">"{s.txt}"</p>
+                          <div className="flex items-center gap-2 text-[8px] font-black text-blue-600 uppercase tracking-widest bg-blue-50/80 px-3 py-2 rounded-xl border border-blue-100">
+                             <Camera size={12} className="text-blue-500 shadow-sm" /> <span className="opacity-70 italic">Graba:</span> <span className="font-black text-blue-700">{s.action || "Clip de 5 segundos"}</span>
                           </div>
                        </div>
                     </div>
@@ -141,9 +147,9 @@ export default function ContenidoPage() {
               <div className="p-6 bg-white border-t border-gray-50">
                  <button 
                   onClick={() => setSelectedScript(null)}
-                  className="w-full bg-[var(--primary)] text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-500/10 active:scale-95 transition-all"
+                  className="w-full bg-[var(--primary)] text-white py-4 rounded-[22px] font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/30 active:scale-95 transition-all flex items-center justify-center gap-2"
                  >
-                    ¡Entendido, a grabar!
+                    ¡Entendido, a rodar! <CheckCircle2 size={16} />
                  </button>
               </div>
            </Card>
