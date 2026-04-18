@@ -199,7 +199,7 @@ export default function ManualPage() {
         })}
       </div>
 
-      {/* Haz y Evita - Updated for Hub 3.0 */}
+      {/* Protocolos de acción */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-10 bg-emerald-50/30 border-emerald-100 rounded-[40px]">
           <div className="flex items-center gap-3 mb-8">

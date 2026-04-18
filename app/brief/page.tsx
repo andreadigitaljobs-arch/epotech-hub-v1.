@@ -66,7 +66,7 @@ export default function BrandBriefPage() {
         <div className="relative z-10 max-w-4xl">
           <div className="flex items-center gap-2 mb-3 md:mb-5">
             <span className="bg-[var(--accent)] px-3 py-1 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em]">
-              Centro de Marca v3.0
+              Centro de Marca Premium
             </span>
             <div className="h-0.5 w-4 md:w-8 bg-white/20" />
           </div>
