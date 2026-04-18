@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import { Card } from "@/components/ui/Card";
 import { 
   Sparkles, 
@@ -16,9 +17,26 @@ import {
   Star,
   Users
 } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 export default function ContenidoPage() {
   const [activeTab, setActiveTab] = useState('guiones');
+  const [ideas, setIdeas] = useState<any[]>([]);
+  const [publicaciones, setPublicaciones] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data: iData } = await supabase.from('ideas_contenido').select('*').order('creada_at', { ascending: false });
+      if (iData) setIdeas(iData);
+
+      const { data: pData } = await supabase.from('registro_publicaciones').select('*').order('created_at', { ascending: false });
+      if (pData) setPublicaciones(pData);
+
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
 
   const tabs = [
     { id: 'guiones', name: 'Escaletas', icon: Play },
@@ -26,6 +44,8 @@ export default function ContenidoPage() {
     { id: 'academia', name: 'Tips Pro', icon: Video },
     { id: 'publicado', name: 'Lo que subimos', icon: CheckCircle2 },
   ];
+
+  if (loading) return <LoadingSpinner message="Cargando Estrategia..." />;
 
   return (
     <div className="space-y-10 pb-32">
@@ -66,9 +86,9 @@ export default function ContenidoPage() {
       {/* Content Area */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
         {activeTab === 'guiones' && <GuionesSection />}
-        {activeTab === 'ideas' && <IdeasSection />}
+        {activeTab === 'ideas' && <IdeasSection ideas={ideas} />}
         {activeTab === 'academia' && <AcademiaSection />}
-        {activeTab === 'publicado' && <PublicadoSection />}
+        {activeTab === 'publicado' && <PublicadoSection publicaciones={publicaciones} />}
       </div>
     </div>
   );
@@ -140,7 +160,7 @@ function GuionesSection() {
   );
 }
 
-function IdeasSection() {
+function IdeasSection({ ideas }: { ideas: any[] }) {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -150,21 +170,17 @@ function IdeasSection() {
           </div>
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-600 mb-6">Ideas Rápidas (Para Sebas)</h3>
           <div className="space-y-6">
-            <IdeaItem 
-              type="CURB APPEAL" 
-              title="Driveway vs Mud" 
-              desc="Lava solo la mitad de una entrada llena de barro y deja que la gente vea la diferencia."
-            />
-            <IdeaItem 
-              type="HUMANO" 
-              title="Story: Mi primera herramienta" 
-              desc="Cuenta la historia de la primera máquina que compraste y dónde estás hoy."
-            />
-            <IdeaItem 
-              type="TUTORIAL" 
-              title="Cómo cuidar tu Epoxy" 
-              desc="Video rápido de lo que NO debes tirar al suelo de tu garaje."
-            />
+            {ideas.map((idea) => (
+              <IdeaItem 
+                key={idea.id}
+                type={idea.tipo || "IDEA"} 
+                title={idea.titulo} 
+                desc={idea.descripcion}
+              />
+            ))}
+            {ideas.length === 0 && (
+              <p className="text-xs font-bold text-gray-400 italic">No hay ideas nuevas hoy. Andrea las plantará pronto.</p>
+            )}
           </div>
         </Card>
 
@@ -212,45 +228,37 @@ function AcademiaSection() {
   );
 }
 
-function PublicadoSection() {
+function PublicadoSection({ publicaciones }: { publicaciones: any[] }) {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-         <h3 className="text-lg font-black text-[var(--primary)] uppercase tracking-tight">Publicado esta semana</h3>
-         <span className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Actualizado por Andrea</span>
+         <h3 className="text-lg font-black text-[var(--primary)] uppercase tracking-tight">Registro Histórico</h3>
+         <span className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Total: {publicaciones.length}</span>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-         <PublishedItem 
-            type="REEL" 
-            platform="INSTAGRAM"
-            title="Video satisfyer driveway" 
-            date="Ayer"
-            views="1.2k"
-         />
-         <PublishedItem 
-            type="TIKTOK" 
-            platform="TIKTOK"
-            title="Antes/Después Garage Epoxy" 
-            date="Hace 2 días"
-            views="3.5k"
-         />
-         <PublishedItem 
-            type="POST" 
-            platform="INSTAGRAM"
-            title="Carrusel Tips Mantenimiento" 
-            date="Semana pasada"
-            views="-- "
-         />
+         {publicaciones.map((pub) => (
+           <PublishedItem 
+              key={pub.id}
+              type={pub.tipo} 
+              platform={pub.plataforma}
+              title={pub.tema} 
+              date={new Date(pub.created_at).toLocaleDateString()}
+              views="--"
+           />
+         ))}
+         {publicaciones.length === 0 && (
+           <p className="text-xs font-bold text-gray-400 italic py-10 text-center col-span-full">Aún no hay registros de esta semana.</p>
+         )}
       </div>
 
       <Card className="p-10 border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center flex-col text-center">
          <div className="bg-white p-4 rounded-full shadow-sm mb-4">
             <BarChart3 size={32} className="text-blue-500" />
          </div>
-         <h4 className="font-black text-[var(--primary)]">Sincronización de Métricas</h4>
-         <p className="text-xs font-bold text-gray-500 mt-1 max-w-xs">
-           Cuando Andrea marca un video como "Subido", los widgets del Dashboard principal se actualizan automáticamente.
+         <h4 className="font-black text-[var(--primary)] uppercase text-xs tracking-widest">Sincronización Activa</h4>
+         <p className="text-[10px] font-bold text-gray-500 mt-2 max-w-xs uppercase tracking-wider">
+           Cualquier post que Andrea registre en el Panel Master aparecerá aquí y actualizará el Dashboard.
          </p>
       </Card>
     </div>
@@ -262,7 +270,7 @@ function IdeaItem({ type, title, desc }: any) {
     <div className="group cursor-pointer p-4 hover:bg-amber-50 rounded-2xl transition-colors border-2 border-transparent hover:border-amber-100">
       <span className="text-[8px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100 tracking-widest">{type}</span>
       <h4 className="text-base font-black text-[var(--primary)] mt-2 group-hover:text-amber-600 transition-colors uppercase tracking-tighter">{title}</h4>
-      <p className="text-xs font-bold text-gray-500 mt-1">{desc}</p>
+      <p className="text-xs font-bold text-gray-500 mt-1 leading-relaxed">{desc}</p>
     </div>
   );
 }
@@ -287,7 +295,7 @@ function PublishedItem({ type, platform, title, date, views }: any) {
     <Card className="p-6 border-2 border-[var(--border)] group hover:border-[var(--accent)] transition-all">
        <div className="flex justify-between items-start mb-4">
           <span className={`text-[8px] font-black px-2 py-0.5 rounded uppercase tracking-widest ${
-            platform === 'TIKTOK' ? 'bg-black text-white' : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+            platform === 'TIKTOK' ? 'bg-black text-white' : (platform === 'REEL' ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' : 'bg-blue-600 text-white')
           }`}>
             {platform}
           </span>
@@ -304,4 +312,3 @@ function PublishedItem({ type, platform, title, date, views }: any) {
     </Card>
   );
 }
-

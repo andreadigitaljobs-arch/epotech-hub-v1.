@@ -255,13 +255,39 @@ export default function MasterPanel() {
             </div>
          </Card>
 
-         <Card className="p-8 border-2 border-dashed border-gray-200 bg-gray-50 flex items-center gap-6 opacity-70">
-            <div className="bg-white p-4 rounded-full shadow-sm">
-               <RefreshCcw size={32} className="text-emerald-500" />
-            </div>
-            <div>
-               <h4 className="font-black text-[var(--primary)] uppercase text-xs tracking-widest">Sincronizar Métricas</h4>
-               <p className="text-[10px] font-bold text-gray-500 mt-1 uppercase tracking-wider">Conexión con Meta Ads... (Próximamente)</p>
+         <Card className="p-8 border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col gap-6">
+            <h3 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest flex items-center gap-2">
+              <Lightbulb size={18} className="text-amber-500" /> Plantar Idea de Contenido
+            </h3>
+            <div className="space-y-4">
+              <input 
+                type="text" 
+                placeholder="Título corto de la idea..."
+                className="w-full bg-white border-2 border-gray-100 rounded-xl p-3 text-xs font-bold outline-none focus:border-blue-500"
+                id="idea-title"
+              />
+              <textarea 
+                placeholder="Describe qué tiene que hacer Sebas..."
+                className="w-full bg-white border-2 border-gray-100 rounded-xl p-3 text-xs font-bold outline-none focus:border-blue-500 min-h-[80px]"
+                id="idea-desc"
+              ></textarea>
+              <button 
+                className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-[10px] font-black shadow-lg shadow-amber-500/20 transition-all active:scale-95"
+                onClick={async () => {
+                   const title = (document.getElementById('idea-title') as HTMLInputElement).value;
+                   const desc = (document.getElementById('idea-desc') as HTMLTextAreaElement).value;
+                   if (!title || !desc) return alert("Completa ambos campos");
+                   
+                   const { error } = await supabase.from('ideas_contenido').insert([{ titulo: title, descripcion: desc, tipo: 'NUEVA' }]);
+                   if (!error) {
+                     alert("¡Idea plantada con éxito!");
+                     (document.getElementById('idea-title') as HTMLInputElement).value = '';
+                     (document.getElementById('idea-desc') as HTMLTextAreaElement).value = '';
+                   }
+                }}
+              >
+                ENVIAR IDEA AL DASHBOARD
+              </button>
             </div>
          </Card>
       </div>
