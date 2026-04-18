@@ -13,7 +13,8 @@ import {
   Clock,
   ChevronRight,
   Briefcase,
-  Target
+  Target,
+  Sparkles
 } from "lucide-react";
 import { proyectos } from "@/data/proyectos";
 import Link from "next/link";
