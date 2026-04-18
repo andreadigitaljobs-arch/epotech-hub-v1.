@@ -19,7 +19,9 @@ import {
   Mic,
   Clapperboard,
   Camera,
-  Info
+  Info,
+  X,
+  Eye
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
@@ -28,6 +30,7 @@ export default function ContenidoPage() {
   const [ideas, setIdeas] = useState<any[]>([]);
   const [publicaciones, setPublicaciones] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedScript, setSelectedScript] = useState<any>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -52,34 +55,34 @@ export default function ContenidoPage() {
   if (loading) return <LoadingSpinner message="Preparando Estudio..." />;
 
   return (
-    <div className="space-y-8 pb-32">
+    <div className="space-y-6 pb-32">
       {/* Header Minimalista */}
       <header className="flex items-center justify-between">
         <div>
            <div className="flex items-center gap-2 mb-1">
              <Clapperboard size={14} className="text-blue-500" />
-             <span className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-500/60 font-mono">Epotech Content</span>
+             <span className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-500/60 font-mono">Epotech Studio</span>
            </div>
            <h1 className="text-2xl font-black tracking-tight text-[var(--primary)] uppercase italic">Plan de Rodaje</h1>
         </div>
       </header>
 
-      {/* Nota de la Directora - Más sutil */}
+      {/* Nota de la Directora - Elegante */}
       <Card className="p-5 bg-blue-900 border-none rounded-2xl shadow-lg relative overflow-hidden">
          <div className="flex items-start gap-4 relative z-10">
             <div className="bg-blue-400/20 p-2 rounded-xl border border-blue-400/30">
                <Info size={16} className="text-blue-400" />
             </div>
             <div className="space-y-1">
-               <h3 className="text-[9px] font-black uppercase text-blue-400 tracking-widest font-mono">Nota de Andrea</h3>
+               <h3 className="text-[9px] font-black uppercase text-blue-400 tracking-widest font-mono">Dirección Creativa • Andrea</h3>
                <p className="text-[10px] font-bold text-blue-100/90 leading-snug">
-                 Estos guiones son tu <span className="text-white font-black">punto de partida</span>. Sé flexible. Si no grabaste, yo te mandaré un mini guion para nota de voz y montamos la magia.
+                 Sé flexible. Estos guiones son solo tu base. Si no grabaste, yo te mandaré un guion para nota de voz y montamos la magia sobre el video.
                </p>
             </div>
          </div>
       </Card>
 
-      {/* Tabs Minimal */}
+      {/* Tabs */}
       <div className="flex gap-1 p-1 bg-gray-100 rounded-2xl overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <button
@@ -99,76 +102,152 @@ export default function ContenidoPage() {
 
       {/* Content Area */}
       <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-        {activeTab === 'guiones' && <GuionesSection />}
+        {activeTab === 'guiones' && <GuionesSection onSelect={setSelectedScript} />}
         {activeTab === 'ideas' && <IdeasSection ideas={ideas} />}
         {activeTab === 'academia' && <AcademiaSection />}
         {activeTab === 'publicado' && <PublicadoSection publicaciones={publicaciones} />}
       </div>
+
+      {/* Script Detail Modal */}
+      {selectedScript && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
+           <Card className="w-full max-w-lg bg-white rounded-[32px] overflow-hidden animate-in slide-in-from-bottom-5 duration-300 border-none shadow-2xl">
+              <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                 <div>
+                    <span className="text-[7px] font-black text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-[0.2em]">{selectedScript.tag}</span>
+                    <h3 className="text-lg font-black text-[var(--primary)] uppercase mt-1 leading-none tracking-tight">{selectedScript.title}</h3>
+                 </div>
+                 <button onClick={() => setSelectedScript(null)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <X size={20} className="text-gray-400" />
+                 </button>
+              </div>
+              <div className="p-6 max-h-[70vh] overflow-y-auto space-y-8 no-scrollbar">
+                 {selectedScript.steps.map((s: any, i: number) => (
+                    <div key={i} className="flex gap-4 group">
+                       <div className="flex flex-col items-center gap-2 pt-1">
+                          <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+                          {i !== selectedScript.steps.length - 1 && <div className="w-0.5 flex-1 bg-gray-100 rounded-full"></div>}
+                       </div>
+                       <div className="space-y-2 pb-6">
+                          <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{s.label}</h4>
+                          <p className="text-sm font-bold text-gray-700 italic leading-relaxed">"{s.txt}"</p>
+                          <div className="flex items-center gap-2 text-[8px] font-black text-blue-500 uppercase tracking-widest bg-blue-50/50 w-fit px-2 py-1 rounded-md">
+                             <Camera size={10} /> Graba esto: {s.action || "Clip de 5 segundos"}
+                          </div>
+                       </div>
+                    </div>
+                 ))}
+              </div>
+              <div className="p-6 bg-gray-50 border-t border-gray-100">
+                 <button 
+                  onClick={() => setSelectedScript(null)}
+                  className="w-full bg-[var(--primary)] text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+                 >
+                    Entendido, ¡A Grabar!
+                 </button>
+              </div>
+           </Card>
+        </div>
+      )}
     </div>
   );
 }
 
-function GuionesSection() {
+function GuionesSection({ onSelect }: any) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
        <ScriptCard 
-          title="Día de Locos en Utah" 
+          title="Acompáñame un día de trabajo" 
           tag="Storytelling"
           steps={[
-            { label: "0-3s", txt: "¡Ustedes no saben con qué nos encontramos hoy!" },
-            { label: "3-30s", txt: "Lijado diamante + por qué el epoxy es inversión en Utah." },
-            { label: "Final", txt: "Escribe INFO abajo para proteger tu garaje." }
+            { label: "0-3s", txt: "¡Ustedes no saben con qué nos encontramos hoy en este garaje!", action: "Muestra Sebas a cámara apuntando al piso sucio." },
+            { label: "Media", txt: "Vlog rápido de la mezcla, el lijado industrial y el equipo trabajando.", action: "3 clips rápidos (1seg c/u) de acción intensa." },
+            { label: "Final", txt: "Resultado espejo y adiós a cámara.", action: "Muestra el brillo final con Sebas despidiéndose." }
           ]}
+          onClick={() => onSelect({
+            title: "Acompáñame un día de trabajo",
+            tag: "Storytelling",
+            steps: [
+              { label: "INICIO", txt: "¡Ustedes no saben con qué nos encontramos hoy en este garaje!", action: "Sebas a cámara apuntando al piso destruido." },
+              { label: "ACCIÓN", txt: "Vlog rápido de la mezcla, el lijado industrial y el equipo trabajando.", action: "Clips POV de las máquinas moviéndose con fuerza." },
+              { label: "EDUCATIVO", txt: "Aquí en Utah la sal destruye el concreto. Por eso el Epoxy es una inversión, no un lujo.", action: "Cerca de una grieta que se está llenando." },
+              { label: "RESULTADO", txt: "¡Miren este brillo! Resultado espejo completo.", action: "Toma panorámica del garaje terminado." },
+              { label: "CIERRE", txt: "Comenta INFO si quieres que tu garaje pase de esto... a esto.", action: "Antes vs Después flash." }
+            ]
+          })}
        />
        <ScriptCard 
-          title="3 Secretos del Brillo" 
+          title="Explicación de un Proceso" 
           tag="Educativo"
           steps={[
-            { label: "0-5s", txt: "¿Por qué nuestros pisos duran más? El secreto #1..." },
-            { label: "5-20s", txt: "No es pintura, es nivelación industrial. Cero grietas." },
-            { label: "Final", txt: "Últimos espacios para mayo. Link en la bio." }
+            { label: "0-5s", txt: "¿Por qué nuestros pisos duran décadas y otros no? Secretos #1...", action: "Lijado diamante POV." },
+            { label: "Media", txt: "La mezcla perfecta (Nivelación industrial). Cero grietas para siempre.", action: "Muestra el material nivelándose solo." },
+            { label: "Final", txt: "Últimos espacios para mayo. Link en la bio.", action: "Sebas hablando a cámara con logo Epotech." }
           ]}
+          onClick={() => onSelect({
+            title: "Explicación de un Proceso",
+            tag: "Educativo",
+            steps: [
+              { label: "HOOCK", txt: "¿Por qué nuestros pisos duran décadas y otros no? El secreto está aquí...", action: "Toma de cerca de la lija de diamante." },
+              { label: "PROCESO", txt: "No solo es pintar. Es preparar la base para que el concreto respire.", action: "Muestra el polvo saliendo (ASMR)." },
+              { label: "DETALLE", txt: "Usamos base niveladora premium. Cero grietas, cero humedad para siempre.", action: "Cerca de la mezcla siendo esparcida." },
+              { label: "FINAL", txt: "Calidad industrial para tu casa. Agenda hoy.", action: "Muestra el camión de Epotech afuera de la casa." }
+            ]
+          })}
        />
        <ScriptCard 
-          title="Antes vs Después" 
-          tag="Visual"
+          title="Experiencia de Cliente" 
+          tag="Testimonio"
           steps={[
-            { label: "Incio", txt: "POV del piso más feo que hayas visto." },
-            { label: "Medio", txt: "Corte rápido con sonido de impacto." },
-            { label: "Final", txt: "Revelación del brillo espejo total." }
+            { label: "0-3s", txt: "Lo que el cliente pensaba vs lo que le entregamos...", action: "Cara de duda del cliente o Sebas." },
+            { label: "Media", txt: "Casi cancela por miedo al precio, hoy dice que es lo mejor que hizo.", action: "Cliente señalando el piso feliz." },
+            { label: "Final", txt: "No te quedes con la duda. Escríbenos.", action: "Texto con el WhatsApp de ventas." }
           ]}
+          onClick={() => onSelect({
+            title: "Experiencia de Cliente",
+            tag: "Testimonio",
+            steps: [
+              { label: "INICIO", txt: "Este cliente casi no se decide por miedo al mantenimiento...", action: "Muestra un garaje muy viejo y descuidado." },
+              { label: "CAMBIO", txt: "Le mostramos nuestra técnica de sellado UV y no hubo vuelta atrás.", action: "Pasando la lija y viendo el cambio de tono." },
+              { label: "CLIENTE", txt: "Miren esta cara... así se siente un trabajo bien hecho.", action: "Muestra al cliente orgulloso de su nuevo garaje." },
+              { label: "CIERRE", txt: "Dignidad para tu garaje. Comenta EPOXY.", action: "Brillo final con luz del sol." }
+            ]
+          })}
        />
     </div>
   );
 }
 
-function ScriptCard({ title, tag, steps }: any) {
+function ScriptCard({ title, tag, steps, onClick }: any) {
   return (
-    <Card className="p-5 border border-gray-100 bg-white rounded-2xl shadow-sm hover:border-blue-200 transition-all flex flex-col justify-between">
+    <Card className="p-5 border border-gray-100 bg-white rounded-2xl shadow-sm hover:border-blue-200 transition-all flex flex-col justify-between group">
       <div>
         <div className="flex justify-between items-center mb-4">
            <span className="text-[7px] font-black text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 uppercase tracking-widest">{tag}</span>
            <Clapperboard size={12} className="text-gray-200" />
         </div>
-        <h3 className="text-xs font-black text-[var(--primary)] uppercase tracking-tight mb-5 leading-tight">{title}</h3>
+        <h3 className="text-[11px] font-black text-[var(--primary)] uppercase tracking-tight mb-5 leading-tight">{title}</h3>
         
-        <div className="space-y-4">
-          {steps.map((s: any, i: number) => (
+        <div className="space-y-3">
+          {steps.slice(0, 3).map((s: any, i: number) => (
             <div key={i} className="flex gap-4 items-start">
               <span className="text-[8px] font-black text-gray-300 w-8 pt-0.5 uppercase font-mono">{s.label}</span>
-              <p className="text-[10px] font-bold text-gray-600 leading-snug flex-1 italic">"{s.txt}"</p>
+              <p className="text-[10px] font-bold text-gray-400 leading-snug flex-1 italic line-clamp-1 group-hover:text-gray-600 transition-colors">"{s.txt}"</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-gray-50 flex items-center justify-between">
+      <button 
+        onClick={onClick}
+        className="mt-6 pt-4 border-t border-gray-50 flex items-center justify-between w-full hover:bg-gray-50 -mx-5 px-5 transition-colors"
+      >
          <div className="flex gap-1">
             <div className="h-1 w-3 bg-blue-100 rounded-full"></div>
             <div className="h-1 w-1 bg-gray-100 rounded-full"></div>
          </div>
-         <span className="text-[8px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-1"> Ver Detalles <ChevronRight size={10} /></span>
-      </div>
+         <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest flex items-center gap-1 group-hover:translate-x-1 transition-transform"> VER DETALLES <ChevronRight size={10} /></span>
+      </button>
     </Card>
   );
 }
@@ -197,7 +276,7 @@ function IdeasSection({ ideas }: { ideas: any[] }) {
         </Card>
 
         <div className="space-y-4">
-           <SerieCard name="Duelo de Suciedad" status="Avanzando" count={2} />
+           <SerieCard name="Duelo de Suciedad" status="Avanzando" count={1} />
            <SerieCard name="Mitos de Utah" status="Planeación" count={0} />
            <div className="p-6 bg-blue-50 border border-blue-100 rounded-2xl text-center">
               <p className="text-[9px] font-black text-blue-400 leading-relaxed uppercase tracking-[0.2em] italic">
@@ -214,14 +293,19 @@ function AcademiaSection() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
        <TipCard 
-          title="Ángulo de Oro" 
-          desc="Cámara al pecho, no a los ojos. Da poder y nitidez."
-          icon={<Star size={14} className="text-amber-500 fill-amber-500" />}
+          title="Ángulo POV" 
+          desc="Graba a la altura de tus ojos. A la gente le encanta ver lo que tú ves mientras trabajas."
+          icon={<Eye size={16} className="text-blue-500" />}
+       />
+       <TipCard 
+          title="Dopamina Sonora" 
+          desc="Graba el sonido de las máquinas de cerca. El 'ruido' de limpieza es adictivo (ASMR industrial)."
+          icon={<Mic size={16} className="text-emerald-500" />}
        />
        <TipCard 
           title="Lente Limpio" 
-          desc="Limpia la cámara antes de cada toma. Clave del brillo."
-          icon={<Zap size={14} className="text-blue-500 fill-blue-500" />}
+          desc="Limpia la cámara antes de cada toma. El secreto del brillo es un lente impecable."
+          icon={<Zap size={16} className="text-amber-500" />}
        />
     </div>
   );
@@ -241,9 +325,6 @@ function PublicadoSection({ publicaciones }: { publicaciones: any[] }) {
               views="--"
            />
          ))}
-         {publicaciones.length === 0 && (
-           <p className="text-xs font-black text-gray-300 italic py-12 text-center col-span-full uppercase tracking-widest">Aún no hay registros este mes.</p>
-         )}
       </div>
     </div>
   );
