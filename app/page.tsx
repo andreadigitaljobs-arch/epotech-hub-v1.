@@ -95,33 +95,53 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-          <Card padding="sm" className="bg-[var(--accent-light)] border-[var(--accent)]/20 card-hover">
-            <div className="text-2xl font-black text-[var(--primary)] text-center md:text-left">
-              {loading ? "..." : (stats?.publicaciones || 0)} <span className="text-sm font-bold text-[var(--text-muted)]">/ {stats?.publicaciones_target || 5}</span>
-            </div>
-            <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider mt-1 text-center md:text-left">Publicaciones</div>
-          </Card>
+          <Link href="/actividad" className="contents">
+            <Card padding="sm" className="bg-[var(--accent-light)] border-[var(--accent)]/20 card-hover cursor-pointer relative group">
+              <div className="text-2xl font-black text-[var(--primary)] text-center md:text-left">
+                {loading ? "..." : (stats?.publicaciones || 0)} <span className="text-sm font-bold text-[var(--text-muted)]">/ {stats?.publicaciones_target || 5}</span>
+              </div>
+              <div className="flex items-center justify-between mt-1">
+                <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider">Publicaciones</div>
+                <ChevronRight size={14} className="text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </Card>
+          </Link>
           
-          <Card padding="sm" className="card-hover">
-            <div className="text-2xl font-black text-[var(--primary)] text-center md:text-left">
-              {loading ? "..." : (stats?.reels || 0)} <span className="text-sm font-bold text-[var(--text-muted)]">/ {stats?.reels_target || 3}</span>
-            </div>
-            <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider mt-1 text-center md:text-left">Reels</div>
-          </Card>
+          <Link href="/referencias" className="contents">
+            <Card padding="sm" className="card-hover cursor-pointer group">
+              <div className="text-2xl font-black text-[var(--primary)] text-center md:text-left">
+                {loading ? "..." : (stats?.reels || 0)} <span className="text-sm font-bold text-[var(--text-muted)]">/ {stats?.reels_target || 3}</span>
+              </div>
+              <div className="flex items-center justify-between mt-1">
+                <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider">Reels</div>
+                <ChevronRight size={14} className="text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </Card>
+          </Link>
           
-          <Card padding="sm" className="card-hover">
-            <div className="text-2xl font-black text-[var(--primary)] text-center md:text-left">
-              {loading ? "..." : (stats?.carruseles || 0)} <span className="text-sm font-bold text-[var(--text-muted)]">/ {stats?.carruseles_target || 2}</span>
-            </div>
-            <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider mt-1 text-center md:text-left">Carruseles</div>
-          </Card>
+          <Link href="/referencias" className="contents">
+            <Card padding="sm" className="card-hover cursor-pointer group">
+              <div className="text-2xl font-black text-[var(--primary)] text-center md:text-left">
+                {loading ? "..." : (stats?.carruseles || 0)} <span className="text-sm font-bold text-[var(--text-muted)]">/ {stats?.carruseles_target || 2}</span>
+              </div>
+              <div className="flex items-center justify-between mt-1">
+                <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider">Carruseles</div>
+                <ChevronRight size={14} className="text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </Card>
+          </Link>
 
           <Link href="/proyectos" className="contents">
-            <Card padding="sm" className="bg-blue-50 border-blue-100 card-hover cursor-pointer">
+            <Card padding="sm" className="bg-blue-50 border-blue-100 card-hover cursor-pointer group ring-2 ring-blue-200 ring-offset-2 animate-pulse-subtle">
               <div className="text-2xl font-black text-[var(--primary)] text-center md:text-left">
                 {loading ? "..." : projectsCount}
               </div>
-              <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider mt-1 text-center md:text-left">Proyectos Activos</div>
+              <div className="flex items-center justify-between mt-1">
+                <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider">Proyectos Activos</div>
+                <div className="flex items-center gap-1 text-[8px] font-black text-[var(--accent)] uppercase animate-bounce-x">
+                   Tocar <ChevronRight size={12} />
+                </div>
+              </div>
             </Card>
           </Link>
         </div>

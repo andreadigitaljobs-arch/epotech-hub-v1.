@@ -227,8 +227,8 @@ export default function ServicesPage() {
                       style={{ width: `${service.progress}%` }}
                     />
                   </div>
-                  <div className="mt-4 flex items-center justify-center gap-1.5 text-[10px] font-bold text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-widest">
-                     Ver historial <ChevronRight size={14} />
+                  <div className="mt-5 flex items-center justify-center gap-2 text-[10px] font-black text-white bg-[var(--accent)] py-2 rounded-xl shadow-lg shadow-cyan-500/10 group-hover:bg-[var(--accent-dark)] transition-all uppercase tracking-[0.1em]">
+                     Abrir Historial <ChevronRight size={14} className="animate-bounce-x" />
                   </div>
                 </div>
               </Card>
