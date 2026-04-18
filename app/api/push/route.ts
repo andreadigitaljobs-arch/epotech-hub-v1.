@@ -12,20 +12,15 @@ export async function POST(request: Request) {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
     );
 
-    // Configurar Web Push solo cuando se necesita
-    const VAPID_PUBLIC = (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY").trim();
-    const VAPID_PRIVATE = (process.env.VAPID_PRIVATE_KEY || "gP4gIYT-zrHJqA1N93dRTm8moqdOAEmiEzH64esOAlo").trim();
+    // Configurar Web Push - Forzado con llaves hardcoded para asegurar funcionamiento
+    const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
+    const VAPID_PRIVATE = "gP4gIYT-zrHJqA1N93dRTm8moqdOAEmiEzH64esOAlo";
 
-    if (VAPID_PUBLIC && VAPID_PRIVATE) {
-      webpush.setVapidDetails(
-        'mailto:andreadigitaljobs@gmail.com',
-        VAPID_PUBLIC,
-        VAPID_PRIVATE
-      );
-    } else {
-      console.warn("VAPID keys missing. Push notification skipped.");
-      return NextResponse.json({ success: false, error: "VAPID keys not configured" }, { status: 500 });
-    }
+    webpush.setVapidDetails(
+      'mailto:andreadigitaljobs@gmail.com',
+      VAPID_PUBLIC,
+      VAPID_PRIVATE
+    );
 
     // 1. Obtener todas las suscripciones
     const { data: subscriptions, error } = await supabase
