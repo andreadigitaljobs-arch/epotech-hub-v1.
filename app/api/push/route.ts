@@ -2,17 +2,17 @@ import { NextResponse } from 'next/server';
 import webpush from 'web-push';
 import { createClient } from '@supabase/supabase-js';
 
-// Cliente Supabase Admin (para leer suscripciones)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
-
 export async function POST(request: Request) {
   try {
     const { titulo, mensaje } = await request.json();
 
-    // Configurar Web Push solo cuando se necesita, para evitar errores en el build
+    // 0. Inicializar clientes de forma perezosa (solo cuando se llama a la API)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+    );
+
+    // Configurar Web Push solo cuando se necesita
     if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
       webpush.setVapidDetails(
         'mailto:andreadigitaljobs@gmail.com',
