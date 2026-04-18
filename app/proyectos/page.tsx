@@ -33,6 +33,7 @@ const IconMap: any = {
   app: Smartphone,
   forms: FormInput,
   landing: Layout,
+  social: Share2,
   Lightbulb,
   Sparkles,
   Share2,
@@ -68,6 +69,7 @@ export default function ServicesPage() {
            // Mapping name to category
            const category = service.name.includes('CRM') ? 'CRM Master' : 
                            service.name.includes('App') ? 'App de Seguimiento' : 
+                           service.name.includes('Social') ? 'Estrategia de Redes' : 
                            service.name.includes('Formulario') ? 'Formulario Inteligente' : 'Landing Page';
            
             // Reset achievements to empty initially as part of the nuclear purge
@@ -91,6 +93,7 @@ export default function ServicesPage() {
     // 1. Map name to category for filtering
     const category = service.name.includes('CRM') ? 'CRM Master' : 
                      service.name.includes('App') ? 'App de Seguimiento' : 
+                     service.name.includes('Social') ? 'Estrategia de Redes' : 
                      service.name.includes('Formulario') ? 'Formulario Inteligente' : 'Landing Page';
 
     // 2. Fetch History from Actividad table
@@ -235,117 +238,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Estrategia Social Media */}
-      {socialData && (
-        <section>
-          <div className="flex items-center gap-3 mb-6">
-            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--primary)]">Estrategia Master de Redes Sociales</h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-[var(--border)] to-transparent" />
-          </div>
 
-          <Card className="p-0 border-2 border-[var(--accent)] overflow-hidden shadow-2xl rounded-3xl">
-            <div className="grid grid-cols-1 lg:grid-cols-3">
-              
-              {/* Columna Izquierda: Ideas y Series */}
-              <div className="lg:col-span-2 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-[var(--border)]">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
-                  <div className="flex items-center gap-5">
-                    <div className="bg-[var(--accent)] p-4 rounded-3xl text-white shadow-xl rotate-[-3deg]">
-                      <Share2 size={28} strokeWidth={2.5} />
-                    </div>
-                    <div>
-                      <h3 className="text-3xl font-black text-[var(--primary)] tracking-tighter">Gestión de Redes Sociales</h3>
-                      <p className="text-xs font-black text-[var(--text-muted)] uppercase tracking-[0.3em] mt-1">Status de Gestión Activa</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  {/* Ideas del Mes */}
-                  <div>
-                    <h4 className="flex items-center gap-2.5 text-xs font-black uppercase text-[var(--primary)] tracking-widest mb-8 border-b pb-4 border-gray-100">
-                      <Zap size={18} className="text-amber-500 fill-amber-500" /> Propuestas del Mes
-                    </h4>
-                    <ul className="space-y-6">
-                      {socialData.monthlyIdeas?.map((idea: any) => {
-                        const IdeaIcon = IconMap[idea.icon] || Lightbulb;
-                        return (
-                          <li key={idea.id} className="group relative pl-10">
-                            <div className="absolute left-0 top-0 h-8 w-8 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-[var(--text-muted)] group-hover:bg-[var(--accent-light)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)] transition-all">
-                              <IdeaIcon size={16} strokeWidth={2.5} />
-                            </div>
-                            <div className="flex flex-col gap-0.5">
-                               <span className="text-[9px] font-black uppercase text-[var(--accent)] tracking-widest">{idea.type}</span>
-                               <p className="text-sm font-black text-[var(--primary)] leading-tight">{idea.text}</p>
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-
-                  {/* Series en Proceso */}
-                  <div>
-                    <h4 className="flex items-center gap-2.5 text-xs font-black uppercase text-[var(--primary)] tracking-widest mb-8 border-b pb-4 border-gray-100">
-                      <Star size={18} className="text-blue-500 fill-blue-500" /> Series en Marcha
-                    </h4>
-                    <div className="space-y-5">
-                      {socialData.activeSeries?.map((serie: any) => (
-                        <div key={serie.id} className="p-5 bg-gray-50 rounded-3xl border border-gray-100 hover:bg-white hover:shadow-lg transition-all border-l-4 hover:border-l-[var(--accent)] group">
-                          <div className="flex justify-between items-start mb-3">
-                             <p className="text-base font-black text-[var(--primary)] group-hover:text-[var(--accent)] transition-all tracking-tight">{serie.name}</p>
-                             <span className={`text-[8px] font-black uppercase px-2.5 py-1 rounded-full ${serie.status === 'En curso' ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-500'}`}>
-                               {serie.status}
-                             </span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2 text-[11px] font-bold text-[var(--text-muted)]">
-                                 <Video size={14} />
-                                 <span className="text-[var(--primary)]">{serie.count}</span> Publicados
-                              </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Columna Derecha: Resultados y Observaciones */}
-              <div className="p-8 lg:p-12 bg-gray-50/70">
-                 <h4 className="flex items-center gap-2.5 text-xs font-black uppercase text-[var(--primary)] tracking-widest mb-10 border-b pb-4 border-gray-100">
-                  <BarChart3 size={18} className="text-[var(--accent)]" /> Resultados Logrados
-                 </h4>
-                 
-                 <div className="space-y-4 mb-12">
-                    {socialData.results?.map((res: string, idx: number) => (
-                      <div key={idx} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:translate-x-1 transition-transform">
-                        <div className="bg-emerald-100 text-emerald-600 p-2 rounded-xl">
-                          <TrendingUp size={16} strokeWidth={2.5} />
-                        </div>
-                        <p className="text-xs font-black text-gray-700 leading-tight">{res}</p>
-                      </div>
-                    ))}
-                 </div>
-
-                 <div className="mt-auto">
-                   <h4 className="flex items-center gap-2.5 text-xs font-black uppercase text-[var(--primary)] tracking-widest mb-5">
-                    <Search size={18} className="text-indigo-500" /> Observaciones Estratégicas
-                   </h4>
-                   <div className="bg-[var(--accent)] text-white p-7 rounded-[2rem] shadow-xl relative overflow-hidden group">
-                     <p className="text-xs font-bold italic leading-relaxed relative z-10">
-                       "{socialData.observations}"
-                     </p>
-                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
-                        <Rocket size={40} />
-                     </div>
-                   </div>
-                 </div>
-              </div>
-            </div>
-          </Card>
-        </section>
-      )}
 
       {/* DETAIL MODAL - TELEPORTADO AL BODY PARA CENTRADO PERFECTO */}
       {mounted && selectedService && createPortal(
