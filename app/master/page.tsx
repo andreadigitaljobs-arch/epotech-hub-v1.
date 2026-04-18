@@ -64,6 +64,20 @@ export default function MasterPanel() {
     ]);
 
     if (!error) {
+      // 2. Intentar enviar Notificación Push real al móvil
+      try {
+        await fetch("/api/push", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            titulo: notificacion.titulo, 
+            mensaje: notificacion.mensaje 
+          }),
+        });
+      } catch (e) {
+        console.error("Failed to send push:", e);
+      }
+
       setNotificacion({ titulo: "", mensaje: "", tipo: "RECORDATORIO" });
       fetchHistory();
       alert("¡Notificación enviada con éxito!");

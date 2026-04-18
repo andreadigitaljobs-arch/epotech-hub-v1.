@@ -5,7 +5,7 @@ import { Bell, Smartphone, Plus, CheckCircle2, X } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { supabase } from "@/lib/supabase";
 
-const VAPID_PUBLIC_KEY = "BNW3Q2VU9OUJNVrhGIcp0vQWwwwzvcYWVzfhsZjiqX-QK1wiqS1B9B_kHSv0LatoIvWTsMmMivw7IEf_5h_Upvg";
+const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
