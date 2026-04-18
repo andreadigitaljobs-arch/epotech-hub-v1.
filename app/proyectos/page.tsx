@@ -135,14 +135,7 @@ export default function ServicesPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center text-[var(--accent)] bg-[var(--bg)]">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-current border-t-transparent mb-4" />
-        <p className="font-black uppercase tracking-widest text-xs">Cargando Hub de Servicios...</p>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner message="Cargando Hub de Servicios..." />;
 
   return (
     <div className="space-y-10 pb-20 relative">

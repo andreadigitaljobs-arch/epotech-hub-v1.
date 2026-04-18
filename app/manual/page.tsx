@@ -17,6 +17,7 @@ import {
   HelpCircle,
   UserCheck
 } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 const phaseIcons: Record<string, any> = {
   antes: Camera,
@@ -67,14 +68,7 @@ export default function ManualPage() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-[var(--text-muted)]">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent mb-4"></div>
-        <p className="font-bold">Cargando protocolos...</p>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner message="Cargando protocolos..." />;
 
   // Use dynamic phases if available, otherwise static
   const phases = data.fases || staticManual.fases;

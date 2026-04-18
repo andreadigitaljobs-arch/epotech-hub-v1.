@@ -14,9 +14,11 @@ import {
   CheckCircle2,
   AlertCircle
 } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 export default function MasterPanel() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
   const [notificacion, setNotificacion] = useState({
     titulo: "",
     mensaje: "",
@@ -35,12 +37,13 @@ export default function MasterPanel() {
       .order("created_at", { ascending: false })
       .limit(5);
     if (data) setHistory(data);
+    setLoading(false);
   }
 
   async function sendNotification() {
     if (!notificacion.titulo || !notificacion.mensaje) return;
     
-    setLoading(true);
+    setSending(true);
     const { error } = await supabase.from("notificaciones").insert([
       {
         titulo: notificacion.titulo,
@@ -57,7 +60,7 @@ export default function MasterPanel() {
     } else {
       alert("Error al enviar: " + error.message);
     }
-    setLoading(false);
+    setSending(false);
   }
 
   async function deleteNotificacion(id: string) {
@@ -65,6 +68,8 @@ export default function MasterPanel() {
     const { error } = await supabase.from("notificaciones").delete().eq("id", id);
     if (!error) fetchHistory();
   }
+
+  if (loading) return <LoadingSpinner message="Abriendo Panel de Control..." />;
 
   return (
     <div className="max-w-4xl mx-auto space-y-10 pb-20 pt-10">
@@ -136,10 +141,10 @@ export default function MasterPanel() {
 
             <button 
               onClick={sendNotification}
-              disabled={loading}
+              disabled={sending}
               className="mt-4 w-full bg-[var(--accent)] hover:bg-[var(--accent-dark)] text-white font-black py-4 rounded-2xl shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50"
             >
-              {loading ? <RefreshCcw className="animate-spin" /> : <Send size={20} />}
+              {sending ? <RefreshCcw className="animate-spin" /> : <Send size={20} />}
               ENVIAR NOTIFICACIÓN A SEBAS
             </button>
           </div>

@@ -30,6 +30,8 @@ interface Notificacion {
   fecha: string;
 }
 
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+
 export default function Home() {
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,6 +63,8 @@ export default function Home() {
     }
     fetchData();
   }, []);
+
+  if (loading) return <LoadingSpinner message="Sincronizando Dashboard..." />;
 
   return (
     <div className="space-y-6">

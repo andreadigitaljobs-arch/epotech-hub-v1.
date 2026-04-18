@@ -19,6 +19,7 @@ import {
   Droplets,
   Paintbrush
 } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 export default function BrandBriefPage() {
   const [data, setData] = useState<any>(null);
@@ -52,14 +53,7 @@ export default function BrandBriefPage() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-[var(--text-muted)]">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent mb-4"></div>
-        <p className="font-bold">Cargando Centro de Marca...</p>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner message="Cargando Centro de Marca..." />;
 
   return (
     <div className="space-y-6 md:space-y-10 pb-20">

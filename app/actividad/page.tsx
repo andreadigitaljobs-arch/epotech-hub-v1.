@@ -11,6 +11,7 @@ import {
   Archive,
   ArrowRight
 } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 interface Activity {
   id: string;
@@ -51,14 +52,7 @@ export default function ActividadPage() {
     fetchActividad();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 min-h-[60vh]">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent" />
-        <p className="mt-4 font-black text-[var(--text-muted)] uppercase tracking-widest text-xs">Preparando información...</p>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner message="Preparando información..." />;
 
   return (
     <div className="space-y-10 pb-32">
