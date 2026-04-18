@@ -31,6 +31,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { NotificationListener } from "@/components/features/NotificationListener";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,6 +44,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className={inter.className}>
+        <NotificationListener />
         <AppShell>{children}</AppShell>
       </body>
     </html>
