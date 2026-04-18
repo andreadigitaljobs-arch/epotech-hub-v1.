@@ -49,7 +49,7 @@ export default function ContenidoPage() {
     { id: 'guiones', name: 'Guiones', icon: Clapperboard },
     { id: 'ideas', name: 'Lluvia de Ideas', icon: Lightbulb },
     { id: 'academia', name: 'Tips Pro', icon: Video },
-    { id: 'publicado', name: 'Registro', icon: CheckCircle2 },
+    { id: 'publicado', name: 'Lo Subido', icon: CheckCircle2 },
   ];
 
   if (loading) return <LoadingSpinner message="Preparando Estudio..." />;
@@ -313,7 +313,7 @@ function AcademiaSection() {
 
 function PublicadoSection({ publicaciones }: { publicaciones: any[] }) {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
          {publicaciones.map((pub) => (
            <PublishedItem 
@@ -325,6 +325,15 @@ function PublicadoSection({ publicaciones }: { publicaciones: any[] }) {
               views="--"
            />
          ))}
+         {publicaciones.length === 0 && (
+           <div className="col-span-full py-16 text-center border-2 border-dashed border-gray-100 rounded-[32px] bg-gray-50/50">
+              <div className="h-12 w-12 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                 <CheckCircle2 size={24} className="text-gray-200" />
+              </div>
+              <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em] italic">Aún no hay publicaciones esta semana.</p>
+              <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">Andrea las registrará pronto.</p>
+           </div>
+         )}
       </div>
     </div>
   );
