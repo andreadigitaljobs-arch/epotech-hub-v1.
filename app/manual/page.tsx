@@ -174,11 +174,16 @@ export default function ManualPage() {
                         </p>
                         {item.tooltip && activeTooltip === idx && (
                           <div className="mt-3 text-sm text-[var(--accent)] bg-blue-50/50 p-4 border border-blue-100 rounded-2xl animate-in fade-in slide-in-from-top-2">
-                             <span className="font-bold flex items-center gap-1 mb-1">
-                               <div className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> 
+                             <span className="font-bold flex items-center gap-1 mb-1 text-[var(--primary)]">
+                               <HelpCircle size={14} className="text-[var(--accent)]" /> 
                                En español simple:
                              </span>
-                             {item.tooltip}
+                             <p className="font-medium">
+                               {item.id === 'luz' ? "Busca una ventana o una lámpara que te dé de frente. Si la luz viene de atrás, tu cara se verá oscura." :
+                                item.id === 'audio' ? "No hace falta un micro profesional, solo evita lugares con mucho viento o máquinas ruidosas cerca." :
+                                item.id === 'lente' ? "Pasa un pañito por la cámara. Parece una tontería, pero cambia la calidad del cielo a la tierra." :
+                                item.tooltip}
+                             </p>
                           </div>
                         )}
                       </div>

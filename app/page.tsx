@@ -74,10 +74,10 @@ export default function Home() {
           </div>
           <div>
             <h1 className="text-2xl font-black tracking-tight text-[var(--primary)] md:text-3xl">
-              {client.greeting}
+              ¡Hola, {client.name}! <span className="animate-bounce inline-block">👋</span>
             </h1>
             <p className="text-sm font-bold text-[var(--accent)] md:text-base">
-              {client.businessName}
+              Hoy es un gran día para hacer crecer a {client.businessName}
             </p>
           </div>
         </div>
@@ -90,7 +90,8 @@ export default function Home() {
         <div className="mb-4">
           <h2 className="font-bold text-[var(--primary)] flex items-center gap-2">
             <Calendar size={18} className="text-[var(--accent)]" />
-            Progreso de la Semana
+            Nuestro Avance Semanal
+            <span className="text-[9px] font-black text-white bg-[var(--accent)] px-2 py-0.5 rounded-full">EN TIEMPO REAL</span>
           </h2>
         </div>
         
@@ -150,19 +151,19 @@ export default function Home() {
 
       <section className="py-2">
         <h2 className="font-bold text-[var(--primary)] mb-3 flex items-center gap-2">
-          ⚡ Accesos Rápidos
+          🎯 ¿Qué quieres revisar hoy?
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Link href="/contenido" className="group sm:col-span-3">
-            <Card className="h-full !bg-amber-500 text-white hover:!bg-amber-600 !border-transparent card-hover p-8 shadow-xl shadow-amber-500/20">
+            <Card className="h-full !bg-amber-500 text-white hover:!bg-amber-600 !border-transparent card-hover p-8 shadow-xl shadow-amber-500/20 ring-4 ring-amber-100 ring-offset-4 animate-pulse-subtle">
                <div className="flex items-center justify-between">
                  <div className="flex items-center gap-6">
                    <div className="bg-white/20 p-4 rounded-[2rem]">
                      <Sparkles size={32} className="text-white" />
                    </div>
                    <div>
-                     <h3 className="font-black text-2xl tracking-tight">Estrategia de Contenido</h3>
-                     <p className="text-xs font-bold text-white/90 mt-1 uppercase tracking-widest">Lo que vamos a grabar hoy</p>
+                     <h3 className="font-black text-2xl tracking-tight">Guía del Día</h3>
+                     <p className="text-xs font-bold text-white/90 mt-1 uppercase tracking-widest">Toca aquí para saber qué grabar hoy</p>
                    </div>
                  </div>
                  <ArrowRight size={28} className="text-white/60 group-hover:text-white group-hover:translate-x-2 transition-all" />

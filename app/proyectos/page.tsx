@@ -158,15 +158,15 @@ export default function ServicesPage() {
           Servicios Activos
         </h1>
         <p className="mt-3 text-sm font-medium text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          Resultados y entregas para Epotech. 
-          Aquí puedes ver lo que hemos logrado paso a paso en cada proyecto.
+          Aquí puedes ver cómo estamos construyendo la tecnología de Epotech paso a paso. 
+          Si tiene una barra azul, es el proyecto en el que estamos trabajando ahora mismo.
         </p>
       </header>
 
       {/* Grid de Infraestructura Digital */}
       <section>
         <div className="flex items-center gap-3 mb-6">
-          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--primary)]">Infraestructura Digital</h2>
+          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--primary)]">La Base de tu Negocio</h2>
           <div className="h-px flex-1 bg-gradient-to-r from-[var(--border)] to-transparent" />
         </div>
         
@@ -192,8 +192,8 @@ export default function ServicesPage() {
                         'bg-gray-100 text-gray-500 border-gray-200'
                       }`}
                     >
-                      {service.status === 'success' ? 'Listo' : 
-                       service.status === 'active' ? 'En proceso' : 'Por crear'}
+                      {service.status === 'success' ? '¡LISTO!' : 
+                       service.status === 'active' ? 'TRABAJANDO EN ESTO' : 'EN FILA'}
                     </button>
                   </div>
                   
