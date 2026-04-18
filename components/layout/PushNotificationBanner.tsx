@@ -89,6 +89,17 @@ export function PushNotificationBanner() {
     }, 15000); // Increased timeout
 
     try {
+      // 1. Pedir permiso INMEDIATAMENTE tras el clic para asegurar el 'user gesture'
+      setCurrentStep("Pidiendo permiso...");
+      const result = await Notification.requestPermission();
+      
+      if (result !== 'granted') {
+        setStatus("error");
+        setErrorMsg("Permiso denegado por el navegador.");
+        clearTimeout(timeout);
+        return;
+      }
+
       setCurrentStep("Registrando conexión...");
       // Explicit registration fix for iOS/Safari
       if ('serviceWorker' in navigator) {
@@ -97,15 +108,6 @@ export function PushNotificationBanner() {
       
       const registration = await navigator.serviceWorker.ready;
       
-      setCurrentStep("Pidiendo permiso...");
-      const result = await Notification.requestPermission();
-      if (result !== 'granted') {
-        setStatus("error");
-        setErrorMsg("Permiso denegado por el navegador.");
-        clearTimeout(timeout);
-        return;
-      }
-
       setCurrentStep("Generando llave de acceso...");
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
