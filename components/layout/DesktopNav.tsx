@@ -11,7 +11,7 @@ export function DesktopNav() {
   const primaryNav = [
     { name: "Dashboard", path: "/", icon: Home },
     { name: "Servicios Activos", path: "/proyectos", icon: Briefcase },
-    { name: "Creación de Contenido", path: "/contenido", icon: Sparkles },
+    { name: "Fábrica de Contenido", path: "/contenido", icon: Sparkles },
     { name: "Brief de Marca", path: "/brief", icon: Target },
     { name: "Reporte de Avances", path: "/actividad", icon: Clock },
   ];
@@ -55,6 +55,34 @@ export function DesktopNav() {
           </nav>
         </div>
 
+        <div>
+          <h3 className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+            Academia
+          </h3>
+          <nav className="space-y-1">
+            <Link
+              href="/manual"
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                pathname === "/manual"
+                  ? "bg-[var(--accent-light)] text-[var(--primary)]"
+                  : "text-[var(--text-muted)] hover:bg-[var(--bg)] hover:text-[var(--text-main)]"
+              }`}
+            >
+              <Video size={18} />
+              Guía de Grabación
+            </Link>
+            <Link
+              href="/referencias"
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                pathname === "/referencias"
+                  ? "bg-[var(--accent-light)] text-[var(--primary)]"
+                  : "text-[var(--text-muted)] hover:bg-[var(--bg)] hover:text-[var(--text-main)]"
+              }`}
+            >
+              <PlaySquare size={18} />
+              Inspiración
+            </Link>
+          </nav>
         <div>
           <h3 className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
             Andrea
