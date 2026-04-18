@@ -10,7 +10,6 @@ export function BottomNav() {
   const tabs = [
     { name: "Inicio", path: "/", icon: Home },
     { name: "Contenido", path: "/contenido", icon: Sparkles },
-    { name: "Guía", path: "/manual", icon: Video },
     { name: "Avances", path: "/actividad", icon: Clock },
     { name: "Brief", path: "/brief", icon: Target },
   ];

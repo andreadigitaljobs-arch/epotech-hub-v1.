@@ -57,31 +57,6 @@ export function DesktopNav() {
 
         <div>
           <h3 className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-            Creación de Contenido
-          </h3>
-          <nav className="space-y-1">
-            {contentNav.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-[var(--accent-light)] text-[var(--primary)]"
-                      : "text-[var(--text-muted)] hover:bg-[var(--bg)] hover:text-[var(--text-main)]"
-                  }`}
-                >
-                  <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-        <div>
-          <h3 className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
             Andrea
           </h3>
           <nav className="space-y-1">
