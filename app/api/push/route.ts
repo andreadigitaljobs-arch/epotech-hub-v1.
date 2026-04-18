@@ -13,8 +13,8 @@ export async function POST(request: Request) {
     );
 
     // Configurar Web Push solo cuando se necesita
-    const VAPID_PUBLIC = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
-    const VAPID_PRIVATE = process.env.VAPID_PRIVATE_KEY || "gP4gIYT-zrHJqA1N93dRTm8moqdOAEmiEzH64esOAlo";
+    const VAPID_PUBLIC = (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY").trim();
+    const VAPID_PRIVATE = (process.env.VAPID_PRIVATE_KEY || "gP4gIYT-zrHJqA1N93dRTm8moqdOAEmiEzH64esOAlo").trim();
 
     if (VAPID_PUBLIC && VAPID_PRIVATE) {
       webpush.setVapidDetails(
