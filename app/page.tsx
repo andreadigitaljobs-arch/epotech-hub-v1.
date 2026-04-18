@@ -66,7 +66,7 @@ export default function Home() {
 
       // Fetch Project Count
       const { data: pData } = await supabase.from("proyectos").select("id");
-      if (pData) setProjectsCount(pData.length);
+      if (pData) setProjectCount(pData.length);
 
       setLoading(false);
     }
