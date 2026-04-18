@@ -74,7 +74,7 @@ export default function Home() {
           </div>
           <div>
             <h1 className="text-2xl font-black tracking-tight text-[var(--primary)] md:text-3xl">
-              ¡Hola, {client.name}! <span className="animate-bounce inline-block">👋</span>
+              ¡Hola, {client.name}! <span className="animate-bounce inline-block">👋🏻</span>
             </h1>
             <p className="text-sm font-bold text-[var(--accent)] md:text-base">
               Hoy es un gran día para hacer crecer a {client.businessName}
