@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { AccountCard } from "@/components/ui/AccountCard";
 import { PlaySquare } from "lucide-react";
 import { VideoCard } from "@/components/ui/VideoCard";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 const InstagramIcon = ({ size = 24, className }: { size?: number, className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -37,13 +38,7 @@ export default function ReferenciasPage() {
     loadData();
   }, []);
 
-  if (loading) {
-     return (
-       <div className="flex min-h-[60vh] items-center justify-center">
-         <div className="h-12 w-12 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent" />
-       </div>
-     );
-  }
+  if (loading) return <LoadingSpinner message="Cargando Inspiración..." />;
 
   const igVideos = data.videos.filter((v: any) => v.platform === "instagram");
   const ttVideos = data.videos.filter((v: any) => v.platform === "tiktok");

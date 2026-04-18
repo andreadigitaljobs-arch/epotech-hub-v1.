@@ -26,6 +26,7 @@ import {
   X,
   History
 } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 // Icon mapping by ID
 const IconMap: any = {
