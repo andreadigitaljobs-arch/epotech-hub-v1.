@@ -108,51 +108,65 @@ export default function ContenidoPage() {
         {activeTab === 'publicado' && <PublicadoSection publicaciones={publicaciones} />}
       </div>
 
-      {/* Script Detail Modal - Centered and High Contrast */}
+      {/* Script Focus Mode - Full Screen Opaque Overlay */}
       {selectedScript && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
-           {/* Overlay con tinte sutil para contraste */}
-           <div 
-            className="absolute inset-0 bg-slate-950/20 backdrop-blur-[2px]" 
-            onClick={() => setSelectedScript(null)}
-           />
-           
-           <Card className="w-full max-w-lg bg-white rounded-[32px] overflow-hidden shadow-[0_20px_70px_-10px_rgba(30,58,138,0.3)] border border-blue-100/50 flex flex-col max-h-[85vh] relative z-10">
-              <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                 <div>
-                    <span className="text-[7px] font-black text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full uppercase tracking-[0.2em]">{selectedScript.tag}</span>
-                    <h3 className="text-base font-black text-[var(--primary)] uppercase mt-1 leading-none tracking-tight">{selectedScript.title}</h3>
-                 </div>
-                 <button onClick={() => setSelectedScript(null)} className="p-2 hover:bg-blue-50 rounded-full transition-colors text-gray-400 hover:text-blue-500">
-                    <X size={20} />
-                 </button>
+        <div className="fixed inset-0 z-[9999] bg-white flex flex-col animate-in fade-in zoom-in-95 duration-300">
+           {/* Header de Salida */}
+           <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+              <div>
+                 <span className="text-[8px] font-black text-blue-600 bg-blue-100 px-3 py-1 rounded-full uppercase tracking-[0.2em]">{selectedScript.tag}</span>
+                 <h3 className="text-xl font-black text-[var(--primary)] uppercase mt-1 tracking-tight leading-none">{selectedScript.title}</h3>
               </div>
-              <div className="p-8 overflow-y-auto space-y-8 no-scrollbar flex-1 bg-white">
+              <button 
+                onClick={() => setSelectedScript(null)} 
+                className="h-12 w-12 bg-white border border-gray-100 shadow-sm flex items-center justify-center rounded-2xl hover:bg-gray-50 transition-all text-gray-500 active:scale-95"
+              >
+                 <X size={24} />
+              </button>
+           </div>
+
+           {/* Paso a Paso del Rodaje */}
+           <div className="flex-1 overflow-y-auto p-8 space-y-12 no-scrollbar">
+              <div className="max-w-md mx-auto space-y-12 py-10">
                  {selectedScript.steps.map((s: any, i: number) => (
-                    <div key={i} className="flex gap-4">
-                       <div className="flex flex-col items-center gap-2 pt-1">
-                          <div className="h-2.5 w-2.5 rounded-full bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.6)]"></div>
-                          {i !== selectedScript.steps.length - 1 && <div className="w-0.5 flex-1 bg-gray-100 rounded-full"></div>}
+                    <div key={i} className="flex gap-6 relative group">
+                       <div className="flex flex-col items-center gap-4">
+                          <div className="h-4 w-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] border-4 border-white"></div>
+                          {i !== selectedScript.steps.length - 1 && <div className="w-1 flex-1 bg-blue-50/50 rounded-full"></div>}
                        </div>
-                       <div className="space-y-3 pb-4">
-                          <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest font-mono">{s.label}</h4>
-                          <p className="text-sm font-bold text-[var(--primary)] italic leading-relaxed opacity-90">"{s.txt}"</p>
-                          <div className="flex items-center gap-2 text-[8px] font-black text-blue-600 uppercase tracking-widest bg-blue-50/80 px-3 py-2 rounded-xl border border-blue-100">
-                             <Camera size={12} className="text-blue-500 shadow-sm" /> <span className="opacity-70 italic">Graba:</span> <span className="font-black text-blue-700">{s.action || "Clip de 5 segundos"}</span>
+                       <div className="space-y-4 pb-6 flex-1">
+                          <h4 className="text-[10px] font-black text-blue-300 uppercase tracking-[0.4em] font-mono italic">{s.label}</h4>
+                          <div className="relative">
+                             <div className="absolute -left-4 top-0 bottom-0 w-1 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                             <p className="text-xl font-bold text-[var(--primary)] leading-relaxed italic">
+                                "{s.txt}"
+                             </p>
+                          </div>
+                          <div className="flex items-center gap-3 text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 shadow-sm px-4 py-3 rounded-2xl border border-blue-100 transition-all group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-700">
+                             <Camera size={16} className="animate-pulse" /> 
+                             <span className="opacity-80">CÁMARA:</span> 
+                             <span className="font-black uppercase">{s.action || "Clip de acción"}</span>
                           </div>
                        </div>
                     </div>
                  ))}
               </div>
-              <div className="p-6 bg-white border-t border-gray-50">
+           </div>
+
+           {/* Footer de Acción */}
+           <div className="p-8 border-t border-gray-100 bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
+              <div className="max-w-md mx-auto">
                  <button 
                   onClick={() => setSelectedScript(null)}
-                  className="w-full bg-[var(--primary)] text-white py-4 rounded-[22px] font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/30 active:scale-95 transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-[var(--primary)] text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all flex items-center justify-center gap-3"
                  >
-                    ¡Entendido, a rodar! <CheckCircle2 size={16} />
+                    Terminar y Salir <CheckCircle2 size={18} />
                  </button>
+                 <p className="text-center text-[9px] font-black text-gray-300 uppercase tracking-widest mt-4">
+                    Toda la atención en el guion • Epotech Studio
+                 </p>
               </div>
-           </Card>
+           </div>
         </div>
       )}
     </div>
