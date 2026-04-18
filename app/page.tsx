@@ -68,6 +68,27 @@ export default function Home() {
       const { data: pData } = await supabase.from("proyectos").select("id");
       if (pData) setProjectCount(pData.length);
 
+      // Fetch Real Content Counts for the Week
+      const { data: rData } = await supabase.from("registro_publicaciones").select("tipo");
+      if (rData) {
+        const counts = {
+          reels: rData.filter(r => r.tipo === 'REEL' || r.tipo === 'TIKTOK').length,
+          carruseles: rData.filter(r => r.tipo === 'CARRUSEL').length,
+          posts: rData.filter(r => r.tipo === 'POST').length,
+          total: rData.length
+        };
+        // Update stats with real counts
+        setStats((prev: any) => ({
+          ...prev,
+          reels: counts.reels,
+          carruseles: counts.carruseles,
+          publicaciones: counts.total,
+          publicaciones_target: 5,
+          reels_target: 3,
+          carruseles_target: 2
+        }));
+      }
+
       setLoading(false);
     }
     fetchData();

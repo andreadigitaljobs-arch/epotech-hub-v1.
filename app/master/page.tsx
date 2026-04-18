@@ -212,22 +212,55 @@ export default function MasterPanel() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-         <Card className="p-8 border-2 border-dashed border-gray-200 bg-gray-50 flex items-center gap-6">
-            <div className="bg-white p-4 rounded-full shadow-sm">
-               <Calendar size={32} className="text-blue-500" />
-            </div>
-            <div>
-               <h4 className="font-black text-[var(--primary)]">Registrar Avance Diario</h4>
-               <p className="text-xs font-bold text-gray-500 mt-1">Próximamente: Abre el diario para documentar el hoy.</p>
+         <Card className="p-8 border-2 border-[var(--primary)] bg-blue-50/30">
+            <h3 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-2">
+              <Zap size={18} className="text-amber-500" /> Registrar Producción
+            </h3>
+            <div className="space-y-4">
+              <input 
+                type="text" 
+                placeholder="Título del video/post..."
+                className="w-full bg-white border-2 border-gray-100 rounded-xl p-3 text-xs font-bold outline-none focus:border-blue-500"
+                id="pub-title"
+              />
+              <div className="flex gap-2">
+                {["REEL", "TIKTOK", "CARRUSEL", "POST"].map((t) => (
+                  <button 
+                    key={t}
+                    className="flex-1 py-2 bg-white border-2 border-gray-100 rounded-xl text-[9px] font-black hover:border-blue-400 transition-all text-gray-500"
+                    onClick={async () => {
+                      const title = (document.getElementById('pub-title') as HTMLInputElement).value;
+                      if (!title) return alert("Ponle un título");
+                      
+                      const { error } = await supabase.from('registro_publicaciones').insert([
+                        { tipo: t, tema: title, plataforma: t === 'POST' ? 'INSTAGRAM' : (t === 'TIKTOK' ? 'TIKTOK' : 'INSTAGRAM') }
+                      ]);
+
+                      if (!error) {
+                        alert(`¡${t} registrado con éxito!`);
+                        (document.getElementById('pub-title') as HTMLInputElement).value = '';
+                      } else {
+                        alert("Error al registrar: " + error.message);
+                      }
+                    }}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[9px] font-bold text-gray-400 text-center uppercase tracking-widest italic">
+                Esto actualiza los números del Dashboard de Sebas
+              </p>
             </div>
          </Card>
-         <Card className="p-8 border-2 border-dashed border-gray-200 bg-gray-50 flex items-center gap-6 opacity-50">
+
+         <Card className="p-8 border-2 border-dashed border-gray-200 bg-gray-50 flex items-center gap-6 opacity-70">
             <div className="bg-white p-4 rounded-full shadow-sm">
                <RefreshCcw size={32} className="text-emerald-500" />
             </div>
             <div>
-               <h4 className="font-black text-[var(--primary)]">Sincronizar Métricas</h4>
-               <p className="text-xs font-bold text-gray-500 mt-1">Conecta con los resultados de Meta Ads.</p>
+               <h4 className="font-black text-[var(--primary)] uppercase text-xs tracking-widest">Sincronizar Métricas</h4>
+               <p className="text-[10px] font-bold text-gray-500 mt-1 uppercase tracking-wider">Conexión con Meta Ads... (Próximamente)</p>
             </div>
          </Card>
       </div>
