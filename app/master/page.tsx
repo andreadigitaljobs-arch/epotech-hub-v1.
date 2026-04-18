@@ -8,6 +8,7 @@ import {
   Bell, 
   ShieldCheck, 
   Zap, 
+  Lightbulb,
   RefreshCcw, 
   Trash2,
   Calendar,
