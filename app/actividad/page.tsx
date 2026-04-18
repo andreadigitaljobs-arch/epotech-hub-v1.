@@ -43,10 +43,10 @@ export default function ActividadPage() {
           }
         });
 
-        // Strictly filter out all legacy data. Only show things from April 18th 2026 onwards.
+        // Strictly filter out all legacy data. Only show things from April 17th 2026 onwards.
         const cleanData = Object.values(grouped).filter(a => {
           const entryDate = new Date(a.fecha);
-          return entryDate >= new Date('2026-04-18'); 
+          return entryDate >= new Date('2026-04-17'); 
         });
         setActividades(cleanData);
       }

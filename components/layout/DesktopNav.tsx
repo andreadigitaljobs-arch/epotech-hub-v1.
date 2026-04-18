@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ListTodo, Target, Video, Briefcase, PlaySquare, Calendar, Clock } from "lucide-react";
+import { Home, ListTodo, Target, Video, Briefcase, PlaySquare, Calendar, Clock, Sparkles, LayoutGrid } from "lucide-react";
 import Image from "next/image";
 
 export function DesktopNav() {
@@ -11,6 +11,7 @@ export function DesktopNav() {
   const primaryNav = [
     { name: "Dashboard", path: "/", icon: Home },
     { name: "Servicios Activos", path: "/proyectos", icon: Briefcase },
+    { name: "Creación de Contenido", path: "/contenido", icon: Sparkles },
     { name: "Brief de Marca", path: "/brief", icon: Target },
     { name: "Reporte de Avances", path: "/actividad", icon: Clock },
   ];

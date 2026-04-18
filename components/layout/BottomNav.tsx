@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ListTodo, Target, Video, Clock, PlaySquare, Briefcase } from "lucide-react";
+import { Home, ListTodo, Target, Video, Clock, PlaySquare, Briefcase, Sparkles } from "lucide-react";
 
 export function BottomNav() {
   const pathname = usePathname();
 
   const tabs = [
     { name: "Inicio", path: "/", icon: Home },
+    { name: "Contenido", path: "/contenido", icon: Sparkles },
     { name: "Guía", path: "/manual", icon: Video },
-    { name: "Inspiración", path: "/referencias", icon: PlaySquare },
     { name: "Avances", path: "/actividad", icon: Clock },
     { name: "Brief", path: "/brief", icon: Target },
   ];

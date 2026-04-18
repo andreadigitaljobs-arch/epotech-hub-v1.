@@ -132,6 +132,23 @@ export default function Home() {
           ⚡ Accesos Rápidos
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <Link href="/contenido" className="group sm:col-span-3">
+            <Card className="h-full !bg-amber-500 text-white hover:!bg-amber-600 !border-transparent card-hover p-8 shadow-xl shadow-amber-500/20">
+               <div className="flex items-center justify-between">
+                 <div className="flex items-center gap-6">
+                   <div className="bg-white/20 p-4 rounded-[2rem]">
+                     <Sparkles size={32} className="text-white" />
+                   </div>
+                   <div>
+                     <h3 className="font-black text-2xl tracking-tight">Estrategia de Contenido</h3>
+                     <p className="text-xs font-bold text-white/90 mt-1 uppercase tracking-widest">Lo que vamos a grabar hoy</p>
+                   </div>
+                 </div>
+                 <ArrowRight size={28} className="text-white/60 group-hover:text-white group-hover:translate-x-2 transition-all" />
+               </div>
+            </Card>
+          </Link>
+
           <Link href="/manual" className="group">
             <Card className="h-full !bg-[var(--primary)] text-white hover:!bg-[var(--primary-light)] !border-transparent card-hover">
                <div className="flex items-center justify-between">
@@ -140,11 +157,10 @@ export default function Home() {
                      <Video size={20} className="text-white" />
                    </div>
                    <div>
-                     <h3 className="font-black text-sm">Guía de Grabación</h3>
-                     <p className="text-[10px] font-bold text-white/80 mt-0.5 uppercase">Protocolo de grabación</p>
+                     <h3 className="font-black text-sm">Cómo Grabar</h3>
+                     <p className="text-[10px] font-bold text-white/80 mt-0.5 uppercase">Manual de Calidad</p>
                    </div>
                  </div>
-                 <ArrowRight size={18} className="text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all" />
                </div>
             </Card>
           </Link>

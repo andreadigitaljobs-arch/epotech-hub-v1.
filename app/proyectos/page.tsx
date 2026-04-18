@@ -87,8 +87,24 @@ export default function ServicesPage() {
 
   const openServiceDetail = async (service: any) => {
     setSelectedService(service);
-    // Force history to empty as part of the nuclear reset
-    setServiceHistory([]);
+    
+    // 1. Map name to category for filtering
+    const category = service.name.includes('CRM') ? 'CRM Master' : 
+                     service.name.includes('App') ? 'App de Seguimiento' : 
+                     service.name.includes('Formulario') ? 'Formulario Inteligente' : 'Landing Page';
+
+    // 2. Fetch History from Actividad table
+    const { data: history, error } = await supabase
+      .from("actividad")
+      .select("*")
+      .eq("categoria", category)
+      .order("fecha", { ascending: false });
+
+    if (!error && history) {
+      setServiceHistory(history);
+    } else {
+      setServiceHistory([]);
+    }
   };
 
   const updateStatus = async (e: React.MouseEvent, serviceId: string, currentStatus: string) => {
@@ -357,37 +373,39 @@ export default function ServicesPage() {
             
             <div className="flex-1 overflow-y-auto p-8 sm:p-12 space-y-10 custom-scrollbar bg-white">
               {serviceHistory.length > 0 ? (
-                serviceHistory.map((entry, idx) => (
-                  <div key={idx} className="relative pl-12 border-l-2 border-dashed border-gray-100 pb-4 last:pb-0">
-                    <div className="absolute left-[-11px] top-0 h-5 w-5 rounded-full bg-white border-4 border-[var(--accent)] shadow-md" />
-                    
-                    <div className="mb-4">
-                       <span className="text-[11px] font-black text-[var(--accent)] uppercase tracking-widest bg-blue-50 px-4 py-1.5 rounded-full border border-blue-100/50">{entry.fecha}</span>
-                    </div>
+                <div className="grid grid-cols-1 gap-6">
+                  {serviceHistory.map((entry, idx) => (
+                    <div key={idx} className="bg-gray-50/80 rounded-[32px] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                      <div className="flex justify-between items-center mb-6">
+                        <span className="text-[10px] font-black text-[var(--accent)] uppercase tracking-[0.2em] bg-blue-50/50 px-4 py-2 rounded-xl border border-blue-100/30">
+                          {new Date(entry.fecha).toLocaleDateString("es-ES", { day: 'numeric', month: 'long' })}
+                        </span>
+                        <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
+                      </div>
+                      
+                      <div className="space-y-3">
+                         {entry.logros.map((logro: string, lIdx: number) => (
+                           <div key={lIdx} className="flex gap-4 items-start">
+                              <div className="bg-emerald-500 rounded-lg p-1 shrink-0 mt-0.5">
+                                <CheckCircle2 size={12} className="text-white" />
+                              </div>
+                              <p className="text-sm font-bold text-[var(--primary)] leading-snug">{logro}</p>
+                           </div>
+                         ))}
 
-                    <div className="space-y-4">
-                       {entry.logros.map((logro: string, lIdx: number) => (
-                         <div key={lIdx} className="flex gap-4 bg-gray-50/50 p-5 rounded-3xl border border-gray-100/50 hover:bg-white hover:shadow-sm transition-all group">
-                            <div className="bg-emerald-500 rounded-full p-1 shrink-0 h-5 w-5 flex items-center justify-center mt-1 group-hover:scale-110 transition-transform">
-                              <CheckCircle2 size={12} className="text-white" />
-                            </div>
-                            <p className="text-base font-bold text-[var(--primary)] leading-tight">{logro}</p>
-                         </div>
-                       ))}
-
-                       {entry.siguiente_objetivo && (
-                         <div className="p-5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-3xl text-white shadow-lg shadow-blue-500/10 flex items-center justify-between group">
-                            <div className="flex items-center gap-4">
-                               <div className="bg-white/20 p-2 rounded-xl group-hover:rotate-12 transition-transform">
-                                  <Zap size={16} className="fill-white" />
-                                </div>
-                               <span className="text-[13px] font-black tracking-tight italic">Próximo Hito: {entry.siguiente_objetivo}</span>
-                            </div>
-                         </div>
-                       )}
+                         {entry.siguiente_objetivo && (
+                           <div className="mt-6 pt-6 border-t border-gray-200/50">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Zap size={14} className="text-amber-500 fill-amber-500" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">Siguiente Meta:</span>
+                              </div>
+                              <p className="text-xs font-bold text-gray-500 italic">"{entry.siguiente_objetivo}"</p>
+                           </div>
+                         )}
+                      </div>
                     </div>
-                  </div>
-                ))
+                  ))}
+                </div>
               ) : (
                 <div className="text-center py-20 bg-gray-50/50 rounded-[40px] border border-dashed border-gray-200">
                   <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Aún no hay registros en este historial.</p>
