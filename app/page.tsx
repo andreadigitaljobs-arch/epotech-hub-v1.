@@ -36,7 +36,16 @@ export default function Home() {
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
-  const [projectsCount, setProjectsCount] = useState(0);
+  const [projectsCount, setProjectCount] = useState(0);
+
+  const formatDate = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr + 'T00:00:00'); // Ensure local time
+      return date.toLocaleDateString("es-ES", { day: 'numeric', month: 'short' }).replace('.', '');
+    } catch (e) {
+      return dateStr;
+    }
+  };
   
   const activeServicesCount = services.filter((s) => s.status === "active").length;
 
@@ -266,7 +275,7 @@ export default function Home() {
                   <span className="text-[9px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded bg-[var(--accent-light)] text-[var(--accent-dark)]">
                     {announcement.tipo}
                   </span>
-                  <span className="text-[10px] font-bold text-[var(--text-muted)] bg-[var(--bg)] px-2 py-0.5 rounded-full">{announcement.fecha}</span>
+                  <span className="text-[10px] font-bold text-[var(--text-muted)] bg-[var(--bg)] px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
                 </div>
                 <h3 className="font-black text-[var(--primary)] mb-2 text-base">
                   {announcement.titulo}

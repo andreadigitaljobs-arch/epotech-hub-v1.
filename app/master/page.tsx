@@ -26,6 +26,16 @@ export default function MasterPanel() {
   });
   const [history, setHistory] = useState<any[]>([]);
 
+  const formatDate = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr + 'T00:00:00');
+      return date.toLocaleDateString("es-ES", { day: 'numeric', month: 'short' }).replace('.', '');
+    } catch (e) {
+      return dateStr;
+    }
+  };
+
+
   useEffect(() => {
     fetchHistory();
   }, []);
@@ -49,7 +59,7 @@ export default function MasterPanel() {
         titulo: notificacion.titulo,
         mensaje: notificacion.mensaje,
         tipo: notificacion.tipo,
-        fecha: new Date().toLocaleDateString("es-ES", { day: 'numeric', month: 'short' })
+        fecha: new Date().toISOString().split('T')[0]
       }
     ]);
 
@@ -173,7 +183,7 @@ export default function MasterPanel() {
                   </div>
                   <h4 className="text-xs font-black text-gray-900">{h.titulo}</h4>
                   <p className="text-[10px] font-bold text-gray-500 mt-1 line-clamp-2">{h.mensaje}</p>
-                  <p className="text-[8px] font-black text-gray-300 mt-3">{h.fecha}</p>
+                  <p className="text-[8px] font-black text-gray-300 mt-3">{formatDate(h.fecha)}</p>
                </Card>
              ))}
              {history.length === 0 && (
