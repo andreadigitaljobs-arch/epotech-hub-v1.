@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ListTodo, Target, Video, Briefcase, PlaySquare, Calendar, Clock, Sparkles, LayoutGrid } from "lucide-react";
+import { Home, ListTodo, Target, Video, Briefcase, PlaySquare, Calendar, Clock, Sparkles, LayoutGrid, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 
 export function DesktopNav() {
