@@ -64,9 +64,8 @@ export default function MasterPanel() {
     ]);
 
     if (!error) {
-      // 2. Intentar enviar Notificación Push real al móvil
       try {
-        await fetch("/api/push", {
+        const pushRes = await fetch("/api/push", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 
@@ -74,15 +73,19 @@ export default function MasterPanel() {
             mensaje: notificacion.mensaje 
           }),
         });
-      } catch (e) {
-        console.error("Failed to send push:", e);
+        const pushResult = await pushRes.json();
+        if (!pushResult.success) {
+          console.error("Push API error:", pushResult.error);
+        }
+      } catch (e: any) {
+        console.error("Failed to call push API:", e);
       }
 
       setNotificacion({ titulo: "", mensaje: "", tipo: "RECORDATORIO" });
       fetchHistory();
-      alert("¡Notificación enviada con éxito!");
+      alert("¡Notificación enviada con éxito! (Nota: Verifica si llega la alerta al móvil)");
     } else {
-      alert("Error al enviar: " + error.message);
+      alert("Error de base de datos: " + error.message);
     }
     setSending(false);
   }
