@@ -80,6 +80,24 @@ export function DesktopNav() {
             })}
           </nav>
         </div>
+        <div>
+          <h3 className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+            Andrea
+          </h3>
+          <nav className="space-y-1">
+            <Link
+              href="/master"
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                pathname === "/master"
+                  ? "bg-red-50 text-red-600 shadow-sm"
+                  : "text-red-400 hover:bg-red-50/50 hover:text-red-500"
+              }`}
+            >
+              <ShieldCheck size={18} />
+              Panel Master
+            </Link>
+          </nav>
+        </div>
       </div>
 
     </aside>
