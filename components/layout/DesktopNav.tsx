@@ -83,6 +83,8 @@ export function DesktopNav() {
               Inspiración
             </Link>
           </nav>
+        </div>
+
         <div>
           <h3 className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
             Andrea
