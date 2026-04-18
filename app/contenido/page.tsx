@@ -108,42 +108,42 @@ export default function ContenidoPage() {
         {activeTab === 'publicado' && <PublicadoSection publicaciones={publicaciones} />}
       </div>
 
-      {/* Script Detail Modal */}
+      {/* Script Detail Modal - Centered and Light */}
       {selectedScript && (
-        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-           <Card className="w-full max-w-lg bg-white rounded-[32px] overflow-hidden animate-in slide-in-from-bottom-5 duration-300 border-none shadow-2xl">
-              <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+        <div className="fixed inset-0 z-[100] bg-white/70 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
+           <Card className="w-full max-w-lg bg-white rounded-[32px] overflow-hidden shadow-[0_32px_64px_-12px_rgba(0,0,0,0.1)] border border-gray-100 flex flex-col max-h-[90vh]">
+              <div className="p-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
                  <div>
-                    <span className="text-[7px] font-black text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-[0.2em]">{selectedScript.tag}</span>
-                    <h3 className="text-lg font-black text-[var(--primary)] uppercase mt-1 leading-none tracking-tight">{selectedScript.title}</h3>
+                    <span className="text-[7px] font-black text-blue-500 bg-blue-100/50 px-2 py-0.5 rounded-full uppercase tracking-[0.2em]">{selectedScript.tag}</span>
+                    <h3 className="text-base font-black text-[var(--primary)] uppercase mt-1 leading-none tracking-tight">{selectedScript.title}</h3>
                  </div>
                  <button onClick={() => setSelectedScript(null)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                    <X size={20} className="text-gray-400" />
+                    <X size={18} className="text-gray-400" />
                  </button>
               </div>
-              <div className="p-6 max-h-[70vh] overflow-y-auto space-y-8 no-scrollbar">
+              <div className="p-8 overflow-y-auto space-y-8 no-scrollbar flex-1">
                  {selectedScript.steps.map((s: any, i: number) => (
-                    <div key={i} className="flex gap-4 group">
+                    <div key={i} className="flex gap-4">
                        <div className="flex flex-col items-center gap-2 pt-1">
-                          <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+                          <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
                           {i !== selectedScript.steps.length - 1 && <div className="w-0.5 flex-1 bg-gray-100 rounded-full"></div>}
                        </div>
-                       <div className="space-y-2 pb-6">
-                          <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{s.label}</h4>
+                       <div className="space-y-3 pb-4">
+                          <h4 className="text-[9px] font-black text-gray-300 uppercase tracking-widest font-mono">{s.label}</h4>
                           <p className="text-sm font-bold text-gray-700 italic leading-relaxed">"{s.txt}"</p>
-                          <div className="flex items-center gap-2 text-[8px] font-black text-blue-500 uppercase tracking-widest bg-blue-50/50 w-fit px-2 py-1 rounded-md">
-                             <Camera size={10} /> Graba esto: {s.action || "Clip de 5 segundos"}
+                          <div className="flex items-center gap-2 text-[8px] font-black text-blue-500 uppercase tracking-widest bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100/50">
+                             <Camera size={10} className="animate-pulse" /> GRABA: {s.action || "Clip de 5 segundos"}
                           </div>
                        </div>
                     </div>
                  ))}
               </div>
-              <div className="p-6 bg-gray-50 border-t border-gray-100">
+              <div className="p-6 bg-white border-t border-gray-50">
                  <button 
                   onClick={() => setSelectedScript(null)}
-                  className="w-full bg-[var(--primary)] text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+                  className="w-full bg-[var(--primary)] text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-500/10 active:scale-95 transition-all"
                  >
-                    Entendido, ¡A Grabar!
+                    ¡Entendido, a grabar!
                  </button>
               </div>
            </Card>
