@@ -7,6 +7,7 @@ import {
   Send, 
   Bell, 
   ShieldCheck, 
+  Zap, 
   RefreshCcw, 
   Trash2,
   Calendar,
