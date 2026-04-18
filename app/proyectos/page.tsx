@@ -72,8 +72,7 @@ export default function ServicesPage() {
                            service.name.includes('Social') ? 'Estrategia de Redes' : 
                            service.name.includes('Formulario') ? 'Formulario Inteligente' : 'Landing Page';
            
-            // Reset achievements to empty initially as part of the nuclear purge
-            const recentLogros = ["En fase de planeación estratégica"];
+            const recentLogros = service.achievements || [];
             
             return { ...service, achievements: recentLogros, category };
         }));
