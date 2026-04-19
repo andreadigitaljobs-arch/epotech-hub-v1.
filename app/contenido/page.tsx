@@ -1,36 +1,17 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
-import { Card } from "@/components/ui/Card";
-import { 
-  Sparkles, 
-  Lightbulb, 
-  Video, 
-  BarChart3, 
-  Zap, 
-  CheckCircle2, 
-  ChevronRight,
-  Smartphone,
-  Play,
-  RotateCcw,
-  Star,
-  Users,
-  Mic,
-  Clapperboard,
-  Camera,
-  Info,
-  X,
-  Eye
-} from "lucide-react";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { useSearchParams } from "next/navigation";
+import { guiones, Script } from "@/data/scripts";
 
 export default function ContenidoPage() {
+  const searchParams = useSearchParams();
+  const typeParam = searchParams.get('type') || 'presion';
+  
   const [activeTab, setActiveTab] = useState('guiones');
+  const [serviceType, setServiceType] = useState(typeParam);
+  const [activeCategory, setActiveCategory] = useState<string>('Todas');
   const [ideas, setIdeas] = useState<any[]>([]);
   const [publicaciones, setPublicaciones] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedScript, setSelectedScript] = useState<any>(null);
+  const [selectedScript, setSelectedScript] = useState<Script | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -47,10 +28,17 @@ export default function ContenidoPage() {
 
   const tabs = [
     { id: 'guiones', name: 'Guiones', icon: Clapperboard },
-    { id: 'ideas', name: 'Lluvia de Ideas', icon: Lightbulb },
-    { id: 'academia', name: 'Tips Pro', icon: Video },
-    { id: 'publicado', name: 'Lo Subido', icon: CheckCircle2 },
+    { id: 'series', name: 'Series', icon: Play },
+    { id: 'broll', name: 'B-Rolls', icon: Camera },
+    { id: 'calendario', name: 'Calendario', icon: Calendar },
   ];
+
+  const categories = ['Todas', 'Antes/Después', 'Satisfying', 'Educativo', 'Storytelling'];
+
+  const filteredGuiones = guiones.filter(g => 
+    g.service === serviceType && 
+    (activeCategory === 'Todas' || g.category === activeCategory)
+  );
 
   if (loading) return <LoadingSpinner message="Preparando Estudio..." />;
 
@@ -63,26 +51,33 @@ export default function ContenidoPage() {
              <Clapperboard size={14} className="text-blue-500" />
              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-500/60 font-mono">Epotech Studio</span>
            </div>
-           <h1 className="text-2xl font-black tracking-tight text-[var(--primary)] uppercase italic">Plan de Rodaje</h1>
+           <h1 className="text-2xl font-black tracking-tight text-[var(--primary)] uppercase italic">Fábrica de Contenido</h1>
         </div>
       </header>
 
-      {/* Nota de la Directora - Elegante */}
-      <Card className="p-5 bg-blue-900 border-none rounded-2xl shadow-lg relative overflow-hidden">
-         <div className="flex items-start gap-4 relative z-10">
-            <div className="bg-blue-400/20 p-2 rounded-xl border border-blue-400/30">
-               <Info size={16} className="text-blue-400" />
-            </div>
-            <div className="space-y-1">
-               <h3 className="text-[9px] font-black uppercase text-blue-400 tracking-widest font-mono">Dirección Creativa • Andrea</h3>
-               <p className="text-[10px] font-bold text-blue-100/90 leading-snug">
-                 Sé flexible. Estos guiones son solo tu base. Si no grabaste, yo te mandaré un guion para nota de voz y montamos la magia sobre el video.
-               </p>
-            </div>
-         </div>
-      </Card>
+      {/* Selector de Servicio Principal */}
+      <div className="grid grid-cols-3 gap-2 bg-slate-100 p-1.5 rounded-2xl">
+        <button 
+          onClick={() => setServiceType('presion')}
+          className={`py-2 px-3 rounded-xl text-[10px] font-black transition-all ${serviceType === 'presion' ? 'bg-[var(--primary)] text-white shadow-md' : 'text-slate-400'}`}
+        >
+          PRESIÓN
+        </button>
+        <button 
+          onClick={() => setServiceType('ventanas')}
+          className={`py-2 px-3 rounded-xl text-[10px] font-black transition-all ${serviceType === 'ventanas' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400'}`}
+        >
+          VENTANAS
+        </button>
+        <button 
+          onClick={() => setServiceType('epoxy')}
+          className={`py-2 px-3 rounded-xl text-[10px] font-black transition-all ${serviceType === 'epoxy' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400'}`}
+        >
+          EPOXY
+        </button>
+      </div>
 
-      {/* Tabs */}
+      {/* Tabs Principales de la Fábrica */}
       <div className="flex gap-1 p-1 bg-gray-100 rounded-2xl overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <button
@@ -102,69 +97,137 @@ export default function ContenidoPage() {
 
       {/* Content Area */}
       <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-        {activeTab === 'guiones' && <GuionesSection onSelect={setSelectedScript} />}
-        {activeTab === 'ideas' && <IdeasSection ideas={ideas} />}
-        {activeTab === 'academia' && <AcademiaSection />}
-        {activeTab === 'publicado' && <PublicadoSection publicaciones={publicaciones} />}
+        {/* GUIONES SECTION */}
+        {activeTab === 'guiones' && (
+          <div className="space-y-6">
+            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-4 py-1.5 rounded-full text-[9px] font-black whitespace-nowrap border-2 transition-all ${
+                    activeCategory === cat 
+                      ? "bg-blue-50 border-blue-500 text-blue-600" 
+                      : "bg-white border-gray-100 text-gray-400"
+                  }`}
+                >
+                  {cat.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredGuiones.map(script => (
+                <ScriptCard 
+                  key={script.id}
+                  title={script.title} 
+                  tag={script.category}
+                  steps={script.steps}
+                  onClick={() => setSelectedScript(script)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* SERIES SECTION */}
+        {activeTab === 'series' && <SeriesSection ideas={ideas} />}
+
+        {/* B-ROLL SECTION */}
+        {activeTab === 'broll' && <BRollSection service={serviceType} />}
+
+        {/* CALENDARIO SECTION */}
+        {activeTab === 'calendario' && <CalendarioSection />}
       </div>
 
-      {/* Script Focus Mode - Full Screen Opaque Overlay */}
+      {/* Script Focus Mode */}
       {selectedScript && (
-        <div className="fixed inset-0 z-[9999] bg-white flex flex-col animate-in fade-in zoom-in-95 duration-300">
-           {/* Header de Salida */}
+        <div className="fixed inset-0 z-[9999] bg-white flex flex-col">
+           {/* Header */}
            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
               <div>
-                 <span className="text-[8px] font-black text-blue-600 bg-blue-100 px-3 py-1 rounded-full uppercase tracking-[0.2em]">{selectedScript.tag}</span>
-                 <h3 className="text-xl font-black text-[var(--primary)] uppercase mt-1 tracking-tight leading-none">{selectedScript.title}</h3>
+                 <span className="text-[8px] font-black text-blue-600 bg-blue-100 px-3 py-1 rounded-full uppercase tracking-[0.2em]">{selectedScript.category}</span>
+                 <h3 className="text-xl font-black text-[var(--primary)] uppercase mt-1 tracking-tight leading-none italic">{selectedScript.title}</h3>
               </div>
               <button 
                 onClick={() => setSelectedScript(null)} 
-                className="h-12 w-12 bg-white border border-gray-100 shadow-sm flex items-center justify-center rounded-2xl hover:bg-gray-50 transition-all text-gray-500 active:scale-95"
+                className="h-12 w-12 bg-white border border-gray-100 shadow-sm flex items-center justify-center rounded-2xl text-gray-500"
               >
                  <X size={24} />
               </button>
            </div>
 
-           {/* Paso a Paso del Rodaje */}
+           {/* Content */}
            <div className="flex-1 overflow-y-auto p-8 space-y-12 no-scrollbar">
-              <div className="max-w-md mx-auto space-y-12 py-10">
-                 {selectedScript.steps.map((s: any, i: number) => (
-                    <div key={i} className="flex gap-6 relative group">
-                       <div className="flex flex-col items-center gap-4">
-                          <div className="h-4 w-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] border-4 border-white"></div>
-                          {i !== selectedScript.steps.length - 1 && <div className="w-1 flex-1 bg-blue-50/50 rounded-full"></div>}
-                       </div>
-                       <div className="space-y-4 pb-6 flex-1">
-                          <h4 className="text-[10px] font-black text-blue-300 uppercase tracking-[0.4em] font-mono italic">{s.label}</h4>
-                          <div className="relative">
-                             <div className="absolute -left-4 top-0 bottom-0 w-1 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <p className="text-xl font-bold text-[var(--primary)] leading-relaxed italic">
-                                "{s.txt}"
-                             </p>
-                          </div>
-                          <div className="flex items-center gap-3 text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 shadow-sm px-4 py-3 rounded-2xl border border-blue-100 transition-all group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-700">
-                             <Camera size={16} className="animate-pulse" /> 
-                             <span className="opacity-80">CÁMARA:</span> 
-                             <span className="font-black uppercase">{s.action || "Clip de acción"}</span>
-                          </div>
-                       </div>
+              <div className="max-w-md mx-auto space-y-12 py-6">
+                 <div className="grid grid-cols-2 gap-4 mb-2">
+                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                       <span className="text-[8px] font-black text-slate-400 uppercase block tracking-widest mb-1">Duración</span>
+                       <span className="text-sm font-black text-[var(--primary)]">{selectedScript.duration}</span>
                     </div>
-                 ))}
+                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                       <span className="text-[8px] font-black text-slate-400 uppercase block tracking-widest mb-1">Tomas Req.</span>
+                       <span className="text-sm font-black text-[var(--primary)]">{selectedScript.tomas} CLIPS</span>
+                    </div>
+                 </div>
+
+                 <section className="space-y-10">
+                    <h4 className="text-[10px] font-black text-blue-600 bg-blue-50 w-fit px-4 py-1 rounded-full uppercase tracking-widest">Estructura del Video</h4>
+                    {selectedScript.steps.map((s, i) => (
+                        <div key={i} className="flex gap-6 relative group">
+                          <div className="flex flex-col items-center gap-4">
+                              <div className="h-4 w-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] border-4 border-white"></div>
+                              {i !== selectedScript.steps.length - 1 && <div className="w-1 flex-1 bg-blue-50/50 rounded-full"></div>}
+                          </div>
+                          <div className="space-y-4 pb-6 flex-1">
+                              <h4 className="text-[10px] font-black text-blue-300 uppercase tracking-[0.4em] font-mono italic">{s.label}</h4>
+                              <p className="text-xl font-bold text-[var(--primary)] leading-relaxed italic">"{s.txt}"</p>
+                              <div className="flex items-center gap-3 text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 p-3 rounded-2xl border border-blue-100">
+                                <Camera size={16} /> 
+                                <span className="font-black italic">{s.action}</span>
+                              </div>
+                          </div>
+                        </div>
+                    ))}
+                 </section>
+
+                 <section className="space-y-4 pt-6">
+                    <h4 className="text-[10px] font-black text-amber-600 bg-amber-50 w-fit px-4 py-1 rounded-full uppercase tracking-widest">Tips Pro</h4>
+                    <div className="space-y-3">
+                       {selectedScript.tips.map((tip, i) => (
+                          <div key={i} className="flex gap-3 bg-amber-50/50 p-4 rounded-2xl border border-amber-100/50">
+                             <Sparkles size={16} className="text-amber-500 shrink-0" />
+                             <p className="text-xs font-bold text-amber-900 leading-tight">"{tip}"</p>
+                          </div>
+                       ))}
+                    </div>
+                 </section>
+
+                 <section className="space-y-4 pt-6">
+                    <h4 className="text-[10px] font-black text-emerald-600 bg-emerald-50 w-fit px-4 py-1 rounded-full uppercase tracking-widest">Checklist de Tomas</h4>
+                    <div className="grid grid-cols-1 gap-2">
+                       {selectedScript.checklist.map((item, i) => (
+                          <div key={i} className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                             <div className="h-5 w-5 rounded-md border-2 border-emerald-500/30 flex items-center justify-center">
+                               <CheckCircle2 size={12} className="text-emerald-500 opacity-0" />
+                             </div>
+                             <span className="text-[10px] font-black text-slate-600 uppercase tracking-[0.05em]">{item}</span>
+                          </div>
+                       ))}
+                    </div>
+                 </section>
               </div>
            </div>
 
-           {/* Footer de Acción */}
-           <div className="p-8 border-t border-gray-100 bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
+           {/* Footer */}
+           <div className="p-8 border-t border-gray-100 bg-white">
               <div className="max-w-md mx-auto">
                  <button 
                   onClick={() => setSelectedScript(null)}
-                  className="w-full bg-[var(--primary)] text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all flex items-center justify-center gap-3"
+                  className="w-full bg-[var(--primary)] text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.3em] shadow-xl"
                  >
-                    Terminar y Salir <CheckCircle2 size={18} />
+                    Terminar y Salir
                  </button>
-                 <p className="text-center text-[9px] font-black text-gray-300 uppercase tracking-widest mt-4">
-                    Toda la atención en el guion • Epotech Studio
-                 </p>
               </div>
            </div>
         </div>
@@ -173,199 +236,259 @@ export default function ContenidoPage() {
   );
 }
 
-function GuionesSection({ onSelect }: any) {
+function BRollSection({ service }: { service: string }) {
+  const brolls: Record<string, any[]> = {
+    presion: [
+      { title: "Hero Shot: El Experto", desc: "Tú de espaldas manejando la máquina con fuerza.", cat: "Hero" },
+      { title: "Detail: La Mugre vuela", desc: "Cerca de la boquilla mientras el agua barriendo.", cat: "Detalle" },
+      { title: "Action: POV Driveway", desc: "Cámara en mano moviéndose sobre el piso limpio.", cat: "Proceso" },
+    ],
+    ventanas: [
+      { title: "Hero Shot: El Reflejo", desc: "Tu cara concentrada reflejada en el vidrio.", cat: "Hero" },
+      { title: "Detail: Espuma satisfying", desc: "Primer plano de las burbujas desapareciendo.", cat: "Detalle" },
+      { title: "Action: La transición mano", desc: "Tu mano tapando el lente y descubriendo limpieza.", cat: "Transición" },
+    ],
+    epoxy: [
+      { title: "Hero Shot: El Maestro", desc: "Tú esparciendo la mezcla con el rodillo.", cat: "Hero" },
+      { title: "Detail: El brillo espejo", desc: "La luz de una lámpara reflejándose en el piso.", cat: "Detalle" },
+      { title: "Action: Lijado diamante", desc: "POV de la máquina industrial sacando polvo.", cat: "Proceso" },
+    ]
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-       <ScriptCard 
-          title="Acompáñame un día de trabajo" 
-          tag="Storytelling"
-          steps={[
-            { label: "0-3s", txt: "¡Ustedes no saben con qué nos encontramos hoy en este garaje!", action: "Muestra Sebas a cámara apuntando al piso sucio." },
-            { label: "Media", txt: "Vlog rápido de la mezcla, el lijado industrial y el equipo trabajando.", action: "3 clips rápidos (1seg c/u) de acción intensa." },
-            { label: "Final", txt: "Resultado espejo y adiós a cámara.", action: "Muestra el brillo final con Sebas despidiéndose." }
-          ]}
-          onClick={() => onSelect({
-            title: "Acompáñame un día de trabajo",
-            tag: "Storytelling",
-            steps: [
-              { label: "INICIO", txt: "¡Ustedes no saben con qué nos encontramos hoy en este garaje!", action: "Sebas a cámara apuntando al piso destruido." },
-              { label: "ACCIÓN", txt: "Vlog rápido de la mezcla, el lijado industrial y el equipo trabajando.", action: "Clips POV de las máquinas moviéndose con fuerza." },
-              { label: "EDUCATIVO", txt: "Aquí en Utah la sal destruye el concreto. Por eso el Epoxy es una inversión, no un lujo.", action: "Cerca de una grieta que se está llenando." },
-              { label: "RESULTADO", txt: "¡Miren este brillo! Resultado espejo completo.", action: "Toma panorámica del garaje terminado." },
-              { label: "CIERRE", txt: "Comenta INFO si quieres que tu garaje pase de esto... a esto.", action: "Antes vs Después flash." }
-            ]
-          })}
-       />
-       <ScriptCard 
-          title="Explicación de un Proceso" 
-          tag="Educativo"
-          steps={[
-            { label: "0-5s", txt: "¿Por qué nuestros pisos duran décadas y otros no? Secretos #1...", action: "Lijado diamante POV." },
-            { label: "Media", txt: "La mezcla perfecta (Nivelación industrial). Cero grietas para siempre.", action: "Muestra el material nivelándose solo." },
-            { label: "Final", txt: "Últimos espacios para mayo. Link en la bio.", action: "Sebas hablando a cámara con logo Epotech." }
-          ]}
-          onClick={() => onSelect({
-            title: "Explicación de un Proceso",
-            tag: "Educativo",
-            steps: [
-              { label: "HOOCK", txt: "¿Por qué nuestros pisos duran décadas y otros no? El secreto está aquí...", action: "Toma de cerca de la lija de diamante." },
-              { label: "PROCESO", txt: "No solo es pintar. Es preparar la base para que el concreto respire.", action: "Muestra el polvo saliendo (ASMR)." },
-              { label: "DETALLE", txt: "Usamos base niveladora premium. Cero grietas, cero humedad para siempre.", action: "Cerca de la mezcla siendo esparcida." },
-              { label: "FINAL", txt: "Calidad industrial para tu casa. Agenda hoy.", action: "Muestra el camión de Epotech afuera de la casa." }
-            ]
-          })}
-       />
-       <ScriptCard 
-          title="Experiencia de Cliente" 
-          tag="Testimonio"
-          steps={[
-            { label: "0-3s", txt: "Lo que el cliente pensaba vs lo que le entregamos...", action: "Cara de duda del cliente o Sebas." },
-            { label: "Media", txt: "Casi cancela por miedo al precio, hoy dice que es lo mejor que hizo.", action: "Cliente señalando el piso feliz." },
-            { label: "Final", txt: "No te quedes con la duda. Escríbenos.", action: "Texto con el WhatsApp de ventas." }
-          ]}
-          onClick={() => onSelect({
-            title: "Experiencia de Cliente",
-            tag: "Testimonio",
-            steps: [
-              { label: "INICIO", txt: "Este cliente casi no se decide por miedo al mantenimiento...", action: "Muestra un garaje muy viejo y descuidado." },
-              { label: "CAMBIO", txt: "Le mostramos nuestra técnica de sellado UV y no hubo vuelta atrás.", action: "Pasando la lija y viendo el cambio de tono." },
-              { label: "CLIENTE", txt: "Miren esta cara... así se siente un trabajo bien hecho.", action: "Muestra al cliente orgulloso de su nuevo garaje." },
-              { label: "CIERRE", txt: "Dignidad para tu garaje. Comenta EPOXY.", action: "Brillo final con luz del sol." }
-            ]
-          })}
-       />
+    <div className="space-y-6">
+      <Card className="p-6 bg-slate-900 border-none rounded-[2rem] text-white overflow-hidden relative">
+         <div className="relative z-10">
+            <h3 className="text-xs font-black uppercase text-blue-400 tracking-[0.2em] mb-2 font-mono italic">¿Qué es un B-Roll?</h3>
+            <p className="text-sm font-bold text-blue-100 leading-relaxed italic">
+              "Son clips extras de apoyo que grabas para que el video no sea aburrido y se vea profesional. Sirven para cualquier guion."
+            </p>
+         </div>
+         <div className="absolute -right-6 -bottom-6 text-white/5">
+            <Camera size={120} />
+         </div>
+      </Card>
+
+      <div className="grid grid-cols-1 gap-3">
+        {brolls[service]?.map((b, i) => (
+          <Card key={i} className="p-5 border-slate-100 rounded-3xl hover:border-blue-200 transition-all">
+            <div className="flex justify-between items-start mb-3">
+              <span className="text-[8px] font-black text-blue-500 bg-blue-50 px-2 py-1 rounded-full uppercase tracking-widest">{b.cat}</span>
+              <Camera size={14} className="text-slate-200" />
+            </div>
+            <h4 className="text-sm font-black text-[var(--primary)] uppercase tracking-tight italic">{b.title}</h4>
+            <p className="text-[10px] font-bold text-slate-400 mt-2 leading-tight italic">"{b.desc}"</p>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
 
-function ScriptCard({ title, tag, steps, onClick }: any) {
+function SeriesSection({ ideas }: { ideas: any[] }) {
   return (
-    <Card className="p-5 border border-gray-100 bg-white rounded-2xl shadow-sm hover:border-blue-200 transition-all flex flex-col justify-between group">
-      <div>
-        <div className="flex justify-between items-center mb-4">
-           <span className="text-[7px] font-black text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 uppercase tracking-widest">{tag}</span>
-           <Clapperboard size={12} className="text-gray-200" />
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-4">
+        <SerieCard name="Duelo de Suciedad" status="Avanzando" count={1} total={3} />
+        <SerieCard name="Mitos de Utah" status="Planeación" count={0} total={3} />
+        <SerieCard name="Transformación Radical" status="Avanzando" count={2} total={5} />
+      </div>
+
+      <Card className="p-8 border border-gray-100 rounded-[2.5rem] shadow-sm bg-white">
+        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-8 flex items-center gap-2">
+          <Lightbulb size={16} /> Otras Ideas Virales
+        </h3>
+        <div className="space-y-6">
+          {ideas.slice(0, 3).map((idea) => (
+              <IdeaItem 
+                key={idea.id}
+                type={idea.tipo} 
+                title={idea.titulo} 
+                desc={idea.descripcion}
+              />
+          ))}
         </div>
-        <h3 className="text-[11px] font-black text-[var(--primary)] uppercase tracking-tight mb-5 leading-tight">{title}</h3>
-        
-        <div className="space-y-3">
-          {steps.slice(0, 3).map((s: any, i: number) => (
-            <div key={i} className="flex gap-4 items-start">
-              <span className="text-[8px] font-black text-gray-300 w-8 pt-0.5 uppercase font-mono">{s.label}</span>
-              <p className="text-[10px] font-bold text-gray-400 leading-snug flex-1 italic line-clamp-1 group-hover:text-gray-600 transition-colors">"{s.txt}"</p>
+      </Card>
+    </div>
+  );
+}
+
+function CalendarioSection() {
+  const days = [
+    { day: 'LUNES 14', type: 'REEL', theme: 'Antes/Después Split', done: true, views: '1.2K' },
+    { day: 'MARTES 15', type: 'CAROUSEL', theme: '5 Slides de Proceso', done: true, views: '456' },
+    { day: 'MIÉRCOLES 16', type: 'REEL', theme: 'ASMR Satisfying', done: false, views: '-' },
+    { day: 'JUEVES 17', type: 'STORY', theme: 'Educativo / Tips', done: false, views: '-' },
+  ];
+
+  return (
+    <div className="space-y-6">
+       <Card className="p-6 bg-emerald-50 border-emerald-100 rounded-[2rem]">
+          <div className="flex justify-between items-end mb-4">
+            <h3 className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">Plan Semanal</h3>
+            <span className="text-xs font-black text-emerald-800">2/5 LISTO</span>
+          </div>
+          <div className="h-3 w-full bg-white rounded-full overflow-hidden border border-emerald-100">
+             <div className="h-full bg-emerald-500 w-[40%] rounded-full shadow-lg shadow-emerald-500/20"></div>
+          </div>
+       </Card>
+
+       <div className="space-y-3">
+          {days.map((d, i) => (
+            <Card key={i} className="p-5 border-slate-100 rounded-3xl flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                 <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ${d.done ? 'bg-emerald-100 text-emerald-600 shadow-sm' : 'bg-slate-50 text-slate-300 border border-slate-100'}`}>
+                    {d.done ? <CheckCircle2 size={20} /> : <Clock size={20} />}
+                 </div>
+                 <div>
+                    <div className="flex items-center gap-2">
+                       <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest font-mono">{d.day}</span>
+                       <span className="text-[7px] font-black text-blue-500 bg-blue-50 px-1.5 rounded uppercase">{d.type}</span>
+                    </div>
+                    <h4 className="text-sm font-black text-[var(--primary)] uppercase tracking-tight italic mt-1">{d.theme}</h4>
+                 </div>
+              </div>
+              {d.done && <div className="text-[10px] font-black text-slate-400">{d.views}</div>}
+            </Card>
+          ))}
+       </div>
+    </div>
+  );
+}
+
+function ScriptCard({ title, tag, steps, onClick }: { title: string, tag: string, steps: any[], onClick: () => void }) {
+  return (
+    <Card className="p-6 border border-gray-100 bg-white rounded-[2rem] shadow-sm hover:border-blue-200 transition-all flex flex-col justify-between group cursor-pointer" onClick={onClick}>
+      <div>
+        <div className="flex justify-between items-center mb-6">
+           <span className="text-[8px] font-black text-blue-500 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 uppercase tracking-widest">{tag}</span>
+           <Clapperboard size={14} className="text-gray-200" />
+        </div>
+        <h3 className="text-lg font-black text-[var(--primary)] uppercase tracking-tight mb-6 leading-tight italic">{title}</h3>
+        <div className="space-y-4">
+          {steps.slice(0, 2).map((s: any, i: number) => (
+            <div key={i} className="flex gap-4 items-start border-l-2 border-slate-50 pl-4">
+              <p className="text-[10px] font-bold text-gray-400 leading-relaxed italic line-clamp-2">"{s.txt}"</p>
             </div>
           ))}
         </div>
       </div>
-
-      <button 
-        onClick={onClick}
-        className="mt-6 pt-4 border-t border-gray-50 flex items-center justify-between w-full hover:bg-gray-50 -mx-5 px-5 transition-colors"
-      >
-         <div className="flex gap-1">
-            <div className="h-1 w-3 bg-blue-100 rounded-full"></div>
-            <div className="h-1 w-1 bg-gray-100 rounded-full"></div>
-         </div>
-         <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest flex items-center gap-1 group-hover:translate-x-1 transition-transform"> VER DETALLES <ChevronRight size={10} /></span>
-      </button>
+      <div className="mt-8 pt-4 border-t border-gray-50 flex items-center justify-between w-full">
+         <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-transform"> GRABAR AHORA <ChevronRight size={12} /></span>
+      </div>
     </Card>
   );
 }
 
-function IdeasSection({ ideas }: { ideas: any[] }) {
+function SerieCard({ name, status, count, total }: any) {
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="p-6 border border-gray-100 rounded-2xl shadow-sm bg-white">
-          <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 mb-6 flex items-center gap-2">
-            <Lightbulb size={14} /> Próximos Virales
-          </h3>
-          <div className="space-y-4">
-            {ideas.map((idea) => (
-               <IdeaItem 
-                  key={idea.id}
-                  type={idea.tipo || "QUICK TIP"} 
-                  title={idea.titulo} 
-                  desc={idea.descripcion}
-               />
-            ))}
-            {ideas.length === 0 && (
-               <p className="text-[9px] font-black text-gray-300 italic uppercase tracking-widest text-center py-6">Sin ideas nuevas aún.</p>
-            )}
-          </div>
-        </Card>
-
-        <div className="space-y-4">
-           <SerieCard name="Duelo de Suciedad" status="Avanzando" count={1} />
-           <SerieCard name="Mitos de Utah" status="Planeación" count={0} />
-           <div className="p-6 bg-blue-50 border border-blue-100 rounded-2xl text-center">
-              <p className="text-[9px] font-black text-blue-400 leading-relaxed uppercase tracking-[0.2em] italic">
-                 "Graba hoy,<br/>triunfa mañana."
-              </p>
-           </div>
+    <Card className="p-6 rounded-[2rem] border border-gray-100 flex items-center justify-between bg-white shadow-sm hover:border-blue-100 transition-all">
+      <div className="flex items-center gap-4">
+        <div className="h-10 w-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-300">
+           <Play size={18} fill="currentColor" />
+        </div>
+        <div>
+          <h4 className="text-sm font-black text-[var(--primary)] uppercase tracking-tight leading-none italic">{name}</h4>
+          <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-2">{status}</p>
         </div>
       </div>
+      <div className="text-right">
+        <div className="text-xs font-black text-[var(--primary)]">{count}/{total}</div>
+        <div className="text-[8px] font-black text-slate-300 uppercase tracking-widest">Episodios</div>
+      </div>
+    </Card>
+  );
+}
+
+function IdeaItem({ type, title, desc }: any) {
+  return (
+    <div className="p-4 hover:bg-gray-50 rounded-2xl transition-all border border-transparent hover:border-gray-100">
+      <span className="text-[8px] font-black text-blue-500 tracking-[0.2em] uppercase">{type}</span>
+      <h4 className="text-sm font-black text-[var(--primary)] uppercase tracking-tight mt-1 italic">{title}</h4>
+      <p className="text-[10px] font-bold text-gray-400 mt-2 leading-tight italic line-clamp-2">"{desc}"</p>
     </div>
   );
 }
 
 function AcademiaSection() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
        <TipCard 
           title="Ángulo POV" 
           desc="Graba a la altura de tus ojos. A la gente le encanta ver lo que tú ves mientras trabajas."
-          icon={<Eye size={16} className="text-blue-500" />}
+          icon={<Eye size={18} className="text-blue-500" />}
        />
        <TipCard 
           title="Dopamina Sonora" 
           desc="Graba el sonido de las máquinas de cerca. El 'ruido' de limpieza es adictivo (ASMR industrial)."
-          icon={<Mic size={16} className="text-emerald-500" />}
+          icon={<Mic size={18} className="text-emerald-500" />}
        />
        <TipCard 
           title="Lente Limpio" 
           desc="Limpia la cámara antes de cada toma. El secreto del brillo es un lente impecable."
-          icon={<Zap size={16} className="text-amber-500" />}
+          icon={<Zap size={18} className="text-amber-500" />}
        />
     </div>
   );
 }
 
 function PublicadoSection({ publicaciones }: { publicaciones: any[] }) {
+  const formatDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString("es-ES", { day: 'numeric', month: 'short' }).replace('.', '');
+  };
+
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-         {publicaciones.map((pub) => (
-           <PublishedItem 
-              key={pub.id}
-              type={pub.tipo} 
-              platform={pub.plataforma}
-              title={pub.tema} 
-              date={new Date(pub.created_at).toLocaleDateString()}
-              views="--"
-           />
-         ))}
-         {publicaciones.length === 0 && (
-           <div className="col-span-full py-16 text-center border-2 border-dashed border-gray-100 rounded-[32px] bg-gray-50/50">
-              <div className="h-12 w-12 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                 <CheckCircle2 size={24} className="text-gray-200" />
-              </div>
-              <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em] italic">Aún no hay publicaciones esta semana.</p>
-              <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">Andrea las registrará pronto.</p>
-           </div>
-         )}
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+       {publicaciones.map((pub) => (
+         <PublishedItem 
+            key={pub.id}
+            type={pub.tipo} 
+            platform={pub.plataforma}
+            title={pub.tema} 
+            date={formatDate(pub.created_at)}
+            views="1.2K"
+         />
+       ))}
     </div>
   );
 }
 
-function IdeaItem({ type, title, desc }: any) {
+function TipCard({ title, desc, icon }: any) {
+   return (
+      <Card className="p-6 border border-gray-100 rounded-[2rem] bg-white shadow-sm flex items-start gap-5 hover:border-blue-100 transition-all">
+         <div className="bg-gray-50 p-3 rounded-2xl shrink-0">{icon}</div>
+         <div className="space-y-1">
+            <h4 className="text-[10px] font-black uppercase text-[var(--primary)] tracking-widest">{title}</h4>
+            <p className="text-xs font-bold text-gray-400 leading-relaxed italic">
+               "{desc}"
+            </p>
+         </div>
+      </Card>
+   );
+}
+
+function PublishedItem({ type, platform, title, date, views }: any) {
   return (
-    <div className="p-3 hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-100 cursor-pointer">
-      <span className="text-[7px] font-black text-blue-500 tracking-[0.2em] uppercase">{type}</span>
-      <h4 className="text-[10px] font-black text-[var(--primary)] uppercase tracking-tight mt-1">{title}</h4>
-      <p className="text-[9px] font-bold text-gray-400 mt-1 leading-tight line-clamp-2 italic">{desc}</p>
-    </div>
+    <Card className="p-0 border border-gray-100 overflow-hidden rounded-[2rem] bg-white shadow-md shadow-black/5 hover:translate-y-[-4px] transition-all">
+       <div className={`px-5 py-3 flex justify-between items-center ${
+            platform === 'TIKTOK' ? 'bg-zinc-900 text-white' : (platform === 'REEL' ? 'bg-gradient-to-r from-purple-700 to-pink-700 text-white' : 'bg-blue-800 text-white')
+          }`}>
+          <span className="text-[8px] font-black tracking-widest uppercase font-mono">{platform}</span>
+          <span className="text-[8px] font-bold opacity-60 uppercase">{date}</span>
+       </div>
+       <div className="p-6">
+          <h4 className="text-[11px] font-black text-[var(--primary)] line-clamp-2 uppercase tracking-tight mb-5 italic h-8">{title}</h4>
+          <div className="flex items-center justify-between border-t border-gray-50 pt-4">
+              <div className="bg-slate-50 px-3 py-1 rounded-full">
+                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{type}</span>
+              </div>
+               <div className="flex items-center gap-1.5">
+                  <BarChart3 size={12} className="text-blue-500" />
+                  <span className="text-[10px] font-black text-[var(--primary)]">{views}</span>
+               </div>
+          </div>
+       </div>
+    </Card>
   );
 }
 
