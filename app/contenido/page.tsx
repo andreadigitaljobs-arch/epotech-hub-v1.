@@ -1,7 +1,38 @@
+"use client";
+
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import { guiones, Script } from "@/data/scripts";
+import { 
+  Clapperboard, 
+  Play, 
+  Camera, 
+  Calendar, 
+  X, 
+  Sparkles, 
+  CheckCircle2, 
+  ChevronRight, 
+  Lightbulb, 
+  Clock,
+  Mic,
+  Zap,
+  Eye,
+  BarChart3
+} from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+
 
 export default function ContenidoPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner message="Conectando con el Estudio..." />}>
+      <ContenidoContent />
+    </Suspense>
+  );
+}
+
+function ContenidoContent() {
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type') || 'presion';
   
@@ -492,56 +523,3 @@ function PublishedItem({ type, platform, title, date, views }: any) {
   );
 }
 
-function SerieCard({ name, status, count }: any) {
-  return (
-    <div className="p-4 rounded-2xl border border-gray-100 flex items-center justify-between bg-white shadow-sm ring-1 ring-gray-100">
-      <div className="flex items-center gap-3">
-        <div className="h-8 w-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-300">
-           <Play size={14} fill="currentColor" />
-        </div>
-        <div>
-          <h4 className="text-[10px] font-black text-[var(--primary)] uppercase tracking-tight leading-none">{name}</h4>
-          <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-1.5 font-mono">{status}</p>
-        </div>
-      </div>
-      <div className="text-center font-black text-[var(--primary)] text-sm">{count}</div>
-    </div>
-  );
-}
-
-function TipCard({ title, desc, icon }: any) {
-   return (
-      <Card className="p-4 border border-gray-100 rounded-xl bg-white shadow-sm flex items-center gap-4">
-         <div className="bg-gray-50 p-2 rounded-lg shrink-0">{icon}</div>
-         <div className="space-y-0.5">
-            <h4 className="text-[9px] font-black uppercase text-[var(--primary)]">{title}</h4>
-            <p className="text-[10px] font-bold text-gray-400 opacity-90 italic leading-tight">
-               "{desc}"
-            </p>
-         </div>
-      </Card>
-   );
-}
-
-function PublishedItem({ type, platform, title, date, views }: any) {
-  return (
-    <Card className="p-0 border border-gray-100 overflow-hidden rounded-2xl bg-white shadow-sm">
-       <div className={`px-4 py-2 flex justify-between items-center ${
-            platform === 'TIKTOK' ? 'bg-zinc-900 text-white' : (platform === 'REEL' ? 'bg-gradient-to-r from-purple-700 to-pink-700 text-white' : 'bg-blue-800 text-white')
-          }`}>
-          <span className="text-[7px] font-black tracking-widest uppercase font-mono">{platform}</span>
-          <span className="text-[7px] font-bold opacity-50 uppercase">{date}</span>
-       </div>
-       <div className="p-4">
-          <h4 className="text-[9px] font-black text-[var(--primary)] line-clamp-1 uppercase tracking-tight mb-3">{title}</h4>
-          <div className="flex items-center justify-between border-t border-gray-100 pt-3">
-             <div className="text-[8px] font-black text-gray-300 uppercase tracking-widest">{type}</div>
-             <div className="flex items-center gap-1.5">
-                <BarChart3 size={10} className="text-blue-500" />
-                <span className="text-[9px] font-black text-[var(--primary)]">{views}</span>
-             </div>
-          </div>
-       </div>
-    </Card>
-  );
-}

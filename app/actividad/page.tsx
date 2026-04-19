@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { Card } from "@/components/ui/Card";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { 
   BarChart3, 
   Lightbulb, 
@@ -8,7 +14,7 @@ import {
   ExternalLink,
   ChevronRight,
   TrendingUp,
-  Instagram,
+  Camera,
   CheckCircle2,
   Clock,
   Flame
@@ -178,9 +184,9 @@ export default function AvancesPage() {
 function CreatorCard({ name, specialty, hook, analysis, url }: any) {
   return (
     <Card className="p-6 border-slate-100 rounded-[2rem] bg-white shadow-sm hover:border-[var(--accent)] transition-all group overflow-hidden relative">
-       <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-          <Instagram size={60} />
-       </div>
+        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <Camera size={60} />
+        </div>
        <div className="flex justify-between items-start mb-4">
           <span className="text-[8px] font-black text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full uppercase tracking-widest">Instagram Top</span>
           <ExternalLink size={14} className="text-slate-300 group-hover:text-pink-500 transition-colors" />

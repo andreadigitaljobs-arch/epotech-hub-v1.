@@ -117,7 +117,7 @@ export default function Home() {
         </div>
       </header>
 
-      <PushNotificationBan      <section className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100/50">
+      <section className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100/50">
         <div className="flex items-center gap-2 mb-6">
           <div className="bg-amber-100 p-2 rounded-xl text-amber-600">
             <Zap size={20} className="fill-amber-600" />
