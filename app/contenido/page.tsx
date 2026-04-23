@@ -184,108 +184,86 @@ function ContenidoContent() {
         {activeTab === 'calendario' && <CalendarioSection />}
       </div>
 
-      {/* Script Focus Mode: REDISEÑO STORY PAPER */}
+      {/* Production Quick-View: DISEÑO COMPACTO Y DE ALTA DENSIDAD */}
       {selectedScript && (
-        <div className="fixed inset-0 z-[9999] bg-slate-900/95 backdrop-blur-xl overflow-y-scroll overscroll-contain animate-in fade-in duration-500">
-           
-           {/* Botón de Cerrar Flotante (Fijo al viewport) */}
-           <div className="fixed top-6 right-6 z-[100]">
-               <button 
+        <>
+          {/* Backdrop sutil */}
+          <div 
+            className="fixed inset-0 z-[9000] bg-slate-950/40 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={() => setSelectedScript(null)}
+          />
+          
+          {/* Panel Lateral (Drawer) */}
+          <div className="fixed top-0 right-0 bottom-0 w-full md:w-[500px] z-[9999] bg-[#142d53] shadow-[-20px_0_80px_rgba(0,0,0,0.5)] border-l border-white/10 flex flex-col animate-in slide-in-from-right duration-500">
+             
+             {/* Header Técnico Compacto */}
+             <div className="p-6 border-b border-white/10 flex items-center justify-between bg-slate-900/50">
+                <div className="flex flex-col">
+                   <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.3em] font-mono mb-1">{selectedScript.category}</span>
+                   <h2 className="text-xl font-black text-white tracking-tighter uppercase italic leading-none">{selectedScript.title}</h2>
+                </div>
+                <button 
                   onClick={() => setSelectedScript(null)}
-                  className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all duration-300 active:scale-90 shadow-2xl border border-white/10 backdrop-blur-md"
-               >
-                  <X size={24} />
-               </button>
-           </div>
+                  className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-all border border-white/10"
+                >
+                  <X size={20} />
+                </button>
+             </div>
 
-           {/* Contenedor del Documento (Story Paper) */}
-           <div className="min-h-full w-full py-10 md:py-20 px-4 flex flex-col items-center">
-               <div className="w-full max-w-3xl">
-                  <div className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] overflow-hidden border border-slate-100">
-                     
-                     {/* Encabezado del Documento (Integrado) */}
-                     <div className="bg-slate-50 px-8 md:px-12 py-8 border-b border-slate-100">
-                        <div className="flex items-center gap-2 mb-2">
-                           <div className="w-2 h-2 rounded-full bg-[#48c1d2] animate-pulse" />
-                           <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.3em] font-mono">{selectedScript.category}</span>
-                        </div>
-                        <h2 className="text-3xl md:text-4xl font-black text-[#142d53] tracking-tighter leading-none">
-                           {selectedScript.title}
-                        </h2>
-                     </div>
+             {/* Área de Datos Compacta (SCROLL NATIVO) */}
+             <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                
+                {/* 1. GUION MAESTRO (Caja compacta) */}
+                <section className="p-5 bg-slate-900/50 rounded-2xl border border-white/5">
+                   <h4 className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 font-mono">Master Copy</h4>
+                   <p className="text-base font-bold text-slate-200 leading-tight italic tracking-tight">
+                      "{selectedScript.steps.map((s: any) => s.txt).join(" ")}"
+                   </p>
+                </section>
 
-                     {/* El Papel del Guion */}
-                     <div className="p-8 md:p-12 space-y-10">
-                        
-                        {/* SECCIÓN 1: LECTURA MAESTRA */}
-                        <section className="space-y-4">
-                           <div className="flex items-center gap-2">
-                              <MessageSquare size={12} className="text-blue-500" />
-                              <h4 className="text-[9px] font-black text-blue-600 uppercase tracking-widest font-mono">Guion Maestro</h4>
-                           </div>
-                           <p className="text-xl md:text-2xl font-bold text-slate-900 leading-tight italic tracking-tight">
-                              "{selectedScript.steps.map((s: any) => s.txt).join(" ")}"
-                           </p>
-                        </section>
+                {/* 2. PASOS DE CÁMARA (Lista Técnica Densa) */}
+                <section className="space-y-4">
+                   <h4 className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest font-mono">Shot List</h4>
+                   <div className="grid grid-cols-1 gap-2">
+                      {selectedScript.steps.map((s: any, i: number) => (
+                         <div key={i} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors group">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-[10px] font-black text-[#48c1d2] font-mono border border-white/10">
+                               0{i + 1}
+                            </div>
+                            <div className="space-y-1">
+                               <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-wider block">{s.action}</span>
+                               <p className="text-sm font-medium text-slate-300 leading-snug">{s.txt}</p>
+                               <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest italic">{s.label}</span>
+                            </div>
+                         </div>
+                      ))}
+                   </div>
+                </section>
 
-                        <div className="h-px w-full bg-slate-100" />
+                {/* 3. ESTRATEGIA (Compacta) */}
+                <section className="grid grid-cols-2 gap-3">
+                   <div className="p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20">
+                      <span className="text-[8px] font-black text-amber-500 uppercase tracking-widest mb-2 block font-mono">Tip</span>
+                      <p className="text-[10px] font-bold text-amber-200 leading-tight italic">"{selectedScript.tips[0]}"</p>
+                   </div>
+                   <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+                      <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest mb-2 block font-mono">Objetivo</span>
+                      <p className="text-[10px] font-bold text-emerald-200 leading-tight italic">"{selectedScript.checklist[0]}"</p>
+                   </div>
+                </section>
+             </div>
 
-                        {/* SECCIÓN 2: PASOS DE PRODUCCIÓN */}
-                        <section className="space-y-8">
-                           <div className="flex items-center gap-2">
-                              <Camera size={12} className="text-slate-300" />
-                              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest font-mono">Desglose de Cámara</h4>
-                           </div>
-                           
-                           <div className="space-y-10">
-                              {selectedScript.steps.map((s: any, i: number) => (
-                                 <div key={i} className="group space-y-4">
-                                    <div className="inline-flex items-center gap-2 bg-[#142d53] text-white px-4 py-1.5 rounded-xl shadow-lg">
-                                       <Zap size={12} fill="currentColor" className="text-[#48c1d2]" />
-                                       <span className="text-[10px] font-black uppercase tracking-widest font-mono">{s.action}</span>
-                                    </div>
-
-                                    <div className="pl-6 border-l-2 border-slate-100 group-hover:border-[#48c1d2] transition-all duration-500">
-                                       <p className="text-lg font-medium text-slate-700 leading-snug">
-                                          {s.txt}
-                                       </p>
-                                       <span className="mt-2 block text-[8px] font-black text-slate-300 uppercase tracking-widest font-mono italic">{s.label}</span>
-                                    </div>
-                                 </div>
-                              ))}
-                           </div>
-                        </section>
-
-                        {/* TIPS Y OBJETIVOS FINAL */}
-                        <footer className="pt-8 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           <div className="bg-amber-50 p-6 rounded-3xl">
-                              <h5 className="text-[8px] font-black text-amber-600 uppercase tracking-widest mb-3 font-mono">Tip</h5>
-                              <p className="text-xs font-bold text-amber-900 leading-tight italic">
-                                 "{selectedScript.tips[0]}"
-                              </p>
-                           </div>
-                           <div className="bg-emerald-50 p-6 rounded-3xl">
-                              <h5 className="text-[8px] font-black text-emerald-600 uppercase tracking-widest mb-3 font-mono">Objetivo</h5>
-                              <p className="text-xs font-bold text-emerald-900 leading-tight italic">
-                                 "{selectedScript.checklist[0]}"
-                              </p>
-                           </div>
-                        </footer>
-                     </div>
-                  </div>
-
-                  {/* Botón de Cierre Inferior Sutil */}
-                  <div className="mt-12 text-center pb-10">
-                      <button 
-                        onClick={() => setSelectedScript(null)}
-                        className="text-white/20 hover:text-white/50 text-[9px] font-black uppercase tracking-[0.4em] transition-all"
-                      >
-                         Cerrar Documento
-                      </button>
-                  </div>
-               </div>
-           </div>
-        </div>
+             {/* Footer de Acción */}
+             <div className="p-6 bg-slate-900/50 border-t border-white/10">
+                <button 
+                  onClick={() => setSelectedScript(null)}
+                  className="w-full py-4 bg-[#48c1d2] text-[#142d53] text-[10px] font-black uppercase tracking-[0.4em] rounded-2xl hover:bg-white transition-all shadow-[0_0_20px_rgba(72,193,210,0.3)]"
+                >
+                   Finalizar Sesión
+                </button>
+             </div>
+          </div>
+        </>
       )}
     </div>
   );
