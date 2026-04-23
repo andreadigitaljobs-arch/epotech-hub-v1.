@@ -203,34 +203,36 @@ function ContenidoContent() {
                  </div>
 
                  <section className="space-y-10">
-                     <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Secuencia de Rodaje</h4>
-                     <div className="space-y-4">
+                     <h4 className="text-xs font-black text-slate-300 uppercase tracking-[0.3em] mb-10 border-b pb-4">Guion Técnico de Rodaje</h4>
+                     
+                     <div className="space-y-16">
                         {selectedScript.steps.map((s, i) => (
-                           <div key={i} className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
-                              <div className="absolute -right-2 -top-2 text-6xl font-black text-slate-50/50 -z-0">
-                                 {i + 1}
+                           <div key={i} className="space-y-6 pb-12 border-b border-slate-50 last:border-0">
+                              {/* Header del Paso */}
+                              <div className="flex items-center gap-4">
+                                 <span className="text-4xl font-black text-slate-100">{i + 1}</span>
+                                 <div className="h-px flex-1 bg-slate-100"></div>
+                                 <span className="text-xs font-black text-blue-500 font-mono tracking-widest">{s.label}</span>
                               </div>
-                              
-                              <div className="relative z-10 space-y-5">
-                                 <div className="flex items-center gap-3">
-                                    <div className="bg-blue-600 p-2.5 rounded-2xl text-white shadow-lg shadow-blue-500/20">
-                                       <Camera size={18} strokeWidth={2.5} />
-                                    </div>
-                                    <h5 className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Paso {i + 1} • {s.label}</h5>
-                                 </div>
 
-                                 <div className="space-y-4">
-                                    <h4 className="text-xl font-semibold text-slate-900 leading-tight">
-                                       {s.action}
-                                    </h4>
-                                    
-                                    <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/50">
-                                       <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest block mb-2">Texto / Guion:</span>
-                                       <p className="text-sm font-medium text-slate-500 leading-relaxed italic">
-                                          "{s.txt}"
-                                       </p>
-                                    </div>
-                                 </div>
+                              {/* Instrucción de Cámara */}
+                              <div className="space-y-2">
+                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                                    <Camera size={12} /> LO QUE HACES (CÁMARA)
+                                 </span>
+                                 <p className="text-2xl font-bold text-slate-900 leading-tight">
+                                    {s.action}
+                                 </p>
+                              </div>
+
+                              {/* Texto del Guion */}
+                              <div className="space-y-2 pt-2">
+                                 <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">
+                                    LO QUE DICES (GUION)
+                                 </span>
+                                 <p className="text-xl font-medium text-slate-600 leading-relaxed bg-slate-50/50 p-6 rounded-2xl border-l-4 border-blue-500 italic">
+                                    "{s.txt}"
+                                 </p>
                               </div>
                            </div>
                         ))}
@@ -268,12 +270,12 @@ function ContenidoContent() {
            {/* Footer */}
            <div className="p-8 border-t border-gray-100 bg-white">
               <div className="max-w-md mx-auto">
-                 <button 
-                  onClick={() => setSelectedScript(null)}
-                  className="w-full bg-[var(--primary)] text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.3em] shadow-xl"
-                 >
-                    Terminar y Salir
-                 </button>
+                  <button 
+                   onClick={() => setSelectedScript(null)}
+                   className="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-sm uppercase tracking-widest shadow-xl hover:bg-black transition-colors"
+                  >
+                     Cerrar Guion
+                  </button>
               </div>
            </div>
         </div>
