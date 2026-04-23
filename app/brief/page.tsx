@@ -142,7 +142,7 @@ export default function BrandBriefPage() {
                     {[...Array(9)].map((_, i) => <div key={i} className="w-1.5 h-1.5 bg-slate-900 rounded-full"></div>)}
                  </div>
               </div>
-              <p className="text-base font-bold text-slate-600 leading-relaxed italic relative z-10">
+              <p className="text-base md:text-lg font-medium text-slate-600 leading-relaxed relative z-10">
                  {data.perfil_cliente}
               </p>
            </Card>
@@ -158,7 +158,7 @@ export default function BrandBriefPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-[var(--accent)]/10 rounded-full blur-2xl -ml-10 -mb-10"></div>
               
-              <p className="text-base font-bold text-white/90 leading-relaxed italic relative z-10">
+              <p className="text-base md:text-lg font-medium text-white/90 leading-relaxed relative z-10">
                  {data.tono_voz}
               </p>
               <div className="mt-8 flex gap-3 relative z-10">
@@ -193,7 +193,7 @@ export default function BrandBriefPage() {
                           <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center text-blue-500 font-mono text-[10px] font-bold">
                              0{idx + 1}
                           </div>
-                          <span className="text-[10px] font-black text-slate-900 uppercase italic tracking-tight">{s}</span>
+                          <span className="text-[10px] font-black text-slate-900 uppercase tracking-tight">{s}</span>
                        </div>
                        <CheckCircle2 size={16} className="text-blue-200 group-hover:text-blue-500 transition-colors" />
                     </div>
@@ -216,7 +216,7 @@ export default function BrandBriefPage() {
                           <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 font-mono text-[10px] font-bold">
                              0{idx + 1}
                           </div>
-                          <span className="text-[10px] font-black text-blue-900 uppercase italic tracking-tight">{s}</span>
+                          <span className="text-[10px] font-black text-blue-900 uppercase tracking-tight">{s}</span>
                        </div>
                        <Zap size={16} className="text-blue-200 group-hover:text-blue-500 transition-colors" />
                     </div>
@@ -245,9 +245,9 @@ export default function BrandBriefPage() {
                        <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform duration-500 border border-slate-50">
                           <Sparkles size={16} />
                        </div>
-                       <p className="text-[11px] font-black text-[var(--primary)] uppercase italic leading-tight tracking-tight">
+                        <p className="text-base font-medium text-[var(--primary)] uppercase leading-tight tracking-tight">
                           "{m}"
-                       </p>
+                        </p>
                     </div>
                  </Card>
                ))}
