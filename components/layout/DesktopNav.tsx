@@ -9,11 +9,11 @@ export function DesktopNav() {
   const pathname = usePathname();
 
   const primaryNav = [
-    { name: "Dashboard", path: "/", icon: Home },
-    { name: "Servicios Activos", path: "/proyectos", icon: Briefcase },
-    { name: "Fábrica de Contenido", path: "/contenido", icon: Sparkles },
-    { name: "Brief de Marca", path: "/brief", icon: Target },
-    { name: "Reporte de Avances", path: "/actividad", icon: Clock },
+    { name: "Inicio", path: "/", icon: Home },
+    { name: "Servicios", path: "/proyectos", icon: Briefcase },
+    { name: "Contenido", path: "/contenido", icon: Sparkles },
+    { name: "Brief", path: "/brief", icon: Target },
+    { name: "Avances", path: "/actividad", icon: Clock },
   ];
 
   return (
@@ -40,7 +40,7 @@ export function DesktopNav() {
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">
                <Zap size={10} className="text-blue-500" fill="currentColor" />
-               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">Navegación</h3>
+               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">Menú</h3>
             </div>
             <nav className="space-y-1">
               {primaryNav.map((item) => {
@@ -71,7 +71,7 @@ export function DesktopNav() {
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">
                <PlaySquare size={10} className="text-emerald-500" fill="currentColor" />
-               <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500">Academia</h3>
+               <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500">Aprende</h3>
             </div>
             <nav className="space-y-1">
               <Link
@@ -83,7 +83,7 @@ export function DesktopNav() {
                 }`}
               >
                 <Video size={16} className={`${pathname === "/manual" ? "text-blue-600" : "group-hover/item:text-white group-hover/item:scale-110"}`} />
-                Guía de Rodaje
+                Grabación
               </Link>
               <Link
                 href="/referencias"
