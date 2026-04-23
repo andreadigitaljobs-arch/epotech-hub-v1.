@@ -177,8 +177,8 @@ function ContenidoContent() {
            {/* Header */}
            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
               <div>
-                 <span className="text-[8px] font-black text-blue-600 bg-blue-100 px-3 py-1 rounded-full uppercase tracking-[0.2em]">{selectedScript.category}</span>
-                 <h3 className="text-xl font-black text-[var(--primary)] uppercase mt-1 tracking-tight leading-none italic">{selectedScript.title}</h3>
+                 <span className="text-[9px] font-semibold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full uppercase tracking-widest">{selectedScript.category}</span>
+                 <h3 className="text-2xl font-light text-slate-900 mt-2 tracking-tight leading-tight">{selectedScript.title}</h3>
               </div>
               <button 
                 onClick={() => setSelectedScript(null)} 
@@ -193,33 +193,48 @@ function ContenidoContent() {
               <div className="max-w-md mx-auto space-y-12 py-6">
                  <div className="grid grid-cols-2 gap-4 mb-2">
                     <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
-                       <span className="text-[8px] font-black text-slate-400 uppercase block tracking-widest mb-1">Duración</span>
-                       <span className="text-sm font-black text-[var(--primary)]">{selectedScript.duration}</span>
+                       <span className="text-[9px] font-semibold text-slate-400 uppercase block tracking-widest mb-1">Duración</span>
+                       <span className="text-sm font-medium text-slate-800">{selectedScript.duration}</span>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
-                       <span className="text-[8px] font-black text-slate-400 uppercase block tracking-widest mb-1">Tomas Req.</span>
-                       <span className="text-sm font-black text-[var(--primary)]">{selectedScript.tomas} CLIPS</span>
+                       <span className="text-[9px] font-semibold text-slate-400 uppercase block tracking-widest mb-1">Tomas Req.</span>
+                       <span className="text-sm font-medium text-slate-800">{selectedScript.tomas} CLIPS</span>
                     </div>
                  </div>
 
                  <section className="space-y-10">
-                    <h4 className="text-[10px] font-black text-blue-600 bg-blue-50 w-fit px-4 py-1 rounded-full uppercase tracking-widest">Estructura del Video</h4>
-                    {selectedScript.steps.map((s, i) => (
-                        <div key={i} className="flex gap-6 relative group">
-                          <div className="flex flex-col items-center gap-4">
-                              <div className="h-4 w-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] border-4 border-white"></div>
-                              {i !== selectedScript.steps.length - 1 && <div className="w-1 flex-1 bg-blue-50/50 rounded-full"></div>}
-                          </div>
-                          <div className="space-y-4 pb-6 flex-1">
-                              <h4 className="text-[10px] font-black text-blue-300 uppercase tracking-[0.4em] font-mono italic">{s.label}</h4>
-                              <p className="text-xl font-bold text-[var(--primary)] leading-relaxed italic">"{s.txt}"</p>
-                              <div className="flex items-center gap-3 text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 p-3 rounded-2xl border border-blue-100">
-                                <Camera size={16} /> 
-                                <span className="font-black italic">{s.action}</span>
+                     <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Secuencia de Rodaje</h4>
+                     <div className="space-y-4">
+                        {selectedScript.steps.map((s, i) => (
+                           <div key={i} className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                              <div className="absolute -right-2 -top-2 text-6xl font-black text-slate-50/50 -z-0">
+                                 {i + 1}
                               </div>
-                          </div>
-                        </div>
-                    ))}
+                              
+                              <div className="relative z-10 space-y-5">
+                                 <div className="flex items-center gap-3">
+                                    <div className="bg-blue-600 p-2.5 rounded-2xl text-white shadow-lg shadow-blue-500/20">
+                                       <Camera size={18} strokeWidth={2.5} />
+                                    </div>
+                                    <h5 className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Paso {i + 1} • {s.label}</h5>
+                                 </div>
+
+                                 <div className="space-y-4">
+                                    <h4 className="text-xl font-semibold text-slate-900 leading-tight">
+                                       {s.action}
+                                    </h4>
+                                    
+                                    <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100/50">
+                                       <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest block mb-2">Texto / Guion:</span>
+                                       <p className="text-sm font-medium text-slate-500 leading-relaxed italic">
+                                          "{s.txt}"
+                                       </p>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        ))}
+                     </div>
                  </section>
 
                  <section className="space-y-4 pt-6">
