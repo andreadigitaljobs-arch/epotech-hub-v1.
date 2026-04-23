@@ -58,115 +58,167 @@ export default function BrandBriefPage() {
   return (
     <div className="space-y-8 pb-32 max-w-4xl mx-auto px-4 md:px-0 pt-6">
       
-      {/* 1. HERO ESTRATÉGICO (Idéntico a captura) */}
-      <header className="relative p-8 md:p-12 rounded-[2.5rem] bg-[var(--primary)] text-white overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 p-8 opacity-10 hidden md:block">
-          <Compass size={160} />
+      {/* 1. HERO ESTRATÉGICO (Con detalles de diseño) */}
+      <header className="relative p-8 md:p-14 rounded-[3.5rem] bg-[var(--primary)] text-white overflow-hidden shadow-2xl ring-1 ring-white/10">
+        <div className="absolute top-0 right-0 p-8 opacity-10 hidden md:block rotate-12">
+          <Compass size={220} />
         </div>
+        {/* Dibujos decorativos de fondo */}
+        <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
+           <div className="absolute top-10 left-10 w-20 h-20 border-2 border-white rounded-full"></div>
+           <div className="absolute bottom-10 right-20 w-32 h-32 border-2 border-white rotate-45 opacity-50"></div>
+           <div className="grid grid-cols-6 gap-4 p-4">
+              {[...Array(24)].map((_, i) => <div key={i} className="w-1 h-1 bg-white rounded-full"></div>)}
+           </div>
+        </div>
+
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="bg-[var(--accent)] px-4 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.3em]">
-              Manual de Estrategia
+          <div className="flex items-center gap-3 mb-8">
+            <span className="bg-white/10 backdrop-blur-md border border-white/20 px-5 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.4em] text-[var(--accent)]">
+              Brand Architecture 2026
             </span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 leading-tight uppercase italic">
-            El Brief Maestro <br /> <span className="text-[var(--accent)]">Epotech Hub</span>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-tight uppercase italic drop-shadow-2xl">
+            El Brief Maestro <br /> <span className="text-[var(--accent)] drop-shadow-none">Epotech Hub</span>
           </h1>
-          <p className="text-xs md:text-sm font-bold text-white/70 italic max-w-xl border-l-4 border-[var(--accent)] pl-6 py-1 leading-relaxed">
-            "{data.mision_desc}"
-          </p>
+          <div className="relative max-w-xl">
+            <div className="absolute -left-6 top-0 bottom-0 w-1.5 bg-[var(--accent)] rounded-full shadow-[0_0_15px_rgba(251,191,36,0.5)]"></div>
+            <p className="text-xs md:text-base font-bold text-white/80 italic pl-6 py-1 leading-relaxed">
+              "{data.mision_desc}"
+            </p>
+          </div>
         </div>
       </header>
 
       {/* 2. EL CORAZÓN DE LA MARCA (Idéntico a captura) */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-        <Card className="p-8 bg-white border-slate-100 rounded-[2.5rem] shadow-sm">
-          <div className="flex items-center gap-3 mb-6">
-             <div className="bg-blue-50 p-2 rounded-xl text-blue-600">
-                <Target size={18} />
-             </div>
-             <h2 className="text-[9px] font-black uppercase tracking-widest text-slate-300">Propuesta de Valor</h2>
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <Card className="p-10 bg-white border-slate-100 rounded-[3rem] shadow-sm relative overflow-hidden group">
+          {/* Detalle decorativo */}
+          <div className="absolute -right-4 -bottom-4 text-blue-50/50 group-hover:scale-110 transition-transform duration-700">
+             <Target size={120} />
           </div>
-          <p className="text-lg font-bold text-[var(--primary)] leading-relaxed">
-            {data.propuesta_valor}
-          </p>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-8">
+               <div className="bg-blue-600 p-2.5 rounded-2xl text-white shadow-lg shadow-blue-500/20">
+                  <Target size={20} />
+               </div>
+               <h2 className="text-[10px] font-black uppercase tracking-widest text-slate-300">Propuesta de Valor</h2>
+            </div>
+            <p className="text-xl md:text-2xl font-black text-[var(--primary)] leading-tight italic">
+              {data.propuesta_valor}
+            </p>
+          </div>
         </Card>
 
-        <Card className="p-8 bg-white border-slate-100 rounded-[2.5rem] shadow-sm">
-          <div className="flex items-center gap-3 mb-6">
-             <div className="bg-blue-50 p-2 rounded-xl text-blue-600">
-                <Star size={18} />
-             </div>
-             <h2 className="text-[9px] font-black uppercase tracking-widest text-slate-300">Diferenciador</h2>
+        <Card className="p-10 bg-white border-slate-100 rounded-[3rem] shadow-sm relative overflow-hidden group">
+          {/* Detalle decorativo */}
+          <div className="absolute -right-4 -bottom-4 text-amber-50/50 group-hover:scale-110 transition-transform duration-700">
+             <Star size={120} />
           </div>
-          <p className="text-lg font-bold text-[var(--primary)] leading-relaxed">
-            {data.diferenciador}
-          </p>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-8">
+               <div className="bg-amber-500 p-2.5 rounded-2xl text-white shadow-lg shadow-amber-500/20">
+                  <Star size={20} />
+               </div>
+               <h2 className="text-[10px] font-black uppercase tracking-widest text-slate-300">Diferenciador</h2>
+            </div>
+            <p className="text-xl md:text-2xl font-black text-[var(--primary)] leading-tight italic">
+              {data.diferenciador}
+            </p>
+          </div>
         </Card>
       </section>
 
-      {/* 3. AUDIENCIA Y COMUNICACIÓN (Idéntico a captura) */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-        <div className="space-y-4">
-           <div className="flex items-center gap-3 ml-2">
+      {/* 3. AUDIENCIA Y COMUNICACIÓN (Refinado con dibujos) */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-6">
+           <div className="flex items-center gap-3 ml-4">
               <Users size={16} className="text-slate-300" />
-              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">Público Objetivo</h3>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Público Objetivo</h3>
            </div>
-           <Card className="p-8 bg-white border-slate-100 rounded-[2.5rem] shadow-sm">
-              <p className="text-sm font-semibold text-slate-600 leading-relaxed">
+           <Card className="p-10 bg-white border-slate-100 rounded-[3rem] shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-[0.05]">
+                 <div className="grid grid-cols-3 gap-1">
+                    {[...Array(9)].map((_, i) => <div key={i} className="w-1.5 h-1.5 bg-slate-900 rounded-full"></div>)}
+                 </div>
+              </div>
+              <p className="text-base font-bold text-slate-600 leading-relaxed italic relative z-10">
                  {data.perfil_cliente}
               </p>
            </Card>
         </div>
 
-        <div className="space-y-4">
-           <div className="flex items-center gap-3 ml-2">
+        <div className="space-y-6">
+           <div className="flex items-center gap-3 ml-4">
               <MessageSquare size={16} className="text-[var(--accent)]" />
-              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Voz y Tono</h3>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)]">Voz y Tono</h3>
            </div>
-           <Card className="p-8 bg-slate-900 border-none rounded-[2.5rem] shadow-2xl text-white overflow-hidden relative">
-              <p className="text-sm font-semibold text-white/90 leading-relaxed relative z-10">
+           <Card className="p-10 bg-slate-950 border-none rounded-[3rem] shadow-2xl text-white overflow-hidden relative group">
+              {/* Dibujo abstracto de fondo */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-[var(--accent)]/10 rounded-full blur-2xl -ml-10 -mb-10"></div>
+              
+              <p className="text-base font-bold text-white/90 leading-relaxed italic relative z-10">
                  {data.tono_voz}
               </p>
-              <div className="mt-6 flex gap-2 relative z-10">
-                 <span className="text-[7px] font-black uppercase bg-white/10 px-3 py-1 rounded-full text-white/60 tracking-widest">Profesional</span>
-                 <span className="text-[7px] font-black uppercase bg-white/10 px-3 py-1 rounded-full text-white/60 tracking-widest">Directo</span>
+              <div className="mt-8 flex gap-3 relative z-10">
+                 <span className="text-[8px] font-black uppercase bg-white/10 border border-white/10 px-4 py-2 rounded-full text-white/50 tracking-[0.2em]">Profesional</span>
+                 <span className="text-[8px] font-black uppercase bg-white/10 border border-white/10 px-4 py-2 rounded-full text-white/50 tracking-[0.2em]">Directo</span>
               </div>
            </Card>
         </div>
       </section>
 
-      {/* 4. SERVICIOS (Idéntico a captura) */}
-      <section className="space-y-4">
-         <div className="flex items-center justify-between ml-2">
-            <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">Portafolio de Soluciones</h3>
-            <Wrench size={16} className="text-slate-100" />
+      {/* 4. SERVICIOS (Diseño de tarjetas de ingeniería) */}
+      <section className="space-y-6">
+         <div className="flex items-center justify-between ml-4">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Portafolio Estratégico</h3>
+            <div className="h-px flex-1 bg-slate-100 mx-6"></div>
+            <Wrench size={16} className="text-slate-200" />
          </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            <Card className="p-6 bg-emerald-50/20 border-emerald-50 rounded-[2.5rem]">
-               <h4 className="text-[9px] font-black uppercase text-emerald-600 tracking-widest mb-6 flex items-center gap-2">
-                  <Droplets size={14} /> Soluciones de Limpieza
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="p-8 bg-emerald-50/10 border-emerald-100/50 rounded-[3.5rem] relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-8 opacity-5">
+                  <Droplets size={120} />
+               </div>
+               <h4 className="text-[10px] font-black uppercase text-emerald-600 tracking-[0.3em] mb-8 flex items-center gap-3">
+                  <div className="w-8 h-[1px] bg-emerald-200"></div>
+                  Soluciones de Limpieza
                </h4>
-               <div className="grid grid-cols-1 gap-2">
+               <div className="grid grid-cols-1 gap-3 relative z-10">
                   {(data.servicios_basicos || []).map((s: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-emerald-50 shadow-sm">
-                       <CheckCircle2 size={14} className="text-emerald-500" />
-                       <span className="text-[9px] font-black text-emerald-900 uppercase italic leading-none">{s}</span>
+                    <div key={idx} className="flex items-center justify-between p-5 bg-white rounded-2xl border border-emerald-50 shadow-sm hover:translate-x-1 transition-transform group">
+                       <div className="flex items-center gap-4">
+                          <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 font-mono text-[10px] font-bold">
+                             0{idx + 1}
+                          </div>
+                          <span className="text-[10px] font-black text-emerald-900 uppercase italic tracking-tight">{s}</span>
+                       </div>
+                       <CheckCircle2 size={16} className="text-emerald-200 group-hover:text-emerald-500 transition-colors" />
                     </div>
                   ))}
                </div>
             </Card>
 
-            <Card className="p-6 bg-blue-50/20 border-blue-50 rounded-[2.5rem]">
-               <h4 className="text-[9px] font-black uppercase text-blue-600 tracking-widest mb-6 flex items-center gap-2">
-                  <Paintbrush size={14} /> Renovación Premium
+            <Card className="p-8 bg-blue-50/10 border-blue-100/50 rounded-[3.5rem] relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-8 opacity-5">
+                  <Paintbrush size={120} />
+               </div>
+               <h4 className="text-[10px] font-black uppercase text-blue-600 tracking-[0.3em] mb-8 flex items-center gap-3">
+                  <div className="w-8 h-[1px] bg-blue-200"></div>
+                  Renovación Premium
                </h4>
-               <div className="grid grid-cols-1 gap-2">
+               <div className="grid grid-cols-1 gap-3 relative z-10">
                   {(data.servicios_premium || []).map((s: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-blue-50 shadow-sm">
-                       <Zap size={14} className="text-blue-500" />
-                       <span className="text-[9px] font-black text-blue-900 uppercase italic leading-none">{s}</span>
+                    <div key={idx} className="flex items-center justify-between p-5 bg-white rounded-2xl border border-blue-50 shadow-sm hover:translate-x-1 transition-transform group">
+                       <div className="flex items-center gap-4">
+                          <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 font-mono text-[10px] font-bold">
+                             0{idx + 1}
+                          </div>
+                          <span className="text-[10px] font-black text-blue-900 uppercase italic tracking-tight">{s}</span>
+                       </div>
+                       <Zap size={16} className="text-blue-200 group-hover:text-blue-500 transition-colors" />
                     </div>
                   ))}
                </div>
@@ -204,18 +256,30 @@ export default function BrandBriefPage() {
          </div>
       </section>
 
-      {/* 6. FOOTER BRÚJULA (Idéntico a captura) */}
-      <footer className="group">
-         <div className="bg-emerald-600 p-8 md:p-12 rounded-[2.5rem] text-white text-center shadow-xl relative overflow-hidden transition-all active:scale-[0.98]">
-            <div className="relative z-10 max-w-xl mx-auto space-y-6">
-               <div className="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-                  <ShieldCheck size={24} />
+      {/* 6. FOOTER BRÚJULA (Con detalles de cristal) */}
+      <footer className="group relative">
+         <div className="absolute -inset-2 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-[4rem] blur-2xl opacity-10 group-hover:opacity-25 transition duration-1000"></div>
+         <div className="relative bg-emerald-600 p-10 md:p-16 rounded-[3.5rem] text-white text-center shadow-2xl overflow-hidden active:scale-[0.99] transition-transform">
+            {/* Dibujos decorativos de fondo */}
+            <div className="absolute top-0 left-0 w-full h-full opacity-10">
+               <div className="absolute top-0 right-0 w-64 h-64 border-[40px] border-white/10 rounded-full -mr-32 -mt-32"></div>
+               <div className="absolute bottom-0 left-0 w-48 h-48 border-[20px] border-white/5 rounded-full -ml-24 -mb-24"></div>
+            </div>
+
+            <div className="relative z-10 max-w-2xl mx-auto space-y-8">
+               <div className="bg-white p-4 w-16 h-16 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-2xl rotate-3">
+                  <ShieldCheck size={32} className="text-emerald-600" />
                </div>
-               <h4 className="text-xl md:text-2xl font-black uppercase italic tracking-tighter">Este Brief es nuestra Brújula</h4>
-               <p className="text-emerald-50 text-xs font-bold leading-relaxed italic opacity-90">
+               <h4 className="text-2xl md:text-4xl font-black uppercase italic tracking-tighter leading-none">
+                  Este Brief es <br /> <span className="text-emerald-200">nuestra Brújula</span>
+               </h4>
+               <p className="text-emerald-50 text-sm font-bold leading-relaxed italic opacity-80 max-w-lg mx-auto">
                   "Todo lo que hagamos —desde un Reel hasta un presupuesto— debe pasar por este filtro. Si no construye confianza o muestra transformación real, no pertenece a Epotech."
                </p>
-               <div className="h-1.5 w-16 bg-emerald-300 mx-auto rounded-full mt-4 opacity-50" />
+               <div className="flex justify-center gap-2">
+                  <div className="h-1.5 w-12 bg-emerald-300 rounded-full opacity-50" />
+                  <div className="h-1.5 w-4 bg-white rounded-full opacity-20" />
+               </div>
             </div>
          </div>
       </footer>
