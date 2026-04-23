@@ -187,24 +187,31 @@ function ContenidoContent() {
       {/* Script Focus Mode: REDISEÑO STORY PAPER */}
       {selectedScript && (
         <div className="fixed inset-0 z-[9999] bg-slate-900/95 backdrop-blur-xl flex flex-col animate-in fade-in duration-500">
-           {/* Header Flotante Crystal */}
-           <div className="absolute top-0 left-0 right-0 p-6 z-20 flex justify-between items-center pointer-events-none">
-              <div className="bg-white/10 backdrop-blur-md border border-white/10 px-6 py-3 rounded-3xl pointer-events-auto">
-                 <span className="text-[8px] font-black text-blue-400 uppercase tracking-[0.3em]">{selectedScript.category}</span>
-                 <h3 className="text-xl font-bold text-white tracking-tight">{selectedScript.title}</h3>
-              </div>
-              <button 
-                onClick={() => setSelectedScript(null)} 
-                className="h-14 w-14 bg-white/10 backdrop-blur-md border border-white/10 shadow-2xl flex items-center justify-center rounded-full text-white hover:bg-white hover:text-slate-900 transition-all pointer-events-auto active:scale-90"
-              >
-                 <X size={28} />
-              </button>
+           {/* Botón de Cerrar Flotante (Fuera de la hoja) */}
+           <div className="fixed top-6 right-6 z-[110]">
+               <button 
+                  onClick={() => setSelectedScript(null)}
+                  className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all duration-300 active:scale-90 shadow-2xl border border-white/10"
+               >
+                  <X size={24} />
+               </button>
            </div>
 
-           {/* Área del Documento */}
-           <div className="flex-1 overflow-y-auto pt-16 pb-12">
+           {/* Área del Documento (SCROLLABLE) */}
+           <div className="flex-1 overflow-y-auto pb-20 pt-4">
                <div className="max-w-3xl mx-auto px-4">
-                  <div className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] overflow-hidden">
+                  <div className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] overflow-hidden border border-slate-100">
+                     
+                     {/* Encabezado del Documento (Integrado) */}
+                     <div className="bg-slate-50 px-8 md:px-12 py-8 border-b border-slate-100">
+                        <div className="flex items-center gap-2 mb-2">
+                           <div className="w-2 h-2 rounded-full bg-[#48c1d2] animate-pulse" />
+                           <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.3em]">{selectedScript.category}</span>
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-black text-[#142d53] tracking-tighter leading-none">
+                           {selectedScript.title}
+                        </h2>
+                     </div>
                      {/* El Papel del Guion */}
                      <div className="p-6 md:p-12 space-y-8">
                         
