@@ -87,7 +87,7 @@ export default function BrandBriefPage() {
              </div>
              <h2 className="text-[9px] font-black uppercase tracking-widest text-slate-300">Propuesta de Valor</h2>
           </div>
-          <p className="text-lg md:text-xl font-black text-[var(--primary)] leading-tight italic">
+          <p className="text-lg font-bold text-[var(--primary)] leading-relaxed">
             {data.propuesta_valor}
           </p>
         </Card>
@@ -99,7 +99,7 @@ export default function BrandBriefPage() {
              </div>
              <h2 className="text-[9px] font-black uppercase tracking-widest text-slate-300">Diferenciador</h2>
           </div>
-          <p className="text-lg md:text-xl font-black text-[var(--primary)] leading-tight italic">
+          <p className="text-lg font-bold text-[var(--primary)] leading-relaxed">
             {data.diferenciador}
           </p>
         </Card>
@@ -113,7 +113,7 @@ export default function BrandBriefPage() {
               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">Público Objetivo</h3>
            </div>
            <Card className="p-8 bg-white border-slate-100 rounded-[2.5rem] shadow-sm">
-              <p className="text-sm font-bold text-slate-600 leading-relaxed italic">
+              <p className="text-sm font-semibold text-slate-600 leading-relaxed">
                  {data.perfil_cliente}
               </p>
            </Card>
@@ -125,7 +125,7 @@ export default function BrandBriefPage() {
               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Voz y Tono</h3>
            </div>
            <Card className="p-8 bg-slate-900 border-none rounded-[2.5rem] shadow-2xl text-white overflow-hidden relative">
-              <p className="text-sm font-bold text-white/90 leading-relaxed italic relative z-10">
+              <p className="text-sm font-semibold text-white/90 leading-relaxed relative z-10">
                  {data.tono_voz}
               </p>
               <div className="mt-6 flex gap-2 relative z-10">
@@ -182,11 +182,22 @@ export default function BrandBriefPage() {
                <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">Pilares de Estrategia Viral</h3>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                {(data.mensajes_clave || []).map((m: string, idx: number) => (
-                 <Card key={idx} className="p-8 text-center bg-white rounded-[2rem] shadow-sm border-none relative overflow-hidden group">
-                    <span className="text-3xl font-black text-slate-50 block mb-2 absolute top-4 left-1/2 -translate-x-1/2 opacity-50">0{idx + 1}</span>
-                    <p className="text-xs font-black text-[var(--primary)] uppercase italic leading-tight relative z-10">"{m}"</p>
+                 <Card key={idx} className="p-8 text-center bg-white/40 backdrop-blur-sm rounded-[2.5rem] shadow-sm border border-white/60 relative overflow-hidden group hover:bg-white hover:shadow-xl transition-all duration-500">
+                    {/* Número de fondo estilizado */}
+                    <span className="absolute -bottom-4 -right-4 text-8xl font-black text-slate-900/5 group-hover:text-blue-500/5 transition-colors duration-500 font-mono">
+                       {idx + 1}
+                    </span>
+                    
+                    <div className="relative z-10 flex flex-col items-center gap-4">
+                       <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform duration-500 border border-slate-50">
+                          <Sparkles size={16} />
+                       </div>
+                       <p className="text-[11px] font-black text-[var(--primary)] uppercase italic leading-tight tracking-tight">
+                          "{m}"
+                       </p>
+                    </div>
                  </Card>
                ))}
             </div>
