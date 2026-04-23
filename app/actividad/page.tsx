@@ -6,18 +6,10 @@ import { Card } from "@/components/ui/Card";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { 
   BarChart3, 
-  Lightbulb, 
   History, 
   Target, 
-  Calendar,
-  Sparkles,
-  ExternalLink,
-  ChevronRight,
-  TrendingUp,
-  Camera,
   CheckCircle2,
-  Clock,
-  Flame
+  Clock
 } from "lucide-react";
 
 interface Activity {
@@ -29,7 +21,7 @@ interface Activity {
 }
 
 export default function AvancesPage() {
-  const [activeTab, setActiveTab] = useState('inspiracion');
+  const [activeTab, setActiveTab] = useState('reportes');
   const [actividades, setActividades] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,7 +50,6 @@ export default function AvancesPage() {
   }, []);
 
   const tabs = [
-    { id: 'inspiracion', name: 'Inspiración', icon: Lightbulb },
     { id: 'reportes', name: 'Reportes', icon: BarChart3 },
     { id: 'historial', name: 'Lo Subido', icon: History },
   ];
@@ -97,54 +88,7 @@ export default function AvancesPage() {
       {/* Secciones Dinámicas */}
       <div className="animate-in fade-in slide-in-from-bottom-2 duration-400">
         
-        {/* 1. INSPIRACIÓN VIRAL */}
-        {activeTab === 'inspiracion' && (
-          <div className="space-y-6">
-            <Card className="p-6 bg-gradient-to-br from-indigo-900 to-slate-900 border-none rounded-[2rem] text-white overflow-hidden relative shadow-xl">
-               <div className="relative z-10 flex gap-4">
-                  <div className="bg-white/10 p-4 rounded-3xl backdrop-blur-md">
-                     <TrendingUp className="text-blue-300" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-black uppercase text-blue-300 tracking-widest mb-1 font-mono">Análisis de Andrea</h3>
-                    <p className="text-[11px] font-bold text-white/80 leading-relaxed italic">
-                      "No solo copies, entiende por qué funcionan. Estos creadores dominan el hook y el contraste visual."
-                    </p>
-                  </div>
-               </div>
-            </Card>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <CreatorCard 
-                  name="Chris Fry" 
-                  specialty="Limpieza Agua Pura" 
-                  hook="Extensiones + Brillo extremo"
-                  analysis="Usa el ASMR de flujo de agua y cristales para relajar al espectador. Contraste inmediato."
-                  url="https://instagram.com"
-               />
-               <CreatorCard 
-                  name="Gold Coast" 
-                  specialty="Driveway King" 
-                  hook="Surface Cleaner POV"
-                  analysis="Sus videos muestran transformaciones radicales en menos de 15 segundos. Dinamismo puro."
-                  url="https://instagram.com"
-               />
-               <CreatorCard 
-                  name="Splash Kings" 
-                  specialty="Educativo / Equipos" 
-                  hook="Muestran soluciones de campo"
-                  analysis="Venden autoridad técnica. Enseñan cómo cuidar el garage mientras limpian."
-                  url="https://instagram.com"
-               />
-               <div className="p-10 border-2 border-dashed border-slate-100 rounded-[2.5rem] flex flex-col items-center justify-center text-center">
-                  <Flame size={24} className="text-amber-500 mb-3 opacity-30" />
-                  <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Próximas referencias muy pronto</p>
-               </div>
-            </div>
-          </div>
-        )}
-
-        {/* 2. REPORTES DE PROYECTO (Andrea documenta) */}
+        {/* 1. REPORTES DE PROYECTO (Andrea documenta) */}
         {activeTab === 'reportes' && (
           <div className="space-y-4">
             {actividades.length > 0 ? actividades.map((act) => (
@@ -178,33 +122,6 @@ export default function AvancesPage() {
 
       </div>
     </div>
-  );
-}
-
-function CreatorCard({ name, specialty, hook, analysis, url }: any) {
-  return (
-    <Card className="p-6 border-slate-100 rounded-[2rem] bg-white shadow-sm hover:border-[var(--accent)] transition-all group overflow-hidden relative">
-        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-          <Camera size={60} />
-        </div>
-       <div className="flex justify-between items-start mb-4">
-          <span className="text-[8px] font-black text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full uppercase tracking-widest">Instagram Top</span>
-          <ExternalLink size={14} className="text-slate-300 group-hover:text-pink-500 transition-colors" />
-       </div>
-       <h4 className="text-[13px] font-black text-[var(--primary)] uppercase italic mb-1">{name}</h4>
-       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-4">{specialty}</p>
-       
-       <div className="space-y-3 pt-3 border-t border-slate-50">
-          <div>
-             <span className="text-[7px] font-black text-blue-500 uppercase tracking-[0.2em] block mb-1">Hook Maestro:</span>
-             <p className="text-[10px] font-black text-slate-600">"{hook}"</p>
-          </div>
-          <div>
-             <span className="text-[7px] font-black text-amber-500 uppercase tracking-[0.2em] block mb-1">Análisis Andrea:</span>
-             <p className="text-[10px] font-bold text-slate-500 italic leading-snug">"{analysis}"</p>
-          </div>
-       </div>
-    </Card>
   );
 }
 
