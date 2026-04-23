@@ -69,8 +69,8 @@ export default function BrandBriefPage() {
               Brand Identity 2026
             </span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-extralight tracking-tight mb-6 leading-[1.1]">
-            El Brief <span className="font-semibold text-blue-400">Estratégico</span>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-6 leading-tight uppercase italic">
+            El Brief Maestro <span className="text-blue-400">Epotech Hub</span>
           </h1>
           <p className="text-lg font-light text-slate-400 max-w-2xl leading-relaxed">
             "{data.mision_desc}"
@@ -88,8 +88,8 @@ export default function BrandBriefPage() {
                 </div>
                 <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-300">Propuesta de Valor</span>
              </div>
-             <p className="text-2xl font-light text-slate-800 leading-tight">
-               {data.propuesta_valor}
+             <p className="text-lg font-bold text-slate-800 leading-relaxed italic">
+               "{data.propuesta_valor}"
              </p>
            </Card>
         </div>
@@ -102,8 +102,8 @@ export default function BrandBriefPage() {
                 </div>
                 <span className="text-[10px] font-semibold uppercase tracking-widest text-amber-600/50">Diferenciador Clave</span>
              </div>
-             <p className="text-2xl font-light text-slate-800 leading-tight">
-               {data.diferenciador}
+             <p className="text-lg font-bold text-slate-800 leading-relaxed italic">
+               "{data.diferenciador}"
              </p>
            </Card>
         </div>
@@ -212,8 +212,8 @@ export default function BrandBriefPage() {
             </div>
             <div className="max-w-2xl mx-auto space-y-6">
                <h4 className="text-3xl font-light text-slate-900 tracking-tight">El <span className="font-semibold text-emerald-600">Filtro Maestro</span></h4>
-               <p className="text-lg font-light text-slate-500 leading-relaxed italic">
-                  "Todo lo que hagamos debe pasar por aquí. Si no construye <span className="text-slate-900 font-medium italic">confianza</span> o muestra <span className="text-slate-900 font-medium italic">transformación real</span>, no pertenece a Epotech."
+               <p className="text-lg font-bold text-slate-500 leading-relaxed italic">
+                  "Todo lo que hagamos debe pasar por aquí. Si no construye confianza o muestra transformación real, no pertenece a Epotech."
                </p>
                <div className="flex justify-center pt-4">
                   <div className="h-0.5 w-12 bg-slate-200 rounded-full"></div>
