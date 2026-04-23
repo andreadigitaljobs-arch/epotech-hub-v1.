@@ -43,21 +43,19 @@ export function BottomNav() {
             <Link
               key={tab.path}
               href={tab.path}
-              className="relative flex flex-col items-center justify-center h-14 w-[18%] transition-all duration-300 active:scale-90"
+              className="relative flex flex-col items-center justify-center h-16 w-[19%] transition-all duration-300 active:scale-90"
             >
-              <div className={`transition-all duration-500 ${isActive ? "text-white -translate-y-1 scale-110" : "text-slate-500"}`}>
-                <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+              <div className={`transition-all duration-500 ${isActive ? "text-white -translate-y-2 scale-110" : "text-slate-500"}`}>
+                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
               </div>
+              
+              {/* Etiqueta del Botón */}
+              <span className={`mt-1 text-[8px] font-black uppercase tracking-tighter transition-all duration-500 ${isActive ? "text-white opacity-100" : "text-slate-500 opacity-60"}`}>
+                {tab.name}
+              </span>
               
               {/* Punto indicador bajo el icono */}
               <div className={`absolute bottom-1 w-1 h-1 rounded-full bg-white transition-all duration-500 ${isActive ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
-              
-              {/* Tooltip o nombre sutil (opcional si se quiere muy minimalista) */}
-              {isActive && (
-                <span className="absolute -top-10 bg-slate-900 text-white text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-white/10 animate-in fade-in zoom-in duration-300">
-                  {tab.name}
-                </span>
-              )}
             </Link>
           );
         })}
