@@ -178,24 +178,24 @@ export default function BrandBriefPage() {
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="p-8 bg-emerald-50/10 border-emerald-100/50 rounded-[3.5rem] relative overflow-hidden">
+            <Card className="p-8 bg-slate-50/50 border-slate-100 rounded-[3.5rem] relative overflow-hidden">
                <div className="absolute top-0 right-0 p-8 opacity-5">
                   <Droplets size={120} />
                </div>
-               <h4 className="text-[10px] font-black uppercase text-emerald-600 tracking-[0.3em] mb-8 flex items-center gap-3">
-                  <div className="w-8 h-[1px] bg-emerald-200"></div>
+               <h4 className="text-[10px] font-black uppercase text-blue-600 tracking-[0.3em] mb-8 flex items-center gap-3">
+                  <div className="w-8 h-[1px] bg-blue-200"></div>
                   Soluciones de Limpieza
                </h4>
                <div className="grid grid-cols-1 gap-3 relative z-10">
                   {(data.servicios_basicos || []).map((s: string, idx: number) => (
-                    <div key={idx} className="flex items-center justify-between p-5 bg-white rounded-2xl border border-emerald-50 shadow-sm hover:translate-x-1 transition-transform group">
+                    <div key={idx} className="flex items-center justify-between p-5 bg-white rounded-2xl border border-slate-50 shadow-sm hover:translate-x-1 transition-transform group">
                        <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 font-mono text-[10px] font-bold">
+                          <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center text-blue-500 font-mono text-[10px] font-bold">
                              0{idx + 1}
                           </div>
-                          <span className="text-[10px] font-black text-emerald-900 uppercase italic tracking-tight">{s}</span>
+                          <span className="text-[10px] font-black text-slate-900 uppercase italic tracking-tight">{s}</span>
                        </div>
-                       <CheckCircle2 size={16} className="text-emerald-200 group-hover:text-emerald-500 transition-colors" />
+                       <CheckCircle2 size={16} className="text-blue-200 group-hover:text-blue-500 transition-colors" />
                     </div>
                   ))}
                </div>
@@ -226,7 +226,7 @@ export default function BrandBriefPage() {
          </div>
       </section>
 
-      {/* 5. ESTRATEGIA VIRAL (Idéntico a captura) */}
+      {/* 5. ESTRATEGIA VIRAL */}
       <section className="p-8 md:p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 relative overflow-hidden">
          <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
@@ -237,7 +237,6 @@ export default function BrandBriefPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                {(data.mensajes_clave || []).map((m: string, idx: number) => (
                  <Card key={idx} className="p-8 text-center bg-white/40 backdrop-blur-sm rounded-[2.5rem] shadow-sm border border-white/60 relative overflow-hidden group hover:bg-white hover:shadow-xl transition-all duration-500">
-                    {/* Número de fondo estilizado */}
                     <span className="absolute -bottom-4 -right-4 text-8xl font-black text-slate-900/5 group-hover:text-blue-500/5 transition-colors duration-500 font-mono">
                        {idx + 1}
                     </span>
@@ -256,10 +255,10 @@ export default function BrandBriefPage() {
          </div>
       </section>
 
-      {/* 6. FOOTER BRÚJULA (Con detalles de cristal) */}
+      {/* 6. FOOTER BRÚJULA (Con el color de marca real) */}
       <footer className="group relative">
-         <div className="absolute -inset-2 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-[4rem] blur-2xl opacity-10 group-hover:opacity-25 transition duration-1000"></div>
-         <div className="relative bg-emerald-600 p-10 md:p-16 rounded-[3.5rem] text-white text-center shadow-2xl overflow-hidden active:scale-[0.99] transition-transform">
+         <div className="absolute -inset-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[4rem] blur-2xl opacity-10 group-hover:opacity-25 transition duration-1000"></div>
+         <div className="relative bg-[var(--primary)] p-10 md:p-16 rounded-[3.5rem] text-white text-center shadow-2xl overflow-hidden active:scale-[0.99] transition-transform">
             {/* Dibujos decorativos de fondo */}
             <div className="absolute top-0 left-0 w-full h-full opacity-10">
                <div className="absolute top-0 right-0 w-64 h-64 border-[40px] border-white/10 rounded-full -mr-32 -mt-32"></div>
@@ -268,16 +267,16 @@ export default function BrandBriefPage() {
 
             <div className="relative z-10 max-w-2xl mx-auto space-y-8">
                <div className="bg-white p-4 w-16 h-16 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-2xl rotate-3">
-                  <ShieldCheck size={32} className="text-emerald-600" />
+                  <ShieldCheck size={32} className="text-[var(--primary)]" />
                </div>
                <h4 className="text-2xl md:text-4xl font-black uppercase italic tracking-tighter leading-none">
-                  Este Brief es <br /> <span className="text-emerald-200">nuestra Brújula</span>
+                  Este Brief es <br /> <span className="text-blue-400">nuestra Brújula</span>
                </h4>
-               <p className="text-emerald-50 text-sm font-bold leading-relaxed italic opacity-80 max-w-lg mx-auto">
+               <p className="text-slate-300 text-sm font-bold leading-relaxed italic opacity-80 max-w-lg mx-auto">
                   "Todo lo que hagamos —desde un Reel hasta un presupuesto— debe pasar por este filtro. Si no construye confianza o muestra transformación real, no pertenece a Epotech."
                </p>
                <div className="flex justify-center gap-2">
-                  <div className="h-1.5 w-12 bg-emerald-300 rounded-full opacity-50" />
+                  <div className="h-1.5 w-12 bg-blue-500 rounded-full opacity-50" />
                   <div className="h-1.5 w-4 bg-white rounded-full opacity-20" />
                </div>
             </div>
