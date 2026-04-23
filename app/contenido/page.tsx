@@ -202,19 +202,19 @@ function ContenidoContent() {
            </div>
 
            {/* Área del Documento */}
-           <div className="flex-1 overflow-y-auto pt-32 pb-20 no-scrollbar">
+           <div className="flex-1 overflow-y-auto pt-16 pb-12">
                <div className="max-w-3xl mx-auto px-4">
-                  <div className="bg-white rounded-[3rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] overflow-hidden">
+                  <div className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] overflow-hidden">
                      {/* El Papel del Guion */}
-                     <div className="p-8 md:p-16 space-y-12">
+                     <div className="p-6 md:p-12 space-y-8">
                         
                         {/* SECCIÓN 1: LECTURA MAESTRA */}
-                        <section className="space-y-6">
+                        <section className="space-y-4">
                            <div className="flex items-center gap-2">
-                              <MessageSquare size={14} className="text-blue-500" />
-                              <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Guion Maestro</h4>
+                              <MessageSquare size={12} className="text-blue-500" />
+                              <h4 className="text-[9px] font-black text-blue-600 uppercase tracking-widest">Guion Maestro</h4>
                            </div>
-                           <p className="text-2xl md:text-4xl font-bold text-slate-900 leading-tight italic tracking-tight">
+                           <p className="text-xl md:text-2xl font-bold text-slate-900 leading-tight italic tracking-tight">
                               "{selectedScript.steps.map((s: any) => s.txt).join(" ")}"
                            </p>
                         </section>
@@ -222,25 +222,25 @@ function ContenidoContent() {
                         <div className="h-px w-full bg-slate-100" />
 
                         {/* SECCIÓN 2: PASOS DE PRODUCCIÓN */}
-                        <section className="space-y-12">
+                        <section className="space-y-8">
                            <div className="flex items-center gap-2">
-                              <Camera size={14} className="text-slate-300" />
+                              <Camera size={12} className="text-slate-300" />
                               <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Desglose de Cámara</h4>
                            </div>
                            
-                           <div className="space-y-16">
+                           <div className="space-y-10">
                               {selectedScript.steps.map((s: any, i: number) => (
-                                 <div key={i} className="group space-y-6">
-                                    <div className="inline-flex items-center gap-3 bg-slate-900 text-white px-5 py-2 rounded-2xl shadow-xl">
-                                       <Zap size={14} fill="currentColor" className="text-[var(--accent)]" />
-                                       <span className="text-xs font-black uppercase tracking-widest">{s.action}</span>
+                                 <div key={i} className="group space-y-4">
+                                    <div className="inline-flex items-center gap-2 bg-slate-900 text-white px-4 py-1.5 rounded-xl shadow-lg">
+                                       <Zap size={12} fill="currentColor" className="text-[var(--accent)]" />
+                                       <span className="text-[10px] font-black uppercase tracking-widest">{s.action}</span>
                                     </div>
 
-                                    <div className="pl-8 border-l-4 border-slate-100 group-hover:border-blue-500 transition-all duration-500">
-                                       <p className="text-xl md:text-2xl font-medium text-slate-700 leading-relaxed">
+                                    <div className="pl-6 border-l-2 border-slate-100 group-hover:border-blue-500 transition-all duration-500">
+                                       <p className="text-lg font-medium text-slate-700 leading-snug">
                                           {s.txt}
                                        </p>
-                                       <span className="mt-4 block text-[9px] font-black text-slate-300 uppercase tracking-widest font-mono italic">{s.label}</span>
+                                       <span className="mt-2 block text-[8px] font-black text-slate-300 uppercase tracking-widest font-mono italic">{s.label}</span>
                                     </div>
                                  </div>
                               ))}
@@ -248,16 +248,16 @@ function ContenidoContent() {
                         </section>
 
                         {/* TIPS Y OBJETIVOS FINAL */}
-                        <footer className="pt-12 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6">
-                           <div className="bg-amber-50 p-8 rounded-[2.5rem]">
-                              <h5 className="text-[9px] font-black text-amber-600 uppercase tracking-widest mb-4">Tip del Director</h5>
-                              <p className="text-sm font-bold text-amber-900 leading-tight italic">
+                        <footer className="pt-8 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <div className="bg-amber-50 p-6 rounded-3xl">
+                              <h5 className="text-[8px] font-black text-amber-600 uppercase tracking-widest mb-3 font-mono">Tip</h5>
+                              <p className="text-xs font-bold text-amber-900 leading-tight italic">
                                  "{selectedScript.tips[0]}"
                               </p>
                            </div>
-                           <div className="bg-emerald-50 p-8 rounded-[2.5rem]">
-                              <h5 className="text-[9px] font-black text-emerald-600 uppercase tracking-widest mb-4">Objetivo Final</h5>
-                              <p className="text-sm font-bold text-emerald-900 leading-tight italic">
+                           <div className="bg-emerald-50 p-6 rounded-3xl">
+                              <h5 className="text-[8px] font-black text-emerald-600 uppercase tracking-widest mb-3 font-mono">Objetivo</h5>
+                              <p className="text-xs font-bold text-emerald-900 leading-tight italic">
                                  "{selectedScript.checklist[0]}"
                               </p>
                            </div>
