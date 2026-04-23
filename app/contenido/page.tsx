@@ -190,71 +190,60 @@ function ContenidoContent() {
            </div>
 
            {/* Content Rediseñado: Narrativo, Sin Listas */}
-           <div className="flex-1 overflow-y-auto p-8 space-y-12 no-scrollbar">
-               <div className="max-w-2xl mx-auto space-y-20 py-8 px-4">
+           <div className="flex-1 overflow-y-auto p-4 md:p-8 no-scrollbar">
+               <div className="max-w-2xl mx-auto space-y-6 py-4">
                   
-                  {/* SECCIÓN 1: EL GUION COMPLETO */}
-                  <section className="space-y-8 text-center md:text-left">
-                     <div className="inline-flex items-center gap-3 bg-blue-50 px-4 py-1.5 rounded-full border border-blue-100">
-                        <MessageSquare size={14} className="text-blue-500" />
-                        <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Lectura de Guion Completo</h4>
+                  {/* SECCIÓN 1: EL GUION COMPLETO (Compacto) */}
+                  <section className="space-y-4">
+                     <div className="flex items-center gap-2 ml-1">
+                        <MessageSquare size={12} className="text-blue-500" />
+                        <h4 className="text-[9px] font-black text-blue-600 uppercase tracking-[0.2em]">Guion Completo</h4>
                      </div>
-                     <div className="bg-white p-10 rounded-[3.5rem] shadow-2xl shadow-blue-500/5 border border-slate-100 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-8 opacity-5">
-                           <Sparkles size={80} />
-                        </div>
-                        <p className="text-2xl md:text-3xl font-bold text-slate-900 leading-[1.15] italic relative z-10">
+                     <div className="bg-slate-50 p-6 md:p-8 rounded-[2rem] border border-slate-100 relative overflow-hidden">
+                        <p className="text-xl md:text-2xl font-bold text-slate-900 leading-tight italic">
                            "{selectedScript.steps.map((s: any) => s.txt).join(" ")}"
                         </p>
                      </div>
                   </section>
 
-                  {/* SECCIÓN 2: FLUJO NARRATIVO (NADA DE LISTAS) */}
-                  <section className="space-y-16">
-                     <div className="flex items-center gap-3 ml-4">
-                        <Camera size={16} className="text-slate-300" />
-                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Flujo de Producción & Cámara</h4>
+                  {/* SECCIÓN 2: FLUJO NARRATIVO (Ágil) */}
+                  <section className="space-y-6">
+                     <div className="flex items-center gap-2 ml-1">
+                        <Camera size={12} className="text-slate-300" />
+                        <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Pasos de Producción</h4>
                      </div>
                      
-                     <div className="space-y-32">
+                     <div className="space-y-8">
                         {selectedScript.steps.map((s: any, i: number) => (
                            <div key={i} className="group relative">
-                              {/* Instrucción de Cámara Integrada */}
-                              <div className="mb-8">
-                                 <div className="inline-flex items-center gap-4 bg-slate-900 text-white px-6 py-2 rounded-2xl shadow-xl shadow-black/10 group-hover:bg-blue-600 transition-colors duration-500">
-                                    <Zap size={14} fill="currentColor" className="text-[var(--accent)]" />
-                                    <span className="text-xs font-bold uppercase tracking-widest">{s.action}</span>
+                              <div className="mb-4">
+                                 <div className="inline-flex items-center gap-3 bg-slate-900 text-white px-4 py-1.5 rounded-xl shadow-lg group-hover:bg-blue-600 transition-colors duration-300">
+                                    <Zap size={12} fill="currentColor" className="text-[var(--accent)]" />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest">{s.action}</span>
                                  </div>
                               </div>
 
-                              {/* Bloque de Guion */}
-                              <div className="pl-10 border-l-4 border-slate-100 group-hover:border-blue-500 transition-all duration-700">
-                                 <p className="text-2xl font-medium text-slate-700 leading-relaxed">
+                              <div className="pl-6 border-l-2 border-slate-100 group-hover:border-blue-500 transition-all duration-500">
+                                 <p className="text-lg font-medium text-slate-700 leading-snug">
                                     {s.txt}
                                  </p>
-                                 <div className="mt-6 flex items-center gap-3 opacity-20 group-hover:opacity-100 transition-opacity">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] font-mono">{s.label}</span>
-                                    <div className="h-px w-12 bg-slate-200"></div>
-                                 </div>
+                                 <span className="mt-2 block text-[8px] font-black text-slate-300 uppercase tracking-widest font-mono">{s.label}</span>
                               </div>
                            </div>
                         ))}
                      </div>
                   </section>
 
-                  {/* TIPS Y OBJETIVO FINAL */}
-                  <footer className="pt-20 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-8">
-                     <div className="bg-amber-50/50 p-10 rounded-[3rem] border border-amber-100/50 relative overflow-hidden">
-                        <Sparkles size={60} className="absolute -right-4 -top-4 text-amber-200/50" />
-                        <h5 className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-6 flex items-center gap-2 font-mono">Tip del Director</h5>
-                        <p className="text-base font-semibold text-amber-900 leading-relaxed italic relative z-10">
+                  <footer className="pt-10 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <div className="bg-amber-50/50 p-6 rounded-[2rem] border border-amber-100/50">
+                        <h5 className="text-[8px] font-black text-amber-600 uppercase tracking-widest mb-3 flex items-center gap-2 font-mono">Tip</h5>
+                        <p className="text-xs font-semibold text-amber-900 leading-tight italic">
                            "{selectedScript.tips[0]}"
                         </p>
                      </div>
-                     <div className="bg-emerald-50/50 p-10 rounded-[3rem] border border-emerald-100/50 relative overflow-hidden">
-                        <CheckCircle2 size={60} className="absolute -right-4 -top-4 text-emerald-200/50" />
-                        <h5 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-6 flex items-center gap-2 font-mono">Objetivo de la Toma</h5>
-                        <p className="text-base font-semibold text-emerald-900 leading-relaxed italic relative z-10">
+                     <div className="bg-emerald-50/50 p-6 rounded-[2rem] border border-emerald-100/50">
+                        <h5 className="text-[8px] font-black text-emerald-600 uppercase tracking-widest mb-3 flex items-center gap-2 font-mono">Objetivo</h5>
+                        <p className="text-xs font-semibold text-emerald-900 leading-tight italic">
                            "{selectedScript.checklist[0]}"
                         </p>
                      </div>
