@@ -58,17 +58,6 @@ function ContenidoContent() {
     fetchData();
   }, []);
 
-  // Bloqueo de scroll para evitar el "Doble Scroll"
-  useEffect(() => {
-    if (selectedScript) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [selectedScript]);
 
   const tabs = [
     { id: 'guiones', name: 'Guiones', icon: Clapperboard },
@@ -184,83 +173,90 @@ function ContenidoContent() {
         {activeTab === 'calendario' && <CalendarioSection />}
       </div>
 
-      {/* Production Quick-View: DISEÑO COMPACTO Y DE ALTA DENSIDAD */}
+      {/* Tablero de Producción: CENTRADO, COMPACTO Y EN ESPAÑOL */}
       {selectedScript && (
         <>
-          {/* Backdrop sutil */}
+          {/* Fondo desenfocado sutil */}
           <div 
-            className="fixed inset-0 z-[9000] bg-slate-950/40 backdrop-blur-sm animate-in fade-in duration-300"
+            className="fixed inset-0 z-[9000] bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-300"
             onClick={() => setSelectedScript(null)}
           />
           
-          {/* Panel Lateral (Drawer) */}
-          <div className="fixed top-0 right-0 bottom-0 w-full md:w-[500px] z-[9999] bg-[#142d53] shadow-[-20px_0_80px_rgba(0,0,0,0.5)] border-l border-white/10 flex flex-col animate-in slide-in-from-right duration-500">
+          {/* Contenedor de Scroll Centrado */}
+          <div className="fixed inset-0 z-[9999] overflow-y-auto p-4 md:p-10 flex justify-center items-start pointer-events-none">
              
-             {/* Header Técnico Compacto */}
-             <div className="p-6 border-b border-white/10 flex items-center justify-between bg-slate-900/50">
-                <div className="flex flex-col">
-                   <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.3em] font-mono mb-1">{selectedScript.category}</span>
-                   <h2 className="text-xl font-black text-white tracking-tighter uppercase italic leading-none">{selectedScript.title}</h2>
-                </div>
-                <button 
-                  onClick={() => setSelectedScript(null)}
-                  className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-all border border-white/10"
-                >
-                  <X size={20} />
-                </button>
-             </div>
-
-             {/* Área de Datos Compacta (SCROLL NATIVO) */}
-             <div className="flex-1 overflow-y-auto p-6 space-y-8">
+             {/* El Tablero Compacto */}
+             <div className="w-full max-w-xl bg-[#142d53] rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.6)] border border-white/10 pointer-events-auto animate-in zoom-in-95 duration-300 overflow-hidden">
                 
-                {/* 1. GUION MAESTRO (Caja compacta) */}
-                <section className="p-5 bg-slate-900/50 rounded-2xl border border-white/5">
-                   <h4 className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 font-mono">Master Copy</h4>
-                   <p className="text-base font-bold text-slate-200 leading-tight italic tracking-tight">
-                      "{selectedScript.steps.map((s: any) => s.txt).join(" ")}"
-                   </p>
-                </section>
+                {/* Cabecera de Producción */}
+                <div className="p-6 border-b border-white/10 flex items-center justify-between bg-slate-900/40">
+                   <div className="flex flex-col">
+                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.4em] font-mono mb-1">{selectedScript.category}</span>
+                      <h2 className="text-xl font-black text-white tracking-tighter uppercase italic leading-none">{selectedScript.title}</h2>
+                   </div>
+                   <button 
+                     onClick={() => setSelectedScript(null)}
+                     className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-all border border-white/10"
+                   >
+                     <X size={20} />
+                   </button>
+                </div>
 
-                {/* 2. PASOS DE CÁMARA (Lista Técnica Densa) */}
-                <section className="space-y-4">
-                   <h4 className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest font-mono">Shot List</h4>
-                   <div className="grid grid-cols-1 gap-2">
-                      {selectedScript.steps.map((s: any, i: number) => (
-                         <div key={i} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors group">
-                            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-[10px] font-black text-[#48c1d2] font-mono border border-white/10">
-                               0{i + 1}
+                {/* Cuerpo del Tablero (Info Compacta) */}
+                <div className="p-6 space-y-6">
+                   
+                   {/* 1. TEXTO DEL GUION */}
+                   <section className="p-5 bg-slate-900/50 rounded-2xl border border-white/5">
+                      <div className="flex items-center gap-2 mb-3">
+                         <div className="w-1 h-3 bg-[#48c1d2] rounded-full" />
+                         <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-widest font-mono">Guion Maestro</h4>
+                      </div>
+                      <p className="text-base font-bold text-slate-100 leading-tight italic tracking-tight">
+                         "{selectedScript.steps.map((s: any) => s.txt).join(" ")}"
+                      </p>
+                   </section>
+
+                   {/* 2. PASOS DE GRABACIÓN */}
+                   <section className="space-y-3">
+                      <h4 className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest font-mono ml-1">Lista de Tomas</h4>
+                      <div className="space-y-2">
+                         {selectedScript.steps.map((s: any, i: number) => (
+                            <div key={i} className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
+                               <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-[10px] font-black text-[#48c1d2] font-mono border border-white/10">
+                                  0{i + 1}
+                               </div>
+                               <div className="space-y-1">
+                                  <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-wider block">{s.action}</span>
+                                  <p className="text-sm font-medium text-slate-300 leading-snug">{s.txt}</p>
+                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest italic">{s.label}</span>
+                               </div>
                             </div>
-                            <div className="space-y-1">
-                               <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-wider block">{s.action}</span>
-                               <p className="text-sm font-medium text-slate-300 leading-snug">{s.txt}</p>
-                               <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest italic">{s.label}</span>
-                            </div>
-                         </div>
-                      ))}
-                   </div>
-                </section>
+                         ))}
+                      </div>
+                   </section>
 
-                {/* 3. ESTRATEGIA (Compacta) */}
-                <section className="grid grid-cols-2 gap-3">
-                   <div className="p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20">
-                      <span className="text-[8px] font-black text-amber-500 uppercase tracking-widest mb-2 block font-mono">Tip</span>
-                      <p className="text-[10px] font-bold text-amber-200 leading-tight italic">"{selectedScript.tips[0]}"</p>
+                   {/* 3. ESTRATEGIA RÁPIDA */}
+                   <div className="grid grid-cols-2 gap-3">
+                      <div className="p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20">
+                         <span className="text-[8px] font-black text-amber-500 uppercase tracking-widest mb-2 block font-mono">Consejo Pro</span>
+                         <p className="text-[10px] font-bold text-amber-200 leading-tight italic">"{selectedScript.tips[0]}"</p>
+                      </div>
+                      <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+                         <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest mb-2 block font-mono">Meta de hoy</span>
+                         <p className="text-[10px] font-bold text-emerald-200 leading-tight italic">"{selectedScript.checklist[0]}"</p>
+                      </div>
                    </div>
-                   <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
-                      <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest mb-2 block font-mono">Objetivo</span>
-                      <p className="text-[10px] font-bold text-emerald-200 leading-tight italic">"{selectedScript.checklist[0]}"</p>
-                   </div>
-                </section>
-             </div>
 
-             {/* Footer de Acción */}
-             <div className="p-6 bg-slate-900/50 border-t border-white/10">
-                <button 
-                  onClick={() => setSelectedScript(null)}
-                  className="w-full py-4 bg-[#48c1d2] text-[#142d53] text-[10px] font-black uppercase tracking-[0.4em] rounded-2xl hover:bg-white transition-all shadow-[0_0_20px_rgba(72,193,210,0.3)]"
-                >
-                   Finalizar Sesión
-                </button>
+                   {/* Footer de Acción */}
+                   <div className="pt-4">
+                      <button 
+                        onClick={() => setSelectedScript(null)}
+                        className="w-full py-4 bg-[#48c1d2] text-[#142d53] text-[10px] font-black uppercase tracking-[0.4em] rounded-2xl hover:bg-white transition-all shadow-[0_0_20px_rgba(72,193,210,0.3)]"
+                      >
+                         Entendido, ¡A grabar!
+                      </button>
+                   </div>
+                </div>
              </div>
           </div>
         </>
