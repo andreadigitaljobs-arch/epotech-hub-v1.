@@ -56,156 +56,168 @@ export default function BrandBriefPage() {
   if (loading) return <LoadingSpinner message="Sincronizando Estrategia..." />;
 
   return (
-    <div className="space-y-12 pb-32">
+    <div className="max-w-5xl mx-auto space-y-16 pb-32 pt-8">
       
-      {/* 1. HERO ESTRATÉGICO */}
-      <header className="relative pt-12 pb-12 px-8 rounded-[3rem] bg-[var(--primary)] text-white overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 p-8 opacity-10">
-          <Compass size={160} />
+      {/* 1. HERO MINIMALISTA (Apple Style) */}
+      <header className="relative py-16 px-12 rounded-[3rem] bg-slate-950 text-white overflow-hidden shadow-2xl ring-1 ring-white/10">
+        <div className="absolute -top-20 -right-20 p-8 opacity-5">
+          <Compass size={320} strokeWidth={1} />
         </div>
-        <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="bg-[var(--accent)] px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.3em]">
-              Manual de Estrategia
+        <div className="relative z-10 text-center md:text-left">
+          <div className="inline-flex items-center gap-3 mb-8">
+            <span className="bg-white/10 backdrop-blur-md border border-white/20 px-5 py-1.5 rounded-full text-[10px] font-medium uppercase tracking-[0.2em] text-blue-300">
+              Brand Identity 2026
             </span>
           </div>
-          <h1 className="text-4xl font-black tracking-tighter mb-4 leading-tight uppercase italic">
-            El Brief Maestro <br /> <span className="text-[var(--accent)]">Epotech Hub</span>
+          <h1 className="text-5xl md:text-6xl font-extralight tracking-tight mb-6 leading-[1.1]">
+            El Brief <span className="font-semibold text-blue-400">Estratégico</span>
           </h1>
-          <p className="text-sm font-bold text-white/70 italic max-w-xl border-l-4 border-[var(--accent)] pl-6 py-1">
+          <p className="text-lg font-light text-slate-400 max-w-2xl leading-relaxed">
             "{data.mision_desc}"
           </p>
         </div>
       </header>
 
-      {/* 2. EL CORAZÓN DE LA MARCA */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-8 bg-white border-slate-100 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all">
-          <div className="flex items-center gap-3 mb-6">
-             <div className="bg-blue-50 p-2 rounded-xl text-blue-600">
-                <Target size={20} />
+      {/* 2. PILARES FUNDAMENTALES (Diseño de tarjetas Airy) */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="group">
+           <Card className="h-full p-10 bg-white border-slate-100/60 rounded-[3rem] shadow-sm hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 ring-1 ring-slate-100">
+             <div className="flex items-center justify-between mb-10">
+                <div className="bg-blue-50/50 p-3 rounded-2xl text-blue-600 ring-1 ring-blue-100">
+                   <Target size={22} strokeWidth={1.5} />
+                </div>
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-300">Propuesta de Valor</span>
              </div>
-             <h2 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Propuesta de Valor</h2>
-          </div>
-          <p className="text-xl font-black text-[var(--primary)] leading-tight italic">
-            {data.propuesta_valor}
-          </p>
-        </Card>
+             <p className="text-2xl font-light text-slate-800 leading-tight">
+               {data.propuesta_valor}
+             </p>
+           </Card>
+        </div>
 
-        <Card className="p-8 bg-blue-50/30 border-blue-100 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all">
-          <div className="flex items-center gap-3 mb-6">
-             <div className="bg-blue-100 p-2 rounded-xl text-blue-600">
-                <Star size={20} />
+        <div className="group">
+           <Card className="h-full p-10 bg-slate-50/40 border-slate-200/50 rounded-[3rem] shadow-sm hover:shadow-2xl hover:shadow-amber-500/5 transition-all duration-500">
+             <div className="flex items-center justify-between mb-10">
+                <div className="bg-amber-50/50 p-3 rounded-2xl text-amber-600 ring-1 ring-amber-100">
+                   <Star size={22} strokeWidth={1.5} />
+                </div>
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-amber-600/50">Diferenciador Clave</span>
              </div>
-             <h2 className="text-[10px] font-black uppercase tracking-widest text-blue-600/60">Diferenciador</h2>
-          </div>
-          <p className="text-xl font-black text-[var(--primary)] leading-tight italic">
-            {data.diferenciador}
-          </p>
-        </Card>
+             <p className="text-2xl font-light text-slate-800 leading-tight">
+               {data.diferenciador}
+             </p>
+           </Card>
+        </div>
       </section>
 
-      {/* 3. AUDIENCIA Y COMUNICACIÓN */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="space-y-4">
-           <div className="flex items-center gap-3 ml-2">
-              <Users size={16} className="text-slate-300" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Público Objetivo</h3>
+      {/* 3. AUDIENCIA Y COMUNICACIÓN (Refinado) */}
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1 space-y-6">
+           <div className="flex items-center gap-3 px-2">
+              <Users size={18} strokeWidth={1.5} className="text-slate-400" />
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">Audiencia</h3>
            </div>
-           <Card className="p-8 bg-white border-slate-100 rounded-[2.5rem] shadow-sm">
-              <p className="text-base font-bold text-slate-600 leading-relaxed italic">
+           <Card className="p-8 bg-white border-slate-100/60 rounded-[2.5rem] shadow-sm ring-1 ring-slate-100">
+              <p className="text-sm font-normal text-slate-500 leading-relaxed">
                  {data.perfil_cliente}
               </p>
            </Card>
         </div>
 
-        <div className="space-y-4">
-           <div className="flex items-center gap-3 ml-2">
-              <MessageSquare size={16} className="text-[var(--accent)]" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Voz y Tono</h3>
+        <div className="lg:col-span-2 space-y-6">
+           <div className="flex items-center gap-3 px-2">
+              <MessageSquare size={18} strokeWidth={1.5} className="text-blue-500" />
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">Voz de Marca</h3>
            </div>
-           <Card className="p-8 bg-slate-900 border-none rounded-[2.5rem] shadow-2xl text-white">
-              <p className="text-base font-bold text-white/90 leading-relaxed italic">
-                 {data.tono_voz}
-              </p>
-              <div className="mt-6 flex gap-2">
-                 <span className="text-[8px] font-black uppercase bg-white/10 px-3 py-1 rounded-full text-white/60 tracking-widest">Profesional</span>
-                 <span className="text-[8px] font-black uppercase bg-white/10 px-3 py-1 rounded-full text-white/60 tracking-widest">Directo</span>
+           <Card className="p-8 bg-slate-900 border-none rounded-[2.5rem] shadow-xl text-white relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:rotate-12 transition-transform duration-700">
+                 <MessageSquare size={120} />
+              </div>
+              <div className="relative z-10">
+                <p className="text-lg font-light text-white/90 leading-relaxed mb-8">
+                   {data.tono_voz}
+                </p>
+                <div className="flex gap-2">
+                   <span className="text-[9px] font-medium uppercase bg-white/5 border border-white/10 px-4 py-1.5 rounded-full text-white/40 tracking-[0.2em]">Sincero</span>
+                   <span className="text-[9px] font-medium uppercase bg-white/5 border border-white/10 px-4 py-1.5 rounded-full text-white/40 tracking-[0.2em]">Experto</span>
+                </div>
               </div>
            </Card>
         </div>
       </section>
 
-      {/* 4. SERVICIOS DEFINIDOS */}
-      <section className="space-y-6">
-         <div className="flex items-center justify-between ml-2">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Portafolio de Soluciones</h3>
-            <Wrench size={16} className="text-slate-200" />
+      {/* 4. PORTAFOLIO (Minimalista) */}
+      <section className="space-y-8">
+         <div className="text-center space-y-2">
+            <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400">Portafolio de Soluciones</h3>
+            <div className="h-0.5 w-12 bg-blue-100 mx-auto rounded-full"></div>
          </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-8 bg-emerald-50/30 border-emerald-100 rounded-[2.5rem]">
-               <h4 className="text-[10px] font-black uppercase text-emerald-600 tracking-widest mb-6 flex items-center gap-2">
-                  <Droplets size={14} /> Soluciones de Limpieza
-               </h4>
-               <div className="grid grid-cols-1 gap-2">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+               <div className="flex items-center gap-3 justify-center md:justify-start">
+                  <div className="w-8 h-[1px] bg-emerald-100 hidden md:block"></div>
+                  <h4 className="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Cleaning & Care</h4>
+               </div>
+               <div className="grid grid-cols-1 gap-3">
                   {(data.servicios_basicos || []).map((s: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-emerald-50 shadow-sm">
-                       <CheckCircle2 size={14} className="text-emerald-500" />
-                       <span className="text-xs font-black text-emerald-900 uppercase italic">{s}</span>
+                    <div key={idx} className="flex items-center justify-between p-5 bg-white rounded-3xl border border-slate-100 hover:border-emerald-100 transition-all group">
+                       <span className="text-sm font-medium text-slate-600">{s}</span>
+                       <CheckCircle2 size={16} className="text-emerald-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                   ))}
                </div>
-            </Card>
+            </div>
 
-            <Card className="p-8 bg-blue-50/30 border-blue-100 rounded-[2.5rem]">
-               <h4 className="text-[10px] font-black uppercase text-blue-600 tracking-widest mb-6 flex items-center gap-2">
-                  <Paintbrush size={14} /> Renovación Premium
-               </h4>
-               <div className="grid grid-cols-1 gap-2">
+            <div className="space-y-4">
+               <div className="flex items-center gap-3 justify-center md:justify-start">
+                  <div className="w-8 h-[1px] bg-blue-100 hidden md:block"></div>
+                  <h4 className="text-[10px] font-semibold text-blue-600 uppercase tracking-widest">Premium Renovation</h4>
+               </div>
+               <div className="grid grid-cols-1 gap-3">
                   {(data.servicios_premium || []).map((s: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-blue-50 shadow-sm">
-                       <Zap size={14} className="text-blue-500" />
-                       <span className="text-xs font-black text-blue-900 uppercase italic">{s}</span>
+                    <div key={idx} className="flex items-center justify-between p-5 bg-white rounded-3xl border border-slate-100 hover:border-blue-100 transition-all group">
+                       <span className="text-sm font-medium text-slate-600">{s}</span>
+                       <Zap size={16} className="text-blue-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                   ))}
                </div>
-            </Card>
-         </div>
-      </section>
-
-      {/* 5. ESTRATEGIA VIRAL */}
-      <section className="p-10 bg-slate-50 rounded-[3rem] border border-slate-100 relative overflow-hidden">
-         <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-8">
-               <Sparkles size={20} className="text-amber-500" />
-               <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Pilares de Estrategia Viral</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               {(data.mensajes_clave || []).map((m: string, idx: number) => (
-                 <Card key={idx} className="p-8 text-center bg-white rounded-[2rem] shadow-lg border-none hover:translate-y-[-5px] transition-all">
-                    <span className="text-3xl font-black text-slate-100 block mb-2">0{idx + 1}</span>
-                    <p className="text-sm font-black text-[var(--primary)] uppercase italic leading-tight">"{m}"</p>
-                 </Card>
-               ))}
             </div>
          </div>
       </section>
 
-      {/* 6. LA BRÚJULA (Master Filter) */}
-      <footer className="group cursor-pointer">
-         <div className="bg-emerald-600 p-10 rounded-[3rem] text-white text-center shadow-2xl shadow-emerald-900/20 relative overflow-hidden transition-all group-hover:scale-[1.01]">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-500 to-teal-700 opacity-50" />
-            <div className="relative z-10 max-w-xl mx-auto space-y-6">
-               <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-                  <ShieldCheck size={32} />
-               </div>
-               <h4 className="text-2xl font-black uppercase italic tracking-tighter">Este Brief es nuestra Brújula</h4>
-               <p className="text-emerald-50 text-sm font-bold leading-relaxed italic opacity-90">
-                  "Todo lo que hagamos —desde un Reel hasta un presupuesto— debe pasar por este filtro. Si no construye confianza o muestra transformación real, no pertenece a Epotech."
+      {/* 5. PILARES VIRALES (Clean Bento Style) */}
+      <section className="bg-slate-50/50 p-12 rounded-[4rem] border border-slate-100 shadow-inner">
+         <div className="text-center mb-12 space-y-2">
+            <Sparkles size={24} className="text-amber-400 mx-auto mb-2 opacity-50" />
+            <h3 className="text-[11px] font-bold uppercase tracking-[0.4em] text-slate-400">Viral Content Pillars</h3>
+         </div>
+         
+         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {(data.mensajes_clave || []).map((m: string, idx: number) => (
+              <Card key={idx} className="p-8 text-center bg-white rounded-[2.5rem] border-slate-100/60 shadow-sm hover:scale-[1.03] transition-transform duration-500">
+                 <span className="text-xs font-bold text-slate-200 block mb-3 font-mono">0{idx + 1}</span>
+                 <p className="text-xs font-semibold text-slate-700 uppercase tracking-tighter leading-tight">{m}</p>
+              </Card>
+            ))}
+         </div>
+      </section>
+
+      {/* 6. MASTER FILTER (Premium Glassmorphism) */}
+      <footer className="relative group">
+         <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-[4rem] blur opacity-10 group-hover:opacity-20 transition duration-1000 group-hover:duration-200"></div>
+         <div className="relative bg-white p-12 rounded-[3.5rem] border border-slate-100 text-center space-y-8 overflow-hidden shadow-2xl">
+            <div className="absolute top-0 left-0 w-full h-full bg-slate-50/20 backdrop-blur-3xl -z-10"></div>
+            <div className="bg-emerald-500/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-100">
+               <ShieldCheck size={36} strokeWidth={1} className="text-emerald-600" />
+            </div>
+            <div className="max-w-2xl mx-auto space-y-6">
+               <h4 className="text-3xl font-light text-slate-900 tracking-tight">El <span className="font-semibold text-emerald-600">Filtro Maestro</span></h4>
+               <p className="text-lg font-light text-slate-500 leading-relaxed italic">
+                  "Todo lo que hagamos debe pasar por aquí. Si no construye <span className="text-slate-900 font-medium italic">confianza</span> o muestra <span className="text-slate-900 font-medium italic">transformación real</span>, no pertenece a Epotech."
                </p>
-               <div className="h-1.5 w-20 bg-emerald-300 mx-auto rounded-full mt-8 opacity-50" />
+               <div className="flex justify-center pt-4">
+                  <div className="h-0.5 w-12 bg-slate-200 rounded-full"></div>
+               </div>
             </div>
          </div>
       </footer>
