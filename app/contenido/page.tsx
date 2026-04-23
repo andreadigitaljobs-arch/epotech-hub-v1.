@@ -273,9 +273,15 @@ function ContenidoContent() {
                         </footer>
                      </div>
                   </div>
-                     >
-                        Finalizar Sesión de Rodaje [ESC]
-                     </button>
+
+                  {/* Botón de Cierre Inferior Sutil */}
+                  <div className="mt-12 text-center pb-10">
+                      <button 
+                        onClick={() => setSelectedScript(null)}
+                        className="text-white/20 hover:text-white/50 text-[9px] font-black uppercase tracking-[0.4em] transition-all"
+                      >
+                         Cerrar Documento
+                      </button>
                   </div>
                </div>
            </div>
