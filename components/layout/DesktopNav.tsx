@@ -18,20 +18,20 @@ export function DesktopNav() {
 
   return (
     <aside className="hidden md:flex w-72 flex-col p-6 h-screen sticky top-0 bg-slate-50/50">
-      <div className="bg-slate-900 rounded-[2.5rem] flex-1 flex flex-col p-8 shadow-2xl shadow-blue-900/20 border border-white/5 relative overflow-hidden group">
+      <div className="bg-[#1B2E5E] rounded-[2.5rem] flex-1 flex flex-col p-8 shadow-2xl shadow-[#1B2E5E]/20 border border-white/5 relative overflow-hidden group">
         
         {/* Luces de fondo decorativas */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/20 blur-[60px] rounded-full -mr-16 -mt-16 group-hover:bg-blue-500/30 transition-colors duration-1000"></div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#2BBFCF]/20 blur-[60px] rounded-full -mr-16 -mt-16 group-hover:bg-[#2BBFCF]/30 transition-colors duration-1000"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-600/10 blur-[50px] rounded-full -ml-12 -mb-12"></div>
 
         {/* Logo Section */}
         <div className="mb-6 flex items-center gap-4 relative z-10">
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-full blur opacity-40 group-hover:opacity-100 transition duration-1000"></div>
+            <div className="absolute -inset-1 bg-gradient-to-tr from-[#2BBFCF] to-purple-500 rounded-full blur opacity-40 group-hover:opacity-100 transition duration-1000"></div>
             <Image src="/logo.png" alt="Epotech" width={40} height={40} className="rounded-full relative border border-white/20 shadow-2xl" />
           </div>
           <div className="flex flex-col">
-            <span className="text-base font-black text-white tracking-tighter uppercase italic leading-tight">Epotech <span className="text-blue-400">Hub</span></span>
+            <span className="text-base font-black text-white tracking-tighter uppercase italic leading-tight">Epotech <span className="text-[#2BBFCF]">Hub</span></span>
           </div>
         </div>
 
@@ -39,8 +39,8 @@ export function DesktopNav() {
           {/* Principal */}
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">
-               <Zap size={10} className="text-blue-500" fill="currentColor" />
-               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">Menú</h3>
+               <Zap size={10} className="text-[#2BBFCF]" fill="currentColor" />
+               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500/80">Menú</h3>
             </div>
             <nav className="space-y-1">
               {primaryNav.map((item) => {
@@ -52,14 +52,14 @@ export function DesktopNav() {
                     href={item.path}
                     className={`flex items-center gap-4 rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 group/item relative ${
                       isActive
-                        ? "bg-white text-slate-900 shadow-[0_10px_25px_rgba(255,255,255,0.15)] scale-[1.02]"
+                        ? "bg-white text-[#1B2E5E] shadow-[0_10px_25px_rgba(43,191,207,0.2)] scale-[1.02]"
                         : "text-slate-400 hover:text-white hover:bg-white/5"
                     }`}
                   >
                     {isActive && (
-                      <div className="absolute left-0 w-1 h-4 bg-blue-500 rounded-full -translate-x-1"></div>
+                      <div className="absolute left-0 w-1 h-4 bg-[#2BBFCF] rounded-full -translate-x-1"></div>
                     )}
-                    <Icon size={16} className={`transition-all duration-500 ${isActive ? "text-blue-600 scale-110" : "group-hover/item:text-white group-hover/item:rotate-12"}`} />
+                    <Icon size={16} className={`transition-all duration-500 ${isActive ? "text-[#2BBFCF] scale-110" : "group-hover/item:text-white group-hover/item:rotate-12"}`} />
                     {item.name}
                   </Link>
                 );
@@ -70,30 +70,30 @@ export function DesktopNav() {
           {/* Academia */}
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">
-               <PlaySquare size={10} className="text-emerald-500" fill="currentColor" />
-               <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500">Aprende</h3>
+               <PlaySquare size={10} className="text-[#2BBFCF]" fill="currentColor" />
+               <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500/80">Aprende</h3>
             </div>
             <nav className="space-y-1">
               <Link
                 href="/manual"
                 className={`flex items-center gap-4 rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 group/item ${
                   pathname === "/manual"
-                    ? "bg-white text-slate-900 shadow-xl scale-[1.02]"
+                    ? "bg-white text-[#1B2E5E] shadow-xl scale-[1.02]"
                     : "text-slate-400 hover:text-white hover:bg-white/5"
                 }`}
               >
-                <Video size={16} className={`${pathname === "/manual" ? "text-blue-600" : "group-hover/item:text-white group-hover/item:scale-110"}`} />
+                <Video size={16} className={`${pathname === "/manual" ? "text-[#2BBFCF]" : "group-hover/item:text-white group-hover/item:scale-110"}`} />
                 Grabación
               </Link>
               <Link
                 href="/referencias"
                 className={`flex items-center gap-4 rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 group/item ${
                   pathname === "/referencias"
-                    ? "bg-white text-slate-900 shadow-xl scale-[1.02]"
+                    ? "bg-white text-[#1B2E5E] shadow-xl scale-[1.02]"
                     : "text-slate-400 hover:text-white hover:bg-white/5"
                 }`}
               >
-                <PlaySquare size={16} className={`${pathname === "/referencias" ? "text-blue-600" : "group-hover/item:text-white group-hover/item:scale-110"}`} />
+                <PlaySquare size={16} className={`${pathname === "/referencias" ? "text-[#2BBFCF]" : "group-hover/item:text-white group-hover/item:scale-110"}`} />
                 Inspiración
               </Link>
             </nav>
