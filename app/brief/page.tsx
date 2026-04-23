@@ -104,7 +104,7 @@ export default function BrandBriefPage() {
                </div>
                <h2 className="text-[10px] font-black uppercase tracking-widest text-slate-300">Propuesta de Valor</h2>
             </div>
-            <p className="text-xl md:text-2xl font-black text-[var(--primary)] leading-tight italic">
+            <p className="text-base md:text-lg font-medium text-slate-600 leading-relaxed">
               {data.propuesta_valor}
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function BrandBriefPage() {
                </div>
                <h2 className="text-[10px] font-black uppercase tracking-widest text-slate-300">Diferenciador</h2>
             </div>
-            <p className="text-xl md:text-2xl font-black text-[var(--primary)] leading-tight italic">
+            <p className="text-base md:text-lg font-medium text-slate-600 leading-relaxed">
               {data.diferenciador}
             </p>
           </div>
