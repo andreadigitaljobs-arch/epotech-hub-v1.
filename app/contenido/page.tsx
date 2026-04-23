@@ -186,40 +186,42 @@ function ContenidoContent() {
 
       {/* Script Focus Mode: REDISEÑO STORY PAPER */}
       {selectedScript && (
-        <div className="fixed inset-0 z-[9999] bg-slate-900/95 backdrop-blur-xl flex flex-col animate-in fade-in duration-500">
-           {/* Botón de Cerrar Flotante (Fuera de la hoja) */}
-           <div className="fixed top-6 right-6 z-[110]">
+        <div className="fixed inset-0 z-[9999] bg-slate-900/95 backdrop-blur-xl overflow-y-auto animate-in fade-in duration-500">
+           
+           {/* Botón de Cerrar Flotante (Fuera de la hoja, fijo en pantalla) */}
+           <div className="fixed top-6 right-6 z-[100]">
                <button 
                   onClick={() => setSelectedScript(null)}
-                  className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all duration-300 active:scale-90 shadow-2xl border border-white/10"
+                  className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all duration-300 active:scale-90 shadow-2xl border border-white/10 backdrop-blur-md"
                >
                   <X size={24} />
                </button>
            </div>
 
-           {/* Área del Documento (SCROLLABLE) */}
-           <div className="flex-1 overflow-y-auto pb-20 pt-4">
-               <div className="max-w-3xl mx-auto px-4">
+           {/* Contenedor del Documento (Story Paper) */}
+           <div className="min-h-screen py-10 md:py-20 px-4">
+               <div className="max-w-3xl mx-auto">
                   <div className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] overflow-hidden border border-slate-100">
                      
                      {/* Encabezado del Documento (Integrado) */}
                      <div className="bg-slate-50 px-8 md:px-12 py-8 border-b border-slate-100">
                         <div className="flex items-center gap-2 mb-2">
                            <div className="w-2 h-2 rounded-full bg-[#48c1d2] animate-pulse" />
-                           <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.3em]">{selectedScript.category}</span>
+                           <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.3em] font-mono">{selectedScript.category}</span>
                         </div>
                         <h2 className="text-3xl md:text-4xl font-black text-[#142d53] tracking-tighter leading-none">
                            {selectedScript.title}
                         </h2>
                      </div>
+
                      {/* El Papel del Guion */}
-                     <div className="p-6 md:p-12 space-y-8">
+                     <div className="p-8 md:p-12 space-y-10">
                         
                         {/* SECCIÓN 1: LECTURA MAESTRA */}
                         <section className="space-y-4">
                            <div className="flex items-center gap-2">
                               <MessageSquare size={12} className="text-blue-500" />
-                              <h4 className="text-[9px] font-black text-blue-600 uppercase tracking-widest">Guion Maestro</h4>
+                              <h4 className="text-[9px] font-black text-blue-600 uppercase tracking-widest font-mono">Guion Maestro</h4>
                            </div>
                            <p className="text-xl md:text-2xl font-bold text-slate-900 leading-tight italic tracking-tight">
                               "{selectedScript.steps.map((s: any) => s.txt).join(" ")}"
@@ -232,18 +234,18 @@ function ContenidoContent() {
                         <section className="space-y-8">
                            <div className="flex items-center gap-2">
                               <Camera size={12} className="text-slate-300" />
-                              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Desglose de Cámara</h4>
+                              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest font-mono">Desglose de Cámara</h4>
                            </div>
                            
                            <div className="space-y-10">
                               {selectedScript.steps.map((s: any, i: number) => (
                                  <div key={i} className="group space-y-4">
-                                    <div className="inline-flex items-center gap-2 bg-slate-900 text-white px-4 py-1.5 rounded-xl shadow-lg">
-                                       <Zap size={12} fill="currentColor" className="text-[var(--accent)]" />
-                                       <span className="text-[10px] font-black uppercase tracking-widest">{s.action}</span>
+                                    <div className="inline-flex items-center gap-2 bg-[#142d53] text-white px-4 py-1.5 rounded-xl shadow-lg">
+                                       <Zap size={12} fill="currentColor" className="text-[#48c1d2]" />
+                                       <span className="text-[10px] font-black uppercase tracking-widest font-mono">{s.action}</span>
                                     </div>
 
-                                    <div className="pl-6 border-l-2 border-slate-100 group-hover:border-blue-500 transition-all duration-500">
+                                    <div className="pl-6 border-l-2 border-slate-100 group-hover:border-[#48c1d2] transition-all duration-500">
                                        <p className="text-lg font-medium text-slate-700 leading-snug">
                                           {s.txt}
                                        </p>
@@ -271,12 +273,6 @@ function ContenidoContent() {
                         </footer>
                      </div>
                   </div>
-                  
-                  {/* Botón de Cierre Inferior */}
-                  <div className="mt-8 text-center">
-                     <button 
-                       onClick={() => setSelectedScript(null)}
-                       className="text-white/40 hover:text-white text-[10px] font-black uppercase tracking-[0.4em] transition-colors"
                      >
                         Finalizar Sesión de Rodaje [ESC]
                      </button>
