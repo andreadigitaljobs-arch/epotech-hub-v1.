@@ -26,11 +26,13 @@ export function BottomNav() {
     <div className="fixed bottom-6 left-0 right-0 z-[100] px-6 md:hidden pointer-events-none">
       <nav className="mx-auto max-w-[400px] flex items-center justify-around bg-slate-900/90 backdrop-blur-2xl border border-white/10 p-2 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] pointer-events-auto relative overflow-hidden">
         
-        {/* Indicador Líquido de Fondo */}
+        {/* Indicador Líquido de Fondo (Cápsula Contenedora) */}
         <div 
-          className="absolute h-12 w-[18%] bg-gradient-to-tr from-[#48c1d2] to-[#35a5b5] rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] shadow-[0_0_20px_rgba(72,193,210,0.4)]"
+          className="absolute h-[85%] w-[19%] bg-gradient-to-tr from-[#48c1d2] to-[#35a5b5] rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] shadow-[0_5px_15px_rgba(72,193,210,0.3)]"
           style={{ 
-            left: `${2 + activeIndex * 19.6}%`,
+            left: `${1.5 + activeIndex * 19.6}%`,
+            top: "50%",
+            transform: "translateY(-50%)",
             opacity: activeIndex === -1 ? 0 : 1
           }}
         />
@@ -43,19 +45,19 @@ export function BottomNav() {
             <Link
               key={tab.path}
               href={tab.path}
-              className="relative flex flex-col items-center justify-center h-16 w-[19%] transition-all duration-300 active:scale-90"
+              className="relative flex flex-col items-center justify-center h-full w-[19%] transition-all duration-300 active:scale-95"
             >
-              <div className={`transition-all duration-500 ${isActive ? "text-white -translate-y-2 scale-110" : "text-slate-500"}`}>
-                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+              <div className={`transition-all duration-500 z-10 ${isActive ? "text-white scale-110" : "text-slate-500"}`}>
+                <Icon size={isActive ? 18 : 20} strokeWidth={isActive ? 3 : 2} />
               </div>
               
               {/* Etiqueta del Botón */}
-              <span className={`mt-1 text-[8px] font-black uppercase tracking-tighter transition-all duration-500 ${isActive ? "text-white opacity-100" : "text-slate-500 opacity-60"}`}>
+              <span className={`mt-0.5 text-[7px] font-black uppercase tracking-tighter transition-all duration-500 z-10 ${isActive ? "text-white opacity-100 scale-105" : "text-slate-500 opacity-60"}`}>
                 {tab.name}
               </span>
               
-              {/* Punto indicador bajo el icono */}
-              <div className={`absolute bottom-1 w-1 h-1 rounded-full bg-white transition-all duration-500 ${isActive ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
+              {/* Punto indicador (Oculto en favor de la cápsula) */}
+              <div className={`absolute bottom-1 w-1 h-1 rounded-full bg-white transition-all duration-500 ${isActive ? "opacity-100 scale-100" : "opacity-0 scale-0"} hidden`} />
             </Link>
           );
         })}
