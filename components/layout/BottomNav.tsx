@@ -28,7 +28,7 @@ export function BottomNav() {
         
         {/* Indicador Líquido de Fondo */}
         <div 
-          className="absolute h-12 w-[18%] bg-gradient-to-tr from-[#2BBFCF] to-[#1A9CA9] rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] shadow-[0_0_20px_rgba(43,191,207,0.4)]"
+          className="absolute h-12 w-[18%] bg-gradient-to-tr from-[#48c1d2] to-[#35a5b5] rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] shadow-[0_0_20px_rgba(72,193,210,0.4)]"
           style={{ 
             left: `${2 + activeIndex * 19.6}%`,
             opacity: activeIndex === -1 ? 0 : 1
