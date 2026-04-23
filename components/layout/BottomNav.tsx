@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ListTodo, Target, Video, Clock, PlaySquare, Briefcase, Sparkles } from "lucide-react";
+import { Home, Target, Video, Clock, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function BottomNav() {
   const pathname = usePathname();
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const tabs = [
     { name: "Inicio", path: "/", icon: Home },
@@ -15,31 +17,51 @@ export function BottomNav() {
     { name: "Brief", path: "/brief", icon: Target },
   ];
 
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-[var(--border)] bg-[var(--surface)] pb-[calc(env(safe-area-inset-bottom,0px)+24px)] pt-3 md:hidden shadow-[0_-8px-24px_rgba(0,0,0,0.06)]">
-      {tabs.map((tab) => {
-        const Icon = tab.icon;
-        const isActive = pathname === tab.path;
+  useEffect(() => {
+    const index = tabs.findIndex(tab => tab.path === pathname);
+    if (index !== -1) setActiveIndex(index);
+  }, [pathname]);
 
-        return (
-          <Link
-            key={tab.path}
-            href={tab.path}
-            className={`flex flex-col items-center gap-0.5 p-1.5 transition-colors ${
-              isActive ? "text-[var(--primary)]" : "text-[var(--text-muted)]"
-            }`}
-          >
-            <div
-              className={`flex h-10 w-10 items-center justify-center rounded-full transition-all ${
-                isActive ? "bg-[var(--accent-light)] nav-active-pill" : "bg-transparent"
-              }`}
+  return (
+    <div className="fixed bottom-6 left-0 right-0 z-[100] px-6 md:hidden pointer-events-none">
+      <nav className="mx-auto max-w-[400px] flex items-center justify-around bg-slate-900/90 backdrop-blur-2xl border border-white/10 p-2 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] pointer-events-auto relative overflow-hidden">
+        
+        {/* Indicador Líquido de Fondo */}
+        <div 
+          className="absolute h-12 w-[18%] bg-gradient-to-tr from-blue-600 to-blue-400 rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] shadow-[0_0_20px_rgba(37,99,235,0.4)]"
+          style={{ 
+            left: `${2 + activeIndex * 19.6}%`,
+            opacity: activeIndex === -1 ? 0 : 1
+          }}
+        />
+
+        {tabs.map((tab, i) => {
+          const Icon = tab.icon;
+          const isActive = activeIndex === i;
+
+          return (
+            <Link
+              key={tab.path}
+              href={tab.path}
+              className="relative flex flex-col items-center justify-center h-14 w-[18%] transition-all duration-300 active:scale-90"
             >
-              <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-            </div>
-            <span className="text-[10px] font-medium">{tab.name}</span>
-          </Link>
-        );
-      })}
-    </nav>
+              <div className={`transition-all duration-500 ${isActive ? "text-white -translate-y-1 scale-110" : "text-slate-500"}`}>
+                <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+              </div>
+              
+              {/* Punto indicador bajo el icono */}
+              <div className={`absolute bottom-1 w-1 h-1 rounded-full bg-white transition-all duration-500 ${isActive ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
+              
+              {/* Tooltip o nombre sutil (opcional si se quiere muy minimalista) */}
+              {isActive && (
+                <span className="absolute -top-10 bg-slate-900 text-white text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-white/10 animate-in fade-in zoom-in duration-300">
+                  {tab.name}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
   );
 }
