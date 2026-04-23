@@ -18,7 +18,8 @@ import {
   Mic,
   Zap,
   Eye,
-  BarChart3
+  BarChart3,
+  MessageSquare
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
@@ -188,83 +189,77 @@ function ContenidoContent() {
               </button>
            </div>
 
-           {/* Content */}
+           {/* Content Rediseñado: Narrativo, Sin Listas */}
            <div className="flex-1 overflow-y-auto p-8 space-y-12 no-scrollbar">
-              <div className="max-w-md mx-auto space-y-12 py-6">
-                 <div className="grid grid-cols-2 gap-4 mb-2">
-                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
-                       <span className="text-[9px] font-semibold text-slate-400 uppercase block tracking-widest mb-1">Duración</span>
-                       <span className="text-sm font-medium text-slate-800">{selectedScript.duration}</span>
-                    </div>
-                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
-                       <span className="text-[9px] font-semibold text-slate-400 uppercase block tracking-widest mb-1">Tomas Req.</span>
-                       <span className="text-sm font-medium text-slate-800">{selectedScript.tomas} CLIPS</span>
-                    </div>
-                 </div>
+               <div className="max-w-2xl mx-auto space-y-20 py-8 px-4">
+                  
+                  {/* SECCIÓN 1: EL GUION COMPLETO */}
+                  <section className="space-y-8 text-center md:text-left">
+                     <div className="inline-flex items-center gap-3 bg-blue-50 px-4 py-1.5 rounded-full border border-blue-100">
+                        <MessageSquare size={14} className="text-blue-500" />
+                        <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Lectura de Guion Completo</h4>
+                     </div>
+                     <div className="bg-white p-10 rounded-[3.5rem] shadow-2xl shadow-blue-500/5 border border-slate-100 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-5">
+                           <Sparkles size={80} />
+                        </div>
+                        <p className="text-2xl md:text-3xl font-bold text-slate-900 leading-[1.15] italic relative z-10">
+                           "{selectedScript.steps.map((s: any) => s.txt).join(" ")}"
+                        </p>
+                     </div>
+                  </section>
 
-                 <section className="space-y-10">
-                     <h4 className="text-xs font-black text-slate-300 uppercase tracking-[0.3em] mb-10 border-b pb-4">Guion Técnico de Rodaje</h4>
+                  {/* SECCIÓN 2: FLUJO NARRATIVO (NADA DE LISTAS) */}
+                  <section className="space-y-16">
+                     <div className="flex items-center gap-3 ml-4">
+                        <Camera size={16} className="text-slate-300" />
+                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Flujo de Producción & Cámara</h4>
+                     </div>
                      
-                     <div className="space-y-16">
-                        {selectedScript.steps.map((s, i) => (
-                           <div key={i} className="space-y-6 pb-12 border-b border-slate-50 last:border-0">
-                              {/* Header del Paso */}
-                              <div className="flex items-center gap-4">
-                                 <span className="text-4xl font-black text-slate-100">{i + 1}</span>
-                                 <div className="h-px flex-1 bg-slate-100"></div>
-                                 <span className="text-xs font-black text-blue-500 font-mono tracking-widest">{s.label}</span>
+                     <div className="space-y-32">
+                        {selectedScript.steps.map((s: any, i: number) => (
+                           <div key={i} className="group relative">
+                              {/* Instrucción de Cámara Integrada */}
+                              <div className="mb-8">
+                                 <div className="inline-flex items-center gap-4 bg-slate-900 text-white px-6 py-2 rounded-2xl shadow-xl shadow-black/10 group-hover:bg-blue-600 transition-colors duration-500">
+                                    <Zap size={14} fill="currentColor" className="text-[var(--accent)]" />
+                                    <span className="text-xs font-bold uppercase tracking-widest">{s.action}</span>
+                                 </div>
                               </div>
 
-                              {/* Instrucción de Cámara */}
-                              <div className="space-y-2">
-                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                                    <Camera size={12} /> LO QUE HACES (CÁMARA)
-                                 </span>
-                                 <p className="text-2xl font-bold text-slate-900 leading-tight">
-                                    {s.action}
+                              {/* Bloque de Guion */}
+                              <div className="pl-10 border-l-4 border-slate-100 group-hover:border-blue-500 transition-all duration-700">
+                                 <p className="text-2xl font-medium text-slate-700 leading-relaxed">
+                                    {s.txt}
                                  </p>
-                              </div>
-
-                              {/* Texto del Guion */}
-                              <div className="space-y-2 pt-2">
-                                 <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">
-                                    LO QUE DICES (GUION)
-                                 </span>
-                                 <p className="text-xl font-medium text-slate-600 leading-relaxed bg-slate-50/50 p-6 rounded-2xl border-l-4 border-blue-500 italic">
-                                    "{s.txt}"
-                                 </p>
+                                 <div className="mt-6 flex items-center gap-3 opacity-20 group-hover:opacity-100 transition-opacity">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] font-mono">{s.label}</span>
+                                    <div className="h-px w-12 bg-slate-200"></div>
+                                 </div>
                               </div>
                            </div>
                         ))}
                      </div>
-                 </section>
+                  </section>
 
-                 <section className="space-y-4 pt-6">
-                    <h4 className="text-[10px] font-black text-amber-600 bg-amber-50 w-fit px-4 py-1 rounded-full uppercase tracking-widest">Tips Pro</h4>
-                    <div className="space-y-3">
-                       {selectedScript.tips.map((tip, i) => (
-                          <div key={i} className="flex gap-3 bg-amber-50/50 p-4 rounded-2xl border border-amber-100/50">
-                             <Sparkles size={16} className="text-amber-500 shrink-0" />
-                             <p className="text-xs font-bold text-amber-900 leading-tight">"{tip}"</p>
-                          </div>
-                       ))}
-                    </div>
-                 </section>
-
-                 <section className="space-y-4 pt-6">
-                    <h4 className="text-[10px] font-black text-emerald-600 bg-emerald-50 w-fit px-4 py-1 rounded-full uppercase tracking-widest">Checklist de Tomas</h4>
-                    <div className="grid grid-cols-1 gap-2">
-                       {selectedScript.checklist.map((item, i) => (
-                          <div key={i} className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                             <div className="h-5 w-5 rounded-md border-2 border-emerald-500/30 flex items-center justify-center">
-                               <CheckCircle2 size={12} className="text-emerald-500 opacity-0" />
-                             </div>
-                             <span className="text-[10px] font-black text-slate-600 uppercase tracking-[0.05em]">{item}</span>
-                          </div>
-                       ))}
-                    </div>
-                 </section>
-              </div>
+                  {/* TIPS Y OBJETIVO FINAL */}
+                  <footer className="pt-20 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-8">
+                     <div className="bg-amber-50/50 p-10 rounded-[3rem] border border-amber-100/50 relative overflow-hidden">
+                        <Sparkles size={60} className="absolute -right-4 -top-4 text-amber-200/50" />
+                        <h5 className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-6 flex items-center gap-2 font-mono">Tip del Director</h5>
+                        <p className="text-base font-semibold text-amber-900 leading-relaxed italic relative z-10">
+                           "{selectedScript.tips[0]}"
+                        </p>
+                     </div>
+                     <div className="bg-emerald-50/50 p-10 rounded-[3rem] border border-emerald-100/50 relative overflow-hidden">
+                        <CheckCircle2 size={60} className="absolute -right-4 -top-4 text-emerald-200/50" />
+                        <h5 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-6 flex items-center gap-2 font-mono">Objetivo de la Toma</h5>
+                        <p className="text-base font-semibold text-emerald-900 leading-relaxed italic relative z-10">
+                           "{selectedScript.checklist[0]}"
+                        </p>
+                     </div>
+                  </footer>
+               </div>
            </div>
 
            {/* Footer */}
@@ -539,4 +534,3 @@ function PublishedItem({ type, platform, title, date, views }: any) {
     </Card>
   );
 }
-
