@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Globe, ExternalLink, X } from "lucide-react";
+import { Globe, ExternalLink, X, ShieldCheck, Zap } from "lucide-react";
 
 const InstagramIcon = ({ size = 24 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -37,54 +37,63 @@ export function AccountCard({
   const isTiktok = tipo === "TikTok";
 
   return (
-    <div className="group relative h-full flex flex-col bg-slate-50/50 rounded-[32px] border-2 border-slate-200 hover:border-[var(--accent)] transition-all duration-500 hover:shadow-2xl overflow-hidden shadow-sm">
-      {/* Icon & Platform Header */}
-      <div className={`p-4 flex items-center justify-between ${
-        isIg ? 'bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-orange-500/10' : 
-        isTiktok ? 'bg-slate-900/5' : 'bg-blue-500/5'
+    <div className="group relative h-full flex flex-col bg-white rounded-[2.5rem] border border-slate-100 hover:border-[#48c1d2]/30 transition-all duration-700 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden">
+      
+      {/* Badge Header (ID Style) */}
+      <div className={`p-6 flex flex-col items-center text-center relative overflow-hidden ${
+        isIg ? 'bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50' : 
+        isTiktok ? 'bg-slate-50' : 'bg-blue-50'
       }`}>
-        <div className={`p-2.5 rounded-2xl shadow-sm ${
-          isIg ? 'bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-500 text-white' : 
-          isTiktok ? 'bg-slate-900 text-white' : 'bg-blue-600 text-white'
-        }`}>
-          {isIg ? <InstagramIcon size={20} /> : isTiktok ? <TiktokIcon size={20} /> : <Globe size={20} />}
+        <div className="absolute top-0 left-0 w-full h-1 bg-[#48c1d2]/20" />
+        
+        {/* Avatar Placeholder / Brand Logo */}
+        <div className="relative mb-4">
+           <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-xl rotate-3 group-hover:rotate-0 transition-transform duration-700 ${
+             isIg ? 'bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-500 text-white' : 
+             isTiktok ? 'bg-slate-900 text-white' : 'bg-blue-600 text-white'
+           }`}>
+             {isIg ? <InstagramIcon size={32} /> : isTiktok ? <TiktokIcon size={32} /> : <Globe size={32} />}
+           </div>
+           <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
+              <ShieldCheck size={16} className="text-[#48c1d2]" />
+           </div>
         </div>
-        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-          {tipo}
-        </span>
-      </div>
 
-      {/* Content */}
-      <div className="p-6 flex-1 flex flex-col">
-        <h3 className="text-sm font-black text-[var(--primary)] leading-tight mb-4 group-hover:text-[var(--accent)] transition-colors">
+        <h3 className="text-lg font-black text-[#142d53] tracking-tighter uppercase italic leading-none mb-1">
           {nombre}
         </h3>
+        <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Production Studio Pass</span>
+      </div>
 
+      {/* Specialty Insights */}
+      <div className="p-8 flex-1 flex flex-col space-y-6">
         <div className="space-y-4 flex-1">
-          {/* Fuerte */}
-          <div className="bg-blue-50/50 rounded-2xl p-4 border border-blue-100/50">
-            <span className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-1 block">🏆 Especialidad</span>
-            <p className="text-[11px] font-bold text-blue-900 leading-snug">{fuerte}</p>
+          {/* Especialidad */}
+          <div className="space-y-1.5">
+            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-[#48c1d2] font-mono">Especialidad</span>
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 group-hover:bg-blue-50/50 transition-colors">
+               <p className="text-xs font-bold text-[#142d53] leading-snug">{fuerte}</p>
+            </div>
           </div>
 
-          {/* Analisis */}
-          <div>
-            <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2 block">🧠 Análisis Hedy</span>
-            <p className="text-[11px] font-bold text-gray-500 leading-relaxed line-clamp-4 italic">
+          {/* Análisis */}
+          <div className="space-y-1.5">
+            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-300 font-mono">Estrategia Viral</span>
+            <p className="text-[11px] font-medium text-slate-500 leading-relaxed italic line-clamp-3">
               "{porqueFunciona}"
             </p>
           </div>
         </div>
 
-        {/* Footer Action */}
-        <div className="mt-6 pt-4 border-t border-gray-50">
+        {/* Footer Link */}
+        <div className="pt-6 border-t border-slate-50">
           <a 
             href={url} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl bg-gray-50 text-[var(--primary)] text-[11px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-white transition-all group-hover:gap-3"
+            className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#48c1d2] hover:text-[#142d53] transition-all duration-500 shadow-lg shadow-slate-900/10 hover:shadow-[#48c1d2]/20"
           >
-            Visitar Perfil <ExternalLink size={14} />
+            Visitar Canal <ExternalLink size={14} />
           </a>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Play, ExternalLink, X } from "lucide-react";
+import { Play, ExternalLink, X, Zap } from "lucide-react";
 
 const InstagramIcon = ({ size = 24 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -33,60 +33,81 @@ export function VideoCard({
   fuerte,
   porqueFunciona,
 }: VideoCardProps) {
-  const isTiktok = platform === "tiktok";
   const isIg = platform === "instagram";
+  const isTiktok = platform === "tiktok";
 
   return (
-    <div className="group relative h-full flex flex-col bg-slate-50/50 rounded-[32px] border-2 border-slate-200 hover:border-[var(--accent)] transition-all duration-500 hover:shadow-2xl overflow-hidden shadow-sm">
-      {/* Icon & Platform Header */}
-      <div className={`p-4 flex items-center justify-between ${
-        isIg ? 'bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-orange-500/10' : 
-        isTiktok ? 'bg-slate-900/5' : 'bg-red-500/5'
-      }`}>
-        <div className={`p-2.5 rounded-2xl shadow-sm ${
-          isIg ? 'bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-500 text-white' : 
-          isTiktok ? 'bg-slate-900 text-white' : 'bg-red-600 text-white'
-        }`}>
-          {isIg ? <InstagramIcon size={20} /> : isTiktok ? <TiktokIcon size={20} /> : <Play size={20} />}
+    <div className="group relative aspect-[9/16] md:aspect-auto md:h-[450px] flex flex-col bg-[#142d53] rounded-[2.5rem] border border-white/5 hover:border-[#48c1d2]/50 transition-all duration-700 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] overflow-hidden shadow-2xl">
+      
+      {/* Visual Frame (Simulado) */}
+      <div className="relative h-48 md:h-56 bg-slate-900 overflow-hidden">
+        {/* Gradiente de video */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#142d53] via-transparent to-black/20 z-10" />
+        
+        {/* Placeholder de Video Style */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity duration-700">
+           <Play size={64} fill="white" className="text-white" />
         </div>
-        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-          {platform}
-        </span>
+
+        {/* Platform Badge */}
+        <div className="absolute top-4 left-4 z-20">
+           <div className={`p-2 rounded-xl backdrop-blur-md border border-white/20 shadow-xl ${
+             isIg ? 'bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-500 text-white' : 
+             isTiktok ? 'bg-black text-white' : 'bg-red-600 text-white'
+           }`}>
+             {isIg ? <InstagramIcon size={16} /> : isTiktok ? <TiktokIcon size={16} /> : <Play size={16} />}
+           </div>
+        </div>
+
+        {/* Título sobre el "Video" */}
+        <div className="absolute bottom-4 left-6 right-6 z-20">
+           <h3 className="text-base font-black text-white leading-tight tracking-tight uppercase italic line-clamp-2">
+             {titleEs}
+           </h3>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="p-6 flex-1 flex flex-col">
-        <h3 className="text-sm font-black text-[var(--primary)] leading-tight mb-4 group-hover:text-[var(--accent)] transition-colors">
-          {titleEs}
-        </h3>
-
-        <div className="space-y-4 flex-1">
-          {/* Fuerte */}
-          <div className="bg-blue-50/50 rounded-2xl p-4 border border-blue-100/50">
-            <span className="text-[9px] font-black uppercase tracking-widest text-blue-600 mb-1 block">🎯 Hook Maestro</span>
-            <p className="text-[11px] font-bold text-blue-900 leading-snug">{fuerte}</p>
+      {/* Production Insights (Glassmorphism) */}
+      <div className="p-6 flex-1 flex flex-col justify-between relative z-20">
+        <div className="space-y-4">
+          {/* Fuerte (Hook) */}
+          <div className="bg-[#48c1d2]/10 rounded-2xl p-4 border border-[#48c1d2]/20 relative overflow-hidden group/hook">
+            <div className="absolute top-0 right-0 p-2 opacity-5">
+               <Zap size={40} fill="currentColor" className="text-[#48c1d2]" />
+            </div>
+            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-[#48c1d2] mb-2 block font-mono">Hook Maestro</span>
+            <p className="text-xs font-bold text-blue-100 leading-snug italic">"{fuerte}"</p>
           </div>
 
-          {/* Analisis */}
-          <div>
-            <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2 block">🧠 Análisis Hedy</span>
-            <p className="text-[11px] font-bold text-gray-500 leading-relaxed line-clamp-4 italic">
+          {/* Analisis (Director's Notes) */}
+          <div className="px-2">
+            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30 mb-2 block font-mono">Análisis Hedy</span>
+            <p className="text-[11px] font-medium text-white/60 leading-relaxed italic line-clamp-4">
               "{porqueFunciona}"
             </p>
           </div>
         </div>
 
-        {/* Footer Action */}
-        <div className="mt-6 pt-4 border-t border-gray-50">
+        {/* Action Link */}
+        <div className="mt-6">
           <a 
             href={url} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl bg-gray-50 text-[var(--primary)] text-[11px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-white transition-all group-hover:gap-3"
+            className="flex items-center justify-between w-full p-4 rounded-2xl bg-white/5 hover:bg-[#48c1d2] text-white hover:text-[#142d53] border border-white/10 hover:border-transparent text-[10px] font-black uppercase tracking-widest transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(72,193,210,0.3)]"
           >
             Ver Referencia <ExternalLink size={14} />
           </a>
         </div>
+      </div>
+
+      {/* Decoración Cine */}
+      <div className="absolute bottom-0 right-0 p-1 opacity-10">
+         <div className="flex gap-1">
+            <div className="w-1 h-1 bg-white rounded-full"></div>
+            <div className="w-1 h-1 bg-white rounded-full"></div>
+            <div className="w-1 h-1 bg-white rounded-full"></div>
+         </div>
       </div>
     </div>
   );

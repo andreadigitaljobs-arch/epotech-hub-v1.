@@ -186,9 +186,9 @@ function ContenidoContent() {
 
       {/* Script Focus Mode: REDISEÑO STORY PAPER */}
       {selectedScript && (
-        <div className="fixed inset-0 z-[9999] bg-slate-900/95 backdrop-blur-xl overflow-y-auto animate-in fade-in duration-500">
+        <div className="fixed inset-0 z-[9999] bg-slate-900/95 backdrop-blur-xl overflow-y-scroll overscroll-contain animate-in fade-in duration-500">
            
-           {/* Botón de Cerrar Flotante (Fuera de la hoja, fijo en pantalla) */}
+           {/* Botón de Cerrar Flotante (Fijo al viewport) */}
            <div className="fixed top-6 right-6 z-[100]">
                <button 
                   onClick={() => setSelectedScript(null)}
@@ -199,8 +199,8 @@ function ContenidoContent() {
            </div>
 
            {/* Contenedor del Documento (Story Paper) */}
-           <div className="min-h-screen py-10 md:py-20 px-4">
-               <div className="max-w-3xl mx-auto">
+           <div className="min-h-full w-full py-10 md:py-20 px-4 flex flex-col items-center">
+               <div className="w-full max-w-3xl">
                   <div className="bg-white rounded-[2.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] overflow-hidden border border-slate-100">
                      
                      {/* Encabezado del Documento (Integrado) */}
