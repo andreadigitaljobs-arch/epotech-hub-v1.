@@ -2093,8 +2093,8 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
           reproducciones_reels: editedAnalytics.repro_reels,
           compartidos_reels: editedAnalytics.compartidos,
           guardados_reels: editedAnalytics.guardados,
-          captura_url: analytics[0].images[0] || '',
-          captura_cuenta_url: analytics[0].images[1] || ''
+          captura_url: analytics[0].images_reels[0] || '',
+          captura_cuenta_url: analytics[0].images_account[0] || ''
         }, { onConflict: 'mes,semana' });
 
       if (error) throw error;
