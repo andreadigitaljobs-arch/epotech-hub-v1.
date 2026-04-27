@@ -159,6 +159,7 @@ export default function ProyectosPage() {
   const [editingName, setEditingName] = useState<string | null>(null);
   const [addingTask, setAddingTask] = useState<Record<string, string>>({});
   const [newTaskText, setNewTaskText] = useState<Record<string, string>>({});
+  const [activeSubTab, setActiveSubTab] = useState<'proyectos' | 'mensajes'>('proyectos');
 
   useEffect(() => {
     async function fetchData() {
@@ -311,19 +312,37 @@ export default function ProyectosPage() {
         </p>
       </header>
 
-      <div className="bg-white/50 border border-slate-200 p-6 rounded-[2.5rem] mb-8">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="bg-[var(--accent)] p-2 rounded-xl shadow-lg">
-            <Rocket size={18} className="text-white" />
-          </div>
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">
-            Progreso de proyectos
-          </span>
-        </div>
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] leading-relaxed">
-          Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
-        </p>
+      {/* Sub-Tabs Switcher */}
+      <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8 gap-2">
+        <button 
+          onClick={() => setActiveSubTab('proyectos')}
+          className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'proyectos' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
+        >
+          <Rocket size={14} /> Proyectos
+        </button>
+        <button 
+          onClick={() => setActiveSubTab('mensajes')}
+          className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'mensajes' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
+        >
+          <Bell size={14} /> Mensajes {notificaciones.length > 0 && <span className="w-1.5 h-1.5 bg-[#48c1d2] rounded-full animate-pulse" />}
+        </button>
       </div>
+
+      {activeSubTab === 'proyectos' ? (
+        <>
+          <div className="bg-white/50 border border-slate-200 p-6 rounded-[2.5rem] mb-8">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="bg-[var(--accent)] p-2 rounded-xl shadow-lg">
+                <Rocket size={18} className="text-white" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">
+                Progreso de proyectos
+              </span>
+            </div>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] leading-relaxed">
+              Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
+            </p>
+          </div>
 
       {/* Service cards */}
       <div className="space-y-4">
@@ -556,17 +575,10 @@ export default function ProyectosPage() {
             </div>
           );
         })}
-      </div>
-      {/* Mensajes del Equipo Section */}
-      <section className="pt-10 border-t border-slate-100">
-        <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Bell size={18} className="text-[#48c1d2]" />
-            <h2 className="font-black text-[#142d53] uppercase tracking-tighter">Mensajes del Equipo</h2>
-          </div>
         </div>
-        
-        <div className="space-y-4">
+      ) : (
+        /* Mensajes del Equipo Sub-Tab */
+        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {notificaciones.length > 0 ? (
             notificaciones.map((announcement) => (
               <div key={announcement.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 border-l-[#48c1d2] relative overflow-hidden group">
@@ -593,7 +605,7 @@ export default function ProyectosPage() {
             </div>
           )}
         </div>
-      </section>
+      )}
     </div>
   );
 }
