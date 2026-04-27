@@ -12,6 +12,7 @@ export function DesktopNav() {
     { name: "Inicio", path: "/", icon: Home },
     { name: "Servicios", path: "/proyectos", icon: Briefcase },
     { name: "Contenido", path: "/contenido", icon: Sparkles },
+    { name: "Grabación", path: "/manual", icon: Video },
     { name: "Brief", path: "/brief", icon: Target },
   ];
 
@@ -63,38 +64,6 @@ export function DesktopNav() {
                   </Link>
                 );
               })}
-            </nav>
-          </div>
-
-          {/* Academia */}
-          <div>
-            <div className="flex items-center gap-2 mb-2 px-4">
-               <PlaySquare size={10} className="text-[#48c1d2]" fill="currentColor" />
-               <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500/80">Aprende</h3>
-            </div>
-            <nav className="space-y-1">
-              <Link
-                href="/manual"
-                className={`flex items-center gap-4 rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 group/item ${
-                  pathname === "/manual"
-                    ? "bg-white text-[#142d53] shadow-xl scale-[1.02]"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                <Video size={16} className={`${pathname === "/manual" ? "text-[#48c1d2]" : "group-hover/item:text-white group-hover/item:scale-110"}`} />
-                Grabación
-              </Link>
-              <Link
-                href="/referencias"
-                className={`flex items-center gap-4 rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 group/item ${
-                  pathname === "/referencias"
-                    ? "bg-white text-[#142d53] shadow-xl scale-[1.02]"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                <PlaySquare size={16} className={`${pathname === "/referencias" ? "text-[#48c1d2]" : "group-hover/item:text-white group-hover/item:scale-110"}`} />
-                Inspiración
-              </Link>
             </nav>
           </div>
         </div>
