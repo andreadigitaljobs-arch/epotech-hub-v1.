@@ -567,7 +567,7 @@ export default function ProyectosPage() {
             </div>
           );
         })}
-        </div>
+        </>
       ) : (
         /* Mensajes del Equipo Sub-Tab */
         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
