@@ -2156,7 +2156,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
       showToast("¡Datos extraídos con éxito!", "success");
     } catch (err) {
       console.error("OCR Error:", err);
-      showToast("No se pudo extraer texto de la imagen", "warning");
+      showToast("No se pudo extraer texto de la imagen", "info");
     }
   };
 
