@@ -1163,7 +1163,7 @@ function ContenidoContent() {
   ) : null;
 
   return (
-    <div className="max-w-md md:max-w-5xl mx-auto pt-6 pb-24 px-4 text-center">
+    <div className="max-w-md md:max-w-5xl pt-6 pb-24 px-4 text-left">
       <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="inline-flex items-center gap-2 bg-[#48c1d2]/10 px-3 py-1.5 rounded-full mb-3">
           <div className="w-5 h-5 bg-[#48c1d2] rounded-lg flex items-center justify-center">
@@ -1171,7 +1171,7 @@ function ContenidoContent() {
           </div>
           <span className="text-[10px] font-black text-[#142d53] uppercase tracking-widest">Estudio Epotech 2026</span>
         </div>
-         <h1 className="text-3xl font-black text-[#142d53] leading-tight tracking-tighter">
+        <h1 className="text-3xl font-black text-[#142d53] leading-tight tracking-tighter">
           Estudio de<br/>
           <span className="text-[#48c1d2]">Producción</span>
         </h1>
