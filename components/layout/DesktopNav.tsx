@@ -13,7 +13,6 @@ export function DesktopNav() {
     { name: "Servicios", path: "/proyectos", icon: Briefcase },
     { name: "Contenido", path: "/contenido", icon: Sparkles },
     { name: "Brief", path: "/brief", icon: Target },
-    { name: "Avances", path: "/actividad", icon: Clock },
   ];
 
   return (

@@ -14,7 +14,9 @@ import {
   Calendar,
   MessageSquare,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Mic,
+  Download
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
@@ -27,11 +29,20 @@ export default function MasterPanel() {
     tipo: "RECORDATORIO"
   });
   const [history, setHistory] = useState<any[]>([]);
+  const [reportesAudio, setReportesAudio] = useState<any[]>([]);
+  const [locuciones, setLocuciones] = useState<any[]>([]);
+  const [playingId, setPlayingId] = useState<string | null>(null);
 
   const formatDate = (dateStr: string) => {
     try {
-      const date = new Date(dateStr + 'T00:00:00');
-      return date.toLocaleDateString("es-ES", { day: 'numeric', month: 'short' }).replace('.', '');
+      const isISO = dateStr.includes('T');
+      const date = new Date(isISO ? dateStr : dateStr + 'T00:00:00');
+      
+      return date.toLocaleString("es-ES", { 
+        day: 'numeric', 
+        month: 'short',
+        ...(isISO && { hour: 'numeric', minute: '2-digit', hour12: true })
+      }).replace('.', '');
     } catch (e) {
       return dateStr;
     }
@@ -40,7 +51,32 @@ export default function MasterPanel() {
 
   useEffect(() => {
     fetchHistory();
+    fetchAudios();
+    fetchLocuciones();
+
+    const channel = supabase.channel('audios-channel')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'reportes_audio' }, () => fetchAudios())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'locuciones' }, () => fetchLocuciones())
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, []);
+
+  async function fetchAudios() {
+    const { data } = await supabase
+      .from("reportes_audio")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (data) setReportesAudio(data);
+  }
+
+  async function fetchLocuciones() {
+    const { data } = await supabase
+      .from("locuciones")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (data) setLocuciones(data);
+  }
 
   async function fetchHistory() {
     const { data } = await supabase
@@ -96,6 +132,50 @@ export default function MasterPanel() {
     if (!confirm("¿Seguro que quieres borrar este aviso?")) return;
     const { error } = await supabase.from("notificaciones").delete().eq("id", id);
     if (!error) fetchHistory();
+  }
+
+  async function deleteAudio(id: string, url: string) {
+    if (!confirm("¿Seguro que quieres borrar este audio?")) return;
+    try {
+      const fileName = url.split('/').pop();
+      if (fileName) await supabase.storage.from('audios').remove([fileName]);
+      const { error } = await supabase.from("reportes_audio").delete().eq("id", id);
+      if (!error) fetchAudios();
+    } catch (e) { console.error(e); }
+  }
+
+  async function deleteLocucion(id: string, url: string) {
+    if (!confirm("¿Seguro que quieres borrar esta locución?")) return;
+    try {
+      const fileName = url.split('/').pop();
+      if (fileName) await supabase.storage.from('audios').remove([fileName]);
+      const { error } = await supabase.from("locuciones").delete().eq("id", id);
+      if (!error) fetchLocuciones();
+    } catch (e) { console.error(e); }
+  }
+
+  async function forceDownload(url: string, id: string) {
+    try {
+      const fileName = url.split('/').pop();
+      if (!fileName) return;
+      
+      // Descargamos el blob internamente con Supabase para evitar restricciones Cross-Origin
+      const { data, error } = await supabase.storage.from('audios').download(fileName);
+      if (error) throw error;
+      
+      // Creamos un link fantasma para forzar la descarga al disco duro
+      const blobUrl = URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `reporte_epotech_${id.split('-')[0]}.webm`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      console.error("Error forzando descarga:", e);
+      alert("No se pudo descargar automáticamente. Haz clic derecho en el reproductor de arriba y selecciona 'Guardar audio como...'.");
+    }
   }
 
   if (loading) return <LoadingSpinner message="Abriendo Panel de Control..." />;
@@ -291,6 +371,111 @@ export default function MasterPanel() {
               </button>
             </div>
          </Card>
+      </div>
+
+      {/* BANDEJA DE AUDIOS: TU REPORTE PRO */}
+      <div className="mt-16">
+         <h3 className="text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-3">
+           <div className="bg-[#48c1d2] p-2 rounded-xl text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
+             <Mic size={20} />
+           </div>
+           Reportes de Audio Recibidos
+         </h3>
+         
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {reportesAudio.map(r => (
+             <Card key={r.id} className="p-6 border-2 border-slate-100 bg-white rounded-[2rem] shadow-xl relative group hover:scale-[1.02] transition-transform">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                   <Mic size={40} className="text-[#48c1d2]" />
+                </div>
+                <div className="flex justify-between items-start mb-4">
+                   <span className="text-[9px] font-black px-3 py-1.5 bg-[#142d53] text-[#48c1d2] rounded-xl tracking-widest uppercase shadow-md">
+                     {r.proyecto_id === 'manual' ? 'Reporte Libre' : r.proyecto_id}
+                   </span>
+                   <button 
+                     onClick={() => deleteAudio(r.id, r.audio_url)}
+                     className="text-slate-300 hover:text-red-500 transition-colors bg-slate-50 p-2 rounded-lg"
+                   >
+                     <Trash2 size={16} />
+                   </button>
+                </div>
+                
+                <div className="space-y-4">
+                   <audio src={r.audio_url} controls className="w-full h-12 rounded-xl" />
+                   
+                   <div className="flex items-center justify-between pt-2">
+                      <span className="text-[10px] font-bold text-slate-400">
+                        {formatDate(r.created_at)}
+                      </span>
+                      <button 
+                        onClick={() => forceDownload(r.audio_url, r.id)}
+                        className="flex items-center gap-2 text-[10px] font-black text-[#142d53] hover:text-[#48c1d2] transition-colors tracking-widest uppercase bg-[#48c1d2]/10 px-4 py-2 rounded-xl border border-[#48c1d2]/20 active:scale-95"
+                      >
+                        <Download size={14} /> Descargar
+                      </button>
+                   </div>
+                </div>
+             </Card>
+           ))}
+           {reportesAudio.length === 0 && (
+             <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-300 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[3rem]">
+               <Mic size={48} className="mb-4 opacity-20" />
+               <p className="text-sm font-bold tracking-widest italic opacity-40">Bandeja vacía. Esperando audios de Sebas...</p>
+             </div>
+           )}
+         </div>
+      </div>
+
+      {/* BANDEJA DE LOCUCIONES DE GUIONES */}
+      <div className="mt-16">
+         <h3 className="text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-3">
+           <div className="bg-[#142d53] p-2 rounded-xl text-[#48c1d2] shadow-lg shadow-[#142d53]/20">
+             <Mic size={20} />
+           </div>
+           Locuciones de Guiones
+           <span className="ml-auto text-[10px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1.5 rounded-full border border-[#48c1d2]/20">
+             {locuciones.length} archivo{locuciones.length !== 1 ? 's' : ''}
+           </span>
+         </h3>
+         
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {locuciones.map(loc => (
+             <Card key={loc.id} className="p-6 border-2 border-[#48c1d2]/20 bg-[#142d53] rounded-[2rem] shadow-xl relative group hover:scale-[1.02] transition-transform">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                   <Mic size={40} className="text-[#48c1d2]" />
+                </div>
+                <div className="flex justify-between items-start mb-3">
+                   <div className="flex-1 min-w-0 mr-2">
+                     <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-widest block mb-0.5">Locución</span>
+                     <h4 className="text-sm font-black text-white leading-tight truncate">{loc.script_title}</h4>
+                     <p className="text-[9px] font-bold text-white/40 mt-1">{formatDate(loc.created_at)}</p>
+                   </div>
+                   <button 
+                     onClick={() => deleteLocucion(loc.id, loc.audio_url)}
+                     className="text-white/20 hover:text-red-400 transition-colors bg-white/5 p-2 rounded-lg shrink-0"
+                   >
+                     <Trash2 size={16} />
+                   </button>
+                </div>
+                
+                <div className="space-y-3">
+                   <audio src={loc.audio_url} controls className="w-full h-12 rounded-xl opacity-80" />
+                   <button 
+                     onClick={() => forceDownload(loc.audio_url, loc.id)}
+                     className="w-full flex items-center justify-center gap-2 text-[10px] font-black text-[#48c1d2] tracking-widest uppercase bg-[#48c1d2]/10 px-4 py-3 rounded-xl border border-[#48c1d2]/20 active:scale-95 hover:bg-[#48c1d2]/20 transition-all"
+                   >
+                     <Download size={14} /> Descargar WAV
+                   </button>
+                </div>
+             </Card>
+           ))}
+           {locuciones.length === 0 && (
+             <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-300 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[3rem]">
+               <Mic size={48} className="mb-4 opacity-20" />
+               <p className="text-sm font-bold tracking-widest italic opacity-40">Sin locuciones enviadas aún...</p>
+             </div>
+           )}
+         </div>
       </div>
 
     </div>

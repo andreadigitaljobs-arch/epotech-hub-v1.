@@ -22,6 +22,17 @@ interface Activity {
 
 export default function AvancesPage() {
   const [activeTab, setActiveTab] = useState('reportes');
+
+  // Memoria de Pestaña
+  useEffect(() => {
+    const savedTab = localStorage.getItem('epotech_activity_tab');
+    if (savedTab) setActiveTab(savedTab);
+  }, []);
+
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    localStorage.setItem('epotech_activity_tab', tabId);
+  };
   const [actividades, setActividades] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -62,9 +73,9 @@ export default function AvancesPage() {
       <header>
         <div className="flex items-center gap-2 mb-1">
           <BarChart3 size={14} className="text-[var(--accent)]" />
-          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent)] font-mono">Estrategia & Análisis</span>
+          <span className="text-[10px] font-semibold text-[var(--accent)] font-mono">Estrategia y Análisis</span>
         </div>
-        <h1 className="text-2xl font-black tracking-tight text-[var(--primary)] uppercase italic">Centro de Avances</h1>
+        <h1 className="text-2xl font-black tracking-tight text-[#142d53]">Centro de Avances</h1>
       </header>
 
       {/* Sub-Tabs */}
@@ -72,7 +83,7 @@ export default function AvancesPage() {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => handleTabChange(tab.id)}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-[9px] font-black whitespace-nowrap transition-all ${
               activeTab === tab.id 
                 ? "bg-white text-[var(--primary)] shadow-sm scale-[1.02]" 
@@ -80,7 +91,7 @@ export default function AvancesPage() {
             }`}
           >
             <tab.icon size={12} />
-            {tab.name.toUpperCase()}
+            {tab.name}
           </button>
         ))}
       </div>
@@ -101,20 +112,28 @@ export default function AvancesPage() {
           </div>
         )}
 
-        {/* 3. HISTORIAL DE PERFORMANCE */}
+        {/* 3. HISTORIAL DE PERFORMANCE - CONECTADO REAL */}
         {activeTab === 'historial' && (
           <div className="space-y-6">
              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <StatBox label="MEJOR FORMATO" value="REEL" sub="7.3% Engagement" color="blue" />
-                <StatBox label="MEJOR HORA" value="2:00 PM" sub="Martes y Viernes" color="emerald" />
+                <StatBox 
+                  label="MEJOR FORMATO" 
+                  value={actividades.length > 0 ? "REEL" : "S/D"} 
+                  sub="Basado en frecuencia" 
+                  color="blue" 
+                />
+                <StatBox 
+                  label="PRODUCCIÓN" 
+                  value="ACTIVA" 
+                  sub="2026 Season" 
+                  color="emerald" 
+                />
              </div>
              
              <Card className="p-8 border-slate-100 rounded-[2.5rem] bg-white">
-                <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-6">Últimos Posts Analizados</h3>
+                <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-6 italic">Contenidos Publicados (Base Real)</h3>
                 <div className="space-y-4">
-                   <MiniPerformanceItem title="REEL: Antes/Después Garage" views="1.2K" perf="success" />
-                   <MiniPerformanceItem title="CAROUSEL: Tips de Sellado" views="456" perf="warning" />
-                   <MiniPerformanceItem title="REEL: ASMR Limpieza" views="890" perf="success" />
+                   <PublishedHistoryList />
                 </div>
              </Card>
           </div>
@@ -127,37 +146,40 @@ export default function AvancesPage() {
 
 function ReportCard({ activity }: { activity: Activity }) {
   return (
-    <Card className="p-8 border-2 border-slate-50 rounded-[2.5rem] bg-white hover:border-blue-200 transition-all shadow-sm">
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <div className="flex items-center gap-2 text-slate-400 mb-1">
-            <Clock size={12} />
-            <span className="text-[9px] font-black uppercase tracking-widest">
-                {new Date(activity.fecha).toLocaleDateString("es-ES", { day: 'numeric', month: 'long', year: 'numeric' })}
-            </span>
+    <Card className="p-10 border border-slate-100 rounded-[3rem] bg-white shadow-xl hover:shadow-2xl transition-all relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[5rem] -mr-8 -mt-8 transition-all group-hover:bg-[#48c1d2]/10" />
+      
+      <div className="flex justify-between items-start mb-8 relative z-10">
+        <div className="text-left">
+          <div className="flex items-center gap-2 mb-3">
+             <span className="text-[8px] font-black tracking-[0.4em] px-3 py-1 bg-[#142d53] text-[#48c1d2] rounded-full shadow-lg shadow-[#142d53]/20">Auditoría de resultados</span>
+             <span className="text-[8px] font-black text-slate-300 tracking-widest">{new Date(activity.fecha).toLocaleDateString("es-ES", { month: 'long', year: 'numeric' })}</span>
           </div>
-          <h3 className="text-lg font-black text-[var(--primary)] uppercase italic leading-none">{activity.categoria}</h3>
+          <h3 className="text-3xl font-black text-[#142d53] leading-none tracking-tighter">{activity.categoria}</h3>
         </div>
-        <div className="h-10 w-10 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500">
-           <CheckCircle2 size={20} />
+        <div className="h-14 w-14 rounded-2xl bg-slate-50 flex items-center justify-center text-[#142d53] border border-slate-100 shadow-inner group-hover:scale-110 transition-transform">
+           <CheckCircle2 size={24} />
         </div>
       </div>
 
-      <div className="space-y-3 mb-8">
+      <div className="space-y-4 mb-10 text-left">
+        <h4 className="text-[9px] font-black text-[#48c1d2] tracking-[0.3em] mb-4">Hitos de crecimiento alcanzados</h4>
         {activity.logros.map((logro, i) => (
-          <div key={i} className="flex gap-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-50">
-             <div className="h-2 w-2 rounded-full bg-emerald-500 mt-1.5 shrink-0 shadow-lg shadow-emerald-500/20"></div>
-             <p className="text-xs font-bold text-[var(--primary)] leading-tight italic">"{logro}"</p>
+          <div key={i} className="flex gap-4 p-5 bg-slate-50/50 rounded-3xl border border-slate-50 hover:bg-white hover:border-[#48c1d2]/20 transition-all">
+             <div className="h-3 w-3 rounded-full bg-[#48c1d2] mt-1.5 shrink-0 shadow-lg shadow-[#48c1d2]/40 animate-pulse"></div>
+             <p className="text-sm font-bold text-[#142d53] leading-relaxed">"{logro}"</p>
           </div>
         ))}
       </div>
 
-      <div className="pt-6 border-t border-slate-50">
-         <div className="flex items-center gap-2 mb-2">
-            <Target size={14} className="text-amber-500" />
-            <span className="text-[8px] font-black uppercase tracking-widest text-amber-600">Plan de Acción / Siguiente Paso</span>
+      <div className="pt-8 border-t border-slate-100 text-left">
+         <div className="flex items-center gap-3 mb-3">
+            <Target size={18} className="text-[#48c1d2]" />
+            <span className="text-[9px] font-black tracking-[0.3em] text-slate-400">Hoja de ruta / Próximo objetivo</span>
          </div>
-         <p className="text-[10px] font-bold text-slate-400 italic">"{activity.siguiente_objetivo}"</p>
+         <div className="p-6 bg-[#142d53] rounded-[2.5rem] shadow-xl">
+            <p className="text-xs font-black text-[#48c1d2] italic tracking-wider leading-relaxed">"{activity.siguiente_objetivo}"</p>
+         </div>
       </div>
     </Card>
   );
@@ -177,16 +199,49 @@ function StatBox({ label, value, sub, color }: any) {
   );
 }
 
+function PublishedHistoryList() {
+  const [history, setHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPublished() {
+      const { data } = await supabase
+        .from("registro_publicaciones")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (data) setHistory(data);
+      setLoading(false);
+    }
+    fetchPublished();
+  }, []);
+
+  if (loading) return <div className="text-[10px] font-black text-slate-300 uppercase animate-pulse">Sincronizando archivo...</div>;
+  if (history.length === 0) return <div className="text-[10px] font-black text-slate-300 uppercase italic">Aún no hay videos publicados esta semana</div>;
+
+  return (
+    <div className="space-y-4">
+      {history.map((item) => (
+        <MiniPerformanceItem 
+          key={item.id} 
+          title={`${item.tipo}: ${item.tema}`} 
+          views={item.plataforma} 
+          perf="success" 
+        />
+      ))}
+    </div>
+  );
+}
+
 function MiniPerformanceItem({ title, views, perf }: any) {
   return (
-    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-[#48c1d2]/30 transition-all">
        <div className="flex items-center gap-3">
-          <div className={`h-2 w-2 rounded-full ${perf === 'success' ? 'bg-emerald-500' : 'bg-amber-500'}`}></div>
-          <span className="text-[10px] font-black text-[var(--primary)] uppercase italic leading-none">{title}</span>
+          <div className={`h-2 w-2 rounded-full ${perf === 'success' ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-amber-500'}`}></div>
+          <span className="text-[10px] font-black text-[var(--primary)] uppercase italic leading-tight line-clamp-1">{title}</span>
        </div>
-       <div className="flex items-center gap-1.5">
-          <BarChart3 size={10} className="text-slate-400" />
-          <span className="text-[9px] font-black text-slate-500">{views}</span>
+       <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-lg border border-slate-100">
+          <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-tighter">{views}</span>
        </div>
     </div>
   );

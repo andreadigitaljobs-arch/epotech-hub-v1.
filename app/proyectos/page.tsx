@@ -1,316 +1,537 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import { Card } from "@/components/ui/Card";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
-import { 
-  Rocket, 
-  CheckCircle2, 
-  TrendingUp, 
-  Lightbulb, 
-  Video, 
-  BarChart3,
-  Search,
-  ArrowRight,
-  Share2,
-  ChevronRight,
-  Zap,
-  Star,
-  Sparkles,
-  Target,
-  Database,
-  Smartphone,
-  Layout,
-  FormInput,
-  X,
-  History
-} from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import {
+  CheckCircle2, Circle, Clock, ChevronDown, ChevronUp,
+  Database, Smartphone, Layout, FormInput, Rocket,
+  MessageSquare, Save, AlertCircle, Trash2, Plus, Pencil,
+  TrendingUp, Search
+} from "lucide-react";
 
-// Icon mapping by ID
-const IconMap: any = {
-  crm: Database,
-  app: Smartphone,
-  forms: FormInput,
-  landing: Layout,
-  social: Share2,
-  Lightbulb,
-  Sparkles,
-  Share2,
-  Target
+// ─── Static service definitions ─────────────────────────────────────────────
+const SERVICES = [
+  {
+    id: "crm",
+    name: "CRM Master",
+    description: "Gestión de clientes y automatización de seguimiento.",
+    Icon: Database,
+    color: "blue",
+  },
+  {
+    id: "app",
+    name: "App de Seguimiento",
+    description: "La plataforma que Sebastián usa para grabar, publicar y seguir su progreso.",
+    Icon: Smartphone,
+    color: "indigo",
+  },
+
+  {
+    id: "landing",
+    name: "Landing Page",
+    description: "Página de aterrizaje de alta conversión para Epotech Solutions.",
+    Icon: Layout,
+    color: "purple",
+  },
+  {
+    id: "google-ads",
+    name: "Google Ads",
+    description: "Campañas de publicidad pagada para captar clientes que ya están buscando el servicio.",
+    Icon: TrendingUp,
+    color: "orange",
+  },
+  {
+    id: "seo",
+    name: "Posicionamiento SEO",
+    description: "Optimización para que Epotech Solutions aparezca primero en Google de forma orgánica.",
+    Icon: Search,
+    color: "teal",
+  },
+];
+
+// ─── Initial tasks per service (seeded once if table is empty) ───────────────
+const INITIAL_TASKS: Record<string, { tarea: string; orden: number }[]> = {
+  crm: [
+    { tarea: "Configurar pipeline de clientes potenciales", orden: 1 },
+    { tarea: "Activar automatización de correos de seguimiento", orden: 2 },
+    { tarea: "Integrar formulario de captura con CRM", orden: 3 },
+    { tarea: "Configurar etiquetas y categorías de clientes", orden: 4 },
+    { tarea: "Pruebas finales y entrega al cliente", orden: 5 },
+  ],
+  app: [
+    { tarea: "Diseño de interfaz aprobado", orden: 1 },
+    { tarea: "Sistema de notificaciones push activo", orden: 2 },
+    { tarea: "Sección de contenido y grabación lista", orden: 3 },
+    { tarea: "Panel de administrador (master) completo", orden: 4 },
+    { tarea: "Historial de publicaciones conectado", orden: 5 },
+    { tarea: "Deploy final en producción", orden: 6 },
+  ],
+
+  landing: [
+    { tarea: "Wireframe estratégico aprobado", orden: 1 },
+    { tarea: "Copywriting de la página redactado", orden: 2 },
+    { tarea: "Diseño visual completado", orden: 3 },
+    { tarea: "Integración con formulario de contacto", orden: 4 },
+    { tarea: "SEO básico configurado", orden: 5 },
+    { tarea: "Deploy y pruebas finales", orden: 6 },
+  ],
+  "google-ads": [
+    { tarea: "Definir presupuesto mensual de la campaña", orden: 1 },
+    { tarea: "Investigación de palabras clave (pressure washing Utah)", orden: 2 },
+    { tarea: "Redactar anuncios de texto (3 variantes)", orden: 3 },
+    { tarea: "Configurar segmentación geográfica por zonas de Utah", orden: 4 },
+    { tarea: "Conectar campaña con formulario de captura", orden: 5 },
+    { tarea: "Lanzar campaña y monitorear primeras 48 hrs", orden: 6 },
+    { tarea: "Primer reporte de resultados entregado", orden: 7 },
+  ],
+  seo: [
+    { tarea: "Auditoría SEO inicial del sitio web actual", orden: 1 },
+    { tarea: "Investigación de palabras clave orgánicas locales", orden: 2 },
+    { tarea: "Optimización de títulos, meta descripciones y H1", orden: 3 },
+    { tarea: "Perfil de Google Business Profile optimizado", orden: 4 },
+    { tarea: "Creación de páginas de servicio por zona (Salt Lake, Provo...)", orden: 5 },
+    { tarea: "Estrategia de backlinks locales activada", orden: 6 },
+    { tarea: "Primer reporte de posicionamiento entregado", orden: 7 },
+  ],
 };
 
-export default function ServicesPage() {
+type TaskStatus = "pendiente" | "en_proceso" | "completada";
+
+interface Task {
+  id: string;
+  service_id: string;
+  service_name: string;
+  tarea: string;
+  completada: boolean;
+  status: TaskStatus;
+  observacion: string | null;
+  orden: number;
+}
+
+// ─── Progress calculation ────────────────────────────────────────────────────
+function calcProgress(tasks: Task[]): number {
+  if (!tasks.length) return 0;
+  const score = tasks.reduce((acc, t) => {
+    if (t.status === "completada") return acc + 1;
+    if (t.status === "en_proceso") return acc + 0.5;
+    return acc;
+  }, 0);
+  return Math.round((score / tasks.length) * 100);
+}
+
+const STATUS_CYCLE: Record<TaskStatus, TaskStatus> = {
+  pendiente: "en_proceso",
+  en_proceso: "completada",
+  completada: "pendiente",
+};
+
+const STATUS_LABELS: Record<TaskStatus, string> = {
+  pendiente: "Pendiente",
+  en_proceso: "En proceso",
+  completada: "Completada",
+};
+
+const STATUS_COLORS: Record<TaskStatus, string> = {
+  pendiente: "bg-slate-100 text-slate-500 border-slate-200",
+  en_proceso: "bg-amber-50 text-amber-600 border-amber-200",
+  completada: "bg-emerald-50 text-emerald-600 border-emerald-200",
+};
+
+// ─── Page ────────────────────────────────────────────────────────────────────
+export default function ProyectosPage() {
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
-  const [services, setServices] = useState<any[]>([]);
-  const [socialData, setSocialData] = useState<any>(null);
-  const [selectedService, setSelectedService] = useState<any>(null);
-  const [serviceHistory, setServiceHistory] = useState<any[]>([]);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [obsEdits, setObsEdits] = useState<Record<string, string>>({});
+  const [savingObs, setSavingObs] = useState<string | null>(null);
+  const [nameEdits, setNameEdits] = useState<Record<string, string>>({});
+  const [editingName, setEditingName] = useState<string | null>(null);
+  const [addingTask, setAddingTask] = useState<Record<string, string>>({});
+  const [newTaskText, setNewTaskText] = useState<Record<string, string>>({});
 
-  const [mounted, setMounted] = useState(false);
+  // ── Fetch & seed ──────────────────────────────────────────────────────────
+  const fetchTasks = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("tareas_servicio")
+      .select("*")
+      .order("orden", { ascending: true });
 
-  useEffect(() => {
-    setMounted(true);
-    fetchHubData();
+    if (error) { console.error(error); setLoading(false); return; }
+
+    const existing = data || [];
+
+    // Seed per-service: if a service has no rows, insert its initial tasks
+    const rowsToInsert: any[] = [];
+    for (const svc of SERVICES) {
+      const hasTasks = existing.some((t) => t.service_id === svc.id);
+      if (!hasTasks && INITIAL_TASKS[svc.id]) {
+        INITIAL_TASKS[svc.id].forEach((t) =>
+          rowsToInsert.push({
+            service_id: svc.id,
+            service_name: svc.name,
+            tarea: t.tarea,
+            completada: false,
+            status: "pendiente",
+            observacion: null,
+            orden: t.orden,
+          })
+        );
+      }
+    }
+
+    if (rowsToInsert.length > 0) {
+      await supabase.from("tareas_servicio").insert(rowsToInsert);
+      const { data: refreshed } = await supabase
+        .from("tareas_servicio")
+        .select("*")
+        .order("orden", { ascending: true });
+      setTasks(refreshed || []);
+    } else {
+      setTasks(existing);
+    }
+
+    setLoading(false);
   }, []);
 
-  const fetchHubData = async () => {
-    setLoading(true);
-    try {
-      // 1. Fetch Config
-      const { data: config } = await supabase.from("config_estrategia").select("*").single();
-      
-      if (config) {
-        setSocialData(config.hub_social_media);
-        
-        // 2. Fetch Achievements from Actividad for each service
-        const infra = config.hub_infraestructura || [];
-        const enrichedInfra = await Promise.all(infra.map(async (service: any) => {
-           // Mapping name to category
-           const category = service.name.includes('CRM') ? 'CRM Master' : 
-                           service.name.includes('App') ? 'App de Seguimiento' : 
-                           service.name.includes('Social') ? 'Estrategia de Redes' : 
-                           service.name.includes('Formulario') ? 'Formulario Inteligente' : 'Landing Page';
-           
-            const recentLogros = service.achievements || [];
-            
-            return { ...service, achievements: recentLogros, category };
-        }));
-        
-        setServices(enrichedInfra);
-      }
-    } catch (err) {
-      console.error("Error fetching hub data:", err);
-    } finally {
-      setLoading(false);
+  useEffect(() => { fetchTasks(); }, [fetchTasks]);
+
+  // ── Toggle status (cycles pendiente → en_proceso → completada → pendiente) ─
+  const toggleStatus = async (task: Task) => {
+    const newStatus = STATUS_CYCLE[task.status];
+    const newCompletada = newStatus === "completada";
+
+    // Optimistic update
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === task.id ? { ...t, status: newStatus, completada: newCompletada } : t
+      )
+    );
+
+    await supabase
+      .from("tareas_servicio")
+      .update({ status: newStatus, completada: newCompletada, updated_at: new Date().toISOString() })
+      .eq("id", task.id);
+  };
+
+  // ── Save observation ──────────────────────────────────────────────────────
+  const saveObs = async (taskId: string) => {
+    setSavingObs(taskId);
+    const text = obsEdits[taskId] ?? "";
+    setTasks((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, observacion: text } : t))
+    );
+    await supabase
+      .from("tareas_servicio")
+      .update({ observacion: text, updated_at: new Date().toISOString() })
+      .eq("id", taskId);
+    setSavingObs(null);
+  };
+
+  // ── Save edited task name ────────────────────────────────────────────────
+  const saveTaskName = async (taskId: string) => {
+    const newName = nameEdits[taskId]?.trim();
+    if (!newName) { setEditingName(null); return; }
+    setTasks((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, tarea: newName } : t))
+    );
+    setEditingName(null);
+    await supabase
+      .from("tareas_servicio")
+      .update({ tarea: newName, updated_at: new Date().toISOString() })
+      .eq("id", taskId);
+  };
+
+  // ── Delete task ───────────────────────────────────────────────────────────
+  const deleteTask = async (taskId: string) => {
+    setTasks((prev) => prev.filter((t) => t.id !== taskId));
+    await supabase.from("tareas_servicio").delete().eq("id", taskId);
+  };
+
+  // ── Add new task ──────────────────────────────────────────────────────────
+  const addTask = async (serviceId: string, serviceName: string) => {
+    const text = newTaskText[serviceId]?.trim();
+    if (!text) return;
+    const svcTasks = tasks.filter((t) => t.service_id === serviceId);
+    const maxOrden = svcTasks.length ? Math.max(...svcTasks.map((t) => t.orden)) : 0;
+
+    const { data, error } = await supabase
+      .from("tareas_servicio")
+      .insert({
+        service_id: serviceId,
+        service_name: serviceName,
+        tarea: text,
+        completada: false,
+        status: "pendiente",
+        observacion: null,
+        orden: maxOrden + 1,
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      setTasks((prev) => [...prev, data]);
+      setNewTaskText((prev) => ({ ...prev, [serviceId]: "" }));
+      setAddingTask((prev) => ({ ...prev, [serviceId]: "" }));
     }
   };
 
-  const openServiceDetail = async (service: any) => {
-    setSelectedService(service);
-    
-    // 1. Map name to category for filtering
-    const category = service.name.includes('CRM') ? 'CRM Master' : 
-                     service.name.includes('App') ? 'App de Seguimiento' : 
-                     service.name.includes('Social') ? 'Estrategia de Redes' : 
-                     service.name.includes('Formulario') ? 'Formulario Inteligente' : 'Landing Page';
-
-    // 2. Fetch History from Actividad table
-    const { data: history, error } = await supabase
-      .from("actividad")
-      .select("*")
-      .eq("categoria", category)
-      .order("fecha", { ascending: false });
-
-    if (!error && history) {
-      setServiceHistory(history);
-    } else {
-      setServiceHistory([]);
-    }
-  };
-
-  const updateStatus = async (e: React.MouseEvent, serviceId: string, currentStatus: string) => {
-    e.stopPropagation(); // Evita abrir el modal al cambiar el estado
-    
-    const statusCycle: any = {
-      'pending': 'active',
-      'active': 'success',
-      'success': 'pending'
-    };
-    
-    const newStatus = statusCycle[currentStatus] || 'pending';
-    
-    try {
-      const { data: config } = await supabase.from("config_estrategia").select("*").single();
-      const updatedHub = config.hub_infraestructura.map((s: any) => 
-        s.id === serviceId ? { ...s, status: newStatus } : s
-      );
-      
-      await supabase.from("config_estrategia").update({ hub_infraestructura: updatedHub }).eq('id', config.id);
-      
-      // Update local state for immediate feedback
-      setServices(prev => prev.map(s => s.id === serviceId ? { ...s, status: newStatus } : s));
-    } catch (err) {
-      console.error("Error updating status:", err);
-    }
-  };
-
-  if (loading) return <LoadingSpinner message="Cargando Hub de Servicios..." />;
+  if (loading) return <LoadingSpinner message="Cargando proyectos..." />;
 
   return (
-    <div className="space-y-10 pb-20 relative">
+    <div className="space-y-6 pb-20">
       {/* Header */}
       <header className="relative">
         <div className="flex items-center gap-2 mb-3">
           <div className="bg-[var(--accent)] p-2 rounded-xl shadow-lg">
             <Rocket size={18} className="text-white" />
           </div>
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Progreso de proyectos</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">
+            Progreso de proyectos
+          </span>
         </div>
-        <h1 className="text-4xl font-black tracking-tighter text-[var(--primary)]">
+        <h1 className="text-4xl font-black tracking-tighter text-[var(--primary)] mb-4">
           Servicios Activos
         </h1>
-        <p className="mt-3 text-sm font-medium text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          Aquí puedes ver cómo estamos construyendo la tecnología de Epotech paso a paso. 
-          Si tiene una barra azul, es el proyecto en el que estamos trabajando ahora mismo.
-        </p>
+        <div className="bg-white/50 border border-slate-200 p-4 rounded-[2rem]">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] leading-relaxed">
+            Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
+          </p>
+        </div>
       </header>
 
-      {/* Grid de Infraestructura Digital */}
-      <section>
-        <div className="flex items-center gap-3 mb-6">
-          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--primary)]">La Base de tu Negocio</h2>
-          <div className="h-px flex-1 bg-gradient-to-r from-[var(--border)] to-transparent" />
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
-          {services.map((service) => {
-            const Icon = IconMap[service.id] || Database;
-            return (
-              <Card 
-                key={service.id} 
-                onClick={() => openServiceDetail(service)}
-                className="p-6 border-2 border-[var(--border)] group cursor-pointer hover:border-[var(--accent)] transition-all flex flex-col justify-between min-h-[340px] shadow-sm hover:shadow-xl active:scale-[0.98]"
+      {/* Service cards */}
+      <div className="space-y-4">
+        {SERVICES.map((svc) => {
+          const svcTasks = tasks.filter((t) => t.service_id === svc.id);
+          const progress = calcProgress(svcTasks);
+          const done = svcTasks.filter((t) => t.status === "completada").length;
+          const isOpen = expanded === svc.id;
+          const { Icon } = svc;
+
+          return (
+            <div
+              key={svc.id}
+              className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden transition-all"
+            >
+              {/* Card header — tap to expand */}
+              <button
+                onClick={() => setExpanded(isOpen ? null : svc.id)}
+                className="w-full p-6 flex items-center gap-4 text-left"
               >
-                <div>
-                  <div className="flex items-start justify-between mb-5">
-                    <div className={`p-3 rounded-2xl bg-gray-50 text-[var(--text-muted)] group-hover:bg-[var(--accent-light)] group-hover:text-[var(--accent)] transition-colors shadow-inner`}>
-                      <Icon size={24} strokeWidth={2.5} />
+                <div className="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                  <Icon size={20} className="text-[var(--primary)]" />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <h2 className="text-base font-black text-[var(--primary)] tracking-tight">
+                      {svc.name}
+                    </h2>
+                    <span className="text-[10px] font-black text-[var(--accent)] ml-3 shrink-0">
+                      {done}/{svcTasks.length} listas
+                    </span>
+                  </div>
+
+                  {/* Progress bar */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] rounded-full transition-all duration-700"
+                        style={{ width: `${progress}%` }}
+                      />
                     </div>
-                    <button 
-                      onClick={(e) => updateStatus(e, service.id, service.status || 'pending')}
-                      className={`text-[9px] font-black uppercase px-3 py-1.5 rounded-lg border transition-all active:scale-95 ${
-                        service.status === 'success' ? 'bg-emerald-100 text-emerald-600 border-emerald-200' : 
-                        service.status === 'active' ? 'bg-blue-100 text-blue-600 border-blue-200' : 
-                        'bg-gray-100 text-gray-500 border-gray-200'
-                      }`}
-                    >
-                      {service.status === 'success' ? '¡LISTO!' : 
-                       service.status === 'active' ? 'TRABAJANDO EN ESTO' : 'EN FILA'}
-                    </button>
-                  </div>
-                  
-                  <h3 className="text-lg font-black text-[var(--primary)] mb-1 group-hover:text-[var(--accent)] transition-colors">
-                    {service.name === 'Aplicación de Marca' ? 'App de Seguimiento' : 
-                     service.id === 'app' ? 'App de Seguimiento' : service.name}
-                  </h3>
-                  
-                  {/* LOGROS AUTOMÁTICOS */}
-                  <div className="space-y-2.5 my-6">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2">Logros Recientes</p>
-                    {service.achievements.map((logro: string, i: number) => (
-                      <div key={i} className="flex items-start gap-2.5">
-                        <div className="mt-1 bg-emerald-500 rounded-full p-0.5 shrink-0">
-                          <CheckCircle2 size={10} className="text-white" />
-                        </div>
-                        <span className="text-[11px] font-bold text-[var(--primary)] leading-none">{logro}</span>
-                      </div>
-                    ))}
+                    <span className="text-[11px] font-black text-[var(--primary)] w-8 text-right shrink-0">
+                      {progress}%
+                    </span>
                   </div>
                 </div>
 
-                <div className="mt-auto">
-                  <div className="flex justify-between items-end mb-2">
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Avance Total</span>
-                    <span className="text-[12px] font-black text-[var(--primary)]">{service.progress}%</span>
-                  </div>
-                  <div className="h-2 w-full bg-gray-50 rounded-full overflow-hidden border border-gray-100 shadow-inner">
-                    <div 
-                      className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] rounded-full transition-all duration-1000"
-                      style={{ width: `${service.progress}%` }}
-                    />
-                  </div>
-                  <div className="mt-5 flex items-center justify-center gap-2 text-[10px] font-black text-white bg-[var(--accent)] py-2 rounded-xl shadow-lg shadow-cyan-500/10 group-hover:bg-[var(--accent-dark)] transition-all uppercase tracking-[0.1em]">
-                     Abrir Historial <ChevronRight size={14} className="animate-bounce-x" />
-                  </div>
+                <div className="shrink-0 text-slate-400 ml-2">
+                  {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                 </div>
-              </Card>
-            );
-          })}
-        </div>
-      </section>
-
-
-
-      {/* DETAIL MODAL - TELEPORTADO AL BODY PARA CENTRADO PERFECTO */}
-      {mounted && selectedService && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-10 bg-gray-500/20 animate-in fade-in duration-300">
-          <Card className="w-full max-w-3xl bg-white rounded-[48px] shadow-[0_32px_120px_rgba(0,0,0,0.15)] border border-white overflow-hidden flex flex-col max-h-[90vh] relative animate-in zoom-in-95 duration-300">
-            
-            {/* Header Ligero */}
-            <div className="p-8 sm:p-12 border-b border-gray-50 flex justify-between items-center bg-white">
-              <div className="flex items-center gap-6">
-                 <div className="bg-blue-50 p-4 rounded-3xl text-[var(--accent)] shadow-sm">
-                    <History size={28} />
-                 </div>
-                 <div>
-                    <h3 className="text-3xl font-black tracking-tighter text-[var(--primary)] capitalize">{selectedService.name}</h3>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--accent)] mt-1">Lo que hemos logrado hasta ahora</p>
-                 </div>
-              </div>
-              <button 
-                onClick={() => setSelectedService(null)}
-                className="p-3 hover:bg-gray-100 rounded-full transition-all text-gray-400 hover:text-[var(--primary)] active:scale-90"
-              >
-                <X size={28} />
               </button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-8 sm:p-12 space-y-10 custom-scrollbar bg-white">
-              {serviceHistory.length > 0 ? (
-                <div className="grid grid-cols-1 gap-6">
-                  {serviceHistory.map((entry, idx) => (
-                    <div key={idx} className="bg-gray-50/80 rounded-[32px] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all">
-                      <div className="flex justify-between items-center mb-6">
-                        <span className="text-[10px] font-black text-[var(--accent)] uppercase tracking-[0.2em] bg-blue-50/50 px-4 py-2 rounded-xl border border-blue-100/30">
-                          {new Date(entry.fecha).toLocaleDateString("es-ES", { day: 'numeric', month: 'long' })}
-                        </span>
-                        <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
-                      </div>
-                      
-                      <div className="space-y-3">
-                         {entry.logros.map((logro: string, lIdx: number) => (
-                           <div key={lIdx} className="flex gap-4 items-start">
-                              <div className="bg-emerald-500 rounded-lg p-1 shrink-0 mt-0.5">
-                                <CheckCircle2 size={12} className="text-white" />
-                              </div>
-                              <p className="text-sm font-bold text-[var(--primary)] leading-snug">{logro}</p>
-                           </div>
-                         ))}
 
-                         {entry.siguiente_objetivo && (
-                           <div className="mt-6 pt-6 border-t border-gray-200/50">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Zap size={14} className="text-amber-500 fill-amber-500" />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">Siguiente Meta:</span>
-                              </div>
-                              <p className="text-xs font-bold text-gray-500 italic">"{entry.siguiente_objetivo}"</p>
-                           </div>
-                         )}
+              {/* Checklist — visible when expanded */}
+              {isOpen && (
+                <div className="border-t border-slate-50 px-6 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-300">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest pt-4 pb-1">
+                    Lista de tareas
+                  </p>
+
+                  {svcTasks.map((task) => {
+                    const obsVal = obsEdits[task.id] ?? task.observacion ?? "";
+                    const isDirty = obsEdits[task.id] !== undefined && obsEdits[task.id] !== (task.observacion ?? "");
+
+                    return (
+                      <div
+                        key={task.id}
+                        className={`rounded-2xl border p-4 space-y-3 transition-colors ${
+                          task.status === "completada"
+                            ? "bg-emerald-50/40 border-emerald-100"
+                            : task.status === "en_proceso"
+                            ? "bg-amber-50/40 border-amber-100"
+                            : "bg-slate-50 border-slate-100"
+                        }`}
+                      >
+                        {/* Task row */}
+                        <div className="flex items-start gap-3">
+                          {/* Status toggle button */}
+                          <button
+                            onClick={() => toggleStatus(task)}
+                            className="shrink-0 mt-0.5 transition-transform active:scale-90"
+                          >
+                            {task.status === "completada" ? (
+                              <CheckCircle2 size={22} className="text-emerald-500" />
+                            ) : task.status === "en_proceso" ? (
+                              <Clock size={22} className="text-amber-500" />
+                            ) : (
+                              <Circle size={22} className="text-slate-300" />
+                            )}
+                          </button>
+
+                          <div className="flex-1 min-w-0">
+                            {editingName === task.id ? (
+                              <input
+                                autoFocus
+                                className="w-full text-sm font-bold text-[var(--primary)] bg-white border border-[var(--accent)] rounded-lg px-2 py-1 outline-none"
+                                value={nameEdits[task.id] ?? task.tarea}
+                                onChange={(e) =>
+                                  setNameEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
+                                }
+                                onBlur={() => saveTaskName(task.id)}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") saveTaskName(task.id);
+                                  if (e.key === "Escape") setEditingName(null);
+                                }}
+                              />
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  setEditingName(task.id);
+                                  setNameEdits((prev) => ({ ...prev, [task.id]: task.tarea }));
+                                }}
+                                className={`text-left text-sm font-bold leading-snug w-full group/name flex items-center gap-1 ${
+                                  task.status === "completada"
+                                    ? "line-through text-slate-400"
+                                    : "text-[var(--primary)]"
+                                }`}
+                              >
+                                {task.tarea}
+                                <Pencil size={10} className="text-slate-300 opacity-0 group-hover/name:opacity-100 transition-opacity shrink-0" />
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Status badge */}
+                          <span
+                            className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg border shrink-0 ${STATUS_COLORS[task.status]}`}
+                          >
+                            {STATUS_LABELS[task.status]}
+                          </span>
+
+                          {/* Delete */}
+                          <button
+                            onClick={() => deleteTask(task.id)}
+                            className="shrink-0 p-1 text-slate-200 hover:text-red-400 transition-colors"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+
+                        {/* Observation field */}
+                        <div className="pl-9 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <MessageSquare size={11} className="text-slate-400" />
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                              Observación
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            <textarea
+                              rows={2}
+                              placeholder="Ej: Faltó conectar el webhook, retomamos mañana..."
+                              className="flex-1 text-[11px] font-medium text-slate-600 bg-white border border-slate-200 rounded-xl p-3 resize-none outline-none focus:border-[var(--accent)] transition-all placeholder:text-slate-300"
+                              value={obsVal}
+                              onChange={(e) =>
+                                setObsEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
+                              }
+                            />
+                            {isDirty && (
+                              <button
+                                onClick={() => saveObs(task.id)}
+                                disabled={savingObs === task.id}
+                                className="shrink-0 self-end px-3 py-3 bg-[var(--accent)] text-white rounded-xl active:scale-95 transition-all disabled:opacity-50"
+                              >
+                                {savingObs === task.id ? (
+                                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <Save size={14} />
+                                )}
+                              </button>
+                            )}
+                          </div>
+                        </div>
                       </div>
+                    );
+                  })}
+
+                  {/* Add new task */}
+                  {addingTask[svc.id] !== undefined ? (
+                    <div className="flex gap-2 pt-1">
+                      <input
+                        autoFocus
+                        placeholder="Nombre de la nueva tarea..."
+                        className="flex-1 text-sm font-bold text-[var(--primary)] bg-white border border-[var(--accent)] rounded-xl px-4 py-3 outline-none placeholder:text-slate-300"
+                        value={newTaskText[svc.id] ?? ""}
+                        onChange={(e) =>
+                          setNewTaskText((prev) => ({ ...prev, [svc.id]: e.target.value }))
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") addTask(svc.id, svc.name);
+                          if (e.key === "Escape")
+                            setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; });
+                        }}
+                      />
+                      <button
+                        onClick={() => addTask(svc.id, svc.name)}
+                        className="shrink-0 px-4 py-3 bg-[var(--accent)] text-white rounded-xl font-black text-xs active:scale-95 transition-all"
+                      >
+                        <Save size={16} />
+                      </button>
+                      <button
+                        onClick={() =>
+                          setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; })
+                        }
+                        className="shrink-0 px-3 py-3 bg-slate-100 text-slate-500 rounded-xl font-black text-xs active:scale-95 transition-all"
+                      >
+                        ✕
+                      </button>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-20 bg-gray-50/50 rounded-[40px] border border-dashed border-gray-200">
-                  <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Aún no hay registros en este historial.</p>
+                  ) : (
+                    <button
+                      onClick={() =>
+                        setAddingTask((prev) => ({ ...prev, [svc.id]: "" }))
+                      }
+                      className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-slate-200 rounded-2xl text-[10px] font-black text-slate-400 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
+                    >
+                      <Plus size={14} /> Agregar tarea
+                    </button>
+                  )}
+
+                  {/* Tip */}
+                  <div className="flex items-start gap-2 pt-1">
+                    <AlertCircle size={12} className="text-slate-300 mt-0.5 shrink-0" />
+                    <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest leading-relaxed">
+                      Toca el nombre de una tarea para editarlo · Toca el ícono para cambiar el estado
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
-            
-            <div className="p-8 sm:p-12 bg-white border-t border-gray-50 flex justify-center">
-               <button 
-                 onClick={() => setSelectedService(null)}
-                 className="px-12 py-5 bg-[var(--primary)] text-white rounded-[24px] font-black text-sm shadow-2xl shadow-blue-900/20 hover:scale-[1.02] active:scale-95 transition-all w-full sm:w-auto"
-               >
-                 Entendido, ¡continuemos!
-               </button>
-            </div>
-          </Card>
-        </div>,
-        document.body
-      )}
+          );
+        })}
+      </div>
     </div>
   );
 }

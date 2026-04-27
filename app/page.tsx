@@ -68,25 +68,23 @@ export default function Home() {
       const { data: pData } = await supabase.from("proyectos").select("id");
       if (pData) setProjectCount(pData.length);
 
-      // Fetch Real Content Counts for the Week
+      // Fetch Real Content Counts for the Week from Supabase
       const { data: rData } = await supabase.from("registro_publicaciones").select("tipo");
       if (rData) {
         const counts = {
           reels: rData.filter(r => r.tipo === 'REEL' || r.tipo === 'TIKTOK').length,
           carruseles: rData.filter(r => r.tipo === 'CARRUSEL').length,
-          posts: rData.filter(r => r.tipo === 'POST').length,
           total: rData.length
         };
-        // Update stats with real counts
-        setStats((prev: any) => ({
-          ...prev,
-          reels: counts.reels,
-          carruseles: counts.carruseles,
+        
+        setStats({
           publicaciones: counts.total,
           publicaciones_target: 5,
+          reels: counts.reels,
           reels_target: 3,
+          carruseles: counts.carruseles,
           carruseles_target: 2
-        }));
+        });
       }
 
       setLoading(false);
@@ -101,16 +99,16 @@ export default function Home() {
       <header className="mb-8">
         <div className="flex items-center gap-3 mb-1">
           <div className="relative">
-            <Image src="/logo.png" alt="Epotech Solutions" width={52} height={52} className="rounded-full md:hidden border-2 border-[var(--accent-light)]" />
+            <Image src="/logo.png" alt="Epotech Solutions" width={60} height={60} className="rounded-full md:hidden border-2 border-[var(--accent-light)] shadow-lg" />
             <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-[var(--success)] border-2 border-white flex items-center justify-center">
-               <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+               <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
             </div>
           </div>
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-[var(--primary)] md:text-3xl">
+            <h1 className="text-4xl font-black tracking-tighter text-[var(--primary)]">
               ¡Hola, {client.name}! <span className="animate-bounce inline-block">👋🏻</span>
             </h1>
-            <p className="text-sm font-bold text-[var(--accent)] md:text-base">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--accent)] mt-1">
               Hoy es un gran día para hacer crecer a {client.businessName}
             </p>
           </div>
@@ -118,7 +116,7 @@ export default function Home() {
       </header>
 
       <section className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100/50">
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-3 mb-4">
           <div className="bg-amber-100 p-2 rounded-xl text-amber-600">
             <Zap size={20} className="fill-amber-600" />
           </div>
@@ -126,6 +124,10 @@ export default function Home() {
             ¿Qué trabajo tienes hoy?
           </h2>
         </div>
+        
+        <p className="text-[11px] font-bold text-slate-400 mb-8 leading-relaxed uppercase tracking-wider">
+          Si hoy vas a realizar un servicio, elige la categoría aquí abajo. Te llevaré directamente a los mejores guiones para que elijas cuál grabar hoy mismo y aproveches tu tiempo en el sitio.
+        </p>
         
         <div className="grid grid-cols-2 gap-4">
           <Link href="/contenido?type=presion" className="group">
@@ -225,47 +227,59 @@ export default function Home() {
       </section>
 
       <section className="py-2">
-        <h2 className="font-bold text-[var(--primary)] mb-4 flex items-center gap-2">
+        <h2 className="font-black text-xl text-[var(--primary)] mb-2 flex items-center gap-2">
           📚 Acciones de Apoyo
         </h2>
-        <div className="grid grid-cols-2 gap-3">
+        <p className="text-[11px] font-bold text-slate-400 mb-8 leading-relaxed uppercase tracking-wider">
+          Utiliza estas herramientas para asegurar que cada video y cada proyecto cumpla con el estándar de excelencia de Epotech Solutions.
+        </p>
+
+        <div className="grid grid-cols-2 gap-4">
           <Link href="/manual" className="group">
-            <Card className="h-full !bg-white hover:!bg-slate-50 card-hover p-5 border-slate-100">
-              <div className="bg-slate-100 p-3 rounded-2xl w-fit mb-3">
+            <Card className="h-full !bg-white hover:!bg-slate-50 card-hover p-6 border-slate-100 flex flex-col">
+              <div className="bg-slate-100 p-3 rounded-2xl w-fit mb-4">
                 <Video size={20} className="text-slate-600" />
               </div>
-              <h3 className="font-black text-sm text-[var(--primary)]">Cómo Grabar</h3>
-              <p className="text-[10px] font-bold text-[var(--text-muted)] mt-1 uppercase tracking-wider">Manual de Calidad</p>
+              <h3 className="font-black text-sm text-[var(--primary)] uppercase mb-2 italic">Cómo Grabar</h3>
+              <p className="text-[10px] font-bold text-slate-400 leading-tight uppercase tracking-tight">
+                Domina la técnica. La guía para que tus videos se vean de alta autoridad y atraigan mejores clientes.
+              </p>
             </Card>
           </Link>
           
           <Link href="/brief" className="group">
-            <Card className="h-full !bg-white hover:!bg-slate-50 card-hover p-5 border-slate-100">
-              <div className="bg-blue-50 p-3 rounded-2xl w-fit mb-3">
+            <Card className="h-full !bg-white hover:!bg-slate-50 card-hover p-6 border-slate-100 flex flex-col">
+              <div className="bg-blue-50 p-3 rounded-2xl w-fit mb-4">
                 <Target size={20} className="text-blue-600" />
               </div>
-              <h3 className="font-black text-sm text-[var(--primary)]">Mi Brief</h3>
-              <p className="text-[10px] font-bold text-[var(--text-muted)] mt-1 uppercase tracking-wider">Estrategia Viral</p>
+              <h3 className="font-black text-sm text-[var(--primary)] uppercase mb-2 italic">Mi Brief</h3>
+              <p className="text-[10px] font-bold text-slate-400 leading-tight uppercase tracking-tight">
+                Tu brújula de marca. Consúltalo para no olvidar nunca qué hace a Epotech única frente a la competencia.
+              </p>
             </Card>
           </Link>
 
           <Link href="/proyectos" className="group">
-            <Card className="h-full !bg-white hover:!bg-slate-50 card-hover p-5 border-slate-100">
-              <div className="bg-emerald-50 p-3 rounded-2xl w-fit mb-3">
+            <Card className="h-full !bg-white hover:!bg-slate-50 card-hover p-6 border-slate-100 flex flex-col">
+              <div className="bg-emerald-50 p-3 rounded-2xl w-fit mb-4">
                 <Briefcase size={20} className="text-emerald-600" />
               </div>
-              <h3 className="font-black text-sm text-[var(--primary)]">Servicios</h3>
-              <p className="text-[10px] font-bold text-[var(--text-muted)] mt-1 uppercase tracking-wider">Dashboard Técnico</p>
+              <h3 className="font-black text-sm text-[var(--primary)] uppercase mb-2 italic">Servicios</h3>
+              <p className="text-[10px] font-bold text-slate-400 leading-tight uppercase tracking-tight">
+                Tu evolución técnica. Mira cómo avanza la construcción de tu CRM, App y Web paso a paso.
+              </p>
             </Card>
           </Link>
 
-          <Link href="/actividad" className="group">
-            <Card className="h-full !bg-white hover:!bg-slate-50 card-hover p-5 border-slate-100">
-              <div className="bg-slate-100 p-3 rounded-2xl w-fit mb-3">
+          <Link href="/contenido?tab=historial" className="group">
+            <Card className="h-full !bg-white hover:!bg-slate-50 card-hover p-6 border-slate-100 flex flex-col">
+              <div className="bg-slate-100 p-3 rounded-2xl w-fit mb-4">
                 <Clock size={20} className="text-slate-600" />
               </div>
-              <h3 className="font-black text-sm text-[var(--primary)]">Historial</h3>
-              <p className="text-[10px] font-bold text-[var(--text-muted)] mt-1 uppercase tracking-wider">Qué hemos hecho</p>
+              <h3 className="font-black text-sm text-[var(--primary)] uppercase mb-2 italic">Historial</h3>
+              <p className="text-[10px] font-bold text-slate-400 leading-tight uppercase tracking-tight">
+                Muro de victorias. Analiza qué videos son los favoritos de tu audiencia y cómo vamos a ganar mañana.
+              </p>
             </Card>
           </Link>
         </div>

@@ -40,6 +40,8 @@ export const manual = {
         { en: "Video of the team working", es: "1 video del equipo trabajando", tooltip: "Una toma un poco más abierta donde se vea a 1 o 2 trabajadores en acción. Transmite que hay un equipo serio detrás del trabajo." },
         { en: "2 short close-up detail videos", es: "2 videos cortos de detalles grabados bien de cerca", tooltip: "Enfócate en algo super satisfactorio: la espuma cayendo por la pared negra, o el agua sucia resbalando hacia el desagüe. Puro ASMR visual." },
         { en: "Video walking through the space", es: "1 video caminando el espacio", tooltip: "Avanza lentamente por el área de trabajo mostrando todo lo que se está limpiando en ese momento. Máximo 10-15 segundos, sin moverte brusco." },
+        { en: "Fixed tripod shot (Timelapse)", es: "1 toma de trípode fijo (Timelapse)", tooltip: "Deja el celular en un trípode apuntando a la zona de trabajo por 10 minutos. Lo capturas todo en modo normal y en edición se acelera. Magia pura de satisfacción." },
+        { en: "POV chest camera shot", es: "1 toma POV (Cámara al Pecho)", tooltip: "Agarra el celular y sujétalo a la altura del pecho apuntando hacia abajo mientras trabajas. Sigue la línea perfecta entre lo sucio y lo limpio. El espectador siente que está ahí contigo." },
       ],
     },
     {
@@ -80,7 +82,7 @@ export const manual = {
       { en: "Think in short, reusable clips", es: "Piensa en clips cortos y reutilizables" },
     ],
     evita: [
-      { en: "Don't use GoPro for vertical social media", es: "Evita usar GoPro: Arruina la calidad al redimensionar a vertical (Déjala solo para YouTube)" },
+      { en: "Don't use GoPro in horizontal format", es: "Evita usar la GoPro en formato horizontal. Trata de voltear la cámara en vertical para capturar videos nativos. Esto mantiene la calidad excelente para redes sociales." },
       { en: "NO WIDE ANGLE LENS", es: "Nunca grabar en gran angular (0.5x), distorsiona la toma real" },
       { en: "Moving the phone too fast", es: "Mover demasiado el celular" },
       { en: "Sending only final result videos", es: "Mandar solo videos del resultado final" },

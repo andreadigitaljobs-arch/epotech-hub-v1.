@@ -22,7 +22,7 @@ export default function ServiciosPage() {
           Servicios Activos
         </h1>
         <p className="mt-2 text-sm text-[var(--text-muted)]">
-          Estado actual de todo lo que estamos trabajando para Epotech.
+          Aquí puedes ver en qué estamos trabajando para ti en este momento, qué tan avanzado está cada proyecto y cuál es el próximo paso. Nosotros actualizamos esto cada vez que hay un avance nuevo.
         </p>
       </header>
 
