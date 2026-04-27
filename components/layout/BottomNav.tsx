@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Target, Video, Clock, Sparkles, Briefcase } from "lucide-react";
+import { Home, Target, Video, Clock, Sparkles, Briefcase, PlaySquare } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function BottomNav() {
