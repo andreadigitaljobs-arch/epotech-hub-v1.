@@ -1258,7 +1258,7 @@ function ContenidoContent() {
       <div className="mb-8">
         {activeTab === 'guiones' && (
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[#48c1d2]">Banco de Guiones:</span> Elige un guion según tu servicio y modo de grabación.
+            <span className="text-[#48c1d2]">Mis Guiones:</span> Aquí tienes las historias listas para grabar basadas en tus trabajos más recientes.
           </p>
         )}
         {activeTab === 'calendario' && (
