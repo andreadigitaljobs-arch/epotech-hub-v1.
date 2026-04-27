@@ -1171,7 +1171,7 @@ function ContenidoContent() {
           </div>
           <span className="text-[10px] font-black text-[#142d53] uppercase tracking-widest">Estudio Epotech 2026</span>
         </div>
-        <h1 className="text-3xl font-black text-[#142d53] leading-tight tracking-tighter">
+        <h1 className="text-4xl font-black text-[#142d53] leading-tight tracking-tighter">
           Estudio de<br/>
           <span className="text-[#48c1d2]">Producción</span>
         </h1>

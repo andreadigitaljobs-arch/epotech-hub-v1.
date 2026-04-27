@@ -330,17 +330,9 @@ export default function ProyectosPage() {
 
       {activeSubTab === 'proyectos' ? (
         <>
-          <div className="bg-white/50 border border-slate-200 p-6 rounded-[2.5rem] mb-8">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="bg-[var(--accent)] p-2 rounded-xl shadow-lg">
-                <Rocket size={18} className="text-white" />
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">
-                Progreso de proyectos
-              </span>
-            </div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] leading-relaxed">
-              Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
+          <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-8">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+              <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
             </p>
           </div>
 
