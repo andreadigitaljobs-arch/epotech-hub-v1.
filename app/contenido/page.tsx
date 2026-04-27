@@ -2655,7 +2655,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                            rel="noopener noreferrer"
                            className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
                          >
-                            <ExternalLink size={12} /> Abrir Solo
+                            <Download size={12} /> Abrir Solo
                          </a>
                          <a 
                            href={report.audio_url} 
