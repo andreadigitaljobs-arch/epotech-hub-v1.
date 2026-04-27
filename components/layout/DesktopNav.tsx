@@ -9,7 +9,6 @@ export function DesktopNav() {
   const pathname = usePathname();
 
   const primaryNav = [
-    { name: "Inicio", path: "/", icon: Home },
     { name: "Servicios", path: "/proyectos", icon: Briefcase },
     { name: "Contenido", path: "/contenido", icon: Sparkles },
     { name: "Grabación", path: "/manual", icon: Video },

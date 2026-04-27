@@ -10,10 +10,9 @@ export function BottomNav() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const tabs = [
-    { name: "Inicio", path: "/", icon: Home },
+    { name: "Servicios", path: "/proyectos", icon: Briefcase },
     { name: "Contenido", path: "/contenido", icon: Sparkles },
     { name: "Grabación", path: "/manual", icon: Video },
-    { name: "Servicios", path: "/proyectos", icon: Briefcase },
     { name: "Brief", path: "/brief", icon: Target },
   ];
 
@@ -31,8 +30,8 @@ export function BottomNav() {
           <div 
             className="absolute inset-y-0 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
             style={{ 
-              left: `${activeIndex * 20}%`,
-              width: "20%",
+              left: `${activeIndex * 25}%`,
+              width: "25%",
               opacity: activeIndex === -1 ? 0 : 1
             }}
           >

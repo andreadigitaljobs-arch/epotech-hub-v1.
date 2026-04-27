@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import { client } from "@/data/sebastian";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import {
   CheckCircle2, Circle, Clock, ChevronDown, ChevronUp,
   Database, Smartphone, Layout, FormInput, Rocket,
   MessageSquare, Save, AlertCircle, Trash2, Plus, Pencil,
-  TrendingUp, Search
+  TrendingUp, Search, Bell, Sparkles
 } from "lucide-react";
 
 // ─── Static service definitions ─────────────────────────────────────────────
@@ -138,10 +139,19 @@ const STATUS_COLORS: Record<TaskStatus, string> = {
   completada: "bg-emerald-50 text-emerald-600 border-emerald-200",
 };
 
+interface Notificacion {
+  id: string;
+  titulo: string;
+  mensaje: string;
+  tipo: string;
+  fecha: string;
+}
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function ProyectosPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [obsEdits, setObsEdits] = useState<Record<string, string>>({});
   const [savingObs, setSavingObs] = useState<string | null>(null);
@@ -150,51 +160,59 @@ export default function ProyectosPage() {
   const [addingTask, setAddingTask] = useState<Record<string, string>>({});
   const [newTaskText, setNewTaskText] = useState<Record<string, string>>({});
 
-  // ── Fetch & seed ──────────────────────────────────────────────────────────
-  const fetchTasks = useCallback(async () => {
-    const { data, error } = await supabase
-      .from("tareas_servicio")
-      .select("*")
-      .order("orden", { ascending: true });
-
-    if (error) { console.error(error); setLoading(false); return; }
-
-    const existing = data || [];
-
-    // Seed per-service: if a service has no rows, insert its initial tasks
-    const rowsToInsert: any[] = [];
-    for (const svc of SERVICES) {
-      const hasTasks = existing.some((t) => t.service_id === svc.id);
-      if (!hasTasks && INITIAL_TASKS[svc.id]) {
-        INITIAL_TASKS[svc.id].forEach((t) =>
-          rowsToInsert.push({
-            service_id: svc.id,
-            service_name: svc.name,
-            tarea: t.tarea,
-            completada: false,
-            status: "pendiente",
-            observacion: null,
-            orden: t.orden,
-          })
-        );
-      }
-    }
-
-    if (rowsToInsert.length > 0) {
-      await supabase.from("tareas_servicio").insert(rowsToInsert);
-      const { data: refreshed } = await supabase
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch Tasks
+      const { data: tData } = await supabase
         .from("tareas_servicio")
         .select("*")
         .order("orden", { ascending: true });
-      setTasks(refreshed || []);
-    } else {
-      setTasks(existing);
-    }
+      if (tData) {
+         const hasTasks = tData.length > 0;
+         if (!hasTasks) {
+            const rowsToInsert: any[] = [];
+            for (const svc of SERVICES) {
+              INITIAL_TASKS[svc.id]?.forEach((t) =>
+                rowsToInsert.push({
+                  service_id: svc.id,
+                  service_name: svc.name,
+                  tarea: t.tarea,
+                  completada: false,
+                  status: "pendiente",
+                  observacion: null,
+                  orden: t.orden,
+                })
+              );
+            }
+            await supabase.from("tareas_servicio").insert(rowsToInsert);
+            const { data: refreshed } = await supabase.from("tareas_servicio").select("*").order("orden", { ascending: true });
+            setTasks(refreshed || []);
+         } else {
+            setTasks(tData);
+         }
+      }
 
-    setLoading(false);
+      // Fetch Notifications
+      const { data: nData } = await supabase
+        .from("notificaciones")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(3);
+      if (nData) setNotificaciones(nData);
+
+      setLoading(false);
+    }
+    fetchData();
   }, []);
 
-  useEffect(() => { fetchTasks(); }, [fetchTasks]);
+  const formatDate = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString("es-ES", { day: 'numeric', month: 'short' }).replace('.', '');
+    } catch (e) {
+      return dateStr;
+    }
+  };
 
   // ── Toggle status (cycles pendiente → en_proceso → completada → pendiente) ─
   const toggleStatus = async (task: Task) => {
@@ -281,7 +299,19 @@ export default function ProyectosPage() {
   return (
     <div className="space-y-6 pb-20">
       {/* Header */}
-      <header className="relative">
+      <header className="mb-8">
+        <div className="flex items-center gap-3 mb-1">
+           <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+           <h1 className="text-3xl font-black text-[#142d53] leading-tight tracking-tighter">
+             ¡Hola, {client.name}! 👋🏻
+           </h1>
+        </div>
+        <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.2em] ml-5">
+          Hoy es un gran día para hacer crecer a Epotech Solutions
+        </p>
+      </header>
+
+      <div className="bg-white/50 border border-slate-200 p-6 rounded-[2.5rem] mb-8">
         <div className="flex items-center gap-2 mb-3">
           <div className="bg-[var(--accent)] p-2 rounded-xl shadow-lg">
             <Rocket size={18} className="text-white" />
@@ -290,15 +320,10 @@ export default function ProyectosPage() {
             Progreso de proyectos
           </span>
         </div>
-        <h1 className="text-4xl font-black tracking-tighter text-[var(--primary)] mb-4">
-          Servicios Activos
-        </h1>
-        <div className="bg-white/50 border border-slate-200 p-4 rounded-[2rem]">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] leading-relaxed">
-            Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
-          </p>
-        </div>
-      </header>
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] leading-relaxed">
+          Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
+        </p>
+      </div>
 
       {/* Service cards */}
       <div className="space-y-4">
@@ -532,6 +557,43 @@ export default function ProyectosPage() {
           );
         })}
       </div>
+      {/* Mensajes del Equipo Section */}
+      <section className="pt-10 border-t border-slate-100">
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Bell size={18} className="text-[#48c1d2]" />
+            <h2 className="font-black text-[#142d53] uppercase tracking-tighter">Mensajes del Equipo</h2>
+          </div>
+        </div>
+        
+        <div className="space-y-4">
+          {notificaciones.length > 0 ? (
+            notificaciones.map((announcement) => (
+              <div key={announcement.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 border-l-[#48c1d2] relative overflow-hidden group">
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded bg-[#48c1d2]/10 text-[#142d53]">
+                    {announcement.tipo}
+                  </span>
+                  <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
+                </div>
+                <h3 className="font-black text-[#142d53] mb-2 text-sm">
+                  {announcement.titulo}
+                </h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  {announcement.mensaje}
+                </p>
+              </div>
+            ))
+          ) : (
+            <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
+               <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+                  <Bell size={24} className="text-slate-300" />
+               </div>
+               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sin avisos recientes por ahora.</p>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
