@@ -1277,57 +1277,21 @@ function ContenidoContent() {
         {activeTab === 'guiones' && (
           <div className="space-y-4">
             {/* Navegación del Estudio de Producción Compacta pero Espaciada */}
-            <div className="flex bg-slate-100 p-1.5 rounded-xl mb-4 gap-2">
-              {[
-                { id: 'historias', name: 'Mis Trabajos (Real)', icon: BookOpen, step: 2, help: 'Entra aquí para ver tus videos de hoy.' },
-                { id: 'biblioteca', name: 'Ejemplos de Referencia', icon: Library }
-              ].map((m) => (
-                  <div key={m.id} className="flex-1 relative">
-                    <button 
-                      onClick={() => { setProductionMode(m.id as any); if(m.step === 2) setDashHelpStep(2); }}
-                      className={`w-full py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${productionMode === m.id ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'} ${showHelp && m.step === 2 && dashHelpStep === 2 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40' : ''}`}
-                    >
-                      <m.icon size={12} /> {m.name}
-                    </button>
-                    {showHelp && m.step === 2 && dashHelpStep === 2 && (
-                      <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-48 z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
-                        <div className="flex flex-col gap-2">
-                          <span>PASO 2: {m.help}</span>
-                          <div className="flex gap-2 justify-end">
-                            <button 
-                              onClick={(e) => { 
-                                e.stopPropagation(); 
-                                handleTabChange('inicio');
-                                setDashHelpStep(1); 
-                              }}
-                              className="bg-white/10 text-white px-3 py-1.5 rounded-xl hover:bg-white/20 transition-all text-[8px] border border-white/10"
-                            >
-                              VOLVER
-                            </button>
-                            <button 
-                              onClick={(e) => { 
-                                e.stopPropagation(); 
-                                setProductionMode('historias');
-                                setDashHelpStep(3); 
-                              }}
-                              className="bg-white text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-teal-50 transition-colors text-[8px] border border-white/10 font-black"
-                            >
-                              SIGUIENTE
-                            </button>
-                          </div>
-                        </div>
-                        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
-                      </div>
-                    )}
+            {/* Navegación del Estudio de Producción - Ahora Simplificada */}
+            <div className="flex bg-slate-100 p-1.5 rounded-xl mb-4">
+                <div className="flex-1 relative">
+                  <div 
+                    className="w-full py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 bg-[#142d53] text-[#48c1d2] shadow-md"
+                  >
+                    <BookOpen size={12} /> Mis Guiones
                   </div>
-              ))}
+                </div>
             </div>
 
-            {productionMode === 'historias' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 text-left">
                 <div className="bg-[#142d53]/5 p-6 rounded-[2.5rem] border border-[#142d53]/10">
-                  <h3 className="text-lg font-black text-[#142d53] mb-2 tracking-tight">Mis Trabajos Realizados</h3>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-6">Guiones creados a partir de tus fotos y videos reales.</p>
+                  <h3 className="text-lg font-black text-[#142d53] mb-2 tracking-tight">Mis Guiones</h3>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-6">Contenido personalizado creado exclusivamente para Epotech.</p>
                   
                   <div className="grid gap-4">
                     {/* Placeholder para Proyecto Nikki */}
@@ -1345,10 +1309,10 @@ function ContenidoContent() {
                         {showHelp && dashHelpStep === 3 && (
                           <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-48 z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
                             <div className="flex flex-col gap-2">
-                              <span>PASO 3: ¡Este es tu proyecto! Tócalo para empezar. La guía continuará automáticamente dentro del guion.</span>
+                              <span>PASO 2: ¡Este es tu guion del día! Tócalo para empezar. La guía continuará automáticamente dentro del guion.</span>
                               <div className="flex gap-2 justify-end">
                                 <button 
-                                  onClick={(e) => { e.stopPropagation(); setDashHelpStep(2); }}
+                                  onClick={(e) => { e.stopPropagation(); setDashHelpStep(1); }}
                                   className="bg-[#142d53]/10 text-[#142d53] px-3 py-1.5 rounded-xl hover:bg-[#142d53]/20 transition-all text-[8px] border border-[#142d53]/20"
                                 >
                                   VOLVER
@@ -1394,93 +1358,6 @@ function ContenidoContent() {
                   </div>
                 </div>
               </div>
-            )}
-
-            {productionMode === 'biblioteca' && (
-              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                {/* Selector de Contexto Estratégico */}
-                <div className="flex bg-slate-50 p-1 rounded-2xl border border-slate-100 gap-2 mb-8">
-                  <button 
-                    onClick={() => { setServiceContext('active'); setActiveCategory('Todas'); }}
-                    className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${serviceContext === 'active' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
-                  >
-                    <MapPin size={12} /> Tengo un servicio hoy
-                  </button>
-                  <button 
-                    onClick={() => { setServiceContext('brand'); setActiveCategory('Marca Personal'); }}
-                    className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${serviceContext === 'brand' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
-                  >
-                    <User size={12} /> Marca Personal / Hablando
-                  </button>
-                </div>
-
-                {/* Sección de Servicios Pro (Solo si está en activo) */}
-                {serviceContext === 'active' && (
-                  <div className="space-y-3">
-                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">¿Qué servicio vas a grabar?</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {['Todas', 'Pressure Washing', 'Window Cleaning', 'Epoxy Floors'].map((cat) => (
-                        <button
-                          key={cat}
-                          onClick={() => setActiveCategory(cat)}
-                          className={`px-4 py-2 rounded-xl text-[9px] font-black tracking-widest transition-all ${
-                            activeCategory === cat 
-                              ? "bg-[#142d53] text-[#48c1d2] shadow-md" 
-                              : "bg-white text-slate-400 border border-slate-100 hover:bg-slate-50"
-                          }`}
-                        >
-                          {cat}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Estrategia de Contenido Adaptativa */}
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 text-left">
-                    {serviceContext === 'active' ? 'Vibe del Contenido (En Obra)' : 'Formatos de Marca Personal'}
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {(serviceContext === 'active' 
-                      ? ['Todos', 'Especial Utah', 'Antes/Después', 'Educativo', 'Satisfying/ASMR', 'Storytelling', 'Controversia', 'Tips & Hacks']
-                      : ['Todos', 'Hablando a Cámara', 'Tips de Negocio', 'Detrás de Escenas', 'Estilo de Vida']
-                    ).map((form) => (
-                      <button
-                        key={form}
-                        onClick={() => setActiveFormat(form)}
-                        className={`px-4 py-2 rounded-xl text-[9px] font-black tracking-widest transition-all ${
-                          activeFormat === form 
-                            ? "bg-[#48c1d2] text-[#142d53] shadow-md" 
-                            : "bg-white text-slate-400 border border-slate-100 hover:bg-slate-50"
-                        }`}
-                      >
-                        {form}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex justify-between items-center mb-2 px-1">
-                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Todos los guiones</h4>
-                  <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">
-                    {filteredGuiones.length} de {guiones.length} Guiones
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 animate-in slide-in-from-bottom-4 duration-700 text-left">
-                {filteredGuiones.map((script) => (
-                  <div key={script.id} onClick={() => setSelectedScript(script)} className="p-4 bg-white border border-slate-100 rounded-[2rem] shadow-sm cursor-pointer hover:border-[#48c1d2]/30 transition-all flex flex-col justify-between min-h-[160px]">
-                    <div>
-                      <div className="flex justify-between mb-3"><span className="text-[7px] font-bold text-[#48c1d2] bg-[#48c1d2]/10 px-2 py-0.5 rounded-full">{script.category}</span><Sparkles size={12} className="text-[#48c1d2]" /></div>
-                      <h3 className="text-sm font-black text-[#142d53] leading-tight mb-2 line-clamp-3">{script.title}</h3>
-                    </div>
-                    <span className="text-[8px] font-bold text-[#48c1d2] flex items-center gap-1 mt-auto">Grabar <ChevronRight size={10} /></span>
-                  </div>
-                ))}
-                </div>
-              </div>
-            )}
 
 
             </div>
