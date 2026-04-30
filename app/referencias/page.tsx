@@ -24,6 +24,8 @@ const TiktokIcon = ({ size = 24, className }: { size?: number, className?: strin
 export default function ReferenciasPage() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>({ videos: [], cuentas: [] });
+  const [activeSubTab, setActiveSubTab] = useState<'videos' | 'cuentas'>('videos');
+  const [platformFilter, setPlatformFilter] = useState<'all' | 'instagram' | 'tiktok'>('all');
 
   useEffect(() => {
     async function loadData() {
@@ -40,127 +42,144 @@ export default function ReferenciasPage() {
 
   if (loading) return <LoadingSpinner message="Cargando Inspiración..." />;
 
-  const igVideos = data.videos.filter((v: any) => v.platform === "instagram");
-  const ttVideos = data.videos.filter((v: any) => v.platform === "tiktok");
-  const igAccounts = data.cuentas.filter((c: any) => c.tipo === "Instagram");
-  const ttAccounts = data.cuentas.filter((c: any) => c.tipo === "TikTok");
+  const filteredVideos = data.videos.filter((v: any) => 
+    platformFilter === 'all' ? true : v.platform === platformFilter
+  );
+
+  const filteredAccounts = data.cuentas.filter((c: any) => {
+    const p = c.tipo.toLowerCase();
+    return platformFilter === 'all' ? true : p.includes(platformFilter);
+  });
 
   return (
-    <div className="space-y-16 pb-32 max-w-6xl mx-auto pt-6 px-4 md:px-0">
+    <div className="space-y-6 pb-32 max-w-6xl mx-auto pt-4 px-4 md:px-0 text-left">
       
-      {/* 1. HERO INSPIRACIONAL (Cinematic Style) */}
-      <header className="relative p-8 md:p-16 rounded-[3.5rem] bg-[#142d53] text-white overflow-hidden shadow-2xl border border-white/5 group">
-         <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 rotate-12">
-            <PlaySquare size={260} />
+      {/* 1. HERO COMPACTO */}
+      <header className="relative p-6 md:p-10 rounded-[2.5rem] bg-[#142d53] text-white overflow-hidden shadow-xl border border-white/5 group">
+         <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 rotate-12">
+            <PlaySquare size={120} />
          </div>
          
-         {/* Decoración de fondo */}
-         <div className="absolute inset-0 opacity-[0.03] pointer-events-none overflow-hidden">
-            <div className="absolute top-20 left-20 w-40 h-40 border border-white rounded-full"></div>
-            <div className="absolute bottom-10 right-40 w-64 h-64 border-2 border-[#48c1d2] rotate-45"></div>
-         </div>
-
-         <div className="relative z-10 max-w-2xl">
-            <div className="flex items-center gap-3 mb-8">
-               <span className="bg-[#48c1d2]/20 backdrop-blur-md border border-[#48c1d2]/30 px-5 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.4em] text-[#48c1d2]">
+         <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-4">
+               <span className="bg-[#48c1d2]/20 backdrop-blur-md border border-[#48c1d2]/30 px-4 py-1 rounded-full text-[7px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">
                   Creative Intelligence 2026
                </span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-tight uppercase italic">
-               El Motor de <br /> <span className="text-[#48c1d2] drop-shadow-[0_0_15px_rgba(72,193,210,0.4)]">Inspiración</span>
+            <h1 className="text-3xl md:text-5xl font-black tracking-tighter mb-4 leading-none uppercase italic">
+               Motor de <span className="text-[#48c1d2]">Inspiración</span>
             </h1>
-            <p className="text-sm md:text-lg font-bold text-slate-300 italic max-w-lg leading-relaxed">
-               "No grabes por grabar. Entiende el código visual de lo que funciona y úsalo para dominar el algoritmo."
+            <p className="text-[10px] md:text-sm font-bold text-slate-300 italic max-w-md leading-tight opacity-70">
+               "No grabes por grabar. Entiende el código visual de lo que funciona."
             </p>
          </div>
       </header>
 
-      {/* 2. VIDEOS VIRALES (Galería Inmersiva) */}
-      <section className="space-y-10">
-         <div className="flex items-center justify-between ml-4">
-            <div className="flex items-center gap-4">
-               <div className="w-1.5 h-12 bg-[#48c1d2] rounded-full shadow-[0_0_15px_rgba(72,193,210,0.5)]" />
-               <div>
-                  <h2 className="text-2xl font-black text-[#142d53] tracking-tighter uppercase italic">Anatomía Viral</h2>
-                  <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Video Performance Breakdown</span>
-               </div>
-            </div>
+      {/* 2. NAVEGACIÓN DE CONSOLA (Sticky) */}
+      <div className="sticky top-4 z-[100] space-y-3">
+         {/* Pestañas Principales */}
+         <div className="flex bg-[#142d53] p-1.5 rounded-[2rem] shadow-2xl border border-white/5">
+            <button 
+               onClick={() => setActiveSubTab('videos')}
+               className={`flex-1 py-3 rounded-[1.5rem] text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#142d53]' : 'text-white/40 hover:text-white'}`}
+            >
+               <Zap size={12} /> Biblioteca Viral
+            </button>
+            <button 
+               onClick={() => setActiveSubTab('cuentas')}
+               className={`flex-1 py-3 rounded-[1.5rem] text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'cuentas' ? 'bg-[#48c1d2] text-[#142d53]' : 'text-white/40 hover:text-white'}`}
+            >
+               <ShieldCheck size={12} /> Referentes Top
+            </button>
          </div>
 
-         {/* Instagram Section */}
-         <div className="space-y-8">
-            <div className="flex items-center gap-4 px-6 py-3 bg-slate-50 rounded-full border border-slate-100 w-fit">
-               <InstagramIcon className="text-pink-500" size={18} />
-               <span className="text-[10px] font-black uppercase tracking-widest text-[#142d53]">Master Library (IG)</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {igVideos.map((video: any) => (
-                 <VideoCard 
-                   key={video.id}
-                   url={video.url}
-                   platform={video.platform}
-                   titleEs={video.titulo}
-                   fuerte={video.fuerte}
-                   porqueFunciona={video.porque_funciona}
-                 />
-              ))}
-            </div>
-         </div>
-
-         {/* TikTok Section */}
-         <div className="space-y-8 pt-10">
-            <div className="flex items-center gap-4 px-6 py-3 bg-slate-900 rounded-full border border-white/5 w-fit">
-               <TiktokIcon size={18} className="text-white" />
-               <span className="text-[10px] font-black uppercase tracking-widest text-white">Algorithm Killers (TT)</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {ttVideos.map((video: any) => (
-                 <VideoCard 
-                   key={video.id}
-                   url={video.url}
-                   platform={video.platform}
-                   titleEs={video.titulo}
-                   fuerte={video.fuerte}
-                   porqueFunciona={video.porque_funciona}
-                 />
-              ))}
-            </div>
-         </div>
-      </section>
-
-      {/* 3. COMPETENCIA (Studio Passes) */}
-      <section className="space-y-10 pt-20">
-         <div className="flex items-center justify-between ml-4">
-            <div className="flex items-center gap-4">
-               <div className="w-1.5 h-12 bg-[#142d53] rounded-full" />
-               <div>
-                  <h2 className="text-2xl font-black text-[#142d53] tracking-tighter uppercase italic">Canales de Élite</h2>
-                  <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Competitive Landscape Analysis</span>
-               </div>
-            </div>
-         </div>
-
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {data.cuentas.map((cuenta: any, idx: number) => (
-              <AccountCard
-                key={idx}
-                nombre={cuenta.nombre}
-                url={cuenta.url}
-                fuerte={cuenta.fuerte}
-                porqueFunciona={cuenta.porque_funciona}
-                tipo={cuenta.tipo}
-              />
+         {/* Filtros de Plataforma */}
+         <div className="flex justify-center gap-2">
+            {[
+               { id: 'all', label: 'Todos', icon: Sparkles, color: 'bg-white/5' },
+               { id: 'instagram', label: 'Instagram', icon: InstagramIcon, color: 'bg-pink-500/10 text-pink-500' },
+               { id: 'tiktok', label: 'TikTok', icon: TiktokIcon, color: 'bg-slate-900 text-white' }
+            ].map((p) => (
+               <button 
+                  key={p.id}
+                  onClick={() => setPlatformFilter(p.id as any)}
+                  className={`px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest transition-all border flex items-center gap-2 ${platformFilter === p.id ? 'bg-[#142d53] text-[#48c1d2] border-[#48c1d2] shadow-lg' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'}`}
+               >
+                  <p.icon size={10} /> {p.label}
+               </button>
             ))}
          </div>
-      </section>
+      </div>
 
-      {/* 4. FOOTER CINE */}
-      <footer className="pt-20 text-center">
-         <div className="inline-flex items-center gap-4 px-10 py-6 bg-[#142d53] text-white rounded-[2.5rem] shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform duration-500">
-            <div className="absolute inset-0 bg-[#48c1d2]/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Sparkles size={20} className="text-[#48c1d2]" />
-            <span className="text-[10px] font-black uppercase tracking-[0.5em] italic">Inspiración es Ejecución</span>
-            <Sparkles size={20} className="text-[#48c1d2]" />
+      {/* 3. CONTENIDO DINÁMICO */}
+      <main className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+         {activeSubTab === 'videos' ? (
+            <div className="space-y-8">
+               <div className="flex items-center gap-3 ml-2">
+                  <div className="w-1 h-8 bg-[#48c1d2] rounded-full" />
+                  <div>
+                     <h2 className="text-xl font-black text-[#142d53] tracking-tighter uppercase italic">Anatomía Viral</h2>
+                     <span className="text-[7px] font-black uppercase tracking-[0.3em] text-slate-400">Breakdown de Rendimiento</span>
+                  </div>
+               </div>
+
+               {filteredVideos.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                     {filteredVideos.map((video: any) => (
+                        <VideoCard 
+                           key={video.id}
+                           url={video.url}
+                           platform={video.platform}
+                           titleEs={video.titulo}
+                           fuerte={video.fuerte}
+                           porqueFunciona={video.porque_funciona}
+                        />
+                     ))}
+                  </div>
+               ) : (
+                  <div className="py-20 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
+                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay videos en esta categoría</p>
+                  </div>
+               )}
+            </div>
+         ) : (
+            <div className="space-y-8">
+               <div className="flex items-center gap-3 ml-2">
+                  <div className="w-1 h-8 bg-[#142d53] rounded-full" />
+                  <div>
+                     <h2 className="text-xl font-black text-[#142d53] tracking-tighter uppercase italic">Canales de Élite</h2>
+                     <span className="text-[7px] font-black uppercase tracking-[0.3em] text-slate-400">Competitive Analysis</span>
+                  </div>
+               </div>
+
+               {filteredAccounts.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                     {filteredAccounts.map((cuenta: any, idx: number) => (
+                        <AccountCard
+                           key={idx}
+                           nombre={cuenta.nombre}
+                           url={cuenta.url}
+                           fuerte={cuenta.fuerte}
+                           porqueFunciona={cuenta.porque_funciona}
+                           tipo={cuenta.tipo}
+                        />
+                     ))}
+                  </div>
+               ) : (
+                  <div className="py-20 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
+                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay referentes en esta red social</p>
+                  </div>
+               )}
+            </div>
+         )}
+      </main>
+
+      {/* 4. FOOTER COMPACTO */}
+      <footer className="pt-10 text-center">
+         <div className="inline-flex items-center gap-3 px-6 py-4 bg-[#142d53] text-white rounded-[2rem] shadow-xl relative overflow-hidden group">
+            <Sparkles size={14} className="text-[#48c1d2]" />
+            <span className="text-[8px] font-black uppercase tracking-[0.4em] italic">Inspiración es Ejecución</span>
+            <Sparkles size={14} className="text-[#48c1d2]" />
          </div>
       </footer>
     </div>

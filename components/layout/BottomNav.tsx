@@ -48,14 +48,14 @@ export function BottomNav() {
             <Link
               key={tab.path}
               href={tab.path}
-              className="relative flex-1 flex flex-col items-center justify-center h-14 transition-all duration-300 active:scale-95"
+              className="relative flex-1 flex flex-col items-center justify-center h-12 transition-all duration-300 active:scale-90"
             >
               <div className={`transition-all duration-500 z-10 flex items-center justify-center ${isActive ? "text-white scale-110" : "text-slate-500"}`}>
-                <Icon size={isActive ? 22 : 20} strokeWidth={isActive ? 3 : 2} />
+                <Icon size={isActive ? 18 : 16} strokeWidth={isActive ? 3 : 2} />
               </div>
               
               {/* Etiqueta del Botón */}
-              <span className={`mt-1 text-[8px] font-black uppercase tracking-tight transition-all duration-500 z-10 ${isActive ? "text-white opacity-100" : "text-slate-500 opacity-60"}`}>
+              <span className={`mt-1 text-[7px] font-black uppercase tracking-tighter transition-all duration-500 z-10 ${isActive ? "text-white opacity-100" : "text-slate-500 opacity-60"}`}>
                 {tab.name}
               </span>
             </Link>

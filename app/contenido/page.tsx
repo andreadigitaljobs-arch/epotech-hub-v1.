@@ -12,7 +12,7 @@ import {
   Sparkles, 
   CheckCircle2, 
   ChevronRight, 
-  Clock,
+  ChevronLeft,  Clock,
   Circle,
   History,
   User,
@@ -76,7 +76,7 @@ import {
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Toast, ToastType } from "@/components/ui/Toast";
-import { guiones, Script } from "@/data/scripts";
+import { guiones, guionesPresentacion, Script } from "@/data/scripts";
 import { mergeBlobsToWav } from "./audioUtils";
 
 // --- INDEXED DB PARA AUTO-GUARDADO DE AUDIOS (ANTI-RELOAD) ---
@@ -308,6 +308,7 @@ function ContenidoContent() {
   const typeParam = searchParams.get('type') || 'presion';
   
   const [activeTab, setActiveTab] = useState('calendario');
+  const [guionTab, setGuionTab] = useState<'reels' | 'historias' | 'presentacion'>('reels');
   const [activeCategory, setActiveCategory] = useState<string>('Todas');
   const [activeFormat, setActiveFormat] = useState<string>('Todos');
   const [serviceType, setServiceType] = useState(typeParam);
@@ -338,11 +339,187 @@ function ContenidoContent() {
     localStorage.setItem('epotech_production_tab', tabId);
   };
 
+  const handleCloseStory = () => {
+    setIsClosingStory(true);
+    setTimeout(() => {
+      setSelectedStory(null);
+      setIsClosingStory(false);
+    }, 500);
+  };
+
   const filteredGuiones = guiones.filter(g => 
     (activeCategory === 'Todas' || g.service === activeCategory) &&
     (activeFormat === 'Todos' || g.category === activeFormat)
   );
+
+  const historiasSituacionales = [
+    {
+      id: 'h1',
+      title: 'En Ruta: Equipo Listo',
+      mood: 'Energía y Acción',
+      color: '#48c1d2',
+      icon: MapPin,
+      sequence: [
+        {
+          title: 'Historia 1: El Gancho',
+          desc: 'Hablando a cámara mientras cargas el sistema de agua pura o las mangueras.',
+          script: '¡Buenos días Utah! Hoy el equipo de Epotech se mueve a [Lugar]. Llevamos el sistema de agua desionizada listo para dejar esas ventanas como nuevas.',
+          tips: 'Muestra el tanque de agua o los postes de limpieza.'
+        },
+        {
+          title: 'Historia 2: El Equipo',
+          desc: 'Muestra la hidrolavadora o los squeegees organizados.',
+          script: 'La clave de un acabado perfecto no es solo el esfuerzo, es tener la herramienta correcta. Aquí no usamos químicos que dañen tus marcos.',
+          tips: 'Haz un paneo de tus herramientas más limpias.'
+        },
+        {
+          title: 'Historia 3: El Compromiso',
+          desc: 'Hablando a cámara de nuevo.',
+          script: 'Si nos ves en [Lugar], ya sabes que estamos eliminando manchas de agua dura. ¡Nos vemos en el brillo final!',
+          tips: 'Usa el sticker de ubicación.'
+        }
+      ]
+    },
+    {
+      id: 'h2',
+      title: 'Desafío: Manchas de Agua Dura',
+      mood: 'Autoridad y Experto',
+      color: '#fbbf24',
+      icon: ShieldCheck,
+      sequence: [
+        {
+          title: 'Historia 1: La Realidad',
+          desc: 'Muestra una ventana opaca con minerales de cerca.',
+          script: 'Miren este cristal. Estos depósitos minerales llevan meses aquí. Si los dejas más tiempo, el daño puede ser permanente. Pero por suerte, llegamos nosotros.',
+          tips: 'Usa el macro de tu cámara para que se vea el "sarro".'
+        },
+        {
+          title: 'Historia 2: La Solución',
+          desc: 'Hablando a cámara con el squeegee en mano.',
+          script: 'Vamos a aplicar nuestra técnica de limpieza profunda. No es solo pasar agua, es restaurar la transparencia total del vidrio.',
+          tips: 'Muestra el producto especial que usas.'
+        },
+        {
+          title: 'Historia 3: El Suspenso',
+          desc: 'Vídeo rápido de 3 segundos de la primera pasada de limpieza.',
+          script: '¿Quieren ver cómo vuelve a brillar? No se despeguen de las historias.',
+          tips: 'Usa una encuesta: "¿Creen que saldrán todas las manchas?"'
+        }
+      ]
+    },
+    {
+      id: 'h3',
+      title: 'Confianza: Concreto Nuevo',
+      mood: 'Gratitud y Cercanía',
+      color: '#f87171',
+      icon: Heart,
+      sequence: [
+        {
+          title: 'Historia 1: El Antes y Después',
+          desc: 'Usa el sticker de "Antes y Después" con el driveway.',
+          script: 'De un gris triste y con moho... a un blanco brillante. El Pressure Washing no es solo estética, es seguridad para tu familia.',
+          tips: 'Muestra la diferencia de color del concreto.'
+        },
+        {
+          title: 'Historia 2: El Factor Humano',
+          desc: 'Tú hablando de la reacción del cliente al ver sus ventanas.',
+          script: 'Acabamos de terminar las ventanas de [Nombre Cliente] y su frase fue: "No sabía que mi casa tenía esta vista". Esa es mi mayor satisfacción.',
+          tips: 'Habla con mucha sinceridad.'
+        },
+        {
+          title: 'Historia 3: Llamado a la Acción',
+          desc: 'Tú señalando el sticker de enlace.',
+          script: 'Si tus ventanas ya no te dejan ver el paisaje o tu entrada necesita un rescate, dale clic al link de mi perfil.',
+          tips: 'Asegúrate de que el CTA sea claro.'
+        }
+      ]
+    },
+    {
+      id: 'h4',
+      title: 'Lifestyle: El Arte del Detalle',
+      mood: 'Humano y Auténtico',
+      color: '#60a5fa',
+      icon: Coffee,
+      sequence: [
+        {
+          title: 'Historia 1: Preparación',
+          desc: 'Tú limpiando tus squeegees o revisando boquillas.',
+          script: 'Día terminado. La gente cree que solo limpiamos, pero el 50% del éxito es cuidar nuestro equipo. Herramienta limpia = Trabajo impecable.',
+          tips: 'Muestra el cuidado que le das a tus gomas de squeegee.'
+        },
+        {
+          title: 'Historia 2: El Lado Humano',
+          desc: 'Un café o tú descansando un momento.',
+          script: 'Un día movido en Utah. Amo este trabajo porque cada ventana es una historia diferente. Gracias por dejarme cuidar sus hogares.',
+          tips: 'Usa un tono relajado.'
+        },
+        {
+          title: 'Historia 3: Comunidad',
+          desc: 'Sticker de preguntas.',
+          script: '¿Dudas sobre cómo mantener tus vidrios limpios por más tiempo? Déjalas aquí abajo.',
+          tips: 'Interactúa con tus seguidores.'
+        }
+      ]
+    },
+    {
+      id: 'h5',
+      title: 'Tip Maestro: Ventanas Pro',
+      mood: 'Educativo y Experto',
+      color: '#10b981',
+      icon: Lightbulb,
+      sequence: [
+        {
+          title: 'Historia 1: Error Común',
+          desc: 'Tú señalando una ventana con rayas de jabón.',
+          script: 'Tip de oro: nunca limpies tus ventanas bajo el sol directo. El jabón se seca antes de que lo quites y deja estas rayas horribles.',
+          tips: 'Muestra el efecto del sol en el vidrio.'
+        },
+        {
+          title: 'Historia 2: El Secreto Epotech',
+          desc: 'Hablando a cámara con autoridad.',
+          script: 'Nosotros usamos agua pura. Sin químicos, sin jabones pesados. Eso garantiza que tus ventanas se mantengan limpias por el doble de tiempo.',
+          tips: 'Muestra cómo el agua resbala por el cristal.'
+        },
+        {
+          title: 'Historia 3: El Especialista',
+          desc: 'Tú con el sistema de filtrado de fondo.',
+          script: 'Si quieres un acabado de nivel profesional sin rayas, hablemos. La agenda de [Mes] ya se está llenando.',
+          tips: 'Muestra tu agenda o disponibilidad.'
+        }
+      ]
+    },
+    {
+      id: 'h6',
+      title: 'Pressure: Fachada Brillante',
+      mood: 'Satisfacción Total',
+      color: '#8b5cf6',
+      icon: Eye,
+      sequence: [
+        {
+          title: 'Historia 1: El Desastre Viral',
+          desc: 'Vídeo lento de una pared con moho verde/negro.',
+          script: 'Muchos piensan que esto es pintura vieja, pero es vida orgánica dañando tu casa. Vamos a darle un reset total hoy.',
+          tips: 'Pasa el dedo (con guante) por la suciedad.'
+        },
+        {
+          title: 'Historia 2: La Magia (Satisfying)',
+          desc: 'Clip de 5 segundos de la boquilla turbo limpiando.',
+          script: 'Miren este contraste. El poder del agua aplicada con la técnica correcta. ¡Satisfacción garantizada!',
+          tips: 'Graba el sonido real del impacto del agua.'
+        },
+        {
+          title: 'Historia 3: El Resultado Final',
+          desc: 'Paseo por la fachada ya seca y limpia.',
+          script: 'Fachada restaurada. Valor de la propiedad aumentado. Cliente feliz. ¿Qué más podemos pedir?',
+          tips: 'Haz un paneo de lejos para ver el cambio general.'
+        }
+      ]
+    }
+  ];
+
   const [selectedScript, setSelectedScript] = useState<Script | null>(null);
+  const [selectedStory, setSelectedStory] = useState<any>(null);
+  const [isClosingStory, setIsClosingStory] = useState(false);
   const [serviceContext, setServiceContext] = useState<'active' | 'brand'>('active');
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
@@ -446,8 +623,13 @@ function ContenidoContent() {
 
   // Efecto para autoguardar la locución cada vez que cambia
   useEffect(() => {
-    if (selectedScript && voiceoverFragments.length > 0) {
-      saveVoiceoverDraft(selectedScript.id, voiceoverFragments);
+    if (selectedScript) {
+      if (voiceoverFragments.length > 0) {
+        saveVoiceoverDraft(selectedScript.id, voiceoverFragments);
+      } else {
+        // Si no hay fragmentos, borramos el borrador de la memoria permanentemente
+        deleteVoiceoverDraft(selectedScript.id);
+      }
     }
   }, [voiceoverFragments, selectedScript]);
 
@@ -692,8 +874,11 @@ function ContenidoContent() {
 
       if (ideas && ideas.length > 0) {
         const mappedPlan: any = {};
+        const now = new Date();
+        const currentMonthShort = now.toLocaleString('es-ES', { month: 'short' });
         ideas.forEach((idea, index) => {
-          const day = (14 + index).toString(); 
+          // Empezar a mapear desde el día 1 o basado en el día actual
+          const day = (index + 1).toString().padStart(2, '0'); 
           mappedPlan[day] = {
             status: idea.status || 'Pendiente',
             title: idea.titulo,
@@ -702,7 +887,7 @@ function ContenidoContent() {
             desc: idea.descripcion,
             copy: 'Cargando texto estratégico...',
             hashtags: '#EpotechSolutions #PisosEpoxy',
-            date: `${day} Abr`
+            date: `${day} ${currentMonthShort}`
           };
         });
         setContentDB(mappedPlan);
@@ -812,16 +997,16 @@ function ContenidoContent() {
                  <div className="relative">
                  <button 
                    onClick={() => setShowFullScript(!showFullScript)} 
-                   className={`px-4 py-2 rounded-full flex items-center justify-center gap-2 transition-all ${showFullScript ? "bg-[#48c1d2] text-[#0a192f] shadow-lg" : "bg-white/5 text-white/40 hover:text-white border border-white/5"} ${showHelp && teleHelpStep === 2 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40' : ''}`}>
+                   className={`h-9 px-3 rounded-xl flex items-center gap-2 transition-all whitespace-nowrap ${showFullScript ? "bg-[#48c1d2] text-[#0a192f] shadow-lg" : "bg-white/5 text-white/40 hover:text-white border border-white/5"} ${showHelp && teleHelpStep === 2 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40' : ''}`}>
                     {showFullScript ? (
                       <>
                         <Zap size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">GRABAR</span>
+                        <span className="text-[8px] font-black uppercase tracking-tighter">MODO PASOS</span>
                       </>
                     ) : (
                       <>
                         <BookOpen size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">LEER COMPLETO</span>
+                        <span className="text-[8px] font-black uppercase tracking-tighter">VISTA TOTAL</span>
                       </>
                     )}
                  </button>
@@ -830,8 +1015,8 @@ function ContenidoContent() {
                          <div className="flex flex-col gap-2">
                            <span>
                              {showFullScript 
-                               ? "PASO 5: Ahora tienes todo el guion a la vista. Si prefieres volver al modo de pasos cortos para leer más cómodo, toca aquí." 
-                               : "PASO 5: ¿Prefieres fluir sin pasar páginas? Toca aquí para ver todo el guion de una vez."}
+                               ? "PASO 7: Ahora tienes todo el guion a la vista. Si prefieres volver al modo de pasos cortos para leer más cómodo, toca aquí." 
+                               : "PASO 7: ¿Prefieres fluir sin pasar páginas? Toca aquí para ver todo el guion de una vez."}
                            </span>
                            <div className="flex gap-2 justify-end">
                               <button 
@@ -847,12 +1032,13 @@ function ContenidoContent() {
                               <button 
                                 onClick={(e) => { 
                                   e.stopPropagation(); 
-                                  // Si está en FULL, saltamos el paso de "Siguiente Toma" (paso 6)
-                                  setTeleHelpStep(showFullScript ? 4 : 3); 
+                                  // Si está en FULL, saltamos el paso de "Siguiente Toma" (paso 8)
+                                  const isLastStep = currentStepIdx === selectedScript.steps.length - 1;
+                                  setTeleHelpStep(showFullScript || isLastStep ? 4 : 3); 
                                 }}
-                                className="bg-white text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-teal-50 transition-colors text-[8px] border border-white/10 font-black"
+                                className="bg-white text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-teal-50 transition-colors text-[8px] font-black shadow-lg"
                               >
-                                ENTENDIDO
+                                SIGUIENTE
                               </button>
                            </div>
                          </div>
@@ -954,13 +1140,13 @@ function ContenidoContent() {
                        {showHelp && teleHelpStep === 1 && (
                          <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#0a192f] text-white p-5 rounded-[2.5rem] text-[10px] font-bold shadow-2xl w-72 z-[100] border-2 border-[#48c1d2]/30 animate-in zoom-in duration-300 guide-bubble-active">
                            <div className="flex flex-col gap-2">
-                             <span>PASO 4: Lee este texto o di algo muy parecido. Este "Hook" está diseñado para enganchar a tu audiencia en segundos.</span>
+                             <span>PASO 6: Lee este texto o di algo muy parecido. Este "Hook" está diseñado para enganchar a tu audiencia en segundos.</span>
                              <div className="flex gap-2 justify-end">
                                <button 
                                  onClick={(e) => { 
                                    e.stopPropagation(); 
                                    setSelectedScript(null); // Cerrar teleprompter
-                                   setDashHelpStep(2); // Volver al paso 3 del dash
+                                   setDashHelpStep(5); // Volver a la tarjeta del guion
                                  }}
                                  className="bg-white/10 text-white px-3 py-1.5 rounded-xl hover:bg-white/20 transition-all text-[8px] border border-white/10"
                                >
@@ -1005,20 +1191,20 @@ function ContenidoContent() {
                                          toggleVoiceoverPlayback(audioUrl);
                                        }
                                      }}
-                                     className="px-4 py-2 bg-green-500/20 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-500/30 hover:bg-green-500/30 flex items-center gap-2 w-[100px] justify-center"
+                                     className="px-4 py-2 bg-green-500/20 text-green-600 rounded-full text-[8px] font-black uppercase tracking-tighter border border-green-500/30 hover:bg-green-500/30 flex items-center gap-2 w-[100px] justify-center"
                                    >
                                      {isPlayingVoiceover ? <PauseCircle size={14} /> : <PlayCircle size={14} />} 
                                      {isPlayingVoiceover ? 'Pausar' : 'Escuchar'}
                                    </button>
                                    <button 
                                      onClick={() => startVoiceoverRecording(currentStepIdx)}
-                                     className="px-4 py-2 bg-white/40 text-[#0a192f] rounded-full text-[10px] font-black uppercase tracking-widest border border-white/40 hover:bg-white/60 flex items-center gap-2"
+                                     className="px-4 py-2 bg-white/40 text-[#0a192f] rounded-full text-[8px] font-black uppercase tracking-tighter border border-white/40 hover:bg-white/60 flex items-center gap-2"
                                    >
-                                     <History size={14} /> Regrabar
+                                     <History size={14} /> ReMODO PASOS
                                    </button>
                                    <button 
                                      onClick={() => deleteVoiceoverFragment(currentStepIdx)}
-                                     className="px-4 py-2 bg-red-500/10 text-red-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-500/20 hover:bg-red-500/20 flex items-center gap-2"
+                                     className="px-4 py-2 bg-red-500/10 text-red-500 rounded-full text-[8px] font-black uppercase tracking-tighter border border-red-500/20 hover:bg-red-500/20 flex items-center gap-2"
                                    >
                                      <Trash2 size={14} /> Eliminar
                                    </button>
@@ -1033,7 +1219,7 @@ function ContenidoContent() {
                                  >
                                    <Mic size={28} />
                                  </button>
-                                 <span className="text-[10px] font-black text-[#142d53]/70 uppercase tracking-widest">Grabar esta toma</span>
+                                 <span className="text-[10px] font-black text-[#142d53]/70 uppercase tracking-widest">MODO PASOS esta toma</span>
                                </>
                              )}
                            </div>
@@ -1041,14 +1227,7 @@ function ContenidoContent() {
                       </div>
                    </div>
 
-                   <div className="bg-white/5 border border-white/10 p-6 rounded-[32px] space-y-2">
-                      <h5 className="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                         <Video size={14} /> Referencia Visual (Usa estos clips)
-                      </h5>
-                      <p className="text-sm font-bold text-white/80 leading-relaxed italic">
-                         {selectedScript.steps[currentStepIdx].visualField}
-                      </p>
-                   </div>
+
                 </div>
               </>
            )}
@@ -1068,7 +1247,7 @@ function ContenidoContent() {
                    setTimeout(() => startVoiceoverRecording(prevIdx), 400);
                  }
                }}
-               className="flex-1 py-5 bg-white/10 text-white text-xs font-black uppercase tracking-[2px] rounded-[24px] border border-white/10 transition-all active:scale-95"
+               className="flex-1 py-5 bg-white/10 text-white text-[10px] font-black uppercase tracking-[1px] rounded-[24px] border border-white/10 transition-all active:scale-95"
              >
                Anterior
              </button>
@@ -1076,40 +1255,64 @@ function ContenidoContent() {
            
            {currentStepIdx < selectedScript.steps.length - 1 ? (
               <div className="flex-[2] relative">
-                <button 
-                  onClick={() => {
-                    const nextIdx = currentStepIdx + 1;
-                    const wasRecording = isRecordingVoiceover;
-                    if (wasRecording) stopVoiceoverRecording();
-                    setCurrentStepIdx(nextIdx);
-                    if (wasRecording) {
-                      setTimeout(() => startVoiceoverRecording(nextIdx), 400);
-                    }
-                  }}
-                  className={`w-full py-5 bg-[#48c1d2] text-[#0a192f] text-xs font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 z-10`}
-                >
-                  Siguiente Toma
-                </button>
+                  <button 
+                    onClick={() => {
+                      const nextIdx = currentStepIdx + 1;
+                      const wasRecording = isRecordingVoiceover;
+                      if (wasRecording) stopVoiceoverRecording();
+                      setCurrentStepIdx(nextIdx);
+                      if (wasRecording) {
+                        setTimeout(() => startVoiceoverRecording(nextIdx), 400);
+                      }
+                    }}
+                    className={`w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[1px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 z-10 ${showHelp && teleHelpStep === 3 ? 'ring-4 ring-white animate-pulse' : ''}`}
+                  >
+                    Siguiente Toma
+                  </button>
+                  {showHelp && teleHelpStep === 3 && (
+                    <div className="absolute -top-32 left-0 right-0 mx-auto bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-[100] border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
+                      <div className="flex flex-col gap-2">
+                        <span>PASO 8: ¿Listo con esta toma? Toca aquí para pasar a la siguiente. ¡Vas muy bien!</span>
+                        <div className="flex gap-2 justify-end">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setTeleHelpStep(2); }}
+                            className="bg-[#142d53]/10 text-[#142d53] px-3 py-1.5 rounded-xl hover:bg-[#142d53]/20 transition-all text-[8px] border border-[#142d53]/20"
+                          >
+                            VOLVER
+                          </button>
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              // Saltar automáticamente al final del guion para mostrar el botón de UNIR
+                              setCurrentStepIdx(selectedScript.steps.length - 1);
+                              setTeleHelpStep(4); 
+                            }}
+                            className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
+                          >
+                            SIGUIENTE
+                          </button>
+                        </div>
+                      </div>
+                      <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
+                    </div>
+                  )}
               </div>
             ) : (
               <div className="flex-[2] relative">
                 <button 
                   onClick={mergeVoiceoverFragments}
-                  className={`w-full py-5 bg-[#48c1d2] text-[#0a192f] text-xs font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] z-10 flex items-center justify-center gap-2`}
+                  className={`w-full py-5 px-6 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[1px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] z-10 flex items-center justify-center gap-2 ${showHelp && teleHelpStep === 4 ? 'ring-4 ring-white animate-pulse' : ''}`}
                 >
                   <Sparkles size={16} /> UNIR Y DESCARGAR LOCUCIÓN
                 </button>
                 {showHelp && teleHelpStep === 4 && (
-                  <div className="absolute -top-24 right-0 bg-[#142d53] text-[#48c1d2] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 z-[100] border-2 border-[#48c1d2]/30 animate-in zoom-in duration-300 guide-bubble-active">
-                    <div className="flex flex-col gap-2">
-                      <span>PASO 7: ¡Casi terminas! Toca aquí para pasar al reporte final. Es vital para escribir el copy de tu video.</span>
-                      <div className="flex gap-2 justify-end">
+                  <div className="absolute -top-40 left-0 right-0 mx-auto bg-[#142d53] text-[#48c1d2] p-6 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-[100] border-2 border-[#48c1d2]/30 animate-in zoom-in duration-300 guide-bubble-active">
+                    <div className="flex flex-col gap-2 text-center">
+                      <span className="text-white uppercase tracking-wider">¡Casi terminas!</span>
+                      <p className="leading-tight opacity-90">Toca aquí para unir todo y descargar tu locución profesional.</p>
+                      <div className="flex gap-2 justify-center mt-2">
                         <button 
-                          onClick={(e) => { 
-                            e.stopPropagation(); 
-                            // Si está en FULL, volvemos directamente al botón de modo lectura (paso 5)
-                            setTeleHelpStep(showFullScript ? 2 : 3); 
-                          }}
+                          onClick={(e) => { e.stopPropagation(); setTeleHelpStep(3); }}
                           className="bg-white/5 text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-white/10 transition-all text-[8px] border border-[#48c1d2]/20"
                         >
                           VOLVER
@@ -1117,24 +1320,53 @@ function ContenidoContent() {
                         <button 
                           onClick={(e) => { 
                             e.stopPropagation(); 
-                            setIsClosing(true);
-                            setTimeout(() => {
-                              setSelectedScript(null);
-                              setIsClosing(false);
-                              setShowAudioReport(true);
-                              setReportHelpStep(1);
-                            }, 500);
+                            setTeleHelpStep(5); 
                           }}
-                          className="bg-[#48c1d2] text-[#142d53] px-3 py-1.5 rounded-xl hover:bg-[#3aa8b8] transition-colors text-[8px] font-black"
+                          className="bg-[#48c1d2] text-[#142d53] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
                         >
-                          ENTENDIDO, ¡VAMOS!
+                          SIGUIENTE
                         </button>
                       </div>
                     </div>
-                    <div className="absolute -bottom-2 right-10 w-4 h-4 bg-[#142d53] rotate-45 border-r-2 border-b-2 border-[#48c1d2]/30"></div>
+                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#142d53] rotate-45 border-r-2 border-b-2 border-[#48c1d2]/30"></div>
                   </div>
                 )}
               </div>
+            )}
+            
+            {showHelp && teleHelpStep === 5 && createPortal(
+              <div className="fixed inset-0 z-[30000] flex items-center justify-center p-6 animate-in fade-in duration-500">
+                <div className="absolute inset-0 bg-[#0a192f]/80 backdrop-blur-sm" />
+                <div className="bg-[#48c1d2] text-[#142d53] p-10 rounded-[4rem] text-[12px] font-black shadow-[0_0_150px_rgba(72,193,210,0.6)] w-80 max-w-[calc(100vw-40px)] border-8 border-white animate-in zoom-in duration-500 text-center relative z-10">
+                  <div className="flex flex-col gap-5">
+                    <div className="w-20 h-20 bg-[#142d53] rounded-full flex items-center justify-center mx-auto shadow-xl ring-4 ring-white/20">
+                      <Sparkles size={40} className="text-[#48c1d2] animate-bounce" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl uppercase italic tracking-tighter mb-1 leading-none">PASO 10: ¡ERES UN PRO!</h3>
+                      <div className="h-1 w-12 bg-[#142d53]/20 mx-auto rounded-full" />
+                    </div>
+                    <p className="leading-tight font-bold text-sm">Ya sabes cómo crear contenido de élite para Epotech.</p>
+                    <p className="text-[10px] opacity-70">Tu voz es el motor de todo lo que hacemos. ¡A darle!</p>
+                    <button 
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        setIsClosing(true);
+                        setTimeout(() => {
+                          setSelectedScript(null);
+                          setIsClosing(false);
+                          setDashHelpStep(0);
+                          setShowHelp(false);
+                        }, 500);
+                      }}
+                      className="bg-[#142d53] text-white py-4 rounded-2xl hover:scale-105 transition-all text-[11px] font-black shadow-2xl mt-4 uppercase tracking-[0.2em] border-b-4 border-black"
+                    >
+                      ¡LISTO, A TRABAJAR!
+                    </button>
+                  </div>
+                </div>
+              </div>,
+              document.body
             )}
            </div>
          )}
@@ -1180,25 +1412,40 @@ function ContenidoContent() {
             const newState = !showHelp;
             setShowHelp(newState);
             if (newState) {
-              setDashHelpStep(1);
+              setDashHelpStep(1); // Empezar directo en el reporte
               setTeleHelpStep(1);
               setReportHelpStep(1);
-              handleTabChange('guiones');
             }
           }}
-          className={`mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${showHelp ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-white text-slate-400 border border-slate-100'}`}
+          className={`mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-tighter transition-all ${showHelp ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-white text-slate-400 border border-slate-100'}`}
         >
           {showHelp ? <X size={14} /> : <HelpCircle size={14} />}
-          {showHelp ? 'Cerrar Guía' : '¿Cómo grabar mi contenido?'}
+          {showHelp ? 'Cerrar Guía' : '¿Cómo MODO PASOS mi contenido?'}
         </button>
         
       </div>
 
       {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}
       <div className={`mb-8 px-2 animate-in fade-in slide-in-from-top-6 duration-1000 delay-200 relative`}>
+        {showHelp && dashHelpStep === 1 && (
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
+            <div className="flex flex-col gap-2">
+              <span>PASO 1: ¡Aquí empieza todo! Antes de los guiones, necesitamos tu reporte. Cuéntanos cómo te fue hoy.</span>
+              <div className="flex gap-2 justify-end">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setShowAudioReport(true); setReportHelpStep(1); }}
+                  className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
+                >
+                  VER CÓMO SE HACE
+                </button>
+              </div>
+            </div>
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
+          </div>
+        )}
         <button 
           onClick={() => setShowAudioReport(true)}
-          className="w-full bg-[#142d53] hover:bg-[#0a192f] text-white p-4 rounded-[2rem] flex items-center justify-between group transition-all shadow-xl shadow-slate-200/50 active:scale-95 border-b-4 border-slate-950 relative overflow-hidden"
+          className={`w-full bg-[#142d53] hover:bg-[#0a192f] text-white p-4 rounded-[2rem] flex items-center justify-between group transition-all shadow-xl shadow-slate-200/50 active:scale-95 border-b-4 border-slate-950 relative overflow-hidden ${showHelp && dashHelpStep === 1 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40 scale-[1.02]' : ''}`}
         >
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-150 transition-transform">
              <Mic size={60} className="text-white" />
@@ -1232,22 +1479,37 @@ function ContenidoContent() {
             >
               <tab.icon size={12} /> {tab.name}
             </button>
-            {showHelp && tab.step === 1 && dashHelpStep === 1 && (
-              <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-48 z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
-                <div className="flex flex-col gap-2">
-                  <span>PASO 1: {tab.help}</span>
-                  <button 
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      handleTabChange('guiones');
-                      setDashHelpStep(2); 
-                    }}
-                    className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl self-end hover:scale-105 transition-all text-[8px] border border-white/10 font-black"
-                  >
-                    SIGUIENTE
-                  </button>
+            {/* PASO 4: EXPLICACIÓN DE GUIONES DESPUÉS DEL REPORTE */}
+            {showHelp && tab.id === 'guiones' && dashHelpStep === 4 && (
+              <div className="absolute -top-44 left-0 right-0 mx-auto bg-[#142d53] text-[#48c1d2] p-6 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-50 border-2 border-[#48c1d2]/30 animate-in zoom-in duration-300 guide-bubble-active">
+                <div className="flex flex-col gap-2 text-center">
+                  <span className="text-white uppercase tracking-wider text-[11px]">¡Excelente!</span>
+                  <p className="leading-tight opacity-90">Con tu reporte generamos tus guiones profesionales.</p>
+                  <div className="flex gap-2 justify-center mt-2">
+                    <button 
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        setShowAudioReport(true);
+                        setReportHelpStep(2);
+                        setDashHelpStep(0); // Ocultar globo de dash mientras el modal está abierto
+                      }}
+                      className="bg-white/5 text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-white/10 transition-all text-[8px] border border-[#48c1d2]/20"
+                    >
+                      VOLVER
+                    </button>
+                    <button 
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        handleTabChange('guiones');
+                        setDashHelpStep(5); 
+                      }}
+                      className="bg-[#48c1d2] text-[#142d53] px-4 py-2 rounded-xl hover:scale-105 transition-all text-[9px] font-black shadow-lg"
+                    >
+                      VER MIS GUIONES
+                    </button>
+                  </div>
                 </div>
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#142d53] rotate-45 border-r-2 border-b-2 border-[#48c1d2]/30"></div>
               </div>
             )}
           </div>
@@ -1258,7 +1520,7 @@ function ContenidoContent() {
       <div className="mb-8">
         {activeTab === 'guiones' && (
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[#48c1d2]">Mis Guiones:</span> Aquí tienes las historias listas para grabar basadas en tus trabajos más recientes.
+            <span className="text-[#48c1d2]">Mis Guiones:</span> Aquí tienes las historias listas para MODO PASOS basadas en tus trabajos más recientes.
           </p>
         )}
         {activeTab === 'calendario' && (
@@ -1278,88 +1540,138 @@ function ContenidoContent() {
           <div className="space-y-4">
             {/* Navegación del Estudio de Producción Compacta pero Espaciada */}
             {/* Navegación del Estudio de Producción - Ahora Simplificada */}
-            <div className="flex bg-slate-100 p-1.5 rounded-xl mb-4">
-                <div className="flex-1 relative">
-                  <div 
-                    className="w-full py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 bg-[#142d53] text-[#48c1d2] shadow-md"
-                  >
-                    <BookOpen size={12} /> Mis Guiones
-                  </div>
-                </div>
+            <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-6 shadow-inner">
+                <button 
+                  onClick={() => setGuionTab('reels')}
+                  className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${guionTab === 'reels' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400'}`}
+                >
+                  <Clapperboard size={12} /> Reels Estratégicos
+                </button>
+                <button 
+                  onClick={() => setGuionTab('historias')}
+                  className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${guionTab === 'historias' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400'}`}
+                >
+                  <Zap size={12} /> Historias Diarias
+                </button>
+                <button 
+                  onClick={() => setGuionTab('presentacion')}
+                  className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${guionTab === 'presentacion' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400'}`}
+                >
+                  <User size={12} /> Videos Fijos
+                </button>
             </div>
 
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 text-left">
                 <div className="bg-[#142d53]/5 p-6 rounded-[2.5rem] border border-[#142d53]/10">
-                  <h3 className="text-lg font-black text-[#142d53] mb-2 tracking-tight">Mis Guiones</h3>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-6">Contenido personalizado creado exclusivamente para Epotech.</p>
+                  <h3 className="text-lg font-black text-[#142d53] mb-2 tracking-tight">
+                    {guionTab === 'reels' && 'Biblioteca de Guiones'}
+                    {guionTab === 'historias' && 'Guía de Historias Diarias'}
+                    {guionTab === 'presentacion' && 'Videos de Marca Personal'}
+                  </h3>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-6">
+                    {guionTab === 'reels' && 'Contenido estructurado para máxima retención y viralidad.'}
+                    {guionTab === 'historias' && 'Guías situacionales para conectar de forma humana y espontánea.'}
+                    {guionTab === 'presentacion' && 'Videos estratégicos fijados (Pinned) para convertir seguidores en clientes.'}
+                  </p>
                   
                   <div className="grid gap-4">
-                    {/* Placeholder para Proyecto Nikki */}
-                      <div 
-                        onClick={() => {
-                          const nikkiScript = guiones.find(g => g.id === 'nikki-park-city');
-                          if (nikkiScript) { 
-                            setSelectedScript(nikkiScript); 
+                    {guionTab === 'reels' ? (
+                      <>
+                        <div className="p-8 bg-gradient-to-br from-[#142d53] to-[#1e3a8a] rounded-[2.5rem] border border-white/10 shadow-xl relative overflow-hidden group mb-4 text-left">
+                          <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform">
+                              <Sparkles size={80} className="text-[#48c1d2]" />
+                          </div>
+                          <div className="relative z-10">
+                              <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-3 block">Próximamente: Tu Guion Personalizado</span>
+                              <h4 className="text-xl font-black text-white italic tracking-tighter mb-3">Laboratorio de Inteligencia <span className="text-[#48c1d2]">Epotech</span></h4>
+                              <p className="text-[11px] font-medium text-slate-300 leading-relaxed max-w-[85%]">
+                                "Usa el <span className="text-[#48c1d2] font-black italic">Reporte de Audio</span> al final de tu jornada. Nuestro equipo procesará tus notas y generará aquí mismo un guion estratégico basado en tus obras reales de hoy."
+                              </p>
+                              <div className="mt-6 flex items-center gap-3">
+                                <div className="w-2 h-2 rounded-full bg-[#48c1d2] animate-pulse"></div>
+                                <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest">Esperando tu reporte...</span>
+                              </div>
+                          </div>
+                        </div>
+                        {guiones.map((script) => (
+                        <div 
+                          key={script.id}
+                          onClick={() => {
+                            setSelectedScript(script); 
                             setCurrentStepIdx(0);
                             if(showHelp) setTeleHelpStep(1); 
-                          }
-                        }}
-                        className={`bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-[#48c1d2]/50 transition-all cursor-pointer active:scale-95 relative ${showHelp && dashHelpStep === 3 ? 'z-40 scale-105' : ''}`}>
-                        {showHelp && dashHelpStep === 3 && <div className="absolute inset-0 rounded-[2rem] ring-4 ring-[#48c1d2] animate-pulse pointer-events-none" />}
-                        {showHelp && dashHelpStep === 3 && (
-                          <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-48 z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
-                            <div className="flex flex-col gap-2">
-                              <span>PASO 2: ¡Este es tu guion del día! Tócalo para empezar. La guía continuará automáticamente dentro del guion.</span>
-                              <div className="flex gap-2 justify-end">
-                                <button 
-                                  onClick={(e) => { e.stopPropagation(); setDashHelpStep(1); }}
-                                  className="bg-[#142d53]/10 text-[#142d53] px-3 py-1.5 rounded-xl hover:bg-[#142d53]/20 transition-all text-[8px] border border-[#142d53]/20"
-                                >
-                                  VOLVER
-                                </button>
-                                <button 
-                                  onClick={(e) => { 
-                                    e.stopPropagation(); 
-                                    const nikkiScript = guiones.find(g => g.id === 'nikki-park-city');
-                                    if (nikkiScript) { 
-                                      setSelectedScript(nikkiScript); 
-                                      setCurrentStepIdx(0);
-                                      setTeleHelpStep(1); 
-                                    }
-                                  }}
-                                  className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
-                                >
-                                  ENTENDIDO, ¡VAMOS!
-                                </button>
-                              </div>
-                            </div>
-                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
+                          }}
+                          className={`bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-[#48c1d2]/50 transition-all cursor-pointer active:scale-95 relative`}>
+                          <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 group-hover:text-[#48c1d2] transition-colors">
+                            <Clapperboard size={20} />
                           </div>
-                        )}
-
-                        <div className="bg-[#48c1d2]/10 p-3 rounded-2xl group-hover:bg-[#48c1d2] group-hover:text-white transition-all">
-                          <MapPin size={20} className="text-[#48c1d2] group-hover:text-white" />
+                          <div className="text-left flex-1">
+                            <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
+                            <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                          </div>
+                          <ChevronRight size={16} className="text-slate-200 group-hover:text-[#48c1d2] transition-all" />
                         </div>
-                      <div className="flex-1">
-                        <div className="flex justify-between items-start mb-1">
-                          <span className="text-[7px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Caso Reciente</span>
-                          <span className="text-[7px] font-black text-slate-300 uppercase tracking-[0.2em]">Abril 2026</span>
+                          ))}
+                        </>
+                      ) : guionTab === 'presentacion' ? (
+                        <div className="grid gap-4">
+                          <div className="p-6 bg-amber-50 rounded-[2.5rem] border border-amber-100 mb-2 text-left">
+                             <h5 className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                <ShieldCheck size={12} /> Estrategia de Marca (Pinned)
+                             </h5>
+                             <p className="text-[11px] font-bold text-amber-900/70 leading-relaxed italic">
+                                "Estos 3 videos son los pilares de tu perfil. Al fijarlos (Pin), aseguras que cualquier persona nueva que llegue por tu video viral entienda de inmediato quién eres y cómo contratarte."
+                             </p>
+                          </div>
+                          {guionesPresentacion.map((script) => (
+                            <div 
+                              key={script.id}
+                              onClick={() => {
+                                setSelectedScript(script); 
+                                setCurrentStepIdx(0);
+                              }}
+                              className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
+                            >
+                               <div className="w-14 h-14 bg-slate-50 rounded-[1.5rem] flex items-center justify-center text-[#142d53] group-hover:bg-[#48c1d2]/10 group-hover:text-[#48c1d2] transition-all">
+                                  <Video size={24} />
+                               </div>
+                               <div className="text-left flex-1">
+                                  <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
+                                  <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                  <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Marca Personal</p>
+                               </div>
+                               <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
+                            </div>
+                          ))}
                         </div>
-                        <h4 className="text-sm font-black text-[#142d53]">El Rescate del Garage (Efecto Epotech)</h4>
-                        <p className="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider">Formato Documental • Voiceover Sugerido</p>
+                      ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {historiasSituacionales.map((story) => (
+                          <div 
+                            key={story.id}
+                            onClick={() => setSelectedStory(story)}
+                            className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover:border-[#48c1d2] transition-all cursor-pointer group relative overflow-hidden"
+                          >
+                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-110 transition-transform">
+                              <story.icon size={50} style={{ color: story.color }} />
+                            </div>
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: `${story.color}20` }}>
+                              <story.icon size={20} style={{ color: story.color }} />
+                            </div>
+                            <div className="text-left">
+                               <span className="text-[8px] font-black uppercase tracking-widest block mb-1" style={{ color: story.color }}>{story.mood}</span>
+                               <h4 className="text-sm font-black text-[#142d53] leading-tight mb-2">{story.title}</h4>
+                               <p className="text-[10px] font-medium text-slate-400 line-clamp-2">
+                                 {story.sequence[0].script}
+                               </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <ChevronRight size={16} className="text-slate-300 group-hover:text-[#48c1d2] transition-colors" />
-                    </div>
-
-                    <div className="border-2 border-dashed border-slate-100 p-8 rounded-[2rem] flex flex-col items-center justify-center text-center opacity-60">
-                      <Sparkles size={24} className="text-slate-200 mb-3" />
-                      <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Próximo Proyecto</p>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
-
-
             </div>
           )}
         {activeTab === 'calendario' && <CreacionSection contentDB={contentDB} toggleStatus={toggleGlobalStatus} onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} />}
@@ -1367,6 +1679,66 @@ function ContenidoContent() {
       </div>
 
       {modalContent}
+      {selectedStory && createPortal(
+        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-center ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
+          <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}>
+            <div className="p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100">
+               <div className="text-left">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ backgroundColor: `${selectedStory.color}15` }}>
+                     <selectedStory.icon size={14} style={{ color: selectedStory.color }} />
+                     <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: selectedStory.color }}>Hoja de Ruta: Historias</span>
+                  </div>
+                  <h2 className="text-2xl font-black text-[#142d53] leading-tight tracking-tighter">{selectedStory.title}</h2>
+               </div>
+               <button onClick={handleCloseStory} className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-300 hover:text-slate-600 shadow-sm transition-colors">
+                  <X size={20} />
+               </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-8 pt-6 space-y-10 custom-scrollbar">
+               {selectedStory.sequence.map((step: any, idx: number) => (
+                 <section key={idx} className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 text-left" style={{ animationDelay: `${idx * 150}ms` }}>
+                    <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-black text-[11px] shrink-0 shadow-lg" style={{ backgroundColor: selectedStory.color }}>{idx + 1}</div>
+                       <h4 className="text-[11px] font-black text-[#142d53] uppercase tracking-[0.2em]">{step.title}</h4>
+                    </div>
+                    
+                    <div className="space-y-3 pl-11">
+                       <div className="p-5 bg-slate-50 rounded-3xl border border-slate-100 italic text-[#142d53] font-medium text-sm leading-relaxed relative text-left">
+                          <div className="absolute -left-2 top-4 w-1 h-8 rounded-full" style={{ backgroundColor: selectedStory.color }} />
+                          <span className="text-[8px] font-bold text-slate-400 uppercase block mb-2 tracking-widest italic">Guion Sugerido:</span>
+                          "{step.script}"
+                       </div>
+                       
+                       <div className="grid grid-cols-2 gap-3">
+                          <div className="p-4 bg-[#142d53]/5 rounded-2xl border border-[#142d53]/5">
+                             <span className="text-[9px] font-black text-slate-400 uppercase block mb-1 tracking-widest">Lo que se ve:</span>
+                             <p className="text-sm font-bold text-[#142d53] leading-snug">{step.desc}</p>
+                          </div>
+                          <div className="p-4 bg-[#48c1d2]/5 rounded-2xl border border-[#48c1d2]/10">
+                             <span className="text-[9px] font-black text-[#48c1d2] uppercase block mb-1 tracking-widest">Pro Tip:</span>
+                             <p className="text-sm font-bold text-slate-500 italic leading-snug">{step.tips}</p>
+                          </div>
+                       </div>
+                    </div>
+                 </section>
+               ))}
+    
+               <div className="p-8 bg-[#142d53] rounded-[3rem] text-center shadow-2xl relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
+                     <selectedStory.icon size={80} className="text-white" />
+                  </div>
+                  <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.3em] mb-2 relative z-10">Misión de Marca</p>
+                  <p className="text-base font-medium text-white italic relative z-10 leading-tight">"Haz que la gente confíe en el hombre detrás de la máquina."</p>
+               </div>
+            </div>
+    
+            <div className="p-8 border-t border-slate-50 bg-slate-50/50">
+               <button onClick={handleCloseStory} className="w-full py-5 bg-[#142d53] text-[#48c1d2] text-xs font-black uppercase tracking-[2px] rounded-2xl shadow-xl shadow-[#142d53]/20 transition-all active:scale-95 border-b-4 border-black">¡ENTENDIDO, A GRABAR!</button>
+            </div>
+          </div>
+        </div>, document.body
+      )}
       {selectedProduction && (
         <FichaProduccionModal 
           post={selectedProduction} 
@@ -1395,17 +1767,15 @@ function ContenidoContent() {
                     {showHelp && reportHelpStep === 1 && (
                       <div className="absolute -top-36 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
                         <div className="flex flex-col gap-2">
-                          <span>PASO 8: ¡Felicidades! Terminaste la grabación. Ahora responde estas 5 preguntas para ayudarnos con la edición y el copy.</span>
+                          <span>PASO 2: Responde estas 5 preguntas rápidas. Tu honestidad nos ayuda a crear guiones que venden de verdad.</span>
                           <div className="flex gap-2 justify-end">
                             <button 
                               onClick={(e) => { 
                                 e.stopPropagation(); 
-                                handleCloseAudioReport(); 
-                                setTeleHelpStep(4);
-                                const nikkiScript = guiones.find(g => g.id === 'nikki-park-city');
-                                if (nikkiScript) { setSelectedScript(nikkiScript); if(showHelp) setTeleHelpStep(1); }
+                                setShowAudioReport(false); 
+                                setDashHelpStep(1); 
                               }}
-                              className="bg-white/10 text-white px-3 py-1.5 rounded-xl hover:bg-white/20 transition-all text-[8px] border border-white/10"
+                              className="bg-[#142d53]/10 text-[#142d53] px-3 py-1.5 rounded-xl hover:bg-[#142d53]/20 transition-all text-[8px] border border-[#142d53]/20"
                             >
                               VOLVER
                             </button>
@@ -1413,7 +1783,7 @@ function ContenidoContent() {
                               onClick={(e) => { e.stopPropagation(); setReportHelpStep(2); }}
                               className="bg-white text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-teal-50 transition-colors text-[8px] border border-white/10 font-black"
                             >
-                              ENTENDIDO
+                              SIGUIENTE
                             </button>
                           </div>
                         </div>
@@ -1446,7 +1816,7 @@ function ContenidoContent() {
                     {showHelp && reportHelpStep === 2 && (
                       <div className="absolute -top-40 right-0 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 z-50 border-2 border-[#142d53]/20 animate-in zoom-in duration-300 guide-bubble-active">
                         <div className="flex flex-col gap-2">
-                          <span>PASO 9: Graba tu nota aquí. Puedes pausar si hay ruido o borrar si te equivocas. Tenemos hasta 60 minutos, ¡foco en el valor!</span>
+                          <span>PASO 3: Graba tu nota aquí. Puedes pausar si hay ruido o borrar si te equivocas. ¡Foco en el valor!</span>
                           <div className="flex gap-2 justify-end">
                             <button 
                               onClick={(e) => { e.stopPropagation(); setReportHelpStep(1); }}
@@ -1455,10 +1825,15 @@ function ContenidoContent() {
                               VOLVER
                             </button>
                             <button 
-                              onClick={(e) => { e.stopPropagation(); setShowHelp(false); }}
+                              onClick={(e) => { 
+                                e.stopPropagation(); 
+                                setShowAudioReport(false);
+                                setDashHelpStep(4);
+                                handleTabChange('guiones');
+                              }}
                               className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
                             >
-                              LISTO, ENTENDIDO
+                              SIGUIENTE
                             </button>
                           </div>
                         </div>
@@ -1475,7 +1850,7 @@ function ContenidoContent() {
                            <div className="flex items-center gap-2 justify-center">
                               <div className={`w-2 h-2 rounded-full ${isRecording && !isPaused ? 'bg-red-500 animate-pulse' : 'bg-slate-600'}`}></div>
                               <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                                 {recordTime >= 3600 ? 'Límite alcanzado' : (isRecording ? (isPaused ? 'Pausado' : 'Grabando...') : 'Listo para grabar')}
+                                 {recordTime >= 3600 ? 'Límite alcanzado' : (isRecording ? (isPaused ? 'Pausado' : 'Grabando...') : 'Listo para MODO PASOS')}
                               </span>
                            </div>
                         </div>
@@ -1674,11 +2049,25 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
 }
 
 function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any, toggleStatus: (day: string) => void, onSelect: (key: string) => void }) {
-  const [selectedDate, setSelectedDate] = useState('16');
+  const [viewDate, setViewDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date().getDate().toString().padStart(2, '0'));
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const toggleExpand = (key: string) => { setExpandedKeys(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]); };
 
-  const monthDays = Array.from({ length: 31 }, (_, i) => {
+  const monthName = viewDate.toLocaleString('es-ES', { month: 'long' });
+  const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+  const currentYear = viewDate.getFullYear();
+  const daysInMonth = new Date(currentYear, viewDate.getMonth() + 1, 0).getDate();
+
+  const handlePrevMonth = () => {
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
+  };
+
+  const monthDays = Array.from({ length: daysInMonth }, (_, i) => {
     const day = (i + 1).toString().padStart(2, '0');
     return { date: day, content: contentDB[day] };
   });
@@ -1688,9 +2077,17 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
   return (
     <div className="space-y-10 animate-in fade-in duration-1000">
       <div className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm text-left">
-        <div className="flex justify-between items-center mb-4 px-2">
-           <h4 className="text-[10px] font-bold text-slate-400 tracking-widest">Cronograma de Abril</h4>
-           <span className="text-[10px] font-bold text-[#142d53] italic">Epotech Hub</span>
+        <div className="flex justify-between items-center mb-6 px-2">
+           <div className="flex items-center gap-3">
+              <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-[#142d53] hover:bg-slate-100 transition-colors">
+                <ChevronLeft size={16} />
+              </button>
+              <h4 className="text-[11px] font-black text-[#142d53] uppercase tracking-[0.2em]">{capitalizedMonth} {currentYear}</h4>
+              <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-[#142d53] hover:bg-slate-100 transition-colors">
+                <ChevronRight size={16} />
+              </button>
+           </div>
+           <span className="text-[10px] font-bold text-slate-300 italic">Epotech Hub</span>
         </div>
         <div className="grid grid-cols-7 gap-y-3 gap-x-1">
           {monthDays.map((d, i) => (
@@ -1708,7 +2105,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
             <div className="h-12 w-12 rounded-2xl bg-[#142d53] flex items-center justify-center text-[#48c1d2] shadow-lg shadow-[#142d53]/20"><Calendar size={20} /></div>
             <div>
               <h4 className="text-[9px] font-bold text-slate-400 tracking-widest mb-1">Estrategia Enfocada</h4>
-              <p className="text-xl font-bold text-[#142d53] italic tracking-tighter">Día {selectedDate} de Abril</p>
+              <p className="text-xl font-bold text-[#142d53] italic tracking-tighter">Día {selectedDate} de {capitalizedMonth}</p>
             </div>
           </div>
           {contentDB[selectedDate] && <div className={`px-4 py-2 rounded-2xl text-[8px] font-bold ${contentDB[selectedDate].status === 'Publicado' ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-slate-100 text-slate-400'}`}>{contentDB[selectedDate].status}</div>}
@@ -1876,19 +2273,19 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
   const [analytics, setAnalytics] = useState([
     {
       month: 'Abril 2026',
-      week: 1,
-      totalViews: '0',
-      topVideo: '---',
-      growth: '0%',
-      insights: '',
+      week: 4,
+      totalViews: '21.7k',
+      topVideo: 'Utah Roof Wash in action',
+      growth: '+14%',
+      insights: '• ¡VIRALIDAD REAL! El video "Utah Roof Wash" alcanzó 21.7k vistas con una estrategia de LOOP PERFECTO.\n• FÓRMULA DE ÉXITO: Duración de 5 segundos + Clips ultra-dinámicos (<1s) que fuerzan la repetición.\n• ASMR SATISFACTORIO: El sonido de la hidrolavadora como protagonista genera una retención altísima.\n• RECOMENDACIÓN PRO: Repetir el formato POV corto (5-7s) en cada obra. La clave es la edición rápida y el sonido real del trabajo.',
       images_reels: [],
       images_account: [],
-      alcance: '0',
-      seguidores: '0',
-      interacciones: '0',
-      repro_reels: '0',
-      compartidos: '0',
-      guardados: '0'
+      alcance: '21 mil',
+      seguidores: '11',
+      interacciones: '360',
+      repro_reels: '21.7k',
+      compartidos: '15',
+      guardados: '9'
     }
   ]);
 
@@ -1938,6 +2335,20 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
             images_account: []
           }]);
         }
+
+        // MILESTONE OVERRIDE: Priorizar éxito viral de Abril
+        if (cleanMonth === 'Abril') {
+           setAnalytics(prev => [{
+             ...prev[0],
+             totalViews: '21.7k',
+             repro_reels: '21.7k',
+             interacciones: '360',
+             alcance: '21 mil',
+             seguidores: '11',
+             totalCuenta: '85',
+             insights: '• ¡VIRALIDAD REAL! El video "Utah Roof Wash" alcanzó 21.7k vistas con una estrategia de LOOP PERFECTO.\n• FÓRMULA DE ÉXITO: Duración de 5 segundos + Clips ultra-dinámicos (<1s) que fuerzan la repetición.\n• ASMR SATISFACTORIO: El sonido de la hidrolavadora como protagonista genera una retención altísima.\n• RECOMENDACIÓN PRO: Repetir el formato POV corto (5-7s) en cada obra. La clave es la edición rápida y el sonido real del trabajo.'
+           }]);
+        }
       } catch (err) {
         console.error("Critical Load Error:", err);
       }
@@ -1946,9 +2357,9 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
   }, [selectedAnalyticsMonth, selectedAnalyticsWeek]);
 
   useEffect(() => {
-    const defaultInsights = '• ¡Estamos rompiendo la burbuja! El 56% de la audiencia son personas que NO te seguían.\n• Logramos 123 visitas al perfil, lo cual demuestra una intención de compra real muy alta.\n• Recomendación: Seguir con videos satisfactorios pero invitar a ver el link del perfil.';
+    const defaultInsights = '• ¡VIRALIDAD ALCANZADA! El video POV "Walking on a masterpiece" rompió el algoritmo con 22.6k vistas.\n• La clave fue el GANCHO VISUAL: La gente se detiene por el contraste y la sensación de lujo.\n• REPLICAR EL ÉXITO: Necesitamos más tomas inmersivas 0.5x caminando sobre los acabados finales.\n• AUDIENCIA PREMIUM: Hemos atraído seguidores de cuentas verificadas, elevando el estatus de la marca.';
     
-    if (!analytics[0].insights) {
+    if (!analytics[0].insights || analytics[0].insights.includes('rompiendo la burbuja')) {
       setAnalytics(prev => [{ ...prev[0], insights: defaultInsights }]);
     }
   }, [selectedAnalyticsMonth, selectedAnalyticsWeek]);
@@ -2176,15 +2587,15 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
         className="space-y-8 animate-in slide-in-from-bottom-4 duration-700 text-left pb-0"
       >
         <div className="flex flex-col gap-6">
-          <button onClick={() => handleSetView('meses')} className="flex items-center gap-2 text-[#142d53] text-[9px] font-bold tracking-widest">
-            <ChevronRight className="rotate-180" size={12} /> volver al repositorio
+          <button onClick={() => handleSetView('meses')} className="flex items-center gap-2 text-[#142d53] text-xs font-black uppercase tracking-widest">
+            <ChevronRight className="rotate-180" size={14} /> VOLVER AL REPOSITORIO
           </button>
           
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
              <div className="space-y-1">
-                <h3 className="text-3xl font-black text-[#142d53] tracking-tighter">laboratorio de éxito</h3>
-                <p className="text-[10px] font-bold text-slate-400 tracking-widest">
-                  {selectedAnalyticsMonth === 'Abril' ? 'rango: 23 mar - 22 abr' : 'reporte estratégico mensual'}
+                <h3 className="text-3xl font-black text-[#142d53] tracking-tighter uppercase">LABORATORIO DE ÉXITO</h3>
+                <p className="text-[11px] font-bold text-slate-400 tracking-widest uppercase">
+                  {selectedAnalyticsMonth === 'Abril' ? 'rango: 30 mar - 29 abr' : 'reporte estratégico mensual'}
                 </p>
              </div>
              
@@ -2193,16 +2604,16 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                   <button 
                     key={m} 
                     onClick={() => handleSetMonth(m)}
-                    className={`px-6 py-3 rounded-lg text-[10px] font-black tracking-widest transition-all ${selectedAnalyticsMonth === m ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
+                    className={`flex-1 px-4 py-3 rounded-xl text-[11px] font-black tracking-[2px] transition-all ${selectedAnalyticsMonth === m ? 'bg-[#142d53] text-[#48c1d2] shadow-lg scale-105' : 'text-slate-400 hover:text-slate-600'}`}
                   >
-                    {m.toLowerCase()}
+                    {m.toUpperCase()}
                   </button>
                 ))}
              </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 items-start">
            {/* Visualizador de Galería Vertical */}
            <div 
              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -2232,7 +2643,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                     </div>
                   </div>
                 ) : (
-                  <div className="min-h-[600px] flex flex-col items-center justify-center text-slate-400 p-12 text-center">
+                  <div className="flex flex-col items-center justify-center text-slate-400 p-12 text-center">
                     <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mb-6">
                         <TrendingUp size={40} className="opacity-30" />
                     </div>
@@ -2253,10 +2664,10 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                        <Video size={40} className="text-[#142d53]" />
                     </div>
-                    <span className="text-[8px] font-black text-slate-400 tracking-widest block mb-1">impacto visual</span>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">impacto visual</span>
                     <p className="text-2xl font-black text-[#142d53] tracking-tighter">{analytics[0].totalViews}</p>
-                    <div className="mt-2 text-[7px] font-bold text-slate-400 leading-tight tracking-widest">
-                       reproducciones totales en la semana
+                    <div className="mt-2 text-xs font-bold text-slate-400 leading-tight tracking-widest uppercase">
+                       reproducciones totales
                     </div>
                  </div>
 
@@ -2265,10 +2676,10 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                        <Users size={40} className="text-[#48c1d2]" />
                     </div>
-                    <span className="text-[8px] font-black text-slate-400 tracking-widest block mb-1">alcance real</span>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">alcance real</span>
                     <p className="text-2xl font-black text-[#48c1d2] tracking-tighter">{analytics[0].alcance}</p>
-                    <div className="mt-2 text-[7px] font-bold text-green-500 leading-tight tracking-widest">
-                       personas únicas alcanzadas
+                    <div className="mt-2 text-xs font-bold text-green-600 leading-tight tracking-widest uppercase">
+                       personas únicas
                     </div>
                  </div>
 
@@ -2277,10 +2688,10 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                        <User size={40} className="text-blue-500" />
                     </div>
-                    <span className="text-[8px] font-black text-slate-400 tracking-widest block mb-1">interés comercial</span>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">interés comercial</span>
                     <p className="text-2xl font-black text-blue-500 tracking-tighter">{analytics[0].interacciones}</p>
-                    <div className="mt-2 text-[7px] font-bold text-blue-400 leading-tight tracking-widest">
-                       visitas directas a tu perfil
+                    <div className="mt-2 text-xs font-bold text-blue-400 leading-tight tracking-widest uppercase">
+                       visitas al perfil
                     </div>
                  </div>
 
@@ -2289,10 +2700,10 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                        <Share2 size={40} className="text-purple-500" />
                     </div>
-                    <span className="text-[8px] font-black text-slate-400 tracking-widest block mb-1">factor viral</span>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">factor viral</span>
                     <p className="text-2xl font-black text-purple-500 tracking-tighter">{parseInt(analytics[0].compartidos) + parseInt(analytics[0].guardados) || 0}</p>
-                    <div className="mt-2 text-[7px] font-bold text-purple-400 leading-tight tracking-widest">
-                       gente recomendando tu marca
+                    <div className="mt-2 text-xs font-bold text-purple-400 leading-tight tracking-widest uppercase">
+                       recomendaciones
                     </div>
                  </div>
               </div>
@@ -2307,7 +2718,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                        </div>
                        <div>
                           <h4 className="text-xs font-black text-[#48c1d2] tracking-[0.2em] uppercase">análisis de la estratega</h4>
-                          <p className="text-[8px] font-bold text-white/30 tracking-[0.4em] mt-1 uppercase">foco: prospección masiva</p>
+                          <p className="text-[10px] font-bold text-white/30 tracking-[0.4em] mt-1 uppercase">foco: prospección masiva</p>
                        </div>
                     </div>
                     
@@ -2327,12 +2738,12 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
               {/* Nuevos Seguidores */}
               <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden flex items-center justify-between">
                  <div>
-                    <span className="text-[8px] font-black text-slate-400 tracking-widest block mb-1">crecimiento de comunidad</span>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">crecimiento de comunidad</span>
                     <p className="text-2xl font-black text-[#48c1d2] tracking-tighter">+{analytics[0].seguidores} seguidores ganados</p>
                  </div>
                  <div className="text-right">
-                    <span className="text-[8px] font-black text-slate-400 tracking-widest block mb-1">total en cuenta</span>
-                    <p className="text-xl font-black text-[#142d53] tracking-tighter">{selectedAnalyticsWeek === 5 ? '74' : '76'}</p>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">total en cuenta</span>
+                    <p className="text-xl font-black text-[#142d53] tracking-tighter">85</p>
                  </div>
               </div>
            </div>
@@ -2363,11 +2774,14 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
               </div>
               <div>
                 <h4 className="text-xl font-black text-white italic tracking-tighter uppercase">Laboratorio de Rendimiento</h4>
-                <span className="text-[8px] font-bold text-[#48c1d2] uppercase tracking-[0.3em]">Analítica Estratégica</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold text-[#48c1d2] uppercase tracking-[0.3em]">Analítica Estratégica</span>
+                  <span className="px-2 py-0.5 bg-green-500 text-[8px] font-black text-[#142d53] rounded-full animate-pulse">¡VIRAL!</span>
+                </div>
               </div>
             </div>
             <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-              <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest leading-relaxed">
+              <p className="text-xs font-bold text-white/70 uppercase tracking-widest leading-relaxed">
                 <span className="text-[#48c1d2]">Tu Brújula de Éxito:</span> Aquí es donde medimos qué tan bien están funcionando tus videos. Sube tus capturas de Instagram y nosotros analizaremos el crecimiento de Epotech para ajustar los próximos guiones y atraer más clientes reales.
               </p>
             </div>
@@ -2384,7 +2798,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
               <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
                 <Mic size={14} className="text-[#48c1d2]" />
               </div>
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Tu Reporte Pro</h3>
+              <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Tu Reporte Pro</h3>
             </div>
             <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{audioReports.length} nota{audioReports.length !== 1 ? 's' : ''}</span>
           </div>
@@ -2399,8 +2813,8 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                 <div key={report.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-white/10 space-y-3">
                   <div className="flex items-center justify-between px-1">
                     <div>
-                      <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest">Reporte de Campo</span>
-                      <p className="text-[10px] font-bold text-white/60">{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                      <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">Reporte de Campo</span>
+                      <p className="text-[11px] font-bold text-white/60 uppercase">{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-[9px] font-bold text-white/40 uppercase">{report.duracion || ''}</span>
@@ -2426,7 +2840,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
               <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
                 <BookOpen size={14} className="text-[#48c1d2]" />
               </div>
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Locuciones de Guiones</h3>
+              <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Locuciones de Guiones</h3>
             </div>
             <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{locuciones.length} locución{locuciones.length !== 1 ? 'es' : ''}</span>
           </div>
@@ -2441,9 +2855,9 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                 <div key={loc.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-[#48c1d2]/10 space-y-3">
                   <div className="flex items-center justify-between px-1">
                     <div className="flex-1 min-w-0 mr-3">
-                      <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
-                      <p className="text-xs font-black text-white truncate leading-tight">{loc.script_title}</p>
-                      <p className="text-[9px] font-bold text-white/40">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                      <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
+                      <p className="text-sm font-black text-white uppercase italic truncate leading-tight">{loc.script_title}</p>
+                      <p className="text-[10px] font-bold text-white/40 uppercase">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
                     <button onClick={() => handleDeleteLocucion(loc.id, loc.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20 shrink-0">
                       <Trash2 size={12} />
@@ -2467,7 +2881,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
            <div className="absolute inset-0 bg-gradient-to-r from-[#48c1d2]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
            <div className="flex items-center gap-6 relative z-10">
               <div className="w-16 h-16 bg-[#48c1d2]/10 rounded-3xl flex items-center justify-center text-[#48c1d2]"><History size={32} /></div>
-              <div className="text-left"><h4 className="text-2xl font-black text-white italic tracking-tighter uppercase">Abril 2026</h4><p className="text-[10px] font-black text-[#48c1d2] tracking-widest mt-1 uppercase">{publishedPosts.length} Publicaciones listas</p></div>
+              <div className="text-left"><h4 className="text-2xl font-black text-white italic tracking-tighter uppercase">Abril 2026</h4><p className="text-[12px] font-black text-[#48c1d2] tracking-widest mt-1 uppercase">85 SEGUIDORES • {publishedPosts.length} VIDEOS</p></div>
            </div>
            <ChevronRight className="text-white/20 group-hover:text-white/60 transition-all" />
         </button>
@@ -2509,8 +2923,8 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
         {postsInSelectedWeek.map(([day, post]: any) => (
           <div key={day} onClick={() => onSelect(day)} style={{ backgroundColor: '#142d53' }} className="p-6 rounded-[3rem] shadow-xl flex flex-col gap-4 border border-white/5 cursor-pointer hover:scale-[1.02] transition-all group">
             <div className="flex items-center gap-6">
-              <div className="h-16 w-16 rounded-[1.5rem] bg-[#48c1d2] flex flex-col items-center justify-center text-[#142d53] shrink-0 shadow-lg shadow-[#48c1d2]/20"><span className="text-[12px] font-black leading-none">{day}</span><span className="text-[7px] font-black uppercase opacity-60">ABRIL</span></div>
-              <div className="flex-1 min-w-0 text-left"><span className="text-[7px] font-black text-[#48c1d2] uppercase tracking-widest">{post.type}</span><h4 className="text-sm font-black text-white uppercase italic truncate mt-0.5">{post.title}</h4><p className="text-[10px] font-bold text-white/40 italic mt-1 line-clamp-1 opacity-60">"{post.desc}"</p></div>
+              <div className="h-16 w-16 rounded-[1.5rem] bg-[#48c1d2] flex flex-col items-center justify-center text-[#142d53] shrink-0 shadow-lg shadow-[#48c1d2]/20"><span className="text-lg font-black leading-none">{day}</span><span className="text-[9px] font-black uppercase opacity-60">ABRIL</span></div>
+              <div className="flex-1 min-w-0 text-left"><span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest">{post.type}</span><h4 className="text-sm font-black text-white uppercase italic truncate mt-0.5">{post.title}</h4><p className="text-xs font-bold text-white/40 italic mt-1 line-clamp-1 opacity-60">"{post.desc}"</p></div>
               <CheckCircle2 size={24} className="text-[#48c1d2] mr-2" />
             </div>
 
@@ -2558,4 +2972,6 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
     </div>
   );
 }
+
+
 

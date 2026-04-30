@@ -37,68 +37,64 @@ export function VideoCard({
   const isTiktok = platform === "tiktok";
 
   return (
-    <div className="group relative aspect-[9/16] md:aspect-auto md:h-[450px] flex flex-col bg-[#142d53] rounded-[2.5rem] border border-white/5 hover:border-[#48c1d2]/50 transition-all duration-700 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] overflow-hidden shadow-2xl">
+    <div className="group relative flex flex-col bg-[#142d53] rounded-[2rem] border border-white/5 hover:border-[#48c1d2]/50 transition-all duration-700 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] overflow-hidden shadow-2xl">
       
-      {/* Visual Frame (Simulado) */}
-      <div className="relative h-48 md:h-56 bg-slate-900 overflow-hidden">
+      {/* Visual Frame (Simulado) - Super Compacto */}
+      <div className="relative h-32 bg-slate-900 overflow-hidden">
         {/* Gradiente de video */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#142d53] via-transparent to-black/20 z-10" />
         
         {/* Placeholder de Video Style */}
         <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity duration-700">
-           <Play size={64} fill="white" className="text-white" />
+           <Play size={32} fill="white" className="text-white" />
         </div>
 
         {/* Platform Badge */}
         <div className="absolute top-4 left-4 z-20">
-           <div className={`p-2 rounded-xl backdrop-blur-md border border-white/20 shadow-xl ${
+           <div className={`p-1 rounded-lg backdrop-blur-md border border-white/20 shadow-xl ${
              isIg ? 'bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-500 text-white' : 
              isTiktok ? 'bg-black text-white' : 'bg-red-600 text-white'
            }`}>
-             {isIg ? <InstagramIcon size={16} /> : isTiktok ? <TiktokIcon size={16} /> : <Play size={16} />}
+             {isIg ? <InstagramIcon size={10} /> : isTiktok ? <TiktokIcon size={10} /> : <Play size={10} />}
            </div>
         </div>
 
         {/* Título sobre el "Video" */}
-        <div className="absolute bottom-4 left-6 right-6 z-20">
-           <h3 className="text-base font-black text-white leading-tight tracking-tight uppercase italic line-clamp-2">
+        <div className="absolute bottom-2 left-4 right-4 z-20">
+           <h3 className="text-xs font-black text-white leading-tight tracking-tight uppercase italic line-clamp-1">
              {titleEs}
            </h3>
         </div>
       </div>
 
       {/* Production Insights (Glassmorphism) */}
-      <div className="p-6 flex-1 flex flex-col justify-between relative z-20">
-        <div className="space-y-4">
-          {/* Fuerte (Hook) */}
-          <div className="bg-[#48c1d2]/10 rounded-2xl p-4 border border-[#48c1d2]/20 relative overflow-hidden group/hook">
-            <div className="absolute top-0 right-0 p-2 opacity-5">
-               <Zap size={40} fill="currentColor" className="text-[#48c1d2]" />
-            </div>
-            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-[#48c1d2] mb-2 block font-mono">Hook Maestro</span>
-            <p className="text-xs font-bold text-blue-100 leading-snug italic">"{fuerte}"</p>
+      <div className="p-4 flex flex-col gap-3 relative z-20">
+        {/* Fuerte (Hook) */}
+        <div className="bg-[#48c1d2]/10 rounded-xl p-3 border border-[#48c1d2]/20 relative overflow-hidden group/hook">
+          <div className="absolute top-0 right-0 p-1 opacity-5">
+             <Zap size={24} fill="currentColor" className="text-[#48c1d2]" />
           </div>
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#48c1d2] mb-1 block font-mono">Hook Maestro</span>
+          <p className="text-xs font-bold text-blue-100 leading-tight italic">"{fuerte}"</p>
+        </div>
 
-          {/* Analisis (Director's Notes) */}
-          <div className="px-2">
-            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30 mb-2 block font-mono">Análisis Hedy</span>
-            <p className="text-[11px] font-medium text-white/60 leading-relaxed italic line-clamp-4">
-              "{porqueFunciona}"
-            </p>
-          </div>
+        {/* Analisis (Director's Notes) */}
+        <div className="px-1">
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30 mb-1 block font-mono">Análisis Hedy</span>
+          <p className="text-xs font-medium text-white/60 leading-tight italic line-clamp-3">
+            "{porqueFunciona}"
+          </p>
         </div>
 
         {/* Action Link */}
-        <div className="mt-6">
-          <a 
-            href={url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center justify-between w-full p-4 rounded-2xl bg-white/5 hover:bg-[#48c1d2] text-white hover:text-[#142d53] border border-white/10 hover:border-transparent text-[10px] font-black uppercase tracking-widest transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(72,193,210,0.3)]"
-          >
-            Ver Referencia <ExternalLink size={14} />
-          </a>
-        </div>
+        <a 
+          href={url} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center justify-between w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-[#48c1d2] text-white hover:text-[#142d53] border border-white/10 hover:border-transparent text-[9px] font-black uppercase tracking-widest transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(72,193,210,0.3)] mt-1"
+        >
+          Ver Referencia <ExternalLink size={12} />
+        </a>
       </div>
 
       {/* Decoración Cine */}

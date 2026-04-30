@@ -41,32 +41,42 @@ export default function ManualPage() {
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
 
   useEffect(() => {
-    async function fetchData() {
-      const { data: mData } = await supabase
-        .from("config_manual")
-        .select("*")
-        .maybeSingle();
-      
-      const fallback = {
-        regla_oro: staticManual.regla.ruleEs,
-        haz_list: staticManual.comoGrabar.haz.map(h => h.es),
-        evita_list: staticManual.comoGrabar.evita.map(e => e.es),
-        fases: staticManual.fases
-      };
+    // Failsafe: 3 segundos max de carga
+    const timer = setTimeout(() => setLoading(false), 3000);
 
-      if (mData) {
-        setData({
-          regla_oro: mData.regla_oro || fallback.regla_oro,
-          haz_list: (mData.haz_list && mData.haz_list.length > 0) ? mData.haz_list : fallback.haz_list,
-          evita_list: (mData.evita_list && mData.evita_list.length > 0) ? mData.evita_list : fallback.evita_list,
-          fases: (mData.fases && mData.fases.length > 0) ? mData.fases : fallback.fases
-        });
-      } else {
-        setData(fallback);
+    async function fetchData() {
+      try {
+        const { data: mData } = await supabase
+          .from("config_manual")
+          .select("*")
+          .maybeSingle();
+        
+        const fallback = {
+          regla_oro: staticManual.regla.ruleEs,
+          haz_list: staticManual.comoGrabar.haz.map(h => h.es),
+          evita_list: staticManual.comoGrabar.evita.map(e => e.es),
+          fases: staticManual.fases
+        };
+
+        if (mData) {
+          setData({
+            regla_oro: mData.regla_oro || fallback.regla_oro,
+            haz_list: (mData.haz_list && mData.haz_list.length > 0) ? mData.haz_list : fallback.haz_list,
+            evita_list: (mData.evita_list && mData.evita_list.length > 0) ? mData.evita_list : fallback.evita_list,
+            fases: (mData.fases && mData.fases.length > 0) ? mData.fases : fallback.fases
+          });
+        } else {
+          setData(fallback);
+        }
+      } catch (error) {
+        console.error("Error loading manual:", error);
+      } finally {
+        setLoading(false);
+        clearTimeout(timer);
       }
-      setLoading(false);
     }
     fetchData();
+    return () => clearTimeout(timer);
   }, []);
 
   if (loading) return <LoadingSpinner message="Cargando protocolos..." />;
@@ -86,8 +96,8 @@ export default function ManualPage() {
           Guía de Grabación Master
         </h1>
         <div className="bg-white/50 border border-slate-200 p-4 rounded-2xl w-full">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[var(--accent)]">Tu Escuela de Cine Personal:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes en el sitio transmita la autoridad de una empresa líder en Utah. El profesionalismo visual genera confianza inmediata.
+          <p className="text-[13px] font-bold text-slate-500 uppercase tracking-tight leading-relaxed">
+            <span className="text-[var(--accent)] font-black">Tu Escuela de Cine Personal:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes en el sitio transmita la autoridad de una empresa líder en Utah. El profesionalismo visual genera confianza inmediata.
           </p>
         </div>
       </header>
@@ -98,14 +108,14 @@ export default function ManualPage() {
           <div className="bg-white/20 p-2 rounded-xl"><Trophy size={18} /></div>
           <h4 className="text-lg font-black tracking-tight">Nuestra Estrategia</h4>
         </div>
-        <p className="text-[11px] font-bold leading-snug mb-4">
+        <p className="text-sm font-bold leading-tight mb-4">
           Documental Real: Menos anuncios falsos, más realidad y autoridad.
         </p>
         
         <a 
           href="https://www.tiktok.com/@allsidespressurewashing" 
           target="_blank" 
-          className="inline-flex items-center gap-2 bg-[#142d53] text-[#48c1d2] px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all mb-6 shadow-lg"
+          className="inline-flex items-center gap-2 bg-[#142d53] text-[#48c1d2] px-6 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all mb-6 shadow-lg"
         >
           <Smartphone size={14} /> Ver Referencia
         </a>
@@ -120,10 +130,10 @@ export default function ManualPage() {
                 { step: "4. Narración del Guion", desc: "Abre el guion en la app, lee cada escena en el teleprompter y graba tu voz en off. Cuando termines, envíanoslo con un clic." }
               ].map((s, idx) => (
                 <div key={idx} className="flex items-start gap-3 bg-white/10 p-4 rounded-xl border border-white/20">
-                  <span className="text-lg font-black opacity-30 leading-none mt-0.5">{idx + 1}</span>
+                  <span className="text-xl font-black opacity-30 leading-none mt-0.5">{idx + 1}</span>
                   <div>
-                    <p className="text-[10px] font-black uppercase leading-none mb-1.5">{s.step}</p>
-                    <p className="text-[9px] font-bold opacity-80 leading-relaxed">{s.desc}</p>
+                    <p className="text-xs font-black uppercase leading-none mb-1.5">{s.step}</p>
+                    <p className="text-[11px] font-bold opacity-90 leading-tight">{s.desc}</p>
                   </div>
                 </div>
               ))}
@@ -138,7 +148,7 @@ export default function ManualPage() {
         <div className="absolute -right-6 -bottom-6 opacity-10 group-hover:opacity-20 transition-opacity">
           <Zap size={120} />
         </div>
-        <h3 className="text-[8px] font-black uppercase tracking-[0.3em] text-[var(--accent)] mb-2">La Regla de Oro Mundial</h3>
+        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)] mb-2">La Regla de Oro Mundial</h3>
         <p className="text-lg font-black italic leading-tight text-balance">
           "{data.regla_oro}"
         </p>
@@ -162,7 +172,7 @@ export default function ManualPage() {
               <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? "bg-[var(--accent)] text-white" : "bg-white border"}`}>
                 <Icon size={14} />
               </div>
-              <span className="text-[8px] font-black uppercase tracking-widest text-left leading-tight">
+              <span className="text-[10px] font-black uppercase tracking-widest text-left leading-tight">
                 {fase.titulo}
               </span>
             </button>
@@ -186,14 +196,14 @@ export default function ManualPage() {
                   </div>
                   <div>
                     <h3 className="text-xl font-black text-[var(--primary)] tracking-tighter">{fase.titulo}</h3>
-                    <p className="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-0.5">Checklist de grabación</p>
+                    <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-0.5">Checklist de grabación</p>
                   </div>
                 </div>
 
-                <div className="mb-6 bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50">
-                  <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-relaxed">
-                    <span className="bg-blue-600 text-white px-2 py-0.5 rounded mr-2">GUÍA ACTIVA:</span>
-                    Si no sabes cómo capturar alguno de estos clips, haz clic en el botón <span className="italic text-blue-800">"¿CÓMO GRABARLO?"</span> al lado de cada paso para recibir una instrucción táctica.
+                <div className="mb-6 bg-blue-50/50 p-5 rounded-2xl border border-blue-100/50">
+                  <p className="text-xs font-bold text-blue-600 uppercase tracking-tight leading-relaxed">
+                    <span className="inline-block bg-blue-600 text-white px-2 py-1 rounded mr-3 mb-1">GUÍA ACTIVA:</span>
+                    Si no sabes cómo capturar alguno de estos clips, haz clic en el botón <span className="italic text-blue-800 font-black">"¿CÓMO GRABARLO?"</span> al lado de cada paso.
                   </p>
                 </div>
 
@@ -209,7 +219,7 @@ export default function ManualPage() {
                           {item.tooltip && (
                             <button
                               onClick={() => setActiveTooltip(activeTooltip === idx ? null : idx)}
-                              className="shrink-0 px-3 py-1 bg-[#142d53] hover:bg-[#48c1d2] text-white text-[7px] font-black uppercase rounded-lg transition-all shadow-lg flex items-center gap-1 active:scale-95"
+                              className="shrink-0 px-3 py-1.5 bg-[#142d53] hover:bg-[#48c1d2] text-white text-[9px] font-black uppercase rounded-lg transition-all shadow-lg flex items-center gap-1 active:scale-95"
                             >
                               <HelpCircle size={10} /> ¿CÓMO GRABARLO?
                             </button>
@@ -233,7 +243,7 @@ export default function ManualPage() {
                   <div className="bg-amber-100 p-1.5 rounded-lg text-amber-600">
                     <AlertCircle size={14} />
                   </div>
-                  <p className="text-[9px] font-black text-amber-900 uppercase tracking-widest leading-tight">
+                  <p className="text-[11px] font-black text-amber-900 uppercase tracking-tight leading-tight">
                     Consejo Pro: Los clips deben durar máximo 5 segundos para que sean dinámicos.
                   </p>
                 </div>

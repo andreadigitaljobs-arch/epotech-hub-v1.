@@ -76,6 +76,11 @@ export const manual = {
     haz: [
       { en: "Record vertically with normal camera (1x) NO ZOOM", es: "Graba vertical con CÁMARA NORMAL EN 1X (Sin zoom)" },
       { en: "Use iPhone 17 or MagSafe neck mount", es: "Usa iPhone 17 o base de cuello con MagSafe para mayor calidad" },
+      { en: "Take many POV shots with your phone", es: "Haz muchas tomas POV con tu teléfono (Inmersión total)" },
+      { en: "Document the process: truck, gear, and arrival", es: "Graba el proceso real: subiendo a la camioneta, bajando herramientas y llegada al sitio." },
+      { en: "Record each other: captures Jenkryfer and team", es: "Grábense mutuamente: si Jenkryfer te acompaña, grábense en acción el uno al otro." },
+      { en: "Use iPhone 17 dual camera (front and back)", es: "Graba con la doble cámara del iPhone 17 (Delantera y trasera)" },
+      { en: "Leverage 0.5x wide angle for space context", es: "Aprovecha el 0.5 (Gran Angular) para tomas abiertas de espacios" },
       { en: "Short clips per room/area", es: "Tomas cortas por habitación (Muchos mini videos son mejor que uno largo)" },
       { en: "Find good lighting & High Quality", es: "Prioriza demasiado la nitidez y calidad visual" },
       { en: "Leave 2-3 seconds before and after", es: "Deja 2 o 3 segundos antes y después de cada toma" },
@@ -83,7 +88,6 @@ export const manual = {
     ],
     evita: [
       { en: "Don't use GoPro in horizontal format", es: "Evita usar la GoPro en formato horizontal. Trata de voltear la cámara en vertical para capturar videos nativos. Esto mantiene la calidad excelente para redes sociales." },
-      { en: "NO WIDE ANGLE LENS", es: "Nunca grabar en gran angular (0.5x), distorsiona la toma real" },
       { en: "Moving the phone too fast", es: "Mover demasiado el celular" },
       { en: "Sending only final result videos", es: "Mandar solo videos del resultado final" },
       { en: "Recording everything from one angle", es: "Grabar todo desde un solo ángulo" },

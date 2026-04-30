@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { CheckCircle2, XCircle, AlertCircle, X, Sparkles } from "lucide-react";
+import { CheckCircle2, XCircle, AlertCircle, X } from "lucide-react";
 
 export type ToastType = "success" | "error" | "info";
 
@@ -26,7 +26,7 @@ export function Toast({ message, type, isVisible, onClose }: ToastProps) {
       setShouldRender(true);
       const timer = setTimeout(() => {
         onClose();
-      }, 5000);
+      }, 4000); // 4 segundos es lo ideal
       return () => clearTimeout(timer);
     } else {
       const timer = setTimeout(() => setShouldRender(false), 500);
@@ -38,22 +38,22 @@ export function Toast({ message, type, isVisible, onClose }: ToastProps) {
 
   const config = {
     success: {
-      icon: <CheckCircle2 className="text-[#48c1d2]" size={20} />,
+      icon: <CheckCircle2 className="text-[#48c1d2]" size={18} />,
       bg: "bg-[#142d53]/95",
-      border: "border-[#48c1d2]/50",
+      border: "border-[#48c1d2]/30",
       accent: "bg-[#48c1d2]"
     },
     error: {
-      icon: <XCircle className="text-red-400" size={20} />,
+      icon: <XCircle className="text-red-400" size={18} />,
       bg: "bg-red-950/95",
       border: "border-red-500/50",
       accent: "bg-red-500"
     },
     info: {
-      icon: <AlertCircle className="text-blue-400" size={20} />,
+      icon: <AlertCircle className="text-[#48c1d2]" size={18} />,
       bg: "bg-[#142d53]/95",
-      border: "border-blue-500/50",
-      accent: "bg-blue-500"
+      border: "border-[#48c1d2]/30",
+      accent: "bg-[#48c1d2]"
     }
   };
 
@@ -61,28 +61,33 @@ export function Toast({ message, type, isVisible, onClose }: ToastProps) {
 
   const content = (
     <div 
-      className={`fixed top-10 left-1/2 z-[99999] transition-all duration-500 transform ${
-        isVisible ? "-translate-x-1/2 translate-y-0 opacity-100 scale-100" : "-translate-x-1/2 -translate-y-4 opacity-0 scale-95 pointer-events-none"
+      className={`fixed top-6 left-0 right-0 mx-auto z-[99999] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] transform w-fit ${
+        isVisible 
+          ? "translate-y-0 opacity-100 scale-100" 
+          : "-translate-y-12 opacity-0 scale-90 pointer-events-none"
       }`}
     >
-      <div className={`flex items-center gap-4 px-6 py-4 rounded-2xl ${bg} backdrop-blur-xl border ${border} shadow-2xl shadow-black/20 min-w-[320px] overflow-hidden relative`}>
-        {/* Barra de progreso animada */}
-        <div className={`absolute bottom-0 left-0 h-1 ${accent} transition-all duration-[5000ms] ease-linear`} style={{ width: isVisible ? '100%' : '0%' }} />
+      <div className={`flex items-center gap-4 px-6 py-4 rounded-[2rem] ${bg} backdrop-blur-xl border border-white/10 shadow-2xl min-w-[280px] max-w-[90vw] overflow-hidden relative`}>
+        {/* Barra de progreso animada - se vacía con el tiempo */}
+        <div 
+          className={`absolute bottom-0 left-0 h-[2px] ${accent} opacity-50 transition-all duration-[4000ms] ease-linear`} 
+          style={{ width: isVisible ? '0%' : '100%' }} 
+        />
         
-        <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+        <div className="p-2 rounded-full bg-white/5 border border-white/10 shrink-0">
           {icon}
         </div>
         
-        <div className="flex-1 pr-4">
-          <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-0.5">Notificación Epotech</p>
-          <p className="text-sm font-bold text-white italic leading-tight">{message}</p>
+        <div className="flex-1 pr-6 text-left">
+          <p className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em] mb-0.5 opacity-70 italic">Notificación Epotech</p>
+          <p className="text-xs font-bold text-white italic leading-tight tracking-tight">{message}</p>
         </div>
 
         <button 
           onClick={onClose}
-          className="p-1 hover:bg-white/10 rounded-lg transition-colors text-white/40 absolute top-4 right-4"
+          className="p-1 hover:bg-white/10 rounded-full transition-colors text-white/20 hover:text-white/60 absolute top-4 right-4"
         >
-          <X size={16} />
+          <X size={14} />
         </button>
       </div>
     </div>

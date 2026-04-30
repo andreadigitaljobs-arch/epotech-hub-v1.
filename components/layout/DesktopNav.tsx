@@ -17,7 +17,7 @@ export function DesktopNav() {
   ];
 
   return (
-    <aside className="hidden md:flex w-72 flex-col p-6 h-screen sticky top-0 bg-slate-50/50">
+    <aside className="hidden md:flex w-72 flex-col p-6 h-screen fixed top-0 left-0 bg-slate-50/50 z-50">
       <div className="bg-[#142d53] rounded-[2.5rem] flex-1 flex flex-col p-8 shadow-2xl shadow-[#142d53]/20 border border-white/5 relative overflow-hidden group">
         
         {/* Luces de fondo decorativas */}

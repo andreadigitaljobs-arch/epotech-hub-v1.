@@ -162,48 +162,55 @@ export default function ProyectosPage() {
   const [activeSubTab, setActiveSubTab] = useState<'proyectos' | 'mensajes'>('proyectos');
 
   useEffect(() => {
+    // Failsafe: 3 segundos max de carga
+    const timer = setTimeout(() => setLoading(false), 3000);
+
     async function fetchData() {
-      // Fetch Tasks
-      const { data: tData } = await supabase
-        .from("tareas_servicio")
-        .select("*")
-        .order("orden", { ascending: true });
-      if (tData) {
-         const hasTasks = tData.length > 0;
-         if (!hasTasks) {
-            const rowsToInsert: any[] = [];
-            for (const svc of SERVICES) {
-              INITIAL_TASKS[svc.id]?.forEach((t) =>
-                rowsToInsert.push({
-                  service_id: svc.id,
-                  service_name: svc.name,
-                  tarea: t.tarea,
-                  completada: false,
-                  status: "pendiente",
-                  observacion: null,
-                  orden: t.orden,
-                })
-              );
-            }
-            await supabase.from("tareas_servicio").insert(rowsToInsert);
-            const { data: refreshed } = await supabase.from("tareas_servicio").select("*").order("orden", { ascending: true });
-            setTasks(refreshed || []);
-         } else {
-            setTasks(tData);
-         }
+      try {
+        // Fetch Tasks
+        const { data: tData } = await supabase
+          .from("tareas_servicio")
+          .select("*")
+          .order("orden", { ascending: true });
+        if (tData) {
+           const hasTasks = tData.length > 0;
+           if (!hasTasks) {
+              const rowsToInsert: any[] = [];
+              for (const svc of SERVICES) {
+                INITIAL_TASKS[svc.id]?.forEach((t) =>
+                  rowsToInsert.push({
+                    service_id: svc.id,
+                    service_name: svc.name,
+                    tarea: t.tarea,
+                    completada: false,
+                    status: "pendiente",
+                    observacion: null,
+                    orden: t.orden,
+                  })
+                );
+              }
+              await supabase.from("tareas_servicio").insert(rowsToInsert);
+              const { data: refreshed } = await supabase.from("tareas_servicio").select("*").order("orden", { ascending: true });
+              setTasks(refreshed || []);
+           } else {
+              setTasks(tData);
+           }
+        }
+
+        // Fetch Notifications
+        const { data: nData } = await supabase
+          .from("notificaciones")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(3);
+        if (nData) setNotificaciones(nData);
+      } finally {
+        setLoading(false);
+        clearTimeout(timer);
       }
-
-      // Fetch Notifications
-      const { data: nData } = await supabase
-        .from("notificaciones")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(3);
-      if (nData) setNotificaciones(nData);
-
-      setLoading(false);
     }
     fetchData();
+    return () => clearTimeout(timer);
   }, []);
 
   const formatDate = (dateStr: string) => {
