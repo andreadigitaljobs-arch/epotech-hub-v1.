@@ -21,8 +21,8 @@ const SERVICES = [
     color: "blue",
   },
   {
-    id: "app",
-    name: "App de Seguimiento",
+    id: "hub-app",
+    name: "Epotech Hub (Esta App)",
     description: "La plataforma que Sebastián usa para grabar, publicar y seguir su progreso.",
     Icon: Smartphone,
     color: "indigo",
@@ -31,69 +31,67 @@ const SERVICES = [
   {
     id: "landing",
     name: "Landing Page",
-    description: "Página de aterrizaje de alta conversión para Epotech Solutions.",
+    description: "Nueva plataforma web optimizada para captar clientes de limpieza de ventanas y lavado a presión.",
     Icon: Layout,
     color: "purple",
   },
   {
     id: "google-ads",
-    name: "Google Ads",
-    description: "Campañas de publicidad pagada para captar clientes que ya están buscando el servicio.",
+    name: "Google Business",
+    description: "Gestión de perfil comercial, reseñas y posicionamiento local en Google Maps.",
     Icon: TrendingUp,
     color: "orange",
   },
   {
-    id: "seo",
-    name: "Posicionamiento SEO",
-    description: "Optimización para que Epotech Solutions aparezca primero en Google de forma orgánica.",
-    Icon: Search,
-    color: "teal",
+    id: "social-media",
+    name: "Redes Sociales",
+    description: "Estrategia de contenido orgánico, viralización y gestión de comunidad en IG, FB y TikTok.",
+    Icon: MessageSquare,
+    color: "pink",
   },
 ];
 
 // ─── Initial tasks per service (seeded once if table is empty) ───────────────
-const INITIAL_TASKS: Record<string, { tarea: string; orden: number }[]> = {
+const INITIAL_TASKS: Record<string, { tarea: string; orden: number; status?: TaskStatus; observacion?: string | null }[]> = {
   crm: [
-    { tarea: "Configurar pipeline de clientes potenciales", orden: 1 },
-    { tarea: "Activar automatización de correos de seguimiento", orden: 2 },
-    { tarea: "Integrar formulario de captura con CRM", orden: 3 },
-    { tarea: "Configurar etiquetas y categorías de clientes", orden: 4 },
-    { tarea: "Pruebas finales y entrega al cliente", orden: 5 },
+    { tarea: "Gestión de Clientes & Marketing", status: "completada", observacion: "Fichas de propiedad con métricas de superficie, trazabilidad de origen de leads e historial multimedia completo.", orden: 1 },
+    { tarea: "Centro de Operaciones & Post-Job Wizard", status: "completada", observacion: "Tablero Kanban para control visual de obras y asistente inteligente de cierre con reportes de químicos y presión.", orden: 2 },
+    { tarea: "Inventario Inteligente con Auto-Ajuste", status: "en_proceso", observacion: "Control de maquinaria y herramientas con descuento automático por trabajo y registro de compras de reposición.", orden: 3 },
+    { tarea: "Automatización Financiera & Agenda", status: "en_proceso", observacion: "Caja automática sincronizada con servicios, balance de rentabilidad en tiempo real y calendario visual de cuadrillas.", orden: 4 },
+    { tarea: "Ingeniería de Datos & Estabilidad", status: "completada", observacion: "Implementación de Deep Linking para navegación fluida y blindaje de código (TypeScript) para producción.", orden: 5 },
   ],
-  app: [
-    { tarea: "Diseño de interfaz aprobado", orden: 1 },
-    { tarea: "Sistema de notificaciones push activo", orden: 2 },
-    { tarea: "Sección de contenido y grabación lista", orden: 3 },
-    { tarea: "Panel de administrador (master) completo", orden: 4 },
-    { tarea: "Historial de publicaciones conectado", orden: 5 },
-    { tarea: "Deploy final en producción", orden: 6 },
+  "hub-app": [
+    { tarea: "Estrategia & Brand Brief", status: "completada", observacion: "Integración total de misión, visión y público objetivo para que cada contenido respire el ADN de Epotech.", orden: 1 },
+    { tarea: "Biblioteca de Inspiración Operativa", status: "completada", observacion: "Repositorio de referencias por red social con enlaces directos y análisis de cuentas top.", orden: 2 },
+    { tarea: "Guía de Producción en Terreno", status: "completada", observacion: "Módulo de grabación con esquema de 4 pasos (Antes/Durante/Después/Humano) y tips específicos.", orden: 3 },
+    { tarea: "Estudio de Voz & Historial de Éxitos", status: "completada", observacion: "Sincronización automática de notas de voz, calendario y análisis de viralidad (Caso Abril).", orden: 4 },
+    { tarea: "Centro de Notificaciones & Reporte Diario", status: "completada", observacion: "Alertas push en tiempo real y formulario inteligente para creación reactiva de guiones.", orden: 5 },
+    { tarea: "Triada de Marca (Guiones Finales)", status: "en_proceso", observacion: "Sustitución de borradores por los 3 guiones de presentación final de alta conversión.", orden: 6 },
+    { tarea: "Manual de Usuario y Tutoriales", status: "en_proceso", observacion: "Creación de guías de uso específicas para garantizar la autonomía total de Sebastian.", orden: 7 },
   ],
 
   landing: [
-    { tarea: "Wireframe estratégico aprobado", orden: 1 },
-    { tarea: "Copywriting de la página redactado", orden: 2 },
-    { tarea: "Diseño visual completado", orden: 3 },
-    { tarea: "Integración con formulario de contacto", orden: 4 },
-    { tarea: "SEO básico configurado", orden: 5 },
-    { tarea: "Deploy y pruebas finales", orden: 6 },
+    { tarea: "Rediseño Estratégico Epotech 2026", status: "en_proceso", observacion: "Nueva arquitectura visual y narrativa centrada en la autoridad de marca y experiencia de usuario moderna.", orden: 1 },
+    { tarea: "Integración de Nuevas Verticales", status: "en_proceso", observacion: "Inclusión detallada de los servicios de Pressure Washing y Window Cleaning en la estructura de ventas.", orden: 2 },
+    { tarea: "Optimización de Conversión (CRO)", status: "en_proceso", observacion: "Rediseño de formularios y llamadas a la acción (CTAs) para maximizar la captura de clientes potenciales.", orden: 3 },
+    { tarea: "Despliegue Técnico y Performance", status: "pendiente", observacion: "Publicación de la nueva versión con optimización de velocidad de carga y estabilidad móvil.", orden: 4 },
   ],
   "google-ads": [
-    { tarea: "Definir presupuesto mensual de la campaña", orden: 1 },
-    { tarea: "Investigación de palabras clave (pressure washing Utah)", orden: 2 },
-    { tarea: "Redactar anuncios de texto (3 variantes)", orden: 3 },
-    { tarea: "Configurar segmentación geográfica por zonas de Utah", orden: 4 },
-    { tarea: "Conectar campaña con formulario de captura", orden: 5 },
-    { tarea: "Lanzar campaña y monitorear primeras 48 hrs", orden: 6 },
-    { tarea: "Primer reporte de resultados entregado", orden: 7 },
+    { tarea: "Control y Gestión de Propiedad", status: "completada", observacion: "Acceso total y configuración de administrador para la gestión centralizada de la marca en Google.", orden: 1 },
+    { tarea: "Optimización de Perfil y Servicios", status: "completada", observacion: "Categorización completa de servicios y actualización de información corporativa para máxima relevancia.", orden: 2 },
+    { tarea: "Gestión de Reputación (Reviews)", status: "completada", observacion: "6 reseñas publicadas y respondidas. Implementación de sistema QR y links directos para captación de clientes felices.", orden: 3 },
+    { tarea: "Indexación Visual y Multimedia", status: "completada", observacion: "Biblioteca de fotos (antes/después) y equipo operativo activa. Indexación de Reels de Instagram en resultados de búsqueda.", orden: 4 },
+    { tarea: "SEO Local y Autoridad Digital", status: "completada", observacion: "Posicionamiento en Google Maps, visibilidad ante IAs (Gemini) y presencia optimizada en plataformas externas como Angi.", orden: 5 },
+    { tarea: "Estrategia de Google Ads (Tráfico Pago)", status: "en_proceso", observacion: "Fase de planificación de anuncios de reconocimiento. Pendiente de lanzamiento tras la actualización de la Landing Page.", orden: 6 },
   ],
-  seo: [
-    { tarea: "Auditoría SEO inicial del sitio web actual", orden: 1 },
-    { tarea: "Investigación de palabras clave orgánicas locales", orden: 2 },
-    { tarea: "Optimización de títulos, meta descripciones y H1", orden: 3 },
-    { tarea: "Perfil de Google Business Profile optimizado", orden: 4 },
-    { tarea: "Creación de páginas de servicio por zona (Salt Lake, Provo...)", orden: 5 },
-    { tarea: "Estrategia de backlinks locales activada", orden: 6 },
-    { tarea: "Primer reporte de posicionamiento entregado", orden: 7 },
+  "social-media": [
+    { tarea: "Refrescamiento de Marca & Branding IA", status: "completada", observacion: "Renovación de perfiles (IG/FB/WA) con bio optimizada para SEO y fotos profesionales generadas con IA.", orden: 1 },
+    { tarea: "Estrategia de Contenido Humano (Bye Canva)", status: "completada", observacion: "Transición de diseños genéricos a una comunicación 100% orgánica y humana. Creación de historias 'Work'.", orden: 2 },
+    { tarea: "Producción & Edición Multimedia (Fase 1)", status: "completada", observacion: "Publicación de 13 piezas de alto impacto (10 videos / 3 carousels) editadas con estándares cinematográficos.", orden: 3 },
+    { tarea: "Optimización de Formatos Virales (POV)", status: "completada", observacion: "Identificación y ejecución con éxito del formato 'Point of View' y sonido satisfactorio. Caso: Viral de Techos.", orden: 4 },
+    { tarea: "Omnicanalidad & Crecimiento Orgánico", status: "completada", observacion: "Reactivación y sincronización de Instagram, Facebook y TikTok con una línea coherente y moderna.", orden: 5 },
+    { tarea: "Experimentación de Narrativa 'Voice-over'", status: "en_proceso", observacion: "Implementación de nuevo formato narrado basado en las notas de voz grabadas desde el Hub.", orden: 6 },
+    { tarea: "Ecosistema de Conversión & Catálogo", status: "en_proceso", observacion: "Optimización de WhatsApp Business y preparación de catálogos digitales para conversión.", orden: 7 },
   ],
 };
 
@@ -177,17 +175,17 @@ export default function ProyectosPage() {
            if (!hasTasks) {
               const rowsToInsert: any[] = [];
               for (const svc of SERVICES) {
-                INITIAL_TASKS[svc.id]?.forEach((t) =>
-                  rowsToInsert.push({
-                    service_id: svc.id,
-                    service_name: svc.name,
-                    tarea: t.tarea,
-                    completada: false,
-                    status: "pendiente",
-                    observacion: null,
-                    orden: t.orden,
-                  })
-                );
+                 INITIAL_TASKS[svc.id]?.forEach((t) =>
+                   rowsToInsert.push({
+                     service_id: svc.id,
+                     service_name: svc.name,
+                     tarea: t.tarea,
+                     completada: t.status === "completada",
+                     status: t.status || "pendiente",
+                     observacion: t.observacion || null,
+                     orden: t.orden,
+                   })
+                 );
               }
               await supabase.from("tareas_servicio").insert(rowsToInsert);
               const { data: refreshed } = await supabase.from("tareas_servicio").select("*").order("orden", { ascending: true });
