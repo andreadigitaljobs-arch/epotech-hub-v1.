@@ -164,11 +164,11 @@ export default function ReferenciasPage() {
                      {filteredAccounts.map((account: any) => (
                         <AccountCard 
                            key={account.id}
-                           name={account.nombre}
-                           description={account.descripcion}
-                           platform={account.tipo}
+                           nombre={account.nombre}
+                           fuerte={account.descripcion}
+                           tipo={account.tipo}
                            url={account.url}
-                           porqueSeguirlo={account.porque_seguirlo}
+                           porqueFunciona={account.porque_seguirlo}
                         />
                      ))}
                   </div>
