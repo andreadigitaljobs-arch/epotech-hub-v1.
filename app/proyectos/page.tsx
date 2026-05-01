@@ -303,307 +303,309 @@ export default function ProyectosPage() {
   if (loading) return <LoadingSpinner message="Cargando proyectos..." />;
 
   return (
-    <div className="space-y-6 pb-20">
-      {/* Header */}
-      <header className="mb-8">
-        <div className="flex items-center gap-3 mb-1">
-           <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-           <h1 className="text-3xl font-black text-[#142d53] leading-tight tracking-tighter">
-             ¡Hola, {client.name}! 👋🏻
-           </h1>
-        </div>
-        <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.2em] ml-5">
-          Hoy es un gran día para hacer crecer a Epotech Solutions
-        </p>
-      </header>
-
-      {/* Sub-Tabs Switcher */}
-      <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8 gap-2">
-        <button 
-          onClick={() => setActiveSubTab('proyectos')}
-          className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'proyectos' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
-        >
-          <Rocket size={14} /> Proyectos
-        </button>
-        <button 
-          onClick={() => setActiveSubTab('mensajes')}
-          className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'mensajes' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
-        >
-          <Bell size={14} /> Mensajes {notificaciones.length > 0 && <span className="w-1.5 h-1.5 bg-[#48c1d2] rounded-full animate-pulse" />}
-        </button>
-      </div>
-
-      {activeSubTab === 'proyectos' ? (
-        <>
-          <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-8">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-              <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
-            </p>
+    <div className="max-w-5xl mx-auto px-8 py-12">
+      <div className="space-y-6 pb-20">
+        {/* Header */}
+        <header className="mb-8">
+          <div className="flex items-center gap-3 mb-1">
+             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+             <h1 className="text-3xl font-black text-[#142d53] leading-tight tracking-tighter">
+               ¡Hola, {client.name}! 👋🏻
+             </h1>
           </div>
+          <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.2em] ml-5">
+            Hoy es un gran día para hacer crecer a Epotech Solutions
+          </p>
+        </header>
 
-      {/* Service cards */}
-      <div className="space-y-4">
-        {SERVICES.map((svc) => {
-          const svcTasks = tasks.filter((t) => t.service_id === svc.id);
-          const progress = calcProgress(svcTasks);
-          const done = svcTasks.filter((t) => t.status === "completada").length;
-          const isOpen = expanded === svc.id;
-          const { Icon } = svc;
+        {/* Sub-Tabs Switcher */}
+        <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8 gap-2">
+          <button 
+            onClick={() => setActiveSubTab('proyectos')}
+            className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'proyectos' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
+          >
+            <Rocket size={14} /> Proyectos
+          </button>
+          <button 
+            onClick={() => setActiveSubTab('mensajes')}
+            className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'mensajes' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
+          >
+            <Bell size={14} /> Mensajes {notificaciones.length > 0 && <span className="w-1.5 h-1.5 bg-[#48c1d2] rounded-full animate-pulse" />}
+          </button>
+        </div>
 
-          return (
-            <div
-              key={svc.id}
-              className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden transition-all"
-            >
-              {/* Card header — tap to expand */}
-              <button
-                onClick={() => setExpanded(isOpen ? null : svc.id)}
-                className="w-full p-6 flex items-center gap-4 text-left"
+        {activeSubTab === 'proyectos' ? (
+          <>
+            <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-8">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+                <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
+              </p>
+            </div>
+
+        {/* Service cards */}
+        <div className="space-y-4">
+          {SERVICES.map((svc) => {
+            const svcTasks = tasks.filter((t) => t.service_id === svc.id);
+            const progress = calcProgress(svcTasks);
+            const done = svcTasks.filter((t) => t.status === "completada").length;
+            const isOpen = expanded === svc.id;
+            const { Icon } = svc;
+
+            return (
+              <div
+                key={svc.id}
+                className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden transition-all"
               >
-                <div className="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                  <Icon size={20} className="text-[var(--primary)]" />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <h2 className="text-base font-black text-[var(--primary)] tracking-tight">
-                      {svc.name}
-                    </h2>
-                    <span className="text-[10px] font-black text-[var(--accent)] ml-3 shrink-0">
-                      {done}/{svcTasks.length} listas
-                    </span>
+                {/* Card header — tap to expand */}
+                <button
+                  onClick={() => setExpanded(isOpen ? null : svc.id)}
+                  className="w-full p-6 flex items-center gap-4 text-left"
+                >
+                  <div className="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                    <Icon size={20} className="text-[var(--primary)]" />
                   </div>
 
-                  {/* Progress bar */}
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] rounded-full transition-all duration-700"
-                        style={{ width: `${progress}%` }}
-                      />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <h2 className="text-base font-black text-[var(--primary)] tracking-tight">
+                        {svc.name}
+                      </h2>
+                      <span className="text-[10px] font-black text-[var(--accent)] ml-3 shrink-0">
+                        {done}/{svcTasks.length} listas
+                      </span>
                     </div>
-                    <span className="text-[11px] font-black text-[var(--primary)] w-8 text-right shrink-0">
-                      {progress}%
-                    </span>
-                  </div>
-                </div>
 
-                <div className="shrink-0 text-slate-400 ml-2">
-                  {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                </div>
-              </button>
-
-              {/* Checklist — visible when expanded */}
-              {isOpen && (
-                <div className="border-t border-slate-50 px-6 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-300">
-                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest pt-4 pb-1">
-                    Lista de tareas
-                  </p>
-
-                  {svcTasks.map((task) => {
-                    const obsVal = obsEdits[task.id] ?? task.observacion ?? "";
-                    const isDirty = obsEdits[task.id] !== undefined && obsEdits[task.id] !== (task.observacion ?? "");
-
-                    return (
-                      <div
-                        key={task.id}
-                        className={`rounded-2xl border p-4 space-y-3 transition-colors ${
-                          task.status === "completada"
-                            ? "bg-emerald-50/40 border-emerald-100"
-                            : task.status === "en_proceso"
-                            ? "bg-amber-50/40 border-amber-100"
-                            : "bg-slate-50 border-slate-100"
-                        }`}
-                      >
-                        {/* Task row */}
-                        <div className="flex items-start gap-3">
-                          {/* Status toggle button */}
-                          <button
-                            onClick={() => toggleStatus(task)}
-                            className="shrink-0 mt-0.5 transition-transform active:scale-90"
-                          >
-                            {task.status === "completada" ? (
-                              <CheckCircle2 size={22} className="text-emerald-500" />
-                            ) : task.status === "en_proceso" ? (
-                              <Clock size={22} className="text-amber-500" />
-                            ) : (
-                              <Circle size={22} className="text-slate-300" />
-                            )}
-                          </button>
-
-                          <div className="flex-1 min-w-0">
-                            {editingName === task.id ? (
-                              <input
-                                autoFocus
-                                className="w-full text-sm font-bold text-[var(--primary)] bg-white border border-[var(--accent)] rounded-lg px-2 py-1 outline-none"
-                                value={nameEdits[task.id] ?? task.tarea}
-                                onChange={(e) =>
-                                  setNameEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
-                                }
-                                onBlur={() => saveTaskName(task.id)}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") saveTaskName(task.id);
-                                  if (e.key === "Escape") setEditingName(null);
-                                }}
-                              />
-                            ) : (
-                              <button
-                                onClick={() => {
-                                  setEditingName(task.id);
-                                  setNameEdits((prev) => ({ ...prev, [task.id]: task.tarea }));
-                                }}
-                                className={`text-left text-sm font-bold leading-snug w-full group/name flex items-center gap-1 ${
-                                  task.status === "completada"
-                                    ? "line-through text-slate-400"
-                                    : "text-[var(--primary)]"
-                                }`}
-                              >
-                                {task.tarea}
-                                <Pencil size={10} className="text-slate-300 opacity-0 group-hover/name:opacity-100 transition-opacity shrink-0" />
-                              </button>
-                            )}
-                          </div>
-
-                          {/* Status badge */}
-                          <span
-                            className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg border shrink-0 ${STATUS_COLORS[task.status]}`}
-                          >
-                            {STATUS_LABELS[task.status]}
-                          </span>
-
-                          {/* Delete */}
-                          <button
-                            onClick={() => deleteTask(task.id)}
-                            className="shrink-0 p-1 text-slate-200 hover:text-red-400 transition-colors"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-
-                        {/* Observation field */}
-                        <div className="pl-9 space-y-2">
-                          <div className="flex items-center gap-2">
-                            <MessageSquare size={11} className="text-slate-400" />
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                              Observación
-                            </span>
-                          </div>
-                          <div className="flex gap-2">
-                            <textarea
-                              rows={2}
-                              placeholder="Ej: Faltó conectar el webhook, retomamos mañana..."
-                              className="flex-1 text-[11px] font-medium text-slate-600 bg-white border border-slate-200 rounded-xl p-3 resize-none outline-none focus:border-[var(--accent)] transition-all placeholder:text-slate-300"
-                              value={obsVal}
-                              onChange={(e) =>
-                                setObsEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
-                              }
-                            />
-                            {isDirty && (
-                              <button
-                                onClick={() => saveObs(task.id)}
-                                disabled={savingObs === task.id}
-                                className="shrink-0 self-end px-3 py-3 bg-[var(--accent)] text-white rounded-xl active:scale-95 transition-all disabled:opacity-50"
-                              >
-                                {savingObs === task.id ? (
-                                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                ) : (
-                                  <Save size={14} />
-                                )}
-                              </button>
-                            )}
-                          </div>
-                        </div>
+                    {/* Progress bar */}
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] rounded-full transition-all duration-700"
+                          style={{ width: `${progress}%` }}
+                        />
                       </div>
-                    );
-                  })}
+                      <span className="text-[11px] font-black text-[var(--primary)] w-8 text-right shrink-0">
+                        {progress}%
+                      </span>
+                    </div>
+                  </div>
 
-                  {/* Add new task */}
-                  {addingTask[svc.id] !== undefined ? (
-                    <div className="flex gap-2 pt-1">
-                      <input
-                        autoFocus
-                        placeholder="Nombre de la nueva tarea..."
-                        className="flex-1 text-sm font-bold text-[var(--primary)] bg-white border border-[var(--accent)] rounded-xl px-4 py-3 outline-none placeholder:text-slate-300"
-                        value={newTaskText[svc.id] ?? ""}
-                        onChange={(e) =>
-                          setNewTaskText((prev) => ({ ...prev, [svc.id]: e.target.value }))
-                        }
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") addTask(svc.id, svc.name);
-                          if (e.key === "Escape")
-                            setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; });
-                        }}
-                      />
-                      <button
-                        onClick={() => addTask(svc.id, svc.name)}
-                        className="shrink-0 px-4 py-3 bg-[var(--accent)] text-white rounded-xl font-black text-xs active:scale-95 transition-all"
-                      >
-                        <Save size={16} />
-                      </button>
+                  <div className="shrink-0 text-slate-400 ml-2">
+                    {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                  </div>
+                </button>
+
+                {/* Checklist — visible when expanded */}
+                {isOpen && (
+                  <div className="border-t border-slate-50 px-6 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-300">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest pt-4 pb-1">
+                      Lista de tareas
+                    </p>
+
+                    {svcTasks.map((task) => {
+                      const obsVal = obsEdits[task.id] ?? task.observacion ?? "";
+                      const isDirty = obsEdits[task.id] !== undefined && obsEdits[task.id] !== (task.observacion ?? "");
+
+                      return (
+                        <div
+                          key={task.id}
+                          className={`rounded-2xl border p-4 space-y-3 transition-colors ${
+                            task.status === "completada"
+                              ? "bg-emerald-50/40 border-emerald-100"
+                              : task.status === "en_proceso"
+                              ? "bg-amber-50/40 border-amber-100"
+                              : "bg-slate-50 border-slate-100"
+                          }`}
+                        >
+                          {/* Task row */}
+                          <div className="flex items-start gap-3">
+                            {/* Status toggle button */}
+                            <button
+                              onClick={() => toggleStatus(task)}
+                              className="shrink-0 mt-0.5 transition-transform active:scale-90"
+                            >
+                              {task.status === "completada" ? (
+                                <CheckCircle2 size={22} className="text-emerald-500" />
+                              ) : task.status === "en_proceso" ? (
+                                <Clock size={22} className="text-amber-500" />
+                              ) : (
+                                <Circle size={22} className="text-slate-300" />
+                              )}
+                            </button>
+
+                            <div className="flex-1 min-w-0">
+                              {editingName === task.id ? (
+                                <input
+                                  autoFocus
+                                  className="w-full text-sm font-bold text-[var(--primary)] bg-white border border-[var(--accent)] rounded-lg px-2 py-1 outline-none"
+                                  value={nameEdits[task.id] ?? task.tarea}
+                                  onChange={(e) =>
+                                    setNameEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
+                                  }
+                                  onBlur={() => saveTaskName(task.id)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") saveTaskName(task.id);
+                                    if (e.key === "Escape") setEditingName(null);
+                                  }}
+                                />
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    setEditingName(task.id);
+                                    setNameEdits((prev) => ({ ...prev, [task.id]: task.tarea }));
+                                  }}
+                                  className={`text-left text-sm font-bold leading-snug w-full group/name flex items-center gap-1 ${
+                                    task.status === "completada"
+                                      ? "line-through text-slate-400"
+                                      : "text-[var(--primary)]"
+                                  }`}
+                                >
+                                  {task.tarea}
+                                  <Pencil size={10} className="text-slate-300 opacity-0 group-hover/name:opacity-100 transition-opacity shrink-0" />
+                                </button>
+                              )}
+                            </div>
+
+                            {/* Status badge */}
+                            <span
+                              className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg border shrink-0 ${STATUS_COLORS[task.status]}`}
+                            >
+                              {STATUS_LABELS[task.status]}
+                            </span>
+
+                            {/* Delete */}
+                            <button
+                              onClick={() => deleteTask(task.id)}
+                              className="shrink-0 p-1 text-slate-200 hover:text-red-400 transition-colors"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+
+                          {/* Observation field */}
+                          <div className="pl-9 space-y-2">
+                            <div className="flex items-center gap-2">
+                              <MessageSquare size={11} className="text-slate-400" />
+                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                Observación
+                              </span>
+                            </div>
+                            <div className="flex gap-2">
+                              <textarea
+                                rows={2}
+                                placeholder="Ej: Faltó conectar el webhook, retomamos mañana..."
+                                className="flex-1 text-[11px] font-medium text-slate-600 bg-white border border-slate-200 rounded-xl p-3 resize-none outline-none focus:border-[var(--accent)] transition-all placeholder:text-slate-300"
+                                value={obsVal}
+                                onChange={(e) =>
+                                  setObsEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
+                                }
+                              />
+                              {isDirty && (
+                                <button
+                                  onClick={() => saveObs(task.id)}
+                                  disabled={savingObs === task.id}
+                                  className="shrink-0 self-end px-3 py-3 bg-[var(--accent)] text-white rounded-xl active:scale-95 transition-all disabled:opacity-50"
+                                >
+                                  {savingObs === task.id ? (
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                  ) : (
+                                    <Save size={14} />
+                                  )}
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {/* Add new task */}
+                    {addingTask[svc.id] !== undefined ? (
+                      <div className="flex gap-2 pt-1">
+                        <input
+                          autoFocus
+                          placeholder="Nombre de la nueva tarea..."
+                          className="flex-1 text-sm font-bold text-[var(--primary)] bg-white border border-[var(--accent)] rounded-xl px-4 py-3 outline-none placeholder:text-slate-300"
+                          value={newTaskText[svc.id] ?? ""}
+                          onChange={(e) =>
+                            setNewTaskText((prev) => ({ ...prev, [svc.id]: e.target.value }))
+                          }
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") addTask(svc.id, svc.name);
+                            if (e.key === "Escape")
+                              setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; });
+                          }}
+                        />
+                        <button
+                          onClick={() => addTask(svc.id, svc.name)}
+                          className="shrink-0 px-4 py-3 bg-[var(--accent)] text-white rounded-xl font-black text-xs active:scale-95 transition-all"
+                        >
+                          <Save size={16} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; })
+                          }
+                          className="shrink-0 px-3 py-3 bg-slate-100 text-slate-500 rounded-xl font-black text-xs active:scale-95 transition-all"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ) : (
                       <button
                         onClick={() =>
-                          setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; })
+                          setAddingTask((prev) => ({ ...prev, [svc.id]: "" }))
                         }
-                        className="shrink-0 px-3 py-3 bg-slate-100 text-slate-500 rounded-xl font-black text-xs active:scale-95 transition-all"
+                        className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-slate-200 rounded-2xl text-[10px] font-black text-slate-400 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
                       >
-                        ✕
+                        <Plus size={14} /> Agregar tarea
                       </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() =>
-                        setAddingTask((prev) => ({ ...prev, [svc.id]: "" }))
-                      }
-                      className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-slate-200 rounded-2xl text-[10px] font-black text-slate-400 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
-                    >
-                      <Plus size={14} /> Agregar tarea
-                    </button>
-                  )}
+                    )}
 
-                  {/* Tip */}
-                  <div className="flex items-start gap-2 pt-1">
-                    <AlertCircle size={12} className="text-slate-300 mt-0.5 shrink-0" />
-                    <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest leading-relaxed">
-                      Toca el nombre de una tarea para editarlo · Toca el ícono para cambiar el estado
-                    </p>
+                    {/* Tip */}
+                    <div className="flex items-start gap-2 pt-1">
+                      <AlertCircle size={12} className="text-slate-300 mt-0.5 shrink-0" />
+                      <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest leading-relaxed">
+                        Toca el nombre de una tarea para editarlo · Toca el ícono para cambiar el estado
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </>
-  ) : (
-        /* Mensajes del Equipo Sub-Tab */
-        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          {notificaciones.length > 0 ? (
-            notificaciones.map((announcement) => (
-              <div key={announcement.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 border-l-[#48c1d2] relative overflow-hidden group">
-                <div className="flex justify-between items-start mb-3">
-                  <span className="text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded bg-[#48c1d2]/10 text-[#142d53]">
-                    {announcement.tipo}
-                  </span>
-                  <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
-                </div>
-                <h3 className="font-black text-[#142d53] mb-2 text-sm">
-                  {announcement.titulo}
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                  {announcement.mensaje}
-                </p>
+                )}
               </div>
-            ))
-          ) : (
-            <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
-               <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
-                  <Bell size={24} className="text-slate-300" />
-               </div>
-               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sin avisos recientes por ahora.</p>
-            </div>
-          )}
+            );
+          })}
         </div>
-      )}
-    </div>
-  );
+      </>
+    ) : (
+      /* Mensajes del Equipo Sub-Tab */
+      <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        {notificaciones.length > 0 ? (
+          notificaciones.map((announcement) => (
+            <div key={announcement.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 border-l-[#48c1d2] relative overflow-hidden group">
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded bg-[#48c1d2]/10 text-[#142d53]">
+                  {announcement.tipo}
+                </span>
+                <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
+              </div>
+              <h3 className="font-black text-[#142d53] mb-2 text-sm">
+                {announcement.titulo}
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                {announcement.mensaje}
+              </p>
+            </div>
+          ))
+        ) : (
+          <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
+             <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+                <Bell size={24} className="text-slate-300" />
+             </div>
+             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sin avisos recientes por ahora.</p>
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+</div>
+);
 }

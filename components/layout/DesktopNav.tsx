@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Target, Video, Briefcase, PlaySquare, Clock, Sparkles, ShieldCheck, Zap } from "lucide-react";
+import { Home, Target, Video, Briefcase, PlaySquare, Clock, Sparkles, ShieldCheck, Zap, BookOpen, HelpCircle } from "lucide-react";
 import Image from "next/image";
 
 export function DesktopNav() {
@@ -64,6 +64,27 @@ export function DesktopNav() {
                   </Link>
                 );
               })}
+            </nav>
+          </div>
+
+          {/* Soporte */}
+          <div className="pt-4">
+            <div className="flex items-center gap-2 mb-2 px-4">
+               <HelpCircle size={10} className="text-purple-400" fill="currentColor" />
+               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500/80">Soporte</h3>
+            </div>
+            <nav className="space-y-1">
+              <Link
+                href="/"
+                className={`flex items-center gap-4 rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 group/item relative ${
+                  pathname === "/"
+                    ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl"
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <BookOpen size={16} className={pathname === "/" ? "text-white" : "group-hover/item:text-white group-hover/item:rotate-12 transition-all"} />
+                Guía de Uso
+              </Link>
             </nav>
           </div>
         </div>

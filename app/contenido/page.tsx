@@ -1395,7 +1395,7 @@ function ContenidoContent() {
   ) : null;
 
   return (
-    <div className="max-w-md md:max-w-5xl pt-6 pb-24 px-4 text-left">
+    <div className="max-w-md md:max-w-5xl mx-auto pt-6 pb-24 px-4 text-left">
       <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="inline-flex items-center gap-2 bg-[#48c1d2]/10 px-3 py-1.5 rounded-full mb-3">
           <div className="w-5 h-5 bg-[#48c1d2] rounded-lg flex items-center justify-center">

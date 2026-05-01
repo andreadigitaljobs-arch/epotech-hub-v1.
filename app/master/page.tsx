@@ -167,7 +167,7 @@ export default function MasterPanel() {
       const blobUrl = URL.createObjectURL(data);
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = `reporte_epotech_${id.split('-')[0]}.webm`;
+      link.download = `reporte_epotech_${id.split('-')[0]}.wav`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

@@ -52,79 +52,86 @@ export default function ReferenciasPage() {
   });
 
   return (
-    <div className="space-y-6 pb-32 max-w-6xl mx-auto pt-4 px-4 md:px-0 text-left">
+    <div className="max-w-5xl mx-auto px-8 py-12 pb-32 text-left space-y-16">
       
       {/* 1. HERO COMPACTO */}
-      <header className="relative p-6 md:p-10 rounded-[2.5rem] bg-[#142d53] text-white overflow-hidden shadow-xl border border-white/5 group">
-         <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 rotate-12">
-            <PlaySquare size={120} />
+      <header className="relative p-10 md:p-16 rounded-[3rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border border-white/10 group">
+         <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-15 transition-opacity duration-1000 rotate-12">
+            <PlaySquare size={180} />
          </div>
          
          <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-4">
-               <span className="bg-[#48c1d2]/20 backdrop-blur-md border border-[#48c1d2]/30 px-4 py-1 rounded-full text-[7px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">
+            <div className="flex items-center gap-3 mb-6">
+               <span className="bg-[#48c1d2]/20 backdrop-blur-md border border-[#48c1d2]/30 px-5 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.4em] text-[#48c1d2]">
                   Creative Intelligence 2026
                </span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-black tracking-tighter mb-4 leading-none uppercase italic">
+            <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 leading-none uppercase italic">
                Motor de <span className="text-[#48c1d2]">Inspiración</span>
             </h1>
-            <p className="text-[10px] md:text-sm font-bold text-slate-300 italic max-w-md leading-tight opacity-70">
-               "No grabes por grabar. Entiende el código visual de lo que funciona."
+            <p className="text-xs md:text-base font-bold text-slate-400 italic max-w-xl leading-relaxed opacity-80 border-l-2 border-[#48c1d2]/30 pl-6">
+               "No grabes por grabar. Entiende el código visual de lo que funciona para elevar Epotech al siguiente nivel."
             </p>
          </div>
       </header>
+      
+      {/* Texto Tutorial Contextual Premium */}
+      <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+          <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
+        </p>
+      </div>
 
-      {/* 2. NAVEGACIÓN DE CONSOLA (Sticky) */}
-      <div className="sticky top-4 z-[100] space-y-3">
+      {/* 2. NAVEGACIÓN Y FILTROS */}
+      <div className="space-y-8">
          {/* Pestañas Principales */}
-         <div className="flex bg-[#142d53] p-1.5 rounded-[2rem] shadow-2xl border border-white/5">
+         <div className="flex bg-[#0a192f] p-2 rounded-[2.5rem] shadow-2xl border border-white/10 max-w-2xl mx-auto">
             <button 
                onClick={() => setActiveSubTab('videos')}
-               className={`flex-1 py-3 rounded-[1.5rem] text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#142d53]' : 'text-white/40 hover:text-white'}`}
+               className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
             >
-               <Zap size={12} /> Biblioteca Viral
+               <Zap size={14} /> Biblioteca Viral
             </button>
             <button 
                onClick={() => setActiveSubTab('cuentas')}
-               className={`flex-1 py-3 rounded-[1.5rem] text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'cuentas' ? 'bg-[#48c1d2] text-[#142d53]' : 'text-white/40 hover:text-white'}`}
+               className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'cuentas' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
             >
-               <ShieldCheck size={12} /> Referentes Top
+               <ShieldCheck size={14} /> Referentes Top
             </button>
          </div>
 
          {/* Filtros de Plataforma */}
-         <div className="flex justify-center gap-2">
+         <div className="flex justify-center gap-3">
             {[
-               { id: 'all', label: 'Todos', icon: Sparkles, color: 'bg-white/5' },
-               { id: 'instagram', label: 'Instagram', icon: InstagramIcon, color: 'bg-pink-500/10 text-pink-500' },
-               { id: 'tiktok', label: 'TikTok', icon: TiktokIcon, color: 'bg-slate-900 text-white' }
+               { id: 'all', label: 'Todos', icon: Sparkles },
+               { id: 'instagram', label: 'Instagram', icon: InstagramIcon },
+               { id: 'tiktok', label: 'TikTok', icon: TiktokIcon }
             ].map((p) => (
                <button 
                   key={p.id}
                   onClick={() => setPlatformFilter(p.id as any)}
-                  className={`px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest transition-all border flex items-center gap-2 ${platformFilter === p.id ? 'bg-[#142d53] text-[#48c1d2] border-[#48c1d2] shadow-lg' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'}`}
+                  className={`px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all border flex items-center gap-3 ${platformFilter === p.id ? 'bg-[#0a192f] text-[#48c1d2] border-[#48c1d2] shadow-xl scale-105' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300 shadow-sm'}`}
                >
-                  <p.icon size={10} /> {p.label}
+                  <p.icon size={12} /> {p.label}
                </button>
             ))}
          </div>
       </div>
 
       {/* 3. CONTENIDO DINÁMICO */}
-      <main className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <main className="animate-in fade-in slide-in-from-bottom-6 duration-700">
          {activeSubTab === 'videos' ? (
-            <div className="space-y-8">
-               <div className="flex items-center gap-3 ml-2">
-                  <div className="w-1 h-8 bg-[#48c1d2] rounded-full" />
+            <div className="space-y-10">
+               <div className="flex items-center gap-4 ml-2">
+                  <div className="w-1.5 h-10 bg-[#48c1d2] rounded-full shadow-[0_0_15px_rgba(72,193,210,0.5)]" />
                   <div>
-                     <h2 className="text-xl font-black text-[#142d53] tracking-tighter uppercase italic">Anatomía Viral</h2>
-                     <span className="text-[7px] font-black uppercase tracking-[0.3em] text-slate-400">Breakdown de Rendimiento</span>
+                     <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Anatomía Viral</h2>
+                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Análisis de Estructura y Rendimiento</span>
                   </div>
                </div>
 
                {filteredVideos.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                      {filteredVideos.map((video: any) => (
                         <VideoCard 
                            key={video.id}
@@ -137,51 +144,43 @@ export default function ReferenciasPage() {
                      ))}
                   </div>
                ) : (
-                  <div className="py-20 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
-                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay videos en esta categoría</p>
+                  <div className="py-24 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
+                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay contenido disponible bajo este filtro</p>
                   </div>
                )}
             </div>
          ) : (
-            <div className="space-y-8">
-               <div className="flex items-center gap-3 ml-2">
-                  <div className="w-1 h-8 bg-[#142d53] rounded-full" />
+            <div className="space-y-10">
+               <div className="flex items-center gap-4 ml-2">
+                  <div className="w-1.5 h-10 bg-[#0a192f] rounded-full" />
                   <div>
-                     <h2 className="text-xl font-black text-[#142d53] tracking-tighter uppercase italic">Canales de Élite</h2>
-                     <span className="text-[7px] font-black uppercase tracking-[0.3em] text-slate-400">Competitive Analysis</span>
+                     <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Canales de Élite</h2>
+                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Benchmarks del Sector Internacional</span>
                   </div>
                </div>
 
                {filteredAccounts.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                     {filteredAccounts.map((cuenta: any, idx: number) => (
-                        <AccountCard
-                           key={idx}
-                           nombre={cuenta.nombre}
-                           url={cuenta.url}
-                           fuerte={cuenta.fuerte}
-                           porqueFunciona={cuenta.porque_funciona}
-                           tipo={cuenta.tipo}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     {filteredAccounts.map((account: any) => (
+                        <AccountCard 
+                           key={account.id}
+                           name={account.nombre}
+                           description={account.descripcion}
+                           platform={account.tipo}
+                           url={account.url}
+                           porqueSeguirlo={account.porque_seguirlo}
                         />
                      ))}
                   </div>
                ) : (
-                  <div className="py-20 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
-                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay referentes en esta red social</p>
+                  <div className="py-24 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
+                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay canales en esta categoría</p>
                   </div>
                )}
             </div>
          )}
       </main>
 
-      {/* 4. FOOTER COMPACTO */}
-      <footer className="pt-10 text-center">
-         <div className="inline-flex items-center gap-3 px-6 py-4 bg-[#142d53] text-white rounded-[2rem] shadow-xl relative overflow-hidden group">
-            <Sparkles size={14} className="text-[#48c1d2]" />
-            <span className="text-[8px] font-black uppercase tracking-[0.4em] italic">Inspiración es Ejecución</span>
-            <Sparkles size={14} className="text-[#48c1d2]" />
-         </div>
-      </footer>
     </div>
   );
 }

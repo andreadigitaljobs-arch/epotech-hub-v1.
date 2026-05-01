@@ -68,6 +68,7 @@ export const manual = {
         { en: "Explaining what was done", es: "Explicando qué se hizo", tooltip: "Selfie (modo vlog): 'Acabamos de lavar a presión la entrada de esta casa de 3,000 sqft en la ciudad de...'" },
         { en: "Saying what problem the client had", es: "Diciendo qué problema tenía el cliente", tooltip: "Seguir grabando y contar: 'El cliente tenía años de acumulación negra por culpa de los árboles cercanos y le daba pena que lo vieran los vecinos'." },
         { en: "Saying why that process matters", es: "Diciendo por qué ese proceso importa", tooltip: "Voz de experto: 'Usamos este químico azul porque la boquilla roja habría destruido el acabado del ladrillo de esta casa del siglo 19'." },
+        { en: "Daily log for stories", es: "Diario de Obra (Para Historias)", tooltip: "Graba un clip rápido de 15 segundos contando una curiosidad o avance del momento. Sin guion, solo tú y la cámara hablando de forma auténtica." },
         { en: "Reacting to the result or saying thank you", es: "Reaccionando al resultado o agradeciendo", tooltip: "Cerrar con energía: '¡Quedó brutal, parece concreto nuevo! Míralo nada más.' o grabando al cliente si se anima a decir 'Guau'." },
       ],
     },
