@@ -1540,24 +1540,36 @@ function ContenidoContent() {
           <div className="space-y-4">
             {/* Navegación del Estudio de Producción Compacta pero Espaciada */}
             {/* Navegación del Estudio de Producción - Ahora Simplificada */}
-            <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-6 shadow-inner">
+            <div className="flex bg-[#0a192f]/5 p-1.5 rounded-2xl mb-6 gap-1.5 border border-slate-200/60 shadow-inner">
                 <button 
                   onClick={() => setGuionTab('reels')}
-                  className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${guionTab === 'reels' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400'}`}
+                  className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${
+                    guionTab === 'reels' 
+                      ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]' 
+                      : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                  }`}
                 >
-                  <Clapperboard size={12} /> Reels Estratégicos
+                  <Clapperboard size={15} /> Reels
                 </button>
                 <button 
                   onClick={() => setGuionTab('historias')}
-                  className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${guionTab === 'historias' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400'}`}
+                  className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${
+                    guionTab === 'historias' 
+                      ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]' 
+                      : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                  }`}
                 >
-                  <Zap size={12} /> Historias Diarias
+                  <Zap size={15} /> Historias
                 </button>
                 <button 
                   onClick={() => setGuionTab('presentacion')}
-                  className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${guionTab === 'presentacion' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400'}`}
+                  className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${
+                    guionTab === 'presentacion' 
+                      ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]' 
+                      : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                  }`}
                 >
-                  <User size={12} /> Videos Fijos
+                  <User size={15} /> Fijos
                 </button>
             </div>
 
