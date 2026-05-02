@@ -15,7 +15,8 @@ import {
   ShieldCheck,
   Droplets,
   Paintbrush,
-  Sparkles
+  Sparkles,
+  MapPin
 } from "lucide-react";
 
 export default function BrandBriefPage() {
