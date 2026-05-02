@@ -39,7 +39,7 @@ export default function BrandBriefPage() {
           perfil_cliente: "Propietarios de vivienda (hombres y mujeres) en EE.UU. (principalmente Utah) que valoran calidad, rapidez, resultados visibles y servicio confiable.",
           tono_voz: "Directo (Mensajes claros y sin rodeos). Enfocado en resultados (Priorizamos beneficios visibles). Sin tecnicismos (Evitamos lenguaje complejo). Transformación antes/después (Mostramos el cambio real).",
           servicios_basicos: ["LAVADO DE CASAS (SOFT WASH)", "LIMPIEZA DE ENTRADAS (DRIVEWAYS)", "LIMPIEZA DE TECHOS", "LIMPIEZA EXTERIOR GENERAL"],
-          servicios_premium: ["PISOS EPÓXICOS (FLAKE Y METÁLICO)", "ACABADOS PARA INTERIORES", "RECUBRIMIENTOS PARA CANCHAS DEPORTIVAS"],
+          servicios_premium: ["PISOS EPÓXICOS (FLAKE Y METÁLICO)", "ACABADOS PARA INTERIORES", "RECUBRIMIENTOS PARA CANCHAS DEPORTIVAS", "POSICIONAMIENTO GOOGLE MAPS"],
           mensajes_clave: ["HACEMOS QUE TU HOGAR SE VEA COMO NUEVO", "COTIZACIÓN GRATIS", "SERVICIO RÁPIDO Y CONFIABLE", "SALT LAKE CITY / UTAH"]
         });
       }
@@ -195,7 +195,49 @@ export default function BrandBriefPage() {
            </div>
         </div>
 
-        {/* 5. MENSAJES CLAVE */}
+        {/* 5. ESTRATEGIA GOOGLE MAPS (SEO LOCAL) */}
+        <div className="bg-[#0a192f] p-10 md:p-16 rounded-[3rem] border border-[#48c1d2]/30 shadow-[0_0_50px_rgba(72,193,210,0.1)] relative overflow-hidden group">
+           <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity duration-700">
+              <MapPin size={240} className="text-[#48c1d2]" />
+           </div>
+           
+           <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-8">
+                 <div className="bg-[#48c1d2] p-2 rounded-lg">
+                    <MapPin size={16} className="text-[#0a192f]" />
+                 </div>
+                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Master Plan: Dominio en Google Maps</span>
+              </div>
+              
+              <h2 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter mb-12 uppercase leading-none">
+                 Posicionamiento <br /> <span className="text-[#48c1d2]">Google Maps</span>
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 {[
+                   { t: "Sistema de Reviews", d: "Objetivo: 50 reviews en 60 días. Usa el script: 'If you liked the results, it would really help us if you leave a quick Google review 🙌'" },
+                   { t: "Fotos Semanales", d: "3-5 fotos por semana: Antes/después, Sebastián trabajando, resultados finales y videos cortos." },
+                   { t: "Posts en Google", d: "2 por semana: 'Driveway cleaning in Salt Lake City – before & after'. Google ama la actividad constante." },
+                   { t: "Servicios Optimizados", d: "Pressure Washing, Window Cleaning, Epoxy Floors. Usar 'Salt Lake City' en cada descripción." },
+                   { t: "Descripción del Negocio", d: "Clara y directa: Professional pressure washing, window cleaning and epoxy in Salt Lake City. Fast and reliable." },
+                   { t: "Zonas de Servicio", d: "Ampliar alcance: Salt Lake City, Magna, West Valley, West Jordan, South Jordan." },
+                   { t: "Responder Reviews", d: "Obligatorio: 'Thank you! We’re glad you loved the results 🙌'. Google valora la interacción." },
+                   { t: "Consistencia Total", d: "Reviews + Fotos + Posts constantes = Subida de ranking real en 30-60 días." },
+                   { t: "Nivel PRO (Web)", d: "Conectar Google Maps con Website. Keywords iguales en web + perfil de Google." }
+                 ].map((step, idx) => (
+                   <div key={idx} className="p-6 bg-white/5 rounded-[2rem] border border-white/5 hover:border-[#48c1d2]/30 transition-all group/step">
+                      <div className="w-8 h-8 rounded-full bg-[#142d53] flex items-center justify-center text-[#48c1d2] text-[10px] font-black mb-4 group-hover/step:scale-110 transition-transform border border-[#48c1d2]/20">
+                         {idx + 1}
+                      </div>
+                      <h4 className="text-xs font-black text-[#48c1d2] uppercase tracking-widest mb-2">{step.t}</h4>
+                      <p className="text-[10px] font-medium text-slate-400 leading-relaxed">{step.d}</p>
+                   </div>
+                 ))}
+              </div>
+           </div>
+        </div>
+
+        {/* 6. PILARES DE ESTRATEGIA VIRAL */}
         <div className="bg-[#0a192f] p-10 md:p-16 rounded-[3rem] border border-white/10 shadow-2xl relative overflow-hidden">
            <div className="absolute top-0 right-0 w-64 h-64 bg-[#48c1d2]/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>
            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-12">Pilares de Estrategia Viral</h3>
