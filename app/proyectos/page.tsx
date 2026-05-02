@@ -350,8 +350,16 @@ export default function ProyectosPage() {
           </button>
         </div>
 
-        {/* Service cards */}
-        <div className="space-y-4">
+        {activeSubTab === 'proyectos' ? (
+          <>
+            <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-8">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+                <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
+              </p>
+            </div>
+
+            {/* Service cards */}
+            <div className="space-y-4">
           {SERVICES.map((svc) => {
             const svcTasks = tasks.filter((t) => t.service_id === svc.id);
             const progress = calcProgress(svcTasks);
