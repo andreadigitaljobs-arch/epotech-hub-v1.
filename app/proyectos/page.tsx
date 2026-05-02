@@ -187,10 +187,15 @@ export default function ProyectosPage() {
           .select("*")
           .order("orden", { ascending: true });
         if (tData) {
-           const hasTasks = tData.length > 0;
-           if (!hasTasks) {
+           setTasks(tData);
+           
+           // Failsafe: Si un servicio de la lista no tiene tareas en DB, las sembramos
+           const existingServiceIds = new Set(tData.map(t => t.service_id));
+           const missingServices = SERVICES.filter(s => !existingServiceIds.has(s.id));
+           
+           if (missingServices.length > 0) {
               const rowsToInsert: any[] = [];
-              for (const svc of SERVICES) {
+              for (const svc of missingServices) {
                  INITIAL_TASKS[svc.id]?.forEach((t) =>
                    rowsToInsert.push({
                      service_id: svc.id,
@@ -203,11 +208,11 @@ export default function ProyectosPage() {
                    })
                  );
               }
-              await supabase.from("tareas_servicio").insert(rowsToInsert);
-              const { data: refreshed } = await supabase.from("tareas_servicio").select("*").order("orden", { ascending: true });
-              setTasks(refreshed || []);
-           } else {
-              setTasks(tData);
+              if (rowsToInsert.length > 0) {
+                 await supabase.from("tareas_servicio").insert(rowsToInsert);
+                 const { data: refreshed } = await supabase.from("tareas_servicio").select("*").order("orden", { ascending: true });
+                 setTasks(refreshed || []);
+              }
            }
         }
 
