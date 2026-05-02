@@ -8,7 +8,7 @@ import {
   CheckCircle2, Circle, Clock, ChevronDown, ChevronUp,
   Database, Smartphone, Layout, FormInput, Rocket,
   MessageSquare, Save, AlertCircle, Trash2, Plus, Pencil,
-  TrendingUp, Search, Bell, Sparkles
+  TrendingUp, Search, Bell, Sparkles, MapPin
 } from "lucide-react";
 
 // ─── Static service definitions ─────────────────────────────────────────────
@@ -336,6 +336,40 @@ export default function ProyectosPage() {
 
         {activeSubTab === 'proyectos' ? (
           <>
+            {/* ESTRATEGIA MAESTRA GOOGLE MAPS */}
+            <div className="bg-[#0a192f] p-8 md:p-12 rounded-[2.5rem] border border-[#48c1d2]/30 shadow-2xl relative overflow-hidden group mb-8">
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                <MapPin size={180} className="text-[#48c1d2]" />
+              </div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                   <div className="bg-[#48c1d2] p-2 rounded-lg">
+                      <TrendingUp size={16} className="text-[#0a192f]" />
+                   </div>
+                   <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Plan de Dominio Local</span>
+                </div>
+                <h2 className="text-2xl md:text-4xl font-black text-white italic tracking-tighter mb-8 uppercase">
+                  Estrategia <span className="text-[#48c1d2]">Google Maps</span>
+                </h2>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[
+                    { t: "Reviews Pro", d: "Objetivo: 50 reseñas. Di: 'If you liked the results, it would help us grow 🙌'" },
+                    { t: "Fotos Semanales", d: "Sube 3-5 fotos/semana: Antes/después, tú trabajando y videos cortos." },
+                    { t: "Posts Constantes", d: "2 posts/semana en Google Business. Ama la actividad constante." },
+                    { t: "Keywords SLC", d: "Usa 'Salt Lake City' en cada descripción de servicio optimizado." },
+                    { t: "Zonas de Alcance", d: "Agrega SLC, Magna, West Valley, West Jordan y South Jordan." },
+                    { t: "Responder Todo", d: "Google valora que respondas cada reseña. Es obligatorio." }
+                  ].map((step, i) => (
+                    <div key={i} className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                      <h4 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest mb-1">{step.t}</h4>
+                      <p className="text-[9px] font-bold text-slate-400 leading-tight">{step.d}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-8">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
                 <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.

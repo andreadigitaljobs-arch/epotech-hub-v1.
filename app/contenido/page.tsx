@@ -1407,22 +1407,6 @@ function ContenidoContent() {
           Estudio de<br/>
           <span className="text-[#48c1d2]">Producción</span>
         </h1>
-        <button 
-          onClick={() => {
-            const newState = !showHelp;
-            setShowHelp(newState);
-            if (newState) {
-              setDashHelpStep(1); // Empezar directo en el reporte
-              setTeleHelpStep(1);
-              setReportHelpStep(1);
-            }
-          }}
-          className={`mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-tighter transition-all ${showHelp ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-white text-slate-400 border border-slate-100'}`}
-        >
-          {showHelp ? <X size={14} /> : <HelpCircle size={14} />}
-          {showHelp ? 'Cerrar Guía' : '¿Cómo MODO PASOS mi contenido?'}
-        </button>
-        
       </div>
 
       {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}
