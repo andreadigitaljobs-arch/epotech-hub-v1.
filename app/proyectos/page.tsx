@@ -49,6 +49,13 @@ const SERVICES = [
     Icon: MessageSquare,
     color: "pink",
   },
+  {
+    id: "google-maps-seo",
+    name: "Posicionamiento Google Maps",
+    description: "Estrategia de SEO Local para dominar Salt Lake City.",
+    Icon: MapPin,
+    color: "cyan",
+  },
 ];
 
 // ─── Initial tasks per service (seeded once if table is empty) ───────────────
@@ -92,6 +99,15 @@ const INITIAL_TASKS: Record<string, { tarea: string; orden: number; status?: Tas
     { tarea: "Omnicanalidad & Crecimiento Orgánico", status: "completada", observacion: "Reactivación y sincronización de Instagram, Facebook y TikTok con una línea coherente y moderna.", orden: 5 },
     { tarea: "Experimentación de Narrativa 'Voice-over'", status: "en_proceso", observacion: "Implementación de nuevo formato narrado basado en las notas de voz grabadas desde el Hub.", orden: 6 },
     { tarea: "Ecosistema de Conversión & Catálogo", status: "en_proceso", observacion: "Optimización de WhatsApp Business y preparación de catálogos digitales para conversión.", orden: 7 },
+  ],
+  "google-maps-seo": [
+    { tarea: "Sistema de Reviews (50 en 60 días)", status: "pendiente", observacion: "Objetivo: 50 reseñas. Usar script: 'If you liked the results, it would help us grow 🙌'", orden: 1 },
+    { tarea: "Fotos Semanales (3-5 tomas)", status: "pendiente", observacion: "Sube antes/después, tú trabajando y videos cortos.", orden: 2 },
+    { tarea: "Posts en Google (2 por semana)", status: "pendiente", observacion: "Actividad constante para rankear en el mapa.", orden: 3 },
+    { tarea: "Optimización SLC Keywords", status: "pendiente", observacion: "Uso de 'Salt Lake City' en cada descripción de servicio.", orden: 4 },
+    { tarea: "Zonas de Alcance (Magna/Jordan)", status: "pendiente", observacion: "Configurar SLC, West Valley, West Jordan, etc.", orden: 5 },
+    { tarea: "Responder 100% de Reviews", status: "pendiente", observacion: "Interacción obligatoria para el algoritmo de Google.", orden: 6 },
+    { tarea: "Nivel PRO: Website Sync", status: "pendiente", observacion: "Keywords iguales en web + perfil de Google.", orden: 7 },
   ],
 };
 
@@ -390,36 +406,6 @@ export default function ProyectosPage() {
                 {isOpen && (
                   <div className="border-t border-slate-50 px-6 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-300">
                     
-                    {/* ESTRATEGIA MAESTRA INTERNA PARA GOOGLE MAPS */}
-                    {svc.id === 'google-ads' && (
-                      <div className="mt-4 mb-6 p-6 bg-[#0a192f] rounded-[2rem] border border-[#48c1d2]/20 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-5">
-                          <MapPin size={100} className="text-[#48c1d2]" />
-                        </div>
-                        <div className="relative z-10">
-                          <div className="flex items-center gap-2 mb-4">
-                            <TrendingUp size={14} className="text-[#48c1d2]" />
-                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#48c1d2]">Master Plan Táctico</span>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {[
-                              { t: "Reviews Pro", d: "50 reseñas. Di: 'If you liked the results, it would help us grow 🙌'" },
-                              { t: "Fotos", d: "3-5 fotos/semana: Antes/después y tú trabajando." },
-                              { t: "Posts", d: "2 posts/semana en Google Business. Actividad constante." },
-                              { t: "Keywords", d: "Usa 'Salt Lake City' en cada descripción." },
-                              { t: "Alcance", d: "SLC, Magna, West Valley, West Jordan y South Jordan." },
-                              { t: "Respuesta", d: "Responde cada reseña. Es obligatorio para Google." }
-                            ].map((step, i) => (
-                              <div key={i} className="p-3 bg-white/5 rounded-xl border border-white/5">
-                                <h4 className="text-[9px] font-black text-[#48c1d2] uppercase mb-1">{step.t}</h4>
-                                <p className="text-[8px] font-bold text-slate-400 leading-tight">{step.d}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest pt-4 pb-1">
                       Lista de tareas
                     </p>
