@@ -386,163 +386,100 @@ function ContenidoContent() {
   const historiasSituacionales = [
     {
       id: 'h1',
-      title: 'En Ruta: Equipo Listo',
-      mood: 'Energía y Acción',
+      title: 'Buenos Días Familia ☀️',
+      mood: 'Humano y Auténtico',
       color: '#48c1d2',
-      icon: MapPin,
+      icon: Sun,
       sequence: [
         {
-          title: 'Historia 1: El Gancho',
-          desc: 'Hablando a cámara mientras cargas el sistema de agua pura o las mangueras.',
-          script: '¡Buenos días Utah! Hoy el equipo de Epotech se mueve a [Lugar]. Llevamos el sistema de agua desionizada listo para dejar esas ventanas como nuevas.',
-          tips: 'Muestra el tanque de agua o los postes de limpieza.'
+          title: 'Historia 1: El Saludo',
+          desc: 'Vídeo corto grabándote al despertar o ya en la camioneta.',
+          script: '¡Buenos días familia! Ya activados por aquí, preparándonos para un gran día en Utah. ¿Cómo amanecieron ustedes?',
+          tips: 'No necesitas filtro, la luz de la mañana es la mejor.'
         },
         {
-          title: 'Historia 2: El Equipo',
-          desc: 'Muestra la hidrolavadora o los squeegees organizados.',
-          script: 'La clave de un acabado perfecto no es solo el esfuerzo, es tener la herramienta correcta. Aquí no usamos químicos que dañen tus marcos.',
-          tips: 'Haz un paneo de tus herramientas más limpias.'
-        },
-        {
-          title: 'Historia 3: El Compromiso',
-          desc: 'Hablando a cámara de nuevo.',
-          script: 'Si nos ves en [Lugar], ya sabes que estamos eliminando manchas de agua dura. ¡Nos vemos en el brillo final!',
-          tips: 'Usa el sticker de ubicación.'
+          title: 'Historia 2: El Desayuno',
+          desc: 'Foto de tu café, tu desayuno o tú comiendo algo rápido.',
+          script: 'Cargando energías para lo que viene hoy. Sin un buen café no somos nadie, ¿verdad?',
+          tips: 'Pon un sticker de hora o de "Buenos Días".'
         }
       ]
     },
     {
       id: 'h2',
-      title: 'Desafío: Manchas de Agua Dura',
-      mood: 'Autoridad y Experto',
+      title: 'En Ruta al Trabajo 🚛',
+      mood: 'Energía y Acción',
       color: '#fbbf24',
-      icon: ShieldCheck,
+      icon: MapPin,
       sequence: [
         {
-          title: 'Historia 1: La Realidad',
-          desc: 'Muestra una ventana opaca con minerales de cerca.',
-          script: 'Miren este cristal. Estos depósitos minerales llevan meses aquí. Si los dejas más tiempo, el daño puede ser permanente. Pero por suerte, llegamos nosotros.',
-          tips: 'Usa el macro de tu cámara para que se vea el "sarro".'
+          title: 'Historia 1: El Destino',
+          desc: 'Foto de tu mano en el volante o el paisaje desde el parabrisas.',
+          script: 'Hoy nos movemos a [Lugar, ej: Park City] a dejar unas ventanas impecables. ¡El clima está perfecto para trabajar!',
+          tips: 'Usa el sticker de ubicación de Instagram.'
         },
         {
-          title: 'Historia 2: La Solución',
-          desc: 'Hablando a cámara con el squeegee en mano.',
-          script: 'Vamos a aplicar nuestra técnica de limpieza profunda. No es solo pasar agua, es restaurar la transparencia total del vidrio.',
-          tips: 'Muestra el producto especial que usas.'
-        },
-        {
-          title: 'Historia 3: El Suspenso',
-          desc: 'Vídeo rápido de 3 segundos de la primera pasada de limpieza.',
-          script: '¿Quieren ver cómo vuelve a brillar? No se despeguen de las historias.',
-          tips: 'Usa una encuesta: "¿Creen que saldrán todas las manchas?"'
+          title: 'Historia 2: Llegada',
+          desc: 'Vídeo rápido bajando de la camioneta o mostrando la casa/driveway.',
+          script: 'Ya llegamos. Miren esta vista... pero miren este driveway, ¡necesita un rescate Epotech urgente!',
+          tips: 'Muestra un "Antes" rápido de la suciedad.'
         }
       ]
     },
     {
       id: 'h3',
-      title: 'Confianza: Concreto Nuevo',
-      mood: 'Gratitud y Cercanía',
-      color: '#f87171',
-      icon: Heart,
+      title: 'Cualquier Cosa es Historia 📸',
+      mood: 'Educativo y Cercano',
+      color: '#10b981',
+      icon: Camera,
       sequence: [
         {
-          title: 'Historia 1: El Antes y Después',
-          desc: 'Usa el sticker de "Antes y Después" con el driveway.',
-          script: 'De un gris triste y con moho... a un blanco brillante. El Pressure Washing no es solo estética, es seguridad para tu familia.',
-          tips: 'Muestra la diferencia de color del concreto.'
+          title: 'Historia 1: Tu Perspectiva',
+          desc: 'Foto de algo que te llame la atención en el trabajo (una herramienta, un reflejo).',
+          script: 'A veces me detengo a ver estos detalles. La limpieza no es solo pasar agua, es cuidar cada rincón.',
+          tips: 'Cualquier cosa que tú veas normal, para el cliente es interesante.'
         },
         {
-          title: 'Historia 2: El Factor Humano',
-          desc: 'Tú hablando de la reacción del cliente al ver sus ventanas.',
-          script: 'Acabamos de terminar las ventanas de [Nombre Cliente] y su frase fue: "No sabía que mi casa tenía esta vista". Esa es mi mayor satisfacción.',
-          tips: 'Habla con mucha sinceridad.'
-        },
-        {
-          title: 'Historia 3: Llamado a la Acción',
-          desc: 'Tú señalando el sticker de enlace.',
-          script: 'Si tus ventanas ya no te dejan ver el paisaje o tu entrada necesita un rescate, dale clic al link de mi perfil.',
-          tips: 'Asegúrate de que el CTA sea claro.'
+          title: 'Historia 2: El Equipo',
+          desc: 'Foto de tus herramientas organizadas o tú preparándolas.',
+          script: 'Herramientas listas. Un profesional se nota en cómo cuida su equipo.',
+          tips: 'La organización genera mucha confianza.'
         }
       ]
     },
     {
       id: 'h4',
-      title: 'Lifestyle: El Arte del Detalle',
-      mood: 'Humano y Auténtico',
-      color: '#60a5fa',
-      icon: Coffee,
+      title: 'Fuera de Servicio 🏡',
+      mood: 'Personal y Real',
+      color: '#f87171',
+      icon: Heart,
       sequence: [
         {
-          title: 'Historia 1: Preparación',
-          desc: 'Tú limpiando tus squeegees o revisando boquillas.',
-          script: 'Día terminado. La gente cree que solo limpiamos, pero el 50% del éxito es cuidar nuestro equipo. Herramienta limpia = Trabajo impecable.',
-          tips: 'Muestra el cuidado que le das a tus gomas de squeegee.'
+          title: 'Historia 1: Relax',
+          desc: 'Foto saliendo con tu esposa, en el gym o descansando en casa.',
+          script: 'Día terminado. Ahora toca lo más importante: tiempo de calidad en familia.',
+          tips: 'Esto hace que la gente te sienta como un vecino, no solo como una empresa.'
         },
         {
-          title: 'Historia 2: El Lado Humano',
-          desc: 'Un café o tú descansando un momento.',
-          script: 'Un día movido en Utah. Amo este trabajo porque cada ventana es una historia diferente. Gracias por dejarme cuidar sus hogares.',
-          tips: 'Usa un tono relajado.'
-        },
-        {
-          title: 'Historia 3: Comunidad',
-          desc: 'Sticker de preguntas.',
-          script: '¿Dudas sobre cómo mantener tus vidrios limpios por más tiempo? Déjalas aquí abajo.',
-          tips: 'Interactúa con tus seguidores.'
+          title: 'Historia 2: Gratitud',
+          desc: 'Tú hablando a cámara relajado.',
+          script: 'Gracias a todos por sus mensajes y por confiarme sus hogares hoy. ¡Mañana vamos por más!',
+          tips: 'Usa un tono muy natural, como si hablaras con un amigo.'
         }
       ]
     },
     {
       id: 'h5',
-      title: 'Tip Maestro: Ventanas Pro',
-      mood: 'Educativo y Experto',
-      color: '#10b981',
-      icon: Lightbulb,
-      sequence: [
-        {
-          title: 'Historia 1: Error Común',
-          desc: 'Tú señalando una ventana con rayas de jabón.',
-          script: 'Tip de oro: nunca limpies tus ventanas bajo el sol directo. El jabón se seca antes de que lo quites y deja estas rayas horribles.',
-          tips: 'Muestra el efecto del sol en el vidrio.'
-        },
-        {
-          title: 'Historia 2: El Secreto Epotech',
-          desc: 'Hablando a cámara con autoridad.',
-          script: 'Nosotros usamos agua pura. Sin químicos, sin jabones pesados. Eso garantiza que tus ventanas se mantengan limpias por el doble de tiempo.',
-          tips: 'Muestra cómo el agua resbala por el cristal.'
-        },
-        {
-          title: 'Historia 3: El Especialista',
-          desc: 'Tú con el sistema de filtrado de fondo.',
-          script: 'Si quieres un acabado de nivel profesional sin rayas, hablemos. La agenda de [Mes] ya se está llenando.',
-          tips: 'Muestra tu agenda o disponibilidad.'
-        }
-      ]
-    },
-    {
-      id: 'h6',
-      title: 'Pressure: Fachada Brillante',
-      mood: 'Satisfacción Total',
+      title: '¿Sin Tiempo? Mándalo 📲',
+      mood: 'Instrucción Importante',
       color: '#8b5cf6',
-      icon: Eye,
+      icon: MessageCircle,
       sequence: [
         {
-          title: 'Historia 1: El Desastre Viral',
-          desc: 'Vídeo lento de una pared con moho verde/negro.',
-          script: 'Muchos piensan que esto es pintura vieja, pero es vida orgánica dañando tu casa. Vamos a darle un reset total hoy.',
-          tips: 'Pasa el dedo (con guante) por la suciedad.'
-        },
-        {
-          title: 'Historia 2: La Magia (Satisfying)',
-          desc: 'Clip de 5 segundos de la boquilla turbo limpiando.',
-          script: 'Miren este contraste. El poder del agua aplicada con la técnica correcta. ¡Satisfacción garantizada!',
-          tips: 'Graba el sonido real del impacto del agua.'
-        },
-        {
-          title: 'Historia 3: El Resultado Final',
-          desc: 'Paseo por la fachada ya seca y limpia.',
-          script: 'Fachada restaurada. Valor de la propiedad aumentado. Cliente feliz. ¿Qué más podemos pedir?',
-          tips: 'Haz un paneo de lejos para ver el cambio general.'
+          title: 'Paso Único: Mándanos el Material',
+          desc: 'No te compliques subiendo historias si estás muy ocupado.',
+          script: 'Si grabas algo cool o tomas una foto, ¡no te detengas a editarla! Simplemente mándanosla por WhatsApp o Telegram.',
+          tips: 'Nosotros nos encargamos de subirlo y ponerlo bonito por ti.'
         }
       ]
     }
@@ -1577,7 +1514,7 @@ function ContenidoContent() {
                   </div>
                   <p className="text-[11px] font-bold text-slate-600 leading-relaxed italic">
                     {guionTab === 'reels' && 'Graba tu voz palabra por palabra siguiendo el guion. Este audio servirá como la narración profesional (voice-over) para tus videos.'}
-                    {guionTab === 'historias' && 'Usa estos ejemplos para inspirarte. No es para leerlo literal, sino para entender el estilo y replicarlo con tus palabras durante el trabajo.'}
+                    {guionTab === 'historias' && 'Cualquier detalle de tu día sirve para conectar. Si estás muy ocupado para subir historias, solo mándanos las fotos o vídeos y nosotros lo hacemos por ti.'}
                     {guionTab === 'presentacion' && 'Sigue el desglose por escenas para grabarte a ti mismo o dirigir a alguien más. Incluye ángulos, movimientos y guiones exactos.'}
                   </p>
                 </div>
