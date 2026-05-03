@@ -16,7 +16,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Mic,
-  Download
+  Download,
+  ArrowLeft
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
@@ -183,7 +184,14 @@ export default function MasterPanel() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-20 pt-6 px-4 md:px-0">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
+        <div className="flex-1">
+          <button 
+            onClick={() => window.history.back()}
+            className="mb-4 flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-[var(--primary)] transition-colors group"
+          >
+            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+            Volver al Hub
+          </button>
            <div className="flex items-center gap-2 mb-2">
              <div className="bg-red-500 p-1.5 rounded-lg text-white">
                 <ShieldCheck size={16} />
