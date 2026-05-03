@@ -388,7 +388,7 @@ export default function ProyectosPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-1 gap-2">
                       <div className="min-w-0">
-                        <h2 className="text-base font-black text-[var(--primary)] tracking-tight truncate leading-tight">
+                        <h2 className="text-base font-black text-[var(--primary)] tracking-tight leading-tight">
                           {svc.name}
                         </h2>
                         {svc.isComingSoon && (
