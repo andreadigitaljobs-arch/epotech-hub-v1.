@@ -1393,26 +1393,6 @@ function ContenidoContent() {
               )}
             </>
           )}
-
-          {/* Si está en modo FULL, mostramos solo el botón de finalizar */}
-          {showFullScript && (
-            <div className="p-6 border-t border-white/5 bg-[#0a192f]/80 backdrop-blur-md">
-              <button
-                onClick={() => {
-                  setIsClosing(true);
-                  setTimeout(() => {
-                    setSelectedScript(null);
-                    setIsClosing(false);
-                    setShowAudioReport(true);
-                    setReportHelpStep(1);
-                  }, 500);
-                }}
-                className="w-full py-5 bg-[#48c1d2] text-[#0a192f] text-xs font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] flex items-center justify-center gap-2"
-              >
-                <Sparkles size={16} /> FINALIZAR Y HACER REPORTE
-              </button>
-            </div>
-          )}
         </div>
 
       </div>
