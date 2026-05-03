@@ -34,8 +34,7 @@ export async function POST(request: Request) {
         { 
           endpoint: subscription.endpoint,
           keys_auth: keys_auth,
-          keys_p256dh: keys_p256dh,
-          updated_at: new Date().toISOString()
+          keys_p256dh: keys_p256dh
         }
       ], { onConflict: 'endpoint' });
 
