@@ -114,68 +114,82 @@ export default function Home() {
       return;
     }
 
-
     try {
-      console.log("1. Solicitando permiso...");
-      const permission = await Notification.requestPermission();
-      console.log("2. Permiso concedido:", permission);
-      setNotificationStatus(permission);
-
-      if (permission === 'granted') {
-        // Suscribir al Service Worker
-        if ('serviceWorker' in navigator) {
-          console.log("3. Obteniendo o registrando SW...");
-          
-          let registration = await navigator.serviceWorker.getRegistration();
-          if (!registration) {
-             registration = await navigator.serviceWorker.register('/sw.js');
-          }
-
-          console.log("4. SW Registrado. ¿Está activo?:", !!registration.active);
-          
-          // Táctica de Guerrilla: Si el SW está atascado en 'installing' o 'waiting' (muy común en Chrome iOS),
-          // recargar la página obliga a WebKit a tomar control y activarlo.
-          if (!registration.active) {
-            console.log("El motor no está activo. Forzando recarga para despertar a iOS...");
-            showToast("Sincronizando motor de Apple... Recargando.", "info");
-            setTimeout(() => {
-              window.location.reload();
-            }, 1500);
-            return; // Detenemos la ejecución aquí
-          }
-
-          console.log("5. SW Activo y listo");
-          
-          const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
-          const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC);
-
-          console.log("6. Suscribiendo en PushManager...");
-          const subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: convertedVapidKey
-          });
-          console.log("7. Suscripción generada:", !!subscription);
-
-          console.log("8. Guardando en Supabase...");
-          // Guardar en la base de datos DIRECTAMENTE como se hacía en el código antiguo
-          const { error } = await supabase.from('push_subscriptions').upsert({
-            endpoint: subscription.endpoint,
-            keys_p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')!) as any)),
-            keys_auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth')!) as any)),
-            user_id: "sebastian"
-          }, { onConflict: 'endpoint' });
-
-          if (!error) {
-            console.log("9. Guardado exitoso!");
-            setIsSubscribed(true);
-            showToast("¡Conexión de Élite establecida! Ya recibirás avisos.", "success");
-          } else {
-            console.error("ERROR SUPABASE:", error);
-            showToast(`Error al guardar: ${error.message}`, "error");
-          }
+      // iOS WebKit FIX:
+      // PASO 1: Esperar a que el SW esté activo ANTES de pedir el permiso.
+      // Si hacemos await entre requestPermission() y subscribe(), WebKit destruye el
+      // token de interacción del usuario y lanza InvalidStateError.
+      if ('serviceWorker' in navigator) {
+        console.log("1. Obteniendo o registrando SW...");
+        let registration = await navigator.serviceWorker.getRegistration();
+        if (!registration) {
+          registration = await navigator.serviceWorker.register('/sw.js');
         }
-      } else {
-        showToast("No se otorgó el permiso necesario.", "error");
+
+        console.log("2. SW obtenido. ¿Activo?:", !!registration.active);
+
+        // Si el SW no está activo, esperamos a que se active (sin recargar)
+        if (!registration.active) {
+          console.log("3. Esperando activación del SW...");
+          showToast("Iniciando motor de notificaciones...", "info");
+          registration = await new Promise<ServiceWorkerRegistration>((resolve, reject) => {
+            const timeoutId = setTimeout(() => reject(new Error("Timeout esperando activación del Service Worker")), 8000);
+
+            const worker = registration!.installing || registration!.waiting;
+            if (worker) {
+              worker.addEventListener('statechange', (e: any) => {
+                if (e.target.state === 'activated') {
+                  clearTimeout(timeoutId);
+                  resolve(registration!);
+                }
+              });
+            } else {
+              navigator.serviceWorker.ready.then(reg => {
+                clearTimeout(timeoutId);
+                resolve(reg);
+              }).catch(reject);
+            }
+          });
+        }
+
+        console.log("4. SW activo y listo.");
+
+        // PASO 2: Pedir permiso
+        console.log("5. Solicitando permiso al usuario...");
+        const permission = await Notification.requestPermission();
+        console.log("6. Permiso:", permission);
+        setNotificationStatus(permission);
+
+        if (permission !== 'granted') {
+          showToast("No se otorgó el permiso necesario.", "error");
+          return;
+        }
+
+        // PASO 3: Suscribir INMEDIATAMENTE sin awaits intermedios
+        const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
+        console.log("7. Suscribiendo en PushManager...");
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC)
+        });
+        console.log("8. Suscripción generada:", !!subscription);
+
+        // PASO 4: Guardar en Supabase
+        const { error } = await supabase.from('push_subscriptions').upsert({
+          endpoint: subscription.endpoint,
+          keys_p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')!) as any)),
+          keys_auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth')!) as any)),
+          user_id: "sebastian"
+        }, { onConflict: 'endpoint' });
+
+        if (!error) {
+          console.log("9. ¡Guardado exitoso!");
+          setIsSubscribed(true);
+          showToast("¡Conexión de Élite establecida! Ya recibirás avisos.", "success");
+        } else {
+          console.error("ERROR SUPABASE:", error);
+          showToast(`Error al guardar: ${error.message}`, "error");
+        }
       }
     } catch (error: any) {
       console.error("Error completo en suscripción:", error);
