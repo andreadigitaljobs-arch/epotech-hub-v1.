@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { useSearchParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Tesseract from 'tesseract.js';
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Clapperboard, 
   Calendar, 
@@ -529,6 +530,7 @@ function ContenidoContent() {
   const [serviceContext, setServiceContext] = useState<'active' | 'brand'>('active');
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
+  const [direction, setDirection] = useState(0);
   const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro'>('pinned');
   const [showFullScript, setShowFullScript] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -1060,8 +1062,35 @@ function ContenidoContent() {
                     </div>
                   </div>
 
-                  {selectedScript.scenes?.[currentStepIdx] && (
-                    <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-500 text-left">
+                  <AnimatePresence mode="wait" custom={direction}>
+                    <motion.div
+                      key={currentStepIdx}
+                      custom={direction}
+                      variants={{
+                        enter: (direction: number) => ({
+                          x: direction > 0 ? 50 : -50,
+                          opacity: 0
+                        }),
+                        center: {
+                          x: 0,
+                          opacity: 1
+                        },
+                        exit: (direction: number) => ({
+                          x: direction < 0 ? 50 : -50,
+                          opacity: 0
+                        })
+                      }}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{
+                        x: { type: "spring", stiffness: 300, damping: 30 },
+                        opacity: { duration: 0.2 }
+                      }}
+                      className="space-y-10 text-left"
+                    >
+                      {selectedScript.scenes?.[currentStepIdx] && (
+                        <>
                       <h3 className="text-2xl font-black text-white italic tracking-tighter text-center uppercase">
                         {selectedScript.scenes[currentStepIdx].title}
                       </h3>
@@ -1160,9 +1189,11 @@ function ContenidoContent() {
                         </div>
                       </div>
                     </div>
-                  )}
-                </>
-              )}
+                        </>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                )}
             </div>
           ) : (
             /* MODO NORMAL: REELS / HISTORIAS (TELEPROMPTER) */
@@ -1248,14 +1279,20 @@ function ContenidoContent() {
               <>
                 <button 
                   disabled={currentStepIdx === 0}
-                  onClick={() => setCurrentStepIdx(prev => prev - 1)}
+                  onClick={() => {
+                    setDirection(-1);
+                    setCurrentStepIdx(prev => prev - 1);
+                  }}
                   className={`flex-1 py-5 rounded-[24px] text-[10px] font-black uppercase tracking-[1px] transition-all ${currentStepIdx === 0 ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-white/10 text-white hover:bg-white/20 border border-white/10 active:scale-95'}`}
                 >
                   ESCENA ANTERIOR
                 </button>
                 {currentStepIdx < (selectedScript.scenes?.length || 0) - 1 ? (
                   <button 
-                    onClick={() => setCurrentStepIdx(prev => prev + 1)}
+                    onClick={() => {
+                      setDirection(1);
+                      setCurrentStepIdx(prev => prev + 1);
+                    }}
                     className="flex-[2] py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
                   >
                     SIGUIENTE ESCENA 🎬
