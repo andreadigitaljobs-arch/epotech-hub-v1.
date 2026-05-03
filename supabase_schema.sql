@@ -22,11 +22,24 @@ CREATE TABLE IF NOT EXISTS notificaciones (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS push_subscriptions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    endpoint TEXT NOT NULL UNIQUE,
+    keys_auth TEXT NOT NULL,
+    keys_p256dh TEXT NOT NULL,
+    user_id TEXT DEFAULT 'sebastian',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 ALTER TABLE actividad ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notificaciones ENABLE ROW LEVEL SECURITY;
+ALTER TABLE push_subscriptions ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Allow public read access for actividad" ON actividad FOR SELECT USING (true);
 CREATE POLICY "Allow public read access for notificaciones" ON notificaciones FOR SELECT USING (true);
 
 CREATE POLICY "Allow public insert for actividad" ON actividad FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public insert for notificaciones" ON notificaciones FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public insert for push_subscriptions" ON push_subscriptions FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public update for push_subscriptions" ON push_subscriptions FOR UPDATE USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public delete for push_subscriptions" ON push_subscriptions FOR DELETE USING (true);

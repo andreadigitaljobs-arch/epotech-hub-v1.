@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "@/components/layout/AppShell";
-import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,10 +42,6 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-        <Script src="https://cdn.jsdelivr.net/npm/eruda" strategy="beforeInteractive" />
-        <Script id="eruda-init" strategy="afterInteractive">
-          {`if (typeof window !== 'undefined') eruda.init();`}
-        </Script>
       </head>
       <body className={inter.className}>
         <NotificationListener />

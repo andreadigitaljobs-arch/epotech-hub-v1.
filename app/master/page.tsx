@@ -123,11 +123,20 @@ export default function MasterPanel() {
           }),
         });
         const pushResult = await pushRes.json();
-        if (!pushResult.success) {
-          console.error("Push API error:", pushResult.error);
+        if (!pushRes.ok || !pushResult.success) {
+          console.error("Push API error:", pushResult);
+          showToast(
+            pushResult.error || `Push fallido: ${pushResult.failed || 0} de ${pushResult.count || 0} dispositivos.`,
+            "error"
+          );
+          setSending(false);
+          return;
         }
       } catch (e: any) {
         console.error("Failed to call push API:", e);
+        showToast("No se pudo llamar al servicio push.", "error");
+        setSending(false);
+        return;
       }
 
       setNotificacion({ titulo: "", mensaje: "", tipo: "RECORDATORIO" });

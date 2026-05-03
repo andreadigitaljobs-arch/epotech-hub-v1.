@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Bell, Smartphone, Plus, CheckCircle2, X } from "lucide-react";
 import { Card } from "@/components/ui/Card";
-import { supabase } from "@/lib/supabase";
 
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
 
@@ -16,6 +15,45 @@ function urlBase64ToUint8Array(base64String: string) {
     outputArray[i] = rawData.charCodeAt(i);
   }
   return outputArray;
+}
+
+async function savePushSubscription(subscription: PushSubscription) {
+  const response = await fetch("/api/subscribe", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...subscription.toJSON(),
+      user_id: "sebastian"
+    })
+  });
+
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(result.error || "No se pudo guardar la suscripcion push.");
+  }
+
+  return result;
+}
+
+async function getReadyServiceWorker() {
+  let registration = await navigator.serviceWorker.getRegistration("/");
+  if (!registration) {
+    registration = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+  }
+
+  if (registration.active) {
+    return registration;
+  }
+
+  return Promise.race([
+    navigator.serviceWorker.ready,
+    new Promise<ServiceWorkerRegistration>((_, reject) => {
+      setTimeout(
+        () => reject(new Error("No se pudo activar el motor de notificaciones. Cierra y abre la app desde el icono de inicio e intenta de nuevo.")),
+        25000
+      );
+    }),
+  ]);
 }
 
 export function PushNotificationBanner() {
@@ -97,6 +135,8 @@ export function PushNotificationBanner() {
       setCurrentStep("Preparando conexión...");
       
       // 1. Obtener el Service Worker YA REGISTRADO (en el useEffect o por next-pwa)
+      const registration = await getReadyServiceWorker();
+      /*
       let registration = await navigator.serviceWorker.getRegistration();
       
       if (!registration) {
@@ -134,6 +174,7 @@ export function PushNotificationBanner() {
         });
       }
 
+      */
       // 3. AHORA pedir permiso INMEDIATAMENTE ANTES de suscribir para asegurar el 'user gesture'
       setCurrentStep("Pidiendo permiso...");
       const result = await Notification.requestPermission();
@@ -154,16 +195,7 @@ export function PushNotificationBanner() {
       });
 
       setCurrentStep("Sincronizando con Epotech...");
-      const { error } = await supabase.from('push_subscriptions').insert({
-        endpoint: subscription.endpoint,
-        keys_p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')!) as any)),
-        keys_auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth')!) as any)),
-        user_id: "sebastian"
-      });
-
-      if (error) {
-        throw new Error("No se pudo conectar con la base de datos.");
-      }
+      await savePushSubscription(subscription);
 
       clearTimeout(timeout);
       setIsSubscribed(true);

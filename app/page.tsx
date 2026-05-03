@@ -10,7 +10,6 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Toast, ToastType } from "@/components/ui/Toast";
-import { supabase } from "@/lib/supabase";
 
 const TUTORIAL_CARDS = [
   {
@@ -71,21 +70,30 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!('Notification' in window)) {
-      setNotificationStatus('unsupported');
-    } else {
-      setNotificationStatus(Notification.permission);
-      checkSubscription();
-    }
-  }, []);
+    const prepareNotifications = async () => {
+      if (!("Notification" in window)) {
+        setNotificationStatus("unsupported");
+        return;
+      }
 
-  const checkSubscription = async () => {
-    if ('serviceWorker' in navigator) {
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
-      setIsSubscribed(!!subscription);
-    }
-  };
+      setNotificationStatus(Notification.permission);
+
+      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        return;
+      }
+
+      try {
+        const registration = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+        const readyRegistration = registration.active ? registration : await navigator.serviceWorker.ready;
+        const subscription = await readyRegistration.pushManager.getSubscription();
+        setIsSubscribed(Boolean(subscription));
+      } catch (error) {
+        console.error("No se pudo preparar push:", error);
+      }
+    };
+
+    prepareNotifications();
+  }, []);
 
   const urlBase64ToUint8Array = (base64String: string) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -98,7 +106,99 @@ export default function Home() {
     return outputArray;
   };
 
+  const savePushSubscription = async (subscription: PushSubscription) => {
+    const response = await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...subscription.toJSON(),
+        user_id: "sebastian"
+      })
+    });
+
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "No se pudo guardar la suscripcion push.");
+    }
+
+    return result;
+  };
+
+  const getPushRegistration = async () => {
+    const registration = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+
+    if (registration.active) {
+      return registration;
+    }
+
+    const worker = registration.installing || registration.waiting;
+    if (worker) {
+      await new Promise<void>((resolve, reject) => {
+        const timeout = window.setTimeout(() => {
+          reject(new Error("El motor de notificaciones no termino de activarse. Cierra y abre la app desde el icono de inicio e intenta otra vez."));
+        }, 15000);
+
+        worker.addEventListener("statechange", () => {
+          if (worker.state === "activated") {
+            window.clearTimeout(timeout);
+            resolve();
+          }
+        });
+      });
+    }
+
+    return navigator.serviceWorker.ready;
+  };
+
+  const getReadyServiceWorker = getPushRegistration;
+
   const executePermissionRequest = async () => {
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      showToast("Este navegador no soporta notificaciones web en esta instalacion.", "error");
+      return;
+    }
+
+    if (Notification.permission === "denied") {
+      showToast("Permiso denegado. Activalo en los ajustes del navegador.", "error");
+      return;
+    }
+
+    if (Notification.permission === "granted" && isSubscribed) {
+      showToast("Resincronizando este dispositivo...", "info");
+    }
+
+    try {
+      showToast("Preparando notificaciones...", "info");
+      const registration = await getPushRegistration();
+      const permission = await Notification.requestPermission();
+      setNotificationStatus(permission);
+
+      if (permission !== "granted") {
+        showToast("No se otorgo el permiso necesario.", "error");
+        return;
+      }
+
+      const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+      if (!vapidPublicKey) {
+        throw new Error("Falta configurar NEXT_PUBLIC_VAPID_PUBLIC_KEY.");
+      }
+
+      const existingSubscription = await registration.pushManager.getSubscription();
+      const subscription = existingSubscription || await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+      });
+
+      const result = await savePushSubscription(subscription);
+      setIsSubscribed(true);
+      showToast(`Notificaciones activas (${result.endpointHost}).`, "success");
+    } catch (error: any) {
+      console.error("Error completo en suscripcion:", error);
+      showToast(error.message || "No se pudo activar notificaciones.", "error");
+    }
+
+    return;
+
     if (!('Notification' in window)) {
       showToast("Este navegador no soporta notificaciones.", "error");
       return;
@@ -121,6 +221,9 @@ export default function Home() {
       // token de interacción del usuario y lanza InvalidStateError.
       if ('serviceWorker' in navigator) {
         console.log("1. Obteniendo o registrando SW...");
+        const registration = await getReadyServiceWorker();
+        showToast("Iniciando motor de notificaciones...", "info");
+        /*
         let registration = await navigator.serviceWorker.getRegistration();
         if (!registration) {
           registration = await navigator.serviceWorker.register('/sw.js');
@@ -152,6 +255,7 @@ export default function Home() {
           });
         }
 
+        */
         console.log("4. SW activo y listo.");
 
         // PASO 2: Pedir permiso
@@ -166,15 +270,21 @@ export default function Home() {
         }
 
         // PASO 3: Suscribir INMEDIATAMENTE sin awaits intermedios
-        const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
+        const VAPID_PUBLIC = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
         console.log("7. Suscribiendo en PushManager...");
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC)
         });
+        const result = await savePushSubscription(subscription);
+        console.log("9. Guardado exitoso:", result.endpointHost);
+        setIsSubscribed(true);
+        showToast(`Conexion lista (${result.endpointHost}). Ya recibiras avisos.`, "success");
+        return;
         console.log("8. Suscripción generada:", !!subscription);
 
         // PASO 4: Guardar en Supabase
+        /*
         const { error } = await supabase.from('push_subscriptions').upsert({
           endpoint: subscription.endpoint,
           keys_p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')!) as any)),
@@ -188,8 +298,9 @@ export default function Home() {
           showToast("¡Conexión de Élite establecida! Ya recibirás avisos.", "success");
         } else {
           console.error("ERROR SUPABASE:", error);
-          showToast(`Error al guardar: ${error.message}`, "error");
+          showToast(`Error al guardar: ${error?.message || "desconocido"}`, "error");
         }
+        */
       }
     } catch (error: any) {
       console.error("Error completo en suscripción:", error);

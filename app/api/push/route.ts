@@ -1,66 +1,128 @@
-import { NextResponse } from 'next/server';
-import webpush from 'web-push';
-import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from "next/server";
+import webpush from "web-push";
+import { createClient } from "@supabase/supabase-js";
+
+type PushResult = {
+  id: string;
+  endpointHost: string;
+  success: boolean;
+  deleted?: boolean;
+  error?: string;
+  statusCode?: number;
+};
 
 export async function POST(request: Request) {
   try {
     const { titulo, mensaje } = await request.json();
 
-    // 0. Inicializar clientes de forma perezosa (solo cuando se llama a la API)
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-    );
+    if (!titulo || !mensaje) {
+      return NextResponse.json(
+        { success: false, error: "Missing notification title or message" },
+        { status: 400 }
+      );
+    }
 
-    // Configurar Web Push - Forzado con llaves hardcoded para asegurar funcionamiento
-    const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
-    const VAPID_PRIVATE = "gP4gIYT-zrHJqA1N93dRTm8moqdOAEmiEzH64esOAlo";
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const vapidPublic = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+    const vapidPrivate = process.env.VAPID_PRIVATE_KEY;
+
+    if (!supabaseUrl || !supabaseKey || !vapidPublic || !vapidPrivate) {
+      return NextResponse.json(
+        { success: false, error: "Server configuration error" },
+        { status: 500 }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     webpush.setVapidDetails(
-      'mailto:andreadigitaljobs@gmail.com',
-      VAPID_PUBLIC,
-      VAPID_PRIVATE
+      "mailto:andreadigitaljobs@gmail.com",
+      vapidPublic,
+      vapidPrivate
     );
 
-    // 1. Obtener todas las suscripciones
     const { data: subscriptions, error } = await supabase
-      .from('push_subscriptions')
-      .select('*');
+      .from("push_subscriptions")
+      .select("*");
 
     if (error) throw error;
 
-    console.log(`Enviando push a ${subscriptions?.length || 0} dispositivos...`);
+    if (!subscriptions?.length) {
+      return NextResponse.json({
+        success: false,
+        error: "No hay dispositivos suscritos para recibir push.",
+        count: 0,
+        sent: 0,
+        failed: 0,
+        deleted: 0,
+        results: [],
+      });
+    }
 
-    // 2. Enviar a cada suscripción
-    const notifications = (subscriptions || []).map((sub: any) => {
+    const notifications = subscriptions.map(async (sub: any): Promise<PushResult> => {
+      let endpointHost = "unknown";
+      try {
+        endpointHost = new URL(sub.endpoint).host;
+      } catch {
+        endpointHost = "invalid-url";
+      }
+
       const pushConfig = {
         endpoint: sub.endpoint,
         keys: {
           auth: sub.keys_auth,
-          p256dh: sub.keys_p256dh
-        }
+          p256dh: sub.keys_p256dh,
+        },
       };
 
-      return webpush.sendNotification(
-        pushConfig,
-        JSON.stringify({
-          title: titulo,
-          body: mensaje,
-          url: '/' // Puedes cambiar esto para que lleve a una página específica
-        })
-      ).catch(async (err) => {
-        // Si la suscripción ha expirado o es inválida, borrarla
+      try {
+        await webpush.sendNotification(
+          pushConfig,
+          JSON.stringify({
+            title: titulo,
+            body: mensaje,
+            url: "/",
+          })
+        );
+
+        return {
+          id: sub.id,
+          endpointHost,
+          success: true,
+        };
+      } catch (err: any) {
+        let deleted = false;
         if (err.statusCode === 410 || err.statusCode === 404) {
-          console.log("Subscription expired, deleting...");
-          await supabase.from('push_subscriptions').delete().eq('id', sub.id);
+          await supabase.from("push_subscriptions").delete().eq("id", sub.id);
+          deleted = true;
         }
+
         console.error("Error sending push:", err.message);
-      });
+        return {
+          id: sub.id,
+          endpointHost,
+          success: false,
+          deleted,
+          error: err.message,
+          statusCode: err.statusCode,
+        };
+      }
     });
 
-    await Promise.all(notifications);
+    const results = await Promise.all(notifications);
+    const sent = results.filter((result) => result.success).length;
+    const failed = results.length - sent;
+    const deleted = results.filter((result) => result.deleted).length;
 
-    return NextResponse.json({ success: true, count: notifications.length });
+    return NextResponse.json({
+      success: sent > 0 && failed === 0,
+      count: results.length,
+      sent,
+      failed,
+      deleted,
+      results,
+    });
   } catch (error: any) {
     console.error("Push API error:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

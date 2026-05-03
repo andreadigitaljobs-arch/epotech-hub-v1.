@@ -9,11 +9,12 @@ export async function GET() {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const { data, error } = await supabase.from('push_subscriptions').select('id, endpoint').limit(10);
+  const { count, error } = await supabase
+    .from('push_subscriptions')
+    .select('*', { count: 'exact', head: true });
 
   return NextResponse.json({
-    count: data ? data.length : 0,
+    count: count || 0,
     error: error ? error.message : null,
-    subscriptions: data
   });
 }
