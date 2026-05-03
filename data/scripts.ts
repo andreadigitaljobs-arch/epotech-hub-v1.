@@ -222,35 +222,142 @@ export const guionesPresentacion: Script[] = [
   },
   {
     id: 'presentacion-2',
-    title: '2. El Estándar Epotech (Autoridad)',
+    title: '2. Entrenamiento Completo (Autoridad)',
     category: 'PINNED: Autoridad',
     service: 'Marca Personal',
     duration: '50s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'Próximamente contenido detallado...',
+    fullDialogue: 'Si tu driveway se ve así… ya se está dañando. Y la mayoría piensa que es solo suciedad. Pero no. Son manchas que se van metiendo, acumulación que desgasta, y superficies que poco a poco… se deterioran. Y cuando reaccionas… ya es más caro arreglarlo. Por eso no solo limpiamos. Restauramos, protegemos y transformamos espacios con limpieza profesional, epoxy y pintura que sí dura. No es estética. Es cuidar lo que te costó dinero. Mira cómo puede verse así otra vez en nuestro perfil.',
     scenes: [
       {
         id: 'p2-e1',
-        title: 'ESCENA 1 — INTRODUCCIÓN',
+        title: '🎬 ESCENA 1 — HOOK (ANTES / PROBLEMA)',
         talent: {
-          whatToSay: 'Esperando guion definitivo...',
-          howToMove: 'Mirando a cámara.',
-          gesture: 'Seguridad.',
+          whatToSay: '“Si tu driveway se ve así… ya se está dañando.”',
+          howToMove: 'Señala el piso (driveway). Mira serio.',
+          gesture: 'Natural, sin actuar.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Frente a él.',
-          angle: 'Plano medio.',
-          movement: 'Estático.',
+          whereToStand: 'Frente o diagonal al driveway.',
+          angle: 'Plano medio (persona + piso).',
+          movement: 'Enfoca bien las manchas e incluye a Sebastián señalando.',
+          avoid: 'No grabes solo su cara. No ignores el suelo.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p2-e2',
+        title: '🎬 ESCENA 2 — ERROR COMÚN',
+        talent: {
+          whatToSay: '“Y la mayoría piensa que es solo suciedad.”',
+          howToMove: 'Niega con la cabeza.',
+          gesture: 'Gesto leve con la mano.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Mantén mismo encuadre.',
+          angle: 'Mismo plano.',
+          movement: 'Estable.',
           avoid: 'Cortes abruptos.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p2-e3',
+        title: '🎬 ESCENA 3 — EXPLICACIÓN (DINÁMICA)',
+        talent: {
+          whatToSay: '“Pero no. Son manchas que se van metiendo, acumulación que desgasta, y superficies que poco a poco… se deterioran.”',
+          howToMove: 'Pausa corta. Señala zonas específicas. Pasa la mano por la superficie. Señala grietas / desgaste.',
+          gesture: 'Dinámico y explicativo.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Más cerca del suelo.',
+          angle: 'Baja un poco la cámara.',
+          movement: 'Captura detalles (manchas, textura).',
+          avoid: 'No grabes muy lejos. No pierdas el detalle.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p2-e4',
+        title: '🎬 ESCENA 4 — CONSECUENCIA',
+        talent: {
+          whatToSay: '“Y cuando reaccionas… ya es más caro arreglarlo.”',
+          howToMove: 'Gesto de “ya es tarde”. Mirada seria.',
+          gesture: 'Seguridad y preocupación.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Plano medio.',
+          angle: 'Cámara estable.',
+          movement: 'Fijo.',
+          avoid: 'Movimientos bruscos.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p2-e5',
+        title: '🎬 ESCENA 5 — SOLUCIÓN (AUTORIDAD)',
+        talent: {
+          whatToSay: '“Por eso no solo limpiamos. Restauramos, protegemos y transformamos espacios con limpieza profesional, epoxy y pintura que sí dura.”',
+          howToMove: 'Mira a cámara. Señala el área. Señala resultados / área trabajada.',
+          gesture: 'Autoridad y confianza.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Mejor ángulo del espacio.',
+          angle: 'Busca zona más “impactante”.',
+          movement: 'Buena luz.',
+          avoid: 'Ángulos desfavorables.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p2-e6',
+        title: '🎬 ESCENA 6 — CIERRE EMOCIONAL',
+        talent: {
+          whatToSay: '“No es estética. Es cuidar lo que te costó dinero.”',
+          howToMove: 'Mano al pecho o gesto firme.',
+          gesture: 'Firmeza y valor.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Plano medio.',
+          angle: 'Estable.',
+          movement: 'Fijo.',
+          avoid: 'Distracciones en fondo.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p2-e7',
+        title: '🎬 ESCENA 7 — CTA (PERFIL)',
+        talent: {
+          whatToSay: '“Mira cómo puede verse así otra vez en nuestro perfil.”',
+          howToMove: 'Señala hacia arriba.',
+          gesture: 'Invitación a la acción.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Deja espacio arriba del encuadre.',
+          angle: 'Mantén estabilidad.',
+          movement: 'Fijo.',
+          avoid: 'Cortar el gesto de señalar.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
     ],
     steps: [],
-    tips: [],
-    checklist: []
+    tips: [
+      'Enfoca bien el deterioro del driveway para el Hook.',
+      'La Escena 3 debe ser muy detallada visualmente.',
+      'Asegúrate de dejar espacio arriba en la última escena para los overlays de Instagram/TikTok.'
+    ],
+    checklist: ['Hook driveway', 'Error común', 'Explicación detallada', 'Consecuencia', 'Solución Epotech', 'Valor emocional', 'CTA perfil'],
+    productionHack: 'Usa un ángulo contrapicado leve en la Escena 5 para dar más autoridad.'
   },
   {
     id: 'presentacion-3',
