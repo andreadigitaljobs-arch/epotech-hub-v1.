@@ -32,16 +32,25 @@ export default function ReferenciasPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const { data: videos } = await supabase.from('referencias_videos').select('*');
-        const { data: cuentas } = await supabase.from('referencias_cuentas').select('*');
-        
+        // Priorizamos la información de alta calidad que ya investigamos
+        // Esto asegura que Sebastian vea la información corregida inmediatamente
         setData({ 
-          videos: (videos && videos.length > 0) ? videos : staticRefs.videos, 
-          cuentas: (cuentas && cuentas.length > 0) ? cuentas : staticRefs.cuentas 
+          videos: staticRefs.videos, 
+          cuentas: staticRefs.cuentas 
         });
+
+        // Intentamos cargar de Supabase, pero solo si quisiéramos actualizar dinámicamente
+        // Por ahora, el "Master" es el archivo estático para garantizar precisión del 100%
+        const { data: vDb } = await supabase.from('referencias_videos').select('*');
+        const { data: cDb } = await supabase.from('referencias_cuentas').select('*');
+        
+        if (vDb && vDb.length > 0 && cDb && cDb.length > 0) {
+          // Si quisiéramos usar la DB, podríamos activarlo aquí, 
+          // pero hoy priorizamos la corrección manual que pidió el usuario.
+          // setData({ videos: vDb, cuentas: cDb });
+        }
       } catch (e) {
         console.error("Error loading refs:", e);
-        setData({ videos: staticRefs.videos, cuentas: staticRefs.cuentas });
       } finally {
         setLoading(false);
       }
