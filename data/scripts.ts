@@ -249,49 +249,46 @@ export const guionesPresentacion: Script[] = [
     category: 'PINNED: Proceso',
     service: 'Marca Personal',
     duration: '45s',
-    fullDialogue: 'Contratar a Epotech es más fácil que limpiar una ventana. Solo tienes que seguir estos 3 pasos: Uno, haz clic en el link de mi biografía o envíame un mensaje directo con la palabra INFO. Dos, agendamos una visita rápida o nos envías fotos de lo que necesitas. Tres, te damos un presupuesto transparente y fijamos el día de la transformación. Así de simple, sin complicaciones y con garantía de satisfacción. Si estás listo para que tu casa sea la envidia del vecindario, envíame ese mensaje ahora mismo. ¡Hablemos!',
-    steps: [
+    isPinned: true,
+    isProductionMode: true,
+    fullDialogue: 'Contratar a Epotech es más fácil que limpiar una ventana. Solo tienes que seguir estos 3 pasos: Uno, haz clic en el link de mi biografía o envíame un mensaje directo con la palabra INFO. Dos, agendamos una visita rápida o nos envías fotos de lo que necesitas. Tres, te damos un presupuesto transparente y fijamos el día de la transformación.',
+    scenes: [
       {
-        label: 'FACILIDAD',
-        script: 'Contratar a Epotech es más fácil que limpiar una ventana. Solo tienes que seguir estos 3 pasos:',
-        visualField: 'Sebastian contando con los dedos a cámara.',
-        visualStudio: 'Toma cercana, muy amigable.',
-        advice: {
-          solo: ['Graba en formato vertical 9:16'],
-          assisted: ['Toma de Sebastian señalando hacia arriba']
+        id: 'p1-e1',
+        title: 'ESCENA 1 — LOS 3 PASOS',
+        talent: {
+          whatToSay: '“Contratar a Epotech es más fácil que limpiar una ventana. Solo sigue estos 3 pasos...”',
+          howToMove: 'Contando con los dedos a cámara.',
+          gesture: 'Sonrisa abierta, tono muy amigable.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Toma cercana (primer plano), fondo desenfocado.',
+          angle: 'Frontal a la altura de los ojos.',
+          movement: 'Ninguno, mantener fijo.',
+          avoid: 'Sombras duras en la cara.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       },
       {
-        label: 'PASO 1: CONTACTO',
-        script: 'Uno, haz clic en el link de mi biografía o envíame un mensaje directo con la palabra INFO.',
-        visualField: 'Grabación de pantalla de tu perfil de Instagram señalando el link.',
-        visualStudio: 'Sebastian señalando el link invisible.',
-        advice: {
-          solo: ['Edita poniendo una captura de tu bio'],
-          assisted: ['Toma de Sebastian escribiendo en su móvil']
-        }
-      },
-      {
-        label: 'PASO 2: AGENDA',
-        script: 'Dos, agendamos una visita rápida o nos envías fotos de lo que necesitas.',
-        visualField: 'Toma de Sebastian hablando por teléfono o revisando su agenda.',
-        visualStudio: 'Tono servicial y atento.',
-        advice: {
-          solo: ['Usa un fondo de oficina o la camioneta'],
-          assisted: ['Toma de Sebastian sonriendo al teléfono']
-        }
-      },
-      {
-        label: 'PASO 3: ACCIÓN',
-        script: 'Tres, te damos un presupuesto transparente y fijamos el día de la transformación. Si estás listo, envía ese mensaje ahora mismo.',
-        visualField: 'Sebastian señalando el sticker de "Enviar Mensaje".',
-        visualStudio: 'Cierre con mucha energía.',
-        advice: {
-          solo: ['Apunta con el dedo a donde irá el sticker'],
-          assisted: ['Toma de Sebastian con pulgar arriba']
+        id: 'p1-e2',
+        title: 'ESCENA 2 — CONTACTO Y ACCIÓN',
+        talent: {
+          whatToSay: '“Uno, haz clic en mi bio o DM con la palabra INFO. ¡Hablemos!”',
+          howToMove: 'Señalando a la cámara.',
+          gesture: 'Energía alta, invitando a la acción.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Toma un poco más abierta (medio cuerpo).',
+          angle: 'Picado suave para dar dinamismo.',
+          movement: 'Un pequeño movimiento lateral.',
+          avoid: 'Cortar las manos cuando señale.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
     ],
+    steps: [],
     tips: [
       'Este video responde la duda: "¿Cómo empiezo?".',
       'Sé muy claro y directo.',

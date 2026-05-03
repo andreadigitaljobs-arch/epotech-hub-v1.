@@ -1638,7 +1638,7 @@ function ContenidoContent() {
                                   "Usa este formato para cualquier video donde necesites calidad de estudio, instrucciones de cámara y demostraciones visuales por escena."
                                 </p>
                               </div>
-                              {guionesPresentacion.filter(s => !s.isPinned || s.isProductionMode).map((script) => (
+                              {guionesPresentacion.filter(s => s.isProductionMode).map((script) => (
                                 <div 
                                   key={script.id}
                                   onClick={() => {
