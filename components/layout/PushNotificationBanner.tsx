@@ -147,6 +147,7 @@ export function PushNotificationBanner() {
 
       setCurrentStep("Generando llave de acceso...");
       // Llamar a subscribe directamente después de requestPermission sin otros awaits intermedios
+      if (!registration) throw new Error("Fallo crítico: Service Worker no disponible.");
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
