@@ -1044,7 +1044,7 @@ function ContenidoContent() {
               {showFullScript ? <Zap size={14} /> : <BookOpen size={14} />}
               <span className="text-[8px] font-black uppercase tracking-tighter">
                 {showFullScript 
-                  ? (selectedScript.isProductionMode ? "MODO ESCENAS" : "MODO PASOS") 
+                  ? (selectedScript.isProductionMode ? "GRABAR ESCENAS" : "GRABAR PARTES") 
                   : "GUION COMPLETO"
                 }
               </span>
@@ -1506,7 +1506,7 @@ function ContenidoContent() {
       <div className="mb-8">
         {activeTab === 'guiones' && (
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[#48c1d2]">Mis Guiones:</span> Aquí tienes las historias listas para MODO PASOS basadas en tus trabajos más recientes.
+            <span className="text-[#48c1d2]">Mis Guiones:</span> Aquí tienes el contenido listo para grabar basado en tus trabajos más recientes.
           </p>
         )}
         {activeTab === 'calendario' && (
