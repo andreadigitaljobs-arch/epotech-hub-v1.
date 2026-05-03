@@ -4,9 +4,10 @@ import { useState } from "react";
 import { 
   BookOpen, Video, Briefcase, PlaySquare, Target, 
   Sparkles, HelpCircle, ArrowRight, Play, Mic, 
-  Search, Smartphone, Zap
+  Search, Smartphone, Zap, Bell
 } from "lucide-react";
 import Link from "next/link";
+import { Toast, ToastType } from "@/components/ui/Toast";
 
 const TUTORIAL_CARDS = [
   {
@@ -53,6 +54,29 @@ const TUTORIAL_CARDS = [
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
+    message: "",
+    type: "success",
+    isVisible: false
+  });
+
+  const showToast = (message: string, type: ToastType = "success") => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const requestNotificationPermission = async () => {
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        showToast("¡Notificaciones activadas! Recibirás los avisos de Andrea.", "success");
+      } else {
+        showToast("No se pudieron activar las notificaciones.", "error");
+      }
+    } else {
+      showToast("Tu navegador no soporta notificaciones.", "info");
+    }
+  };
+
   const tutorialVideoId = "dQw4w9WgXcQ"; // Placeholder, se puede cambiar luego
 
   return (
@@ -75,6 +99,20 @@ export default function Home() {
           <p className="text-slate-400 text-lg max-w-2xl font-medium leading-relaxed">
             Hola Sebastian, aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. ¿Qué quieres lograr hoy?
           </p>
+          
+          <div className="flex flex-col md:flex-row items-center gap-6 mt-10">
+            <button 
+              onClick={requestNotificationPermission}
+              className="w-full md:w-auto bg-[#48c1d2] hover:bg-[#35a5b5] text-[#142d53] px-8 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-[0_20px_40px_rgba(72,193,210,0.3)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 border-b-4 border-[#2d8c9a]"
+            >
+              <Bell size={20} fill="currentColor" />
+              Activar Notificaciones
+            </button>
+            <div className="flex items-center gap-3">
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+              <span className="text-[10px] font-black uppercase text-white/40 tracking-[0.3em] italic">Sincronización de Élite</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -152,6 +190,12 @@ export default function Home() {
         </div>
 
       </div>
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+      />
     </div>
   );
 }
