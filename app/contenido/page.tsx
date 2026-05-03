@@ -1629,36 +1629,22 @@ function ContenidoContent() {
                               ))}
                             </>
                           ) : (
-                            <>
-                              <div className="p-6 bg-[#48c1d2]/5 rounded-[2.5rem] border border-[#48c1d2]/20 mb-2 text-left">
-                                <h5 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest mb-2 flex items-center gap-2">
-                                  <Sparkles size={12} /> Producción Pro
-                                </h5>
-                                <p className="text-[11px] font-bold text-[#142d53]/70 leading-relaxed italic">
-                                  "Usa este formato para cualquier video donde necesites calidad de estudio, instrucciones de cámara y demostraciones visuales por escena."
-                                </p>
-                              </div>
-                              {guionesPresentacion.filter(s => s.isProductionMode).map((script) => (
-                                <div 
-                                  key={script.id}
-                                  onClick={() => {
-                                    setSelectedScript(script); 
-                                    setCurrentStepIdx(0);
-                                  }}
-                                  className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
-                                >
-                                  <div className="w-14 h-14 bg-slate-50 rounded-[1.5rem] flex items-center justify-center text-[#142d53] group-hover:bg-[#48c1d2]/10 group-hover:text-[#48c1d2] transition-all">
-                                    <Clapperboard size={24} />
+                              <>
+                                <div className="py-20 px-8 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center">
+                                  <div className="w-20 h-20 bg-white rounded-[2rem] shadow-sm flex items-center justify-center text-slate-300 mb-6 border border-slate-100">
+                                    <Sparkles size={40} className="animate-pulse" />
                                   </div>
-                                  <div className="text-left flex-1">
-                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">Producción High-End</span>
-                                    <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
-                                    <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Modo Escenas</p>
+                                  <h5 className="text-xl font-black text-[#142d53] italic mb-2 tracking-tighter">Laboratorio de Contenido Pro</h5>
+                                  <p className="text-sm font-bold text-slate-400 max-w-[280px] leading-relaxed italic">
+                                    "Próximamente se estarán colocando guiones estratégicos por aquí."
+                                  </p>
+                                  <div className="mt-8 flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] animate-bounce" style={{ animationDelay: '300ms' }}></div>
                                   </div>
-                                  <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
                                 </div>
-                              ))}
-                            </>
+                              </>
                           )}
                         </div>
                       ) : (
