@@ -327,7 +327,10 @@ export const guionesPresentacion: Script[] = [
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
-    ]
+    ],
+    steps: [],
+    tips: [],
+    checklist: []
   },
   {
     id: 'presentacion-3',
@@ -356,6 +359,9 @@ export const guionesPresentacion: Script[] = [
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
-    ]
+    ],
+    steps: [],
+    tips: [],
+    checklist: []
   }
 ];
