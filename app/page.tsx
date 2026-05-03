@@ -83,7 +83,7 @@ export default function Home() {
         <div className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 mb-12 flex flex-col md:flex-row items-center gap-8 group">
           <div 
             onClick={() => setIsPlaying(true)}
-            className="w-full md:w-1/2 aspect-video bg-slate-900 rounded-[2rem] relative overflow-hidden flex items-center justify-center border-4 border-white shadow-2xl group-hover:scale-[1.02] transition-transform duration-500 cursor-pointer"
+            className="w-full md:w-auto md:min-w-[300px] aspect-[9/16] max-h-[500px] bg-slate-900 rounded-[3rem] relative overflow-hidden flex items-center justify-center border-[12px] border-[#142d53] shadow-2xl group-hover:scale-[1.02] transition-transform duration-500 cursor-pointer mx-auto"
           >
             {isPlaying ? (
               <iframe
