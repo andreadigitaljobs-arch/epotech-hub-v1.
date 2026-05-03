@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { 
   BookOpen, Video, Briefcase, PlaySquare, Target, 
   Sparkles, HelpCircle, ArrowRight, Play, Mic, 
-  Search, Smartphone, Zap, Bell
+  Search, Smartphone, Zap, Bell, ShieldCheck
 } from "lucide-react";
 import Link from "next/link";
 import { Toast, ToastType } from "@/components/ui/Toast";
@@ -53,27 +53,90 @@ const TUTORIAL_CARDS = [
 ];
 
 export default function Home() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
-    message: "",
-    type: "success",
-    isVisible: false
-  });
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
 
-  const showToast = (message: string, type: ToastType = "success") => {
-    setToast({ message, type, isVisible: true });
+  useEffect(() => {
+    if (!('Notification' in window)) {
+      setNotificationStatus('unsupported');
+    } else {
+      setNotificationStatus(Notification.permission);
+      checkSubscription();
+    }
+  }, []);
+
+  const checkSubscription = async () => {
+    if ('serviceWorker' in navigator) {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      setIsSubscribed(!!subscription);
+    }
+  };
+
+  const urlBase64ToUint8Array = (base64String: string) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
   };
 
   const requestNotificationPermission = async () => {
-    if ('Notification' in window) {
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        showToast("¡Notificaciones activadas! Recibirás los avisos de Andrea.", "success");
-      } else {
-        showToast("No se pudieron activar las notificaciones.", "error");
-      }
-    } else {
+    if (!('Notification' in window)) {
       showToast("Tu navegador no soporta notificaciones.", "info");
+      return;
+    }
+
+    if (Notification.permission === 'denied') {
+      showToast("Permiso denegado. Actívalo en los ajustes de tu navegador.", "error");
+      return;
+    }
+
+    if (Notification.permission === 'granted' && isSubscribed) {
+      showToast("¡Ya estás conectado al 100%! Todo listo.", "success");
+      return;
+    }
+
+    try {
+      const permission = await Notification.requestPermission();
+      setNotificationStatus(permission);
+
+      if (permission === 'granted') {
+        // Suscribir al Service Worker
+        if ('serviceWorker' in navigator) {
+          const registration = await navigator.serviceWorker.ready;
+          
+          const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
+          const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC);
+
+          const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: convertedVapidKey
+          });
+
+          // Guardar en la base de datos a través de nuestra API
+          const res = await fetch('/api/subscribe', {
+            method: 'POST',
+            body: JSON.stringify(subscription),
+            headers: { 'Content-Type': 'application/json' }
+          });
+
+          if (res.ok) {
+            setIsSubscribed(true);
+            showToast("¡Conexión de Élite establecida! Ya recibirás avisos.", "success");
+          } else {
+            showToast("Error al registrar la suscripción.", "error");
+          }
+        }
+      } else {
+        showToast("No se otorgó el permiso necesario.", "error");
+      }
+    } catch (error) {
+      console.error("Error en suscripción:", error);
+      showToast("Hubo un fallo técnico al conectar.", "error");
     }
   };
 
@@ -103,14 +166,20 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center gap-6 mt-10">
             <button 
               onClick={requestNotificationPermission}
-              className="w-full md:w-auto bg-[#48c1d2] hover:bg-[#35a5b5] text-[#142d53] px-8 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-[0_20px_40px_rgba(72,193,210,0.3)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 border-b-4 border-[#2d8c9a]"
+              className={`w-full md:w-auto px-8 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-3 border-b-4 ${
+                isSubscribed 
+                ? "bg-slate-800 text-[#48c1d2] border-slate-900 cursor-default" 
+                : "bg-[#48c1d2] hover:bg-[#35a5b5] text-[#142d53] border-[#2d8c9a] hover:scale-105 active:scale-95 shadow-[#48c1d2]/30"
+              }`}
             >
-              <Bell size={20} fill="currentColor" />
-              Activar Notificaciones
+              {isSubscribed ? <ShieldCheck size={20} /> : <Bell size={20} fill="currentColor" />}
+              {isSubscribed ? "Notificaciones Activas" : "Activar Notificaciones"}
             </button>
             <div className="flex items-center gap-3">
-              <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
-              <span className="text-[10px] font-black uppercase text-white/40 tracking-[0.3em] italic">Sincronización de Élite</span>
+              <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${isSubscribed ? 'bg-green-500 shadow-green-500/50' : 'bg-amber-500 shadow-amber-500/50'}`}></div>
+              <span className="text-[10px] font-black uppercase text-white/40 tracking-[0.3em] italic">
+                {isSubscribed ? "Sincronización de Élite" : "Esperando Conexión"}
+              </span>
             </div>
           </div>
         </div>
