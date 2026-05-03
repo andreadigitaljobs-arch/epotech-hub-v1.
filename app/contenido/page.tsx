@@ -993,7 +993,7 @@ function ContenidoContent() {
         </div>
 
         {/* Contenido principal */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar flex flex-col">
           {selectedScript.isProductionMode ? (
             /* NUEVO MODO: EN CÁMARA (PRODUCCIÓN DUAL) */
             <div className="p-6 space-y-12">
