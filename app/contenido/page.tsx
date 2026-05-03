@@ -1070,12 +1070,7 @@ function ContenidoContent() {
                       "{selectedScript.fullDialogue}"
                     </p>
                   </div>
-                  <button
-                    onClick={() => setShowFullScript(false)}
-                    className="w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] border-b-4 border-[#3aa8b8] shadow-xl shadow-[#48c1d2]/20"
-                  >
-                    🚀 EMPEZAR PRODUCCIÓN (POR ESCENAS)
-                  </button>
+                  </div>
                 </div>
               ) : (
                 /* Vista de Escenas (Producción Dual) */
