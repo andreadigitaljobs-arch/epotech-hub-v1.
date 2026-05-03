@@ -361,34 +361,175 @@ export const guionesPresentacion: Script[] = [
   },
   {
     id: 'presentacion-3',
-    title: '3. Resultados Garantizados (Prueba)',
+    title: '3. Resultados Garantizados (Reseñas)',
     category: 'PINNED: Resultados',
     service: 'Marca Personal',
-    duration: '45s',
+    duration: '90s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'Próximamente contenido detallado...',
+    fullDialogue: 'Esto es lo primero que hacen la mayoría antes de elegirnos… Revisan nuestras reseñas. Y es totalmente válido. Porque hoy en día hay muchas opciones… y no siempre es fácil saber cuál elegir. Por eso dejamos que hablen quienes ya trabajaron con nosotros. Ya hemos trabajado con más de 100 clientes, y cada espacio es diferente. Por eso lo hacemos simple: Nos escribes, vemos tu espacio, y te explicamos exactamente qué necesitas. Sin presión, sin complicaciones. Solo hacer bien el trabajo y que tú estés tranquilo con el resultado. Puedes ver nuestras reseñas… y decidir con total confianza.',
     scenes: [
       {
         id: 'p3-e1',
-        title: 'ESCENA 1 — INTRODUCCIÓN',
+        title: '🎬 ESCENA 1 — HOOK',
         talent: {
-          whatToSay: 'Esperando guion definitivo...',
-          howToMove: 'Mirando a cámara.',
-          gesture: 'Seguridad.',
+          whatToSay: '“Esto es lo primero que hacen la mayoría antes de elegirnos…”',
+          howToMove: 'Afuera de la casa. Mira a cámara.',
+          gesture: 'Gesto leve de intriga.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
           whereToStand: 'Frente a él.',
+          angle: 'Plano medio frontal.',
+          movement: 'Estable.',
+          avoid: 'Cortar antes de tiempo.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p3-e2',
+        title: '🎬 ESCENA 2 — RESEÑAS',
+        talent: {
+          whatToSay: '“Revisan nuestras reseñas.”',
+          howToMove: 'Señala hacia arriba.',
+          gesture: 'Seguridad, invitación visual.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Mismo lugar.',
+          angle: 'Plano limpio.',
+          movement: 'Deja espacio arriba (para overlay de estrellas).',
+          avoid: 'No dejar aire arriba.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p3-e3',
+        title: '🎬 ESCENA 3 — VALIDACIÓN',
+        talent: {
+          whatToSay: '“Y es totalmente válido.”',
+          howToMove: 'Cambia posición levemente.',
+          gesture: 'Asiente con la cabeza, natural.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Mismo lugar.',
+          angle: 'Ángulo diagonal.',
+          movement: 'Mantén el plano.',
+          avoid: 'Frontal repetitivo.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p3-e4',
+        title: '🎬 ESCENA 4 — OPCIONES',
+        talent: {
+          whatToSay: '“Porque hoy en día hay muchas opciones… y no siempre es fácil saber cuál elegir.”',
+          howToMove: 'Caminando por entrada / driveway.',
+          gesture: 'Mira a cámara al final de la frase.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Siguiéndolo.',
+          angle: 'Plano medio dinámico.',
+          movement: 'Síguelo caminando (suave).',
+          avoid: 'Sacudidas bruscas.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p3-e5',
+        title: '🎬 ESCENA 5 — PRUEBA SOCIAL',
+        talent: {
+          whatToSay: '“Por eso dejamos que hablen quienes ya trabajaron con nosotros.”',
+          howToMove: 'Frente a pared o fondo limpio.',
+          gesture: 'Señala hacia arriba.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Frente a él.',
+          angle: 'Plano estable.',
+          movement: 'Deja espacio arriba (para 3-5 reseñas).',
+          avoid: 'Zoom innecesario.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p3-e6',
+        title: '🎬 ESCENA 6 — EXPERIENCIA',
+        talent: {
+          whatToSay: '“Ya hemos trabajado con más de 100 clientes, y cada espacio es diferente.”',
+          howToMove: 'En el área de trabajo.',
+          gesture: 'Señala alrededor, gesto abierto.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Diagonal.',
+          angle: 'Plano medio, ángulo bajo.',
+          movement: 'Estable.',
+          avoid: 'Perder el fondo de trabajo.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p3-e7',
+        title: '🎬 ESCENA 7 — PROCESO',
+        talent: {
+          whatToSay: '“Por eso lo hacemos simple: Nos escribes, vemos tu espacio, y te explicamos exactamente qué necesitas.”',
+          howToMove: 'Acércate un poco a cámara. Gesto de celular. Señala alrededor.',
+          gesture: 'Señala a cámara al final.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Frente a él.',
+          angle: 'Plano más cercano.',
+          movement: 'Fijo.',
+          avoid: 'Desenfoque al acercarse.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p3-e8',
+        title: '🎬 ESCENA 8 — TRANQUILIDAD',
+        talent: {
+          whatToSay: '“Sin presión, sin complicaciones. Solo hacer bien el trabajo y que tú estés tranquilo con el resultado.”',
+          howToMove: 'Pausa leve.',
+          gesture: 'Gesto relajado. Mano al pecho.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Mismo lugar.',
           angle: 'Plano medio.',
-          movement: 'Estático.',
-          avoid: 'Cortes abruptos.',
+          movement: 'Sin movimiento.',
+          avoid: 'Distracciones en el fondo.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p3-e9',
+        title: '🎬 ESCENA 9 — CTA',
+        talent: {
+          whatToSay: '“Puedes ver nuestras reseñas… y decidir con total confianza.”',
+          howToMove: 'Mira directo a cámara.',
+          gesture: 'Señala hacia arriba, sonrisa segura.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Mismo lugar.',
+          angle: 'Plano limpio.',
+          movement: 'Deja espacio arriba para reviews finales.',
+          avoid: 'Cortar el gesto de señalar.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
     ],
     steps: [],
-    tips: [],
-    checklist: []
+    tips: [
+      'Asegúrate de dejar suficiente aire arriba en las escenas 2, 5 y 9.',
+      'El tono debe ser honesto y tranquilo.',
+      'Cambia de lugar al menos 4 veces durante el video.'
+    ],
+    checklist: ['Hook Curiosidad', 'Reseñas (Overlay)', 'Validación Ángulo', 'Caminata Natural', 'Prueba Social Fuerte', 'Autoridad Clientes', 'Proceso Simple', 'Cierre Tranquilidad', 'CTA Reseñas'],
+    productionHack: 'Captura pantallas de tus mejores reseñas de Google/Yelp para usarlas como overlays en edición.'
   }
 ];
