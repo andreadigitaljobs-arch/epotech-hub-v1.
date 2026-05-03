@@ -1534,7 +1534,7 @@ function ContenidoContent() {
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
-                <Clapperboard size={15} /> Reels
+                <Mic size={15} /> Voz en Off
               </button>
               <button
                 onClick={() => handleGuionTabChange('historias')}
@@ -1543,7 +1543,7 @@ function ContenidoContent() {
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
-                <Zap size={15} /> Historias
+                <Sparkles size={15} /> Inspiración
               </button>
               <button
                 onClick={() => handleGuionTabChange('presentacion')}
@@ -1552,22 +1552,35 @@ function ContenidoContent() {
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
-                <Video size={15} /> EN CÁMARA
+                <Clapperboard size={15} /> GRABACIÓN PRO
               </button>
             </div>
 
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 text-left">
               <div className="bg-[#142d53]/5 p-6 rounded-[2.5rem] border border-[#142d53]/10">
                 <h3 className="text-lg font-black text-[#142d53] mb-2 tracking-tight">
-                  {guionTab === 'reels' && 'Biblioteca de Guiones'}
-                  {guionTab === 'historias' && 'Guía de Historias Diarias'}
-                  {guionTab === 'presentacion' && 'Videos de Marca Personal'}
+                  {guionTab === 'reels' && 'Estudio de Voz en Off'}
+                  {guionTab === 'historias' && 'Laboratorio de Inspiración'}
+                  {guionTab === 'presentacion' && 'Producción Profesional (Cámara)'}
                 </h3>
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-6">
-                  {guionTab === 'reels' && 'Contenido estructurado para máxima retención y viralidad.'}
-                  {guionTab === 'historias' && 'Guías situacionales para conectar de forma humana y espontánea.'}
-                  {guionTab === 'presentacion' && 'Producción profesional con desglose de escenas para talento y cámara.'}
-                </p>
+                
+                {/* Tarjeta de Instrucciones Dinámica */}
+                <div className="bg-white/60 backdrop-blur-md p-4 rounded-2xl border border-[#142d53]/5 mb-6 flex items-start gap-3 shadow-sm">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    guionTab === 'reels' ? 'bg-[#142d53] text-[#48c1d2]' : 
+                    guionTab === 'historias' ? 'bg-amber-100 text-amber-600' : 
+                    'bg-[#48c1d2] text-[#142d53]'
+                  }`}>
+                    {guionTab === 'reels' && <Mic size={16} />}
+                    {guionTab === 'historias' && <Sparkles size={16} />}
+                    {guionTab === 'presentacion' && <Clapperboard size={16} />}
+                  </div>
+                  <p className="text-[11px] font-bold text-slate-600 leading-relaxed italic">
+                    {guionTab === 'reels' && 'Graba tu voz palabra por palabra siguiendo el guion. Este audio servirá como la narración profesional (voice-over) para tus videos.'}
+                    {guionTab === 'historias' && 'Usa estos ejemplos para inspirarte. No es para leerlo literal, sino para entender el estilo y replicarlo con tus palabras durante el trabajo.'}
+                    {guionTab === 'presentacion' && 'Sigue el desglose por escenas para grabarte a ti mismo o dirigir a alguien más. Incluye ángulos, movimientos y guiones exactos.'}
+                  </p>
+                </div>
 
                 {guionTab === 'presentacion' && (
                   <div className="flex bg-white/50 p-1.5 rounded-2xl border border-slate-200/50 mb-8 max-w-sm">
