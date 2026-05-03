@@ -124,13 +124,10 @@ export default function Home() {
       if (permission === 'granted') {
         // Suscribir al Service Worker
         if ('serviceWorker' in navigator) {
-          console.log("3. Registrando SW...");
-          // Explicit registration fix for iOS/Safari (igual que el código viejo)
-          await navigator.serviceWorker.register('/sw.js');
-          
-          console.log("4. Esperando SW ready...");
-          const registration = await navigator.serviceWorker.ready;
-          console.log("5. SW Ready obtenido:", !!registration);
+          console.log("3. Registrando SW y forzando uso...");
+          // Bypass de iOS: register devuelve el registration, no esperamos el 'ready' que se cuelga en iOS
+          const registration = await navigator.serviceWorker.register('/sw.js');
+          console.log("4. Registro obtenido directo:", !!registration);
           
           if (!registration) {
             throw new Error("El motor de notificaciones falló al iniciar.");
