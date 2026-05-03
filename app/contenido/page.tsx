@@ -334,17 +334,40 @@ function ContenidoContent() {
   // Memoria de Pestaña e Inteligencia de URL
   useEffect(() => {
     const tabParam = searchParams.get('tab');
-    if (tabParam === 'historial') {
-      setActiveTab('historial');
+    const subTabParam = searchParams.get('sub');
+    
+    if (tabParam) {
+      setActiveTab(tabParam);
     } else {
       const savedTab = localStorage.getItem('epotech_production_tab');
       if (savedTab) setActiveTab(savedTab);
+    }
+
+    if (subTabParam) {
+      setGuionTab(subTabParam as any);
+    } else {
+      const savedSubTab = localStorage.getItem('epotech_guion_tab');
+      if (savedSubTab) setGuionTab(savedSubTab as any);
     }
   }, [searchParams]);
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
     localStorage.setItem('epotech_production_tab', tabId);
+    
+    // Actualizar URL sin recargar para mantener consistencia
+    const params = new URLSearchParams(window.location.search);
+    params.set('tab', tabId);
+    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+  };
+
+  const handleGuionTabChange = (tabId: 'reels' | 'historias' | 'presentacion') => {
+    setGuionTab(tabId);
+    localStorage.setItem('epotech_guion_tab', tabId);
+    
+    const params = new URLSearchParams(window.location.search);
+    params.set('sub', tabId);
+    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
   };
 
   const handleCloseStory = () => {
@@ -1328,16 +1351,11 @@ function ContenidoContent() {
             <>
               <button
                 onClick={() => {
-                  if (selectedScript.isProductionMode) {
-                    setShowFullScript(false);
-                  } else {
-                    handleCloseScript();
-                    setShowAudioReport(true);
-                  }
+                  setShowFullScript(false);
                 }}
                 className="w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
               >
-                {selectedScript.isProductionMode ? "EMPEZAR PRODUCCIÓN POR ESCENAS" : "FINALIZAR Y HACER REPORTE"}
+                {selectedScript.isProductionMode ? "EMPEZAR PRODUCCIÓN POR ESCENAS" : "EMPEZAR MODO PASOS (LOCUCIÓN)"}
               </button>
               {showHelp && teleHelpStep === 5 && createPortal(
                 <div className="fixed inset-0 z-[30000] flex items-center justify-center p-6 animate-in fade-in duration-500">
@@ -1533,7 +1551,7 @@ function ContenidoContent() {
             {/* Navegación del Estudio de Producción - Ahora Simplificada */}
             <div className="flex bg-[#0a192f]/5 p-1.5 rounded-2xl mb-6 gap-1.5 border border-slate-200/60 shadow-inner">
               <button
-                onClick={() => setGuionTab('reels')}
+                onClick={() => handleGuionTabChange('reels')}
                 className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'reels'
                     ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
@@ -1542,7 +1560,7 @@ function ContenidoContent() {
                 <Clapperboard size={15} /> Reels
               </button>
               <button
-                onClick={() => setGuionTab('historias')}
+                onClick={() => handleGuionTabChange('historias')}
                 className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'historias'
                     ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
@@ -1551,7 +1569,7 @@ function ContenidoContent() {
                 <Zap size={15} /> Historias
               </button>
               <button
-                onClick={() => setGuionTab('presentacion')}
+                onClick={() => handleGuionTabChange('presentacion')}
                 className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'presentacion'
                     ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
@@ -1616,6 +1634,7 @@ function ContenidoContent() {
                           onClick={() => {
                             setSelectedScript(script);
                             setCurrentStepIdx(0);
+                            setShowFullScript(true);
                             if (showHelp) setTeleHelpStep(1);
                           }}
                           className={`bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-[#48c1d2]/50 transition-all cursor-pointer active:scale-95 relative`}>
@@ -1648,6 +1667,7 @@ function ContenidoContent() {
                               onClick={() => {
                                 setSelectedScript(script);
                                 setCurrentStepIdx(0);
+                                setShowFullScript(true);
                               }}
                               className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-amber-400 transition-all cursor-pointer relative overflow-hidden"
                             >
