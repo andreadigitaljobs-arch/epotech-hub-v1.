@@ -81,7 +81,7 @@ export function VideoCard({
         {/* Analisis (Director's Notes) */}
         <div className="px-1">
           <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30 mb-1 block font-mono">Análisis Hedy</span>
-          <p className="text-xs font-medium text-white/60 leading-tight italic line-clamp-3">
+          <p className="text-xs font-medium text-white/60 leading-tight italic">
             "{porqueFunciona}"
           </p>
         </div>

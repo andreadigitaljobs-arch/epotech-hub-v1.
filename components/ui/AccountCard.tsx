@@ -63,7 +63,7 @@ export function AccountCard({
           <h3 className="text-sm font-black text-[#142d53] tracking-tighter uppercase italic leading-none mb-1">
             {nombre}
           </h3>
-          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 block">Production Studio Pass</span>
+          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 block">Acceso de Producción</span>
         </div>
       </div>
 
@@ -78,7 +78,7 @@ export function AccountCard({
         {/* Análisis */}
         <div className="px-1">
           <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300 font-mono mb-1 block">Estrategia Viral</span>
-          <p className="text-xs font-medium text-slate-500 leading-tight italic line-clamp-2">
+          <p className="text-xs font-medium text-slate-500 leading-tight italic">
             "{porqueFunciona}"
           </p>
         </div>
