@@ -10,10 +10,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Invalid subscription object" }, { status: 400 });
     }
     
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-    );
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.error("Missing Supabase environment variables");
+      return NextResponse.json({ 
+        success: false, 
+        error: "Server configuration error: Missing DB credentials" 
+      }, { status: 500 });
+    }
+    
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Extraer keys con seguridad
     const keys_auth = subscription.keys?.auth || '';
