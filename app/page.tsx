@@ -241,7 +241,7 @@ export default function Home() {
               ></iframe>
             ) : (
               <>
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581092921461-7d657a03006d?q=80&w=1000')] bg-cover bg-center opacity-40"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-[#142d53] to-[#48c1d2]/40 opacity-60"></div>
                 <div className="w-16 h-16 rounded-full bg-[#48c1d2] flex items-center justify-center shadow-2xl shadow-[#48c1d2]/50 relative z-10 group-hover:scale-110 transition-transform">
                   <Play size={24} className="text-[#142d53] ml-1" fill="currentColor" />
                 </div>
