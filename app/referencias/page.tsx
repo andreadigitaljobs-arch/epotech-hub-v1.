@@ -21,6 +21,8 @@ const TiktokIcon = ({ size = 24, className }: { size?: number, className?: strin
   </svg>
 );
 
+import { referencias as staticRefs } from "@/data/referencias";
+
 export default function ReferenciasPage() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>({ videos: [], cuentas: [] });
@@ -29,13 +31,20 @@ export default function ReferenciasPage() {
 
   useEffect(() => {
     async function loadData() {
-      const { data: videos } = await supabase.from('referencias_videos').select('*');
-      const { data: cuentas } = await supabase.from('referencias_cuentas').select('*');
-      setData({ 
-        videos: videos || [], 
-        cuentas: cuentas || [] 
-      });
-      setLoading(false);
+      try {
+        const { data: videos } = await supabase.from('referencias_videos').select('*');
+        const { data: cuentas } = await supabase.from('referencias_cuentas').select('*');
+        
+        setData({ 
+          videos: (videos && videos.length > 0) ? videos : staticRefs.videos, 
+          cuentas: (cuentas && cuentas.length > 0) ? cuentas : staticRefs.cuentas 
+        });
+      } catch (e) {
+        console.error("Error loading refs:", e);
+        setData({ videos: staticRefs.videos, cuentas: staticRefs.cuentas });
+      } finally {
+        setLoading(false);
+      }
     }
     loadData();
   }, []);
@@ -134,8 +143,8 @@ export default function ReferenciasPage() {
                            url={video.url}
                            platform={video.platform}
                            titleEs={video.titulo}
-                           fuerte={video.fuerte}
-                           porqueFunciona={video.porque_funciona}
+                           fuerte={video.fuerte || video.descripcion}
+                           porqueFunciona={video.porqueFunciona || video.porque_funciona || video.porque_seguirlo}
                         />
                      ))}
                   </div>
@@ -161,10 +170,10 @@ export default function ReferenciasPage() {
                         <AccountCard 
                            key={account.id}
                            nombre={account.nombre}
-                           fuerte={account.descripcion}
+                           fuerte={account.fuerte || account.descripcion}
                            tipo={account.tipo}
                            url={account.url}
-                           porqueFunciona={account.porque_seguirlo}
+                           porqueFunciona={account.porqueFunciona || account.porque_seguirlo || account.porque_funciona}
                         />
                      ))}
                   </div>
