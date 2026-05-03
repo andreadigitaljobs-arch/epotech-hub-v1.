@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 
 import { 
   BookOpen, Video, Briefcase, PlaySquare, Target, 
@@ -51,6 +52,9 @@ const TUTORIAL_CARDS = [
 ];
 
 export default function Home() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const tutorialVideoId = "dQw4w9WgXcQ"; // Placeholder, se puede cambiar luego
+
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
       {/* Header Premium */}
@@ -77,19 +81,33 @@ export default function Home() {
       <div className="max-w-6xl mx-auto px-8 md:px-20 -mt-12 relative z-20">
         {/* Quick Help Card */}
         <div className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 mb-12 flex flex-col md:flex-row items-center gap-8 group">
-          <div className="w-full md:w-1/2 aspect-video bg-slate-900 rounded-[2rem] relative overflow-hidden flex items-center justify-center border-4 border-white shadow-2xl group-hover:scale-[1.02] transition-transform duration-500 cursor-pointer">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581092921461-7d657a03006d?q=80&w=1000')] bg-cover bg-center opacity-40"></div>
-            <div className="w-16 h-16 rounded-full bg-[#48c1d2] flex items-center justify-center shadow-2xl shadow-[#48c1d2]/50 relative z-10 group-hover:scale-110 transition-transform">
-              <Play size={24} className="text-[#142d53] ml-1" fill="currentColor" />
-            </div>
-            <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-10">
-              <span className="text-white text-xs font-black uppercase tracking-widest bg-[#142d53]/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-                Tutorial General
-              </span>
-              <span className="text-white/60 text-[10px] font-bold">1:45 min</span>
-            </div>
+          <div 
+            onClick={() => setIsPlaying(true)}
+            className="w-full md:w-1/2 aspect-video bg-slate-900 rounded-[2rem] relative overflow-hidden flex items-center justify-center border-4 border-white shadow-2xl group-hover:scale-[1.02] transition-transform duration-500 cursor-pointer"
+          >
+            {isPlaying ? (
+              <iframe
+                src={`https://www.youtube.com/embed/${tutorialVideoId}?autoplay=1&rel=0&modestbranding=1`}
+                className="w-full h-full"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              <>
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581092921461-7d657a03006d?q=80&w=1000')] bg-cover bg-center opacity-40"></div>
+                <div className="w-16 h-16 rounded-full bg-[#48c1d2] flex items-center justify-center shadow-2xl shadow-[#48c1d2]/50 relative z-10 group-hover:scale-110 transition-transform">
+                  <Play size={24} className="text-[#142d53] ml-1" fill="currentColor" />
+                </div>
+                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-10">
+                  <span className="text-white text-xs font-black uppercase tracking-widest bg-[#142d53]/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                    Tutorial General
+                  </span>
+                  <span className="text-white/60 text-[10px] font-bold">1:45 min</span>
+                </div>
+              </>
+            )}
           </div>
-          <div className="flex-1 space-y-4">
+          <div className="flex-1 space-y-4 text-left">
             <h2 className="text-2xl font-black text-[#142d53] tracking-tight">¡Bienvenido a bordo!</h2>
             <p className="text-slate-600 font-medium leading-relaxed text-sm">
               He preparado este video para mostrarte cómo navegar por cada sección. Dale play y descubre cómo estamos organizando todo tu trabajo de 2026.

@@ -295,6 +295,12 @@ const CustomAudioPlayer = ({ src, title = "Reporte de Audio" }: { src: string, t
   );
 };
 
+const getYoutubeId = (url: string) => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+};
+
 export default function ContenidoPage() {
   return (
     <Suspense fallback={<LoadingSpinner message="Conectando con el Estudio..." />}>
@@ -977,363 +983,310 @@ function ContenidoContent() {
   const modalContent = selectedScript && mounted ? createPortal(
     <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-all duration-500 ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}>
       <div 
-        className={`absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-500 ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity duration-500 ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}
         onClick={handleCloseScript}
       />
       
-      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-visible flex flex-col max-h-[90vh] shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
-        {/* Encabezado - Fijo y Simplificado */}
-        <div className="p-6 pb-2 border-b border-white/5">
-           <div className="flex justify-between items-start text-left">
-              <div>
-                 <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[2px] mb-1 block">
-                    {selectedScript.category}
-                 </span>
-                 <h2 className="text-xl font-black text-white leading-tight">
-                    {selectedScript.title}
-                 </h2>
-              </div>
-              <div className="flex items-center gap-2">
-                 <div className="relative">
-                 <button 
-                   onClick={() => setShowFullScript(!showFullScript)} 
-                   className={`h-9 px-3 rounded-xl flex items-center gap-2 transition-all whitespace-nowrap ${showFullScript ? "bg-[#48c1d2] text-[#0a192f] shadow-lg" : "bg-white/5 text-white/40 hover:text-white border border-white/5"} ${showHelp && teleHelpStep === 2 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40' : ''}`}>
-                    {showFullScript ? (
-                      <>
-                        <Zap size={14} />
-                        <span className="text-[8px] font-black uppercase tracking-tighter">MODO PASOS</span>
-                      </>
-                    ) : (
-                      <>
-                        <BookOpen size={14} />
-                        <span className="text-[8px] font-black uppercase tracking-tighter">VISTA TOTAL</span>
-                      </>
-                    )}
-                 </button>
-                 {showHelp && teleHelpStep === 2 && (
-                       <div className="absolute top-full mt-4 right-0 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 z-[100] border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
-                         <div className="flex flex-col gap-2">
-                           <span>
-                             {showFullScript 
-                               ? "PASO 7: Ahora tienes todo el guion a la vista. Si prefieres volver al modo de pasos cortos para leer más cómodo, toca aquí." 
-                               : "PASO 7: ¿Prefieres fluir sin pasar páginas? Toca aquí para ver todo el guion de una vez."}
-                           </span>
-                           <div className="flex gap-2 justify-end">
-                              <button 
-                                onClick={(e) => { 
-                                  e.stopPropagation(); 
-                                  setShowFullScript(false); // Volver al modo por pasos
-                                  setTeleHelpStep(1); 
-                                }}
-                                className="bg-white/10 text-white px-3 py-1.5 rounded-xl hover:bg-white/20 transition-all text-[8px] border border-white/10"
-                              >
-                                VOLVER
-                              </button>
-                              <button 
-                                onClick={(e) => { 
-                                  e.stopPropagation(); 
-                                  // Si está en FULL, saltamos el paso de "Siguiente Toma" (paso 8)
-                                  const isLastStep = currentStepIdx === selectedScript.steps.length - 1;
-                                  setTeleHelpStep(showFullScript || isLastStep ? 4 : 3); 
-                                }}
-                                className="bg-white text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-teal-50 transition-colors text-[8px] font-black shadow-lg"
-                              >
-                                SIGUIENTE
-                              </button>
-                           </div>
-                         </div>
-                         <div className="absolute -top-3 right-8 w-6 h-6 bg-[#48c1d2] rotate-45 border-l-2 border-t-2 border-white/20"></div>
-                       </div>
-                     )}
-               </div>
-                 <button onClick={handleCloseScript} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/20 hover:text-white transition-colors border border-white/5">
-                    <X size={20} />
-                 </button>
-              </div>
-           </div>
-        </div>
-        
-        {/* Área de Contenido: Teleprompter vs Guion Completo */}
-        <div className="flex-1 overflow-y-auto p-6 pt-10 flex flex-col justify-start space-y-6">
-           {showFullScript ? (
-              <div className="animate-in fade-in zoom-in-95 duration-500 text-left space-y-10 w-full">
-                 <div className="space-y-10">
-                    {selectedScript.steps.map((s: any, i: number) => (
-                       <div key={i} className="space-y-3">
-                          <div className="flex items-center gap-3">
-                             <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[3px]">ACTO {i+1}</span>
-                             <div className="flex-1 h-[1px] bg-white/10" />
-                          </div>
-                          <p className="text-lg font-medium text-white/90 leading-relaxed italic">
-                             "{s.script}"
-                          </p>
-                          <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                             <h5 className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-2">
-                                <Video size={10} /> Referencia Visual
-                             </h5>
-                             <p className="text-[11px] font-bold text-white/40 leading-snug uppercase">
-                                {s.visualField}
-                             </p>
-                          </div>
-                       </div>
-                    ))}
-                 </div>
-                 
-                 
-              </div>
-           ) : mergedVoiceoverUrl ? (
-              <div className="flex flex-col items-center justify-center h-full space-y-6 animate-in zoom-in duration-500 pt-10">
-                <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/30">
-                   <CheckCircle2 size={48} className="text-green-400" />
-                </div>
-                <h3 className="text-xl font-black text-white uppercase tracking-widest text-center">Locución Completada</h3>
-                <p className="text-slate-400 text-xs font-bold text-center max-w-xs">Tus tomas han sido unidas en un solo archivo de audio continuo.</p>
-                
-                <div className="w-full max-w-xs mt-4">
-                   <CustomAudioPlayer title="Vista Previa" src={mergedVoiceoverUrl} />
-                </div>
-
-                <div className="flex flex-col w-full max-w-xs gap-3 mt-4">
-                   <button
-                     onClick={handleSendLocucion}
-                     disabled={isUploadingLocucion}
-                     className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
-                       isUploadingLocucion
-                         ? 'bg-white/10 text-white/30'
-                         : 'bg-[#48c1d2] text-[#0a192f] hover:scale-105 shadow-xl shadow-[#48c1d2]/20'
-                     }`}
-                   >
-                     {isUploadingLocucion ? (
-                       <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Enviando...</>
-                     ) : (
-                       <><Share2 size={16} /> Enviar al Equipo</>
-                     )}
-                   </button>
-                   <a href={mergedVoiceoverUrl} download={`Locucion_${selectedScript.id}.wav`} className="w-full py-4 bg-white/5 text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10">
-                     <Download size={16} /> Descargar Audio Final
-                   </a>
-                   <button onClick={() => setMergedVoiceoverUrl(null)} className="w-full py-4 bg-white/5 text-white/50 hover:text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
-                     Revisar Tomas
-                   </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="flex justify-between items-center mb-2 px-2">
-                   <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px]">Paso {currentStepIdx + 1} de {selectedScript.steps.length}</span>
-                   <div className="flex gap-1">
-                      {selectedScript.steps.map((_: any, i: number) => (
-                         <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === currentStepIdx ? 'w-6 bg-[#48c1d2]' : 'w-2 bg-white/10'}`} />
-                      ))}
-                   </div>
-                </div>
-
-                <div className={`space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 text-left transition-all ${showHelp && teleHelpStep === 1 ? "pt-24" : ""}`}>
-                    <div className={`bg-[#48c1d2] p-8 rounded-[40px] relative group shadow-2xl shadow-[#48c1d2]/20 ${showHelp && teleHelpStep === 1 ? 'z-50' : ''}`}>
-                    {showHelp && teleHelpStep === 1 && <div className="absolute inset-0 rounded-[40px] ring-8 ring-[#142d53]/30 animate-pulse pointer-events-none" />}
-                      <div className="absolute top-0 right-0 p-4 opacity-5">
-                         <Sparkles size={60} className="text-[#0a192f]" />
-                      </div>
-                      <h4 className="text-[9px] font-black text-[#0a192f] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                          <Mic size={14} /> Tu guion para leer:
-                       </h4>
-                       {showHelp && teleHelpStep === 1 && (
-                         <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#0a192f] text-white p-5 rounded-[2.5rem] text-[10px] font-bold shadow-2xl w-72 z-[100] border-2 border-[#48c1d2]/30 animate-in zoom-in duration-300 guide-bubble-active">
-                           <div className="flex flex-col gap-2">
-                             <span>PASO 6: Lee este texto o di algo muy parecido. Este "Hook" está diseñado para enganchar a tu audiencia en segundos.</span>
-                             <div className="flex gap-2 justify-end">
-                               <button 
-                                 onClick={(e) => { 
-                                   e.stopPropagation(); 
-                                   setSelectedScript(null); // Cerrar teleprompter
-                                   setDashHelpStep(5); // Volver a la tarjeta del guion
-                                 }}
-                                 className="bg-white/10 text-white px-3 py-1.5 rounded-xl hover:bg-white/20 transition-all text-[8px] border border-white/10"
-                               >
-                                 VOLVER
-                               </button>
-                               <button 
-                                 onClick={(e) => { e.stopPropagation(); setTeleHelpStep(2); }}
-                                 className="bg-[#48c1d2] text-[#0a192f] px-3 py-1.5 rounded-xl hover:bg-[#3aa8b8] transition-colors text-[8px] font-black"
-                               >
-                                 ENTENDIDO, SIGUIENTE TIP
-                               </button>
-                             </div>
-                           </div>
-                           <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#0a192f] rotate-45 border-r-2 border-b-2 border-[#48c1d2]/30"></div>
-                         </div>
-                       )}
-                      <p className="text-2xl font-black text-[#0a192f] leading-[1.1] tracking-tight">
-                         "{selectedScript.steps[currentStepIdx].script}"
-                      </p>
-
-                      {/* NUEVO: GRABADORA DE FRAGMENTOS (VOZ EN OFF) */}
-                      <div className="mt-8 flex flex-col items-center">
-                         {isRecordingVoiceover ? (
-                           <div className="flex flex-col items-center gap-2">
-                             <button 
-                               onClick={stopVoiceoverRecording}
-                               className="w-16 h-16 rounded-full bg-red-500 shadow-[0_0_30px_rgba(239,68,68,0.4)] flex items-center justify-center text-white active:scale-95 transition-all animate-pulse border-4 border-red-400"
-                             >
-                               <div className="w-5 h-5 bg-white rounded-sm" />
-                             </button>
-                             <span className="text-[10px] font-black text-red-500 uppercase tracking-widest animate-pulse">Grabando toma...</span>
-                           </div>
-                         ) : (
-                           <div className="flex flex-col items-center gap-2">
-                             {voiceoverFragments.find(f => f.stepIdx === currentStepIdx) ? (
-                               <div className="flex flex-col items-center gap-2">
-                                 <div className="flex gap-2">
-                                   <button 
-                                     onClick={() => {
-                                       const audioUrl = voiceoverFragments.find(f => f.stepIdx === currentStepIdx)?.url;
-                                       if (audioUrl) {
-                                         toggleVoiceoverPlayback(audioUrl);
-                                       }
-                                     }}
-                                     className="px-4 py-2 bg-green-500/20 text-green-600 rounded-full text-[8px] font-black uppercase tracking-tighter border border-green-500/30 hover:bg-green-500/30 flex items-center gap-2 w-[100px] justify-center"
-                                   >
-                                     {isPlayingVoiceover ? <PauseCircle size={14} /> : <PlayCircle size={14} />} 
-                                     {isPlayingVoiceover ? 'Pausar' : 'Escuchar'}
-                                   </button>
-                                   <button 
-                                     onClick={() => startVoiceoverRecording(currentStepIdx)}
-                                     className="px-4 py-2 bg-white/40 text-[#0a192f] rounded-full text-[8px] font-black uppercase tracking-tighter border border-white/40 hover:bg-white/60 flex items-center gap-2"
-                                   >
-                                     <History size={14} /> ReMODO PASOS
-                                   </button>
-                                   <button 
-                                     onClick={() => deleteVoiceoverFragment(currentStepIdx)}
-                                     className="px-4 py-2 bg-red-500/10 text-red-500 rounded-full text-[8px] font-black uppercase tracking-tighter border border-red-500/20 hover:bg-red-500/20 flex items-center gap-2"
-                                   >
-                                     <Trash2 size={14} /> Eliminar
-                                   </button>
-                                 </div>
-                                 <span className="text-[9px] font-bold text-green-600 uppercase tracking-widest">Toma Guardada</span>
-                               </div>
-                             ) : (
-                               <>
-                                 <button 
-                                   onClick={() => startVoiceoverRecording(currentStepIdx)}
-                                   className="w-16 h-16 rounded-full bg-[#142d53] shadow-[0_0_20px_rgba(20,45,83,0.3)] flex items-center justify-center text-[#48c1d2] hover:scale-105 active:scale-95 transition-all border-2 border-[#142d53]"
-                                 >
-                                   <Mic size={28} />
-                                 </button>
-                                 <span className="text-[10px] font-black text-[#142d53]/70 uppercase tracking-widest">MODO PASOS esta toma</span>
-                               </>
-                             )}
-                           </div>
-                         )}
-                      </div>
-                   </div>
-
-
-                </div>
-              </>
-           )}
+      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[90vh] shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
+        {/* Encabezado */}
+        <div className="p-6 border-b border-white/5 bg-black/20 flex justify-between items-center text-left">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px]">{selectedScript.category}</span>
+              {selectedScript.isPinned && <span className="bg-amber-500/20 text-amber-400 text-[7px] font-black px-2 py-0.5 rounded-full uppercase border border-amber-500/30">📌 Video para Fijar</span>}
+            </div>
+            <h2 className="text-xl font-black text-white leading-tight">{selectedScript.title}</h2>
+          </div>
+          <div className="flex items-center gap-2">
+            {!selectedScript.isProductionMode && (
+              <button 
+                onClick={() => setShowFullScript(!showFullScript)} 
+                className={`h-9 px-3 rounded-xl flex items-center gap-2 transition-all whitespace-nowrap ${showFullScript ? "bg-[#48c1d2] text-[#0a192f] shadow-lg" : "bg-white/5 text-white/40 border border-white/5"}`}
+              >
+                {showFullScript ? <Zap size={14} /> : <BookOpen size={14} />}
+                <span className="text-[8px] font-black uppercase tracking-tighter">{showFullScript ? "MODO PASOS" : "VISTA TOTAL"}</span>
+              </button>
+            )}
+            <button onClick={handleCloseScript} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/20 hover:text-white transition-colors border border-white/5">
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
-         {/* Pie de Página - Controles Teleprompter - Solo se ven en modo por pasos y si no se ha fusionado el audio */}
-         {!showFullScript && !mergedVoiceoverUrl && (
-           <div className="p-6 border-t border-white/5 bg-[#0a192f]/80 backdrop-blur-md flex gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
-           {currentStepIdx > 0 && (
-             <button 
-               onClick={() => {
-                 const prevIdx = currentStepIdx - 1;
-                 const wasRecording = isRecordingVoiceover;
-                 if (wasRecording) stopVoiceoverRecording();
-                 setCurrentStepIdx(prevIdx);
-                 if (wasRecording) {
-                   setTimeout(() => startVoiceoverRecording(prevIdx), 400);
-                 }
-               }}
-               className="flex-1 py-5 bg-white/10 text-white text-[10px] font-black uppercase tracking-[1px] rounded-[24px] border border-white/10 transition-all active:scale-95"
-             >
-               Anterior
-             </button>
-           )}
-           
-           {currentStepIdx < selectedScript.steps.length - 1 ? (
-              <div className="flex-[2] relative">
+        {/* Contenido principal */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+          {selectedScript.isProductionMode ? (
+            /* NUEVO MODO: EN CÁMARA (PRODUCCIÓN DUAL) */
+            <div className="p-6 space-y-12">
+              {showFullScript ? (
+                /* Vista del Guion Completo para Producción */
+                <div className="animate-in fade-in zoom-in-95 duration-500 text-left space-y-8">
+                  <div className="p-8 bg-white/5 rounded-[2.5rem] border border-white/10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-6 opacity-5"><Mic size={80} className="text-[#48c1d2]" /></div>
+                    <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-4 block">Guion de Referencia</span>
+                    <p className="text-xl font-medium text-white/90 leading-relaxed italic relative z-10">
+                      "{selectedScript.fullDialogue}"
+                    </p>
+                  </div>
                   <button 
-                    onClick={() => {
-                      const nextIdx = currentStepIdx + 1;
-                      const wasRecording = isRecordingVoiceover;
-                      if (wasRecording) stopVoiceoverRecording();
-                      setCurrentStepIdx(nextIdx);
-                      if (wasRecording) {
-                        setTimeout(() => startVoiceoverRecording(nextIdx), 400);
-                      }
-                    }}
-                    className={`w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[1px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 z-10 ${showHelp && teleHelpStep === 3 ? 'ring-4 ring-white animate-pulse' : ''}`}
+                    onClick={() => setShowFullScript(false)}
+                    className="w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] border-b-4 border-[#3aa8b8] shadow-xl shadow-[#48c1d2]/20"
                   >
-                    Siguiente Toma
+                    🚀 EMPEZAR PRODUCCIÓN (POR ESCENAS)
                   </button>
-                  {showHelp && teleHelpStep === 3 && (
-                    <div className="absolute -top-32 left-0 right-0 mx-auto bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-[100] border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
-                      <div className="flex flex-col gap-2">
-                        <span>PASO 8: ¿Listo con esta toma? Toca aquí para pasar a la siguiente. ¡Vas muy bien!</span>
-                        <div className="flex gap-2 justify-end">
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); setTeleHelpStep(2); }}
-                            className="bg-[#142d53]/10 text-[#142d53] px-3 py-1.5 rounded-xl hover:bg-[#142d53]/20 transition-all text-[8px] border border-[#142d53]/20"
-                          >
-                            VOLVER
-                          </button>
-                          <button 
-                            onClick={(e) => { 
-                              e.stopPropagation(); 
-                              // Saltar automáticamente al final del guion para mostrar el botón de UNIR
-                              setCurrentStepIdx(selectedScript.steps.length - 1);
-                              setTeleHelpStep(4); 
-                            }}
-                            className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
-                          >
-                            SIGUIENTE
-                          </button>
+                </div>
+              ) : (
+                /* Vista de Escenas (Producción Dual) */
+                <>
+                  <div className="flex justify-between items-center mb-6 px-2">
+                    <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px]">Escena {currentStepIdx + 1} de {selectedScript.scenes?.length}</span>
+                    <div className="flex gap-1">
+                      {selectedScript.scenes?.map((_: any, i: number) => (
+                        <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === currentStepIdx ? 'w-6 bg-[#48c1d2]' : 'w-2 bg-white/10'}`} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {selectedScript.scenes?.[currentStepIdx] && (
+                    <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-500 text-left">
+                      <h3 className="text-2xl font-black text-white italic tracking-tighter text-center uppercase">
+                        {selectedScript.scenes[currentStepIdx].title}
+                      </h3>
+
+                      {/* INSTRUCCIONES SEBASTIÁN */}
+                      <div className="bg-[#48c1d2]/5 rounded-[2.5rem] border border-[#48c1d2]/20 overflow-hidden">
+                        <div className="p-6 border-b border-[#48c1d2]/10 bg-[#48c1d2]/10 flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-[#48c1d2] flex items-center justify-center text-[#142d53]">
+                            <User size={18} />
+                          </div>
+                          <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px]">Para Sebastián (Talento)</span>
+                        </div>
+                        <div className="p-6 space-y-6">
+                          {selectedScript.scenes[currentStepIdx].talent.whatToSay && (
+                            <div className="space-y-2">
+                              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block italic">Qué decir:</span>
+                              <p className="text-xl font-black text-white leading-tight italic">
+                                {selectedScript.scenes[currentStepIdx].talent.whatToSay}
+                              </p>
+                            </div>
+                          )}
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Cómo moverse:</span>
+                              <p className="text-[11px] font-bold text-white/80 leading-snug">
+                                {selectedScript.scenes[currentStepIdx].talent.howToMove}
+                              </p>
+                            </div>
+                            <div>
+                              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Gesto/Actitud:</span>
+                              <p className="text-[11px] font-bold text-white/80 leading-snug">
+                                {selectedScript.scenes[currentStepIdx].talent.gesture}
+                              </p>
+                            </div>
+                          </div>
+                          {selectedScript.scenes[currentStepIdx].talent.demoUrl && (
+                            <div className="aspect-video rounded-3xl overflow-hidden bg-black/40 border border-white/5 relative group">
+                              <iframe
+                                src={`https://www.youtube.com/embed/${getYoutubeId(selectedScript.scenes[currentStepIdx].talent.demoUrl)}?rel=0&modestbranding=1`}
+                                className="w-full h-full"
+                                allowFullScreen
+                              ></iframe>
+                              <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[7px] font-black text-white uppercase tracking-widest pointer-events-none border border-white/10">Ejemplo Visual</div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
-                    </div>
-                  )}
-              </div>
-            ) : (
-              <div className="flex-[2] relative">
-                <button 
-                  onClick={mergeVoiceoverFragments}
-                  className={`w-full py-5 px-6 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[1px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] z-10 flex items-center justify-center gap-2 ${showHelp && teleHelpStep === 4 ? 'ring-4 ring-white animate-pulse' : ''}`}
-                >
-                  <Sparkles size={16} /> UNIR Y DESCARGAR LOCUCIÓN
-                </button>
-                {showHelp && teleHelpStep === 4 && (
-                  <div className="absolute -top-40 left-0 right-0 mx-auto bg-[#142d53] text-[#48c1d2] p-6 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-[100] border-2 border-[#48c1d2]/30 animate-in zoom-in duration-300 guide-bubble-active">
-                    <div className="flex flex-col gap-2 text-center">
-                      <span className="text-white uppercase tracking-wider">¡Casi terminas!</span>
-                      <p className="leading-tight opacity-90">Toca aquí para unir todo y descargar tu locución profesional.</p>
-                      <div className="flex gap-2 justify-center mt-2">
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setTeleHelpStep(3); }}
-                          className="bg-white/5 text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-white/10 transition-all text-[8px] border border-[#48c1d2]/20"
-                        >
-                          VOLVER
-                        </button>
-                        <button 
-                          onClick={(e) => { 
-                            e.stopPropagation(); 
-                            setTeleHelpStep(5); 
-                          }}
-                          className="bg-[#48c1d2] text-[#142d53] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
-                        >
-                          SIGUIENTE
-                        </button>
+
+                      {/* INSTRUCCIONES JENKRYFER */}
+                      <div className="bg-white/5 rounded-[2.5rem] border border-white/10 overflow-hidden">
+                        <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white">
+                            <Camera size={18} />
+                          </div>
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-[3px]">Para Jenkryfer (Cámara)</span>
+                        </div>
+                        <div className="p-6 space-y-6">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Dónde ponerse:</span>
+                              <p className="text-[11px] font-bold text-white/80 leading-snug">
+                                {selectedScript.scenes[currentStepIdx].camera.whereToStand}
+                              </p>
+                            </div>
+                            <div>
+                              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Ángulo:</span>
+                              <p className="text-[11px] font-bold text-white/80 leading-snug">
+                                {selectedScript.scenes[currentStepIdx].camera.angle}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Movimiento:</span>
+                              <p className="text-[11px] font-bold text-white/80 leading-snug">
+                                {selectedScript.scenes[currentStepIdx].camera.movement}
+                              </p>
+                            </div>
+                            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-2xl">
+                              <span className="text-[8px] font-black text-red-500 uppercase tracking-widest block mb-1 italic">Evitar:</span>
+                              <p className="text-[11px] font-bold text-red-400 leading-snug">
+                                {selectedScript.scenes[currentStepIdx].camera.avoid}
+                              </p>
+                            </div>
+                          </div>
+                          {selectedScript.scenes[currentStepIdx].camera.demoUrl && (
+                            <div className="aspect-video rounded-3xl overflow-hidden bg-black/40 border border-white/5 relative group">
+                              <iframe
+                                src={`https://www.youtube.com/embed/${getYoutubeId(selectedScript.scenes[currentStepIdx].camera.demoUrl)}?rel=0&modestbranding=1`}
+                                className="w-full h-full"
+                                allowFullScreen
+                              ></iframe>
+                              <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[7px] font-black text-white uppercase tracking-widest pointer-events-none border border-white/10">Tutorial Cámara</div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#142d53] rotate-45 border-r-2 border-b-2 border-[#48c1d2]/30"></div>
+                  )}
+                </>
+              )}
+            </div>
+          ) : (
+            /* MODO NORMAL: REELS / HISTORIAS (TELEPROMPTER) */
+            <div className="p-6 flex flex-col flex-1">
+               {showFullScript ? (
+                  <div className="animate-in fade-in zoom-in-95 duration-500 text-left space-y-10 w-full flex-1">
+                     <div className="space-y-10">
+                        {selectedScript.steps.map((s: any, i: number) => (
+                           <div key={i} className="space-y-3">
+                              <div className="flex items-center gap-3">
+                                 <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[3px]">ACTO {i+1}</span>
+                                 <div className="flex-1 h-[1px] bg-white/10" />
+                              </div>
+                              <p className="text-lg font-medium text-white/90 leading-relaxed italic">"{s.script}"</p>
+                              <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                 <h5 className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-2"><Video size={10} /> Referencia Visual</h5>
+                                 <p className="text-[11px] font-bold text-white/40 leading-snug uppercase">{s.visualField}</p>
+                              </div>
+                           </div>
+                        ))}
+                     </div>
                   </div>
+               ) : mergedVoiceoverUrl ? (
+                  <div className="flex flex-col items-center justify-center flex-1 space-y-6 animate-in zoom-in duration-500">
+                    <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/30"><CheckCircle2 size={48} className="text-green-400" /></div>
+                    <h3 className="text-xl font-black text-white uppercase tracking-widest text-center">Locución Completada</h3>
+                    <div className="w-full max-w-xs mt-4"><CustomAudioPlayer title="Vista Previa" src={mergedVoiceoverUrl} /></div>
+                    <div className="flex flex-col w-full max-w-xs gap-3 mt-4">
+                       <button onClick={handleSendLocucion} disabled={isUploadingLocucion} className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${isUploadingLocucion ? 'bg-white/10 text-white/30' : 'bg-[#48c1d2] text-[#0a192f] hover:scale-105 shadow-xl shadow-[#48c1d2]/20'}`}>
+                         {isUploadingLocucion ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Enviando...</> : <><Share2 size={16} /> Enviar al Equipo</>}
+                       </button>
+                       <a href={mergedVoiceoverUrl} download={`Locucion_${selectedScript.id}.wav`} className="w-full py-4 bg-white/5 text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"><Download size={16} /> Descargar Audio Final</a>
+                       <button onClick={() => setMergedVoiceoverUrl(null)} className="w-full py-4 bg-white/5 text-white/50 hover:text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">Revisar Tomas</button>
+                    </div>
+                  </div>
+               ) : (
+                  <>
+                    <div className="flex justify-between items-center mb-6 px-2">
+                       <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px]">Paso {currentStepIdx + 1} de {selectedScript.steps.length}</span>
+                       <div className="flex gap-1">
+                          {selectedScript.steps.map((_: any, i: number) => (
+                             <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === currentStepIdx ? 'w-6 bg-[#48c1d2]' : 'w-2 bg-white/10'}`} />
+                          ))}
+                       </div>
+                    </div>
+                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 text-left flex-1">
+                        <div className="bg-[#48c1d2] p-8 rounded-[40px] relative shadow-2xl shadow-[#48c1d2]/20">
+                           <div className="absolute top-0 right-0 p-4 opacity-5"><Sparkles size={60} className="text-[#0a192f]" /></div>
+                           <h4 className="text-[9px] font-black text-[#0a192f] uppercase tracking-[0.2em] mb-4 flex items-center gap-2"><Mic size={14} /> Tu guion para leer:</h4>
+                           <p className="text-2xl font-black text-[#0a192f] leading-[1.1] tracking-tight italic">"{selectedScript.steps[currentStepIdx].script}"</p>
+                           <div className="mt-8 flex flex-col items-center">
+                              {isRecordingVoiceover ? (
+                                <div className="flex flex-col items-center gap-2">
+                                  <button onClick={stopVoiceoverRecording} className="w-16 h-16 rounded-full bg-red-500 shadow-[0_0_30px_rgba(239,68,68,0.4)] flex items-center justify-center text-white animate-pulse border-4 border-red-400"><div className="w-5 h-5 bg-white rounded-sm" /></button>
+                                  <span className="text-[10px] font-black text-red-500 uppercase tracking-widest animate-pulse">Grabando toma...</span>
+                                </div>
+                              ) : voiceoverFragments.find(f => f.stepIdx === currentStepIdx) ? (
+                                <div className="flex flex-col items-center gap-2">
+                                  <div className="flex gap-2">
+                                    <button onClick={() => { const audioUrl = voiceoverFragments.find(f => f.stepIdx === currentStepIdx)?.url; if (audioUrl) toggleVoiceoverPlayback(audioUrl); }} className="px-4 py-2 bg-green-500/20 text-green-600 rounded-full text-[8px] font-black uppercase tracking-tighter border border-green-500/30 hover:bg-green-500/30 flex items-center gap-2 w-[100px] justify-center">{isPlayingVoiceover ? <PauseCircle size={14} /> : <PlayCircle size={14} />} {isPlayingVoiceover ? 'Pausar' : 'Escuchar'}</button>
+                                    <button onClick={() => startVoiceoverRecording(currentStepIdx)} className="px-4 py-2 bg-white/40 text-[#0a192f] rounded-full text-[8px] font-black uppercase tracking-tighter border border-white/40 hover:bg-white/60 flex items-center gap-2"><History size={14} /> ReMODO PASOS</button>
+                                    <button onClick={() => deleteVoiceoverFragment(currentStepIdx)} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-full text-[8px] font-black uppercase tracking-tighter border border-red-500/20 hover:bg-red-500/20 flex items-center gap-2"><Trash2 size={14} /> Eliminar</button>
+                                  </div>
+                                  <span className="text-[9px] font-bold text-green-600 uppercase tracking-widest">Toma Guardada</span>
+                                </div>
+                              ) : (
+                                <button onClick={() => startVoiceoverRecording(currentStepIdx)} className="w-16 h-16 rounded-full bg-[#142d53] shadow-[0_0_20px_rgba(20,45,83,0.3)] flex items-center justify-center text-[#48c1d2] hover:scale-105 active:scale-95 transition-all border-2 border-[#142d53]"><Mic size={28} /></button>
+                              )}
+                           </div>
+                        </div>
+                    </div>
+                  </>
+               )}
+            </div>
+          )}
+        </div>
+
+        {/* Pie de Página (Controles Navegación) */}
+        <div className="p-6 border-t border-white/5 bg-[#0a192f]/80 backdrop-blur-md flex gap-3">
+          {selectedScript.isProductionMode ? (
+            /* Controles Modo Producción */
+            !showFullScript && (
+              <>
+                <button 
+                  disabled={currentStepIdx === 0}
+                  onClick={() => setCurrentStepIdx(prev => prev - 1)}
+                  className={`flex-1 py-5 rounded-[24px] text-[10px] font-black uppercase tracking-[1px] transition-all ${currentStepIdx === 0 ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-white/10 text-white hover:bg-white/20 border border-white/10 active:scale-95'}`}
+                >
+                  ESCENA ANTERIOR
+                </button>
+                {currentStepIdx < (selectedScript.scenes?.length || 0) - 1 ? (
+                  <button 
+                    onClick={() => setCurrentStepIdx(prev => prev + 1)}
+                    className="flex-[2] py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
+                  >
+                    SIGUIENTE ESCENA 🎬
+                  </button>
+                ) : (
+                  <button 
+                    onClick={handleCloseScript}
+                    className="flex-[2] py-5 bg-green-500 text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-green-500/20 transition-all active:scale-95 border-b-4 border-green-700"
+                  >
+                    FINALIZAR PRODUCCIÓN ✅
+                  </button>
                 )}
-              </div>
-            )}
-            
+              </>
+            )
+          ) : (
+            /* Controles Modo Teleprompter (Existentes) */
+            !showFullScript && !mergedVoiceoverUrl && (
+              <>
+                {currentStepIdx > 0 && (
+                  <button onClick={() => setCurrentStepIdx(prev => prev - 1)} className="flex-1 py-5 bg-white/10 text-white text-[10px] font-black uppercase tracking-[1px] rounded-[24px] border border-white/10 transition-all active:scale-95">Anterior</button>
+                )}
+                {currentStepIdx < selectedScript.steps.length - 1 ? (
+                  <button onClick={() => setCurrentStepIdx(prev => prev + 1)} className="flex-[2] py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[1px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]">Siguiente Toma</button>
+                ) : (
+                  <button onClick={mergeVoiceoverFragments} className="flex-[2] py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[1px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] flex items-center justify-center gap-2"><Sparkles size={16} /> UNIR Y DESCARGAR</button>
+                )}
+              </>
+            )
+          )}
+
+          {showFullScript && (
+             <button 
+               onClick={() => {
+                if (selectedScript.isProductionMode) {
+                  setShowFullScript(false);
+                } else {
+                  handleCloseScript();
+                  setShowAudioReport(true);
+                }
+               }}
+               className="w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
+             >
+               {selectedScript.isProductionMode ? "EMPEZAR PRODUCCIÓN POR ESCENAS" : "FINALIZAR Y HACER REPORTE"}
+             </button>
             {showHelp && teleHelpStep === 5 && createPortal(
               <div className="fixed inset-0 z-[30000] flex items-center justify-center p-6 animate-in fade-in duration-500">
                 <div className="absolute inset-0 bg-[#0a192f]/80 backdrop-blur-sm" />
@@ -1553,7 +1506,7 @@ function ContenidoContent() {
                       : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
                 >
-                  <User size={15} /> Fijos
+                  <Video size={15} /> EN CÁMARA
                 </button>
             </div>
 
@@ -1567,8 +1520,25 @@ function ContenidoContent() {
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-6">
                     {guionTab === 'reels' && 'Contenido estructurado para máxima retención y viralidad.'}
                     {guionTab === 'historias' && 'Guías situacionales para conectar de forma humana y espontánea.'}
-                    {guionTab === 'presentacion' && 'Videos estratégicos fijados (Pinned) para convertir seguidores en clientes.'}
+                    {guionTab === 'presentacion' && 'Producción profesional con desglose de escenas para talento y cámara.'}
                   </p>
+
+                  {guionTab === 'presentacion' && (
+                    <div className="flex bg-white/50 p-1.5 rounded-2xl border border-slate-200/50 mb-8 max-w-sm">
+                      <button 
+                        onClick={() => setEnCamaraSubTab('pinned')}
+                        className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${enCamaraSubTab === 'pinned' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                      >
+                        📌 Videos a Fijar
+                      </button>
+                      <button 
+                        onClick={() => setEnCamaraSubTab('pro')}
+                        className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${enCamaraSubTab === 'pro' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                      >
+                        🎥 Contenido Pro
+                      </button>
+                    </div>
+                  )}
                   
                   <div className="grid gap-4">
                     {guionTab === 'reels' ? (
@@ -1611,34 +1581,69 @@ function ContenidoContent() {
                         </>
                       ) : guionTab === 'presentacion' ? (
                         <div className="grid gap-4">
-                          <div className="p-6 bg-amber-50 rounded-[2.5rem] border border-amber-100 mb-2 text-left">
-                             <h5 className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                <ShieldCheck size={12} /> Estrategia de Marca (Pinned)
-                             </h5>
-                             <p className="text-[11px] font-bold text-amber-900/70 leading-relaxed italic">
-                                "Estos 3 videos son los pilares de tu perfil. Al fijarlos (Pin), aseguras que cualquier persona nueva que llegue por tu video viral entienda de inmediato quién eres y cómo contratarte."
-                             </p>
-                          </div>
-                          {guionesPresentacion.map((script) => (
-                            <div 
-                              key={script.id}
-                              onClick={() => {
-                                setSelectedScript(script); 
-                                setCurrentStepIdx(0);
-                              }}
-                              className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
-                            >
-                               <div className="w-14 h-14 bg-slate-50 rounded-[1.5rem] flex items-center justify-center text-[#142d53] group-hover:bg-[#48c1d2]/10 group-hover:text-[#48c1d2] transition-all">
-                                  <Video size={24} />
-                               </div>
-                               <div className="text-left flex-1">
-                                  <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                  <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
-                                  <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Marca Personal</p>
-                               </div>
-                               <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
-                            </div>
-                          ))}
+                          {enCamaraSubTab === 'pinned' ? (
+                            <>
+                              <div className="p-6 bg-amber-50 rounded-[2.5rem] border border-amber-100 mb-2 text-left">
+                                <h5 className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                  <ShieldCheck size={12} /> Estrategia de Marca (Pinned)
+                                </h5>
+                                <p className="text-[11px] font-bold text-amber-900/70 leading-relaxed italic">
+                                  "Estos 3 videos son los pilares de tu perfil. Al fijarlos (Pin), aseguras que cualquier persona nueva entienda de inmediato quién eres y cómo contratarte."
+                                </p>
+                              </div>
+                              {guionesPresentacion.filter(s => s.isPinned).map((script) => (
+                                <div 
+                                  key={script.id}
+                                  onClick={() => {
+                                    setSelectedScript(script); 
+                                    setCurrentStepIdx(0);
+                                  }}
+                                  className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-amber-400 transition-all cursor-pointer relative overflow-hidden"
+                                >
+                                  <div className="w-14 h-14 bg-amber-50 rounded-[1.5rem] flex items-center justify-center text-amber-600 group-hover:bg-amber-100 transition-all">
+                                    <Video size={24} />
+                                  </div>
+                                  <div className="text-left flex-1">
+                                    <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">Video a Fijar</span>
+                                    <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                    <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
+                                  </div>
+                                  <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                                </div>
+                              ))}
+                            </>
+                          ) : (
+                            <>
+                              <div className="p-6 bg-[#48c1d2]/5 rounded-[2.5rem] border border-[#48c1d2]/20 mb-2 text-left">
+                                <h5 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest mb-2 flex items-center gap-2">
+                                  <Sparkles size={12} /> Producción Pro
+                                </h5>
+                                <p className="text-[11px] font-bold text-[#142d53]/70 leading-relaxed italic">
+                                  "Usa este formato para cualquier video donde necesites calidad de estudio, instrucciones de cámara y demostraciones visuales por escena."
+                                </p>
+                              </div>
+                              {guionesPresentacion.filter(s => !s.isPinned || s.isProductionMode).map((script) => (
+                                <div 
+                                  key={script.id}
+                                  onClick={() => {
+                                    setSelectedScript(script); 
+                                    setCurrentStepIdx(0);
+                                  }}
+                                  className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
+                                >
+                                  <div className="w-14 h-14 bg-slate-50 rounded-[1.5rem] flex items-center justify-center text-[#142d53] group-hover:bg-[#48c1d2]/10 group-hover:text-[#48c1d2] transition-all">
+                                    <Clapperboard size={24} />
+                                  </div>
+                                  <div className="text-left flex-1">
+                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">Producción High-End</span>
+                                    <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                    <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Modo Escenas</p>
+                                  </div>
+                                  <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
+                                </div>
+                              ))}
+                            </>
+                          )}
                         </div>
                       ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
