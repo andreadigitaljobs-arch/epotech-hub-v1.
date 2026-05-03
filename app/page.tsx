@@ -148,7 +148,15 @@ export default function Home() {
             setIsSubscribed(true);
             showToast("¡Conexión de Élite establecida! Ya recibirás avisos.", "success");
           } else {
-            showToast("Error al registrar la suscripción.", "error");
+            let errorMessage = "Error desconocido al registrar.";
+            try {
+              const errData = await res.json();
+              errorMessage = errData.error || errorMessage;
+            } catch (e) {
+              // Si no devuelve JSON, mostramos el status
+              errorMessage = `Error del servidor: ${res.status}`;
+            }
+            showToast(`Error: ${errorMessage}`, "error");
           }
         }
       } else {
