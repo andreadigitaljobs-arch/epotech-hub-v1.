@@ -124,37 +124,28 @@ export default function Home() {
       if (permission === 'granted') {
         // Suscribir al Service Worker
         if ('serviceWorker' in navigator) {
-          console.log("3. Limpiando y registrando SW...");
+          console.log("3. Obteniendo o registrando SW...");
           
-          // FORZAR DESTRUCCIÓN DE SW VIEJOS QUE BLOQUEAN LA FILA
-          const oldRegs = await navigator.serviceWorker.getRegistrations();
-          for (let reg of oldRegs) {
-            await reg.unregister();
+          let registration = await navigator.serviceWorker.getRegistration();
+          if (!registration) {
+             registration = await navigator.serviceWorker.register('/sw.js');
           }
 
-          // Registrar uno nuevo y fresco
-          const registration = await navigator.serviceWorker.register('/sw.js');
+          console.log("4. SW Registrado. ¿Está activo?:", !!registration.active);
           
-          console.log("4. Esperando activación forzada...");
-          // Espera manual de activación sin usar .ready (que se cuelga en iOS)
+          // Táctica de Guerrilla: Si el SW está atascado en 'installing' o 'waiting' (muy común en Chrome iOS),
+          // recargar la página obliga a WebKit a tomar control y activarlo.
           if (!registration.active) {
-            await new Promise<void>((resolve) => {
-              const worker = registration.installing || registration.waiting;
-              if (worker) {
-                worker.addEventListener('statechange', () => {
-                  if (worker.state === 'activated') resolve();
-                });
-              } else {
-                resolve();
-              }
-            });
+            console.log("El motor no está activo. Forzando recarga para despertar a iOS...");
+            showToast("Sincronizando motor de Apple... Recargando.", "info");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+            return; // Detenemos la ejecución aquí
           }
+
           console.log("5. SW Activo y listo");
           
-          if (!registration.active) {
-            throw new Error("El motor no logró activarse.");
-          }
-
           const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
           const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC);
 
