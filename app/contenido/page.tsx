@@ -1348,17 +1348,11 @@ function ContenidoContent() {
 
       <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 flex justify-between items-start gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 bg-[#48c1d2]/10 px-3 py-1.5 rounded-full mb-3">
-            <div className="w-5 h-5 bg-[#48c1d2] rounded-lg flex items-center justify-center">
-              <Sparkles size={12} className="text-[#142d53]" />
-            </div>
-            <span className="text-[10px] font-black text-[#142d53] uppercase tracking-widest">Estudio Epotech 2026</span>
-          </div>
-          <h1 className="text-4xl font-black text-[#142d53] leading-tight tracking-tighter">
-            Estudio de<br />
-            <span className="text-[#48c1d2]">Producción</span>
+          <h1 className="text-4xl font-black text-[#142d53] leading-tight tracking-tighter whitespace-nowrap">
+            Estudio de <span className="text-[#48c1d2]">Producción</span>
           </h1>
         </div>
+
       </div>
 
       {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}
