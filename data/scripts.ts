@@ -117,185 +117,108 @@ export const guiones: Script[] = [
 export const guionesPresentacion: Script[] = [
   {
     id: 'presentacion-1',
-    title: '1. ¿Quién soy y por qué Epotech?',
+    title: '1. ¿Quién soy y por qué Epotech? (Confianza)',
     category: 'PINNED: Confianza',
     service: 'Marca Personal',
     duration: '60s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'Hola, soy Sebastian. Fundé Epotech Solutions no solo para limpiar casas, sino para elevar el estándar de mantenimiento en Utah. Sé lo que significa cuidar un hogar y lo frustrante que es contratar a alguien que no respeta tu propiedad. Por eso, aquí no usamos solo agua, usamos tecnología de agua pura y técnicas industriales que garantizan resultados que duran el doble. Mi compromiso es que cuando mi equipo y yo nos retiremos, tu casa no solo se vea limpia, sino que recupere su valor. Si buscas a alguien que cuide tu hogar como si fuera suyo, bienvenido a la familia Epotech.',
+    fullDialogue: 'El mayor error al contratar limpieza… no es el precio. Es no saber a quién estás dejando entrar a tu casa. Porque no es solo limpiar… es entrar a tu espacio, donde está tu familia, tus cosas, tu tranquilidad. Mi nombre es Sebastián. Y cada vez que trabajamos en una propiedad, pensamos como si fuera nuestra. Cuidamos, respetamos y dejamos el espacio mejor de como lo encontramos. Porque al final… se trata de confianza.',
     scenes: [
       {
-        id: 'e1',
-        title: 'ESCENA 1 — HOOK (AFUERA)',
+        id: 'p1-e1',
+        title: '🎬 ESCENA 1 — HOOK (AFUERA)',
         talent: {
           whatToSay: '“El mayor error al contratar limpieza… no es el precio.”',
-          howToMove: 'Parado afuera de una casa (puede ser la tuya o de un familiar).',
-          gesture: 'Mira a cámara, habla normal, no lo pienses mucho.',
-          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' // Ejemplo temporal
+          howToMove: 'Parado afuera de una casa. Mira directo a cámara.',
+          gesture: 'Habla normal (no actuado). Quédate quieto.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
           whereToStand: 'Ponte frente a él.',
           angle: 'Cámara a la altura del pecho/cara.',
-          movement: 'No te muevas, graba estable.',
-          avoid: 'No te acerques demasiado, deja espacio arriba de su cabeza.',
-          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' // Ejemplo temporal
-        }
-      },
-      {
-        id: 'e2',
-        title: 'ESCENA 2 — PUERTA',
-        talent: {
-          whatToSay: '(Voz en off): “Es no saber a quién estás dejando entrar a tu casa.”',
-          howToMove: 'Solo abre la puerta y entra de forma natural.',
-          gesture: 'No hables aquí, solo acción fluida.',
-          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        },
-        camera: {
-          whereToStand: 'Ponte detrás o de lado (NO de frente).',
-          angle: 'Plano medio de seguimiento.',
-          movement: 'Síguelo un poco cuando entre (leve movimiento).',
-          avoid: 'No le hables mientras graba, no cortes muy rápido.',
-          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        }
-      },
-      {
-        id: 'e3',
-        title: 'ESCENA 3 — INTERIOR',
-        talent: {
-          whatToSay: '“Porque no es solo limpiar…”',
-          howToMove: 'Ya dentro de la casa.',
-          gesture: 'Mira el espacio, señala alrededor con seguridad.',
-          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        },
-        camera: {
-          whereToStand: 'Ponte frente a él.',
-          angle: 'Plano medio (de cintura para arriba).',
-          movement: 'Quédate quieta, plano estático.',
-          avoid: 'No hagas zoom, no cambies de ángulo.',
-          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        }
-      }
-    ],
-    steps: [], // Se mantiene vacío para scripts de producción
-    tips: [
-      'Vístete con el uniforme de Epotech impecable.',
-      'Graba en una zona con mucha luz natural.',
-      'Este video DEBE estar fijado en la primera posición.'
-    ],
-    checklist: ['Uniforme limpio', 'Fondo ordenado', 'Tono de voz seguro', 'Logo visible'],
-    productionHack: 'Este video es tu carta de presentación, graba 3 tomas y elige la que se sienta más natural.'
-  },
-  {
-    id: 'presentacion-2',
-    title: '2. ¿Qué ofrecemos exactamente?',
-    category: 'PINNED: Servicios',
-    service: 'Marca Personal',
-    duration: '50s',
-    fullDialogue: 'En Epotech nos especializamos en dos cosas: claridad total y superficies impecables. Primero: Limpieza de ventanas de alto nivel con sistema de agua pura. Nada de manchas de minerales, solo cristales invisibles. Segundo: Lavado a presión profesional para driveways, fachadas y techos. Eliminamos moho y suciedad acumulada sin dañar tus superficies. Usamos equipos industriales de alta eficiencia para que el trabajo sea rápido y perfecto. Si tu casa necesita un respiro y quieres verla brillar de nuevo, esto es lo que hacemos todos los días aquí en Utah.',
-    steps: [
-      {
-        label: 'VISTA GENERAL',
-        script: 'En Epotech nos especializamos en dos cosas: claridad total y superficies impecables.',
-        visualField: 'Toma abierta de una casa de lujo en Utah.',
-        visualStudio: 'Sebastian señalando la casa.',
-        advice: {
-          solo: ['Usa el gran angular de tu móvil'],
-          assisted: ['Dron o toma desde la calle']
-        }
-      },
-      {
-        label: 'SERVICIO 1: VENTANAS',
-        script: 'Primero: Limpieza de ventanas de alto nivel con sistema de agua pura. Nada de manchas de minerales, solo cristales invisibles.',
-        visualField: 'Clip satisfactorio de limpieza de ventana.',
-        visualStudio: 'Sebastian mostrando un cristal impecable.',
-        advice: {
-          solo: ['Toma de detalle del agua resbalando'],
-          assisted: ['Toma de Sebastian operando el poste']
-        }
-      },
-      {
-        label: 'SERVICIO 2: PRESIÓN',
-        script: 'Segundo: Lavado a presión profesional para driveways, fachadas y techos. Eliminamos moho y suciedad acumulada sin dañar tus superficies.',
-        visualField: 'Cámara rápida de un driveway siendo limpiado.',
-        visualStudio: 'Sebastian con la hidrolavadora.',
-        advice: {
-          solo: ['Toma del "Antes y Después" en pantalla'],
-          assisted: ['Toma de acción con la boquilla turbo']
-        }
-      },
-      {
-        label: 'RESUMEN DE VALOR',
-        script: 'Si tu casa necesita un respiro y quieres verla brillar de nuevo, esto es lo que hacemos todos los días aquí en Utah.',
-        visualField: 'Sebastian caminando hacia la cámara con seguridad.',
-        visualStudio: 'Fondo de una casa terminada.',
-        advice: {
-          solo: ['Caminar y hablar a la vez da dinamismo'],
-          assisted: ['Toma de seguimiento caminando']
-        }
-      }
-    ],
-    tips: [
-      'Usa clips de tus mejores trabajos anteriores.',
-      'Habla con ritmo, que no sea lento.',
-      'Pon texto en pantalla resaltando los servicios.'
-    ],
-    checklist: ['Clips de ventanas', 'Clips de presión', 'Texto de servicios', 'Energía alta'],
-    productionHack: 'Usa transiciones rápidas entre servicios para mantener la atención.'
-  },
-  {
-    id: 'presentacion-3',
-    title: '3. ¿Cómo contratarnos? (Paso a Paso)',
-    category: 'PINNED: Proceso',
-    service: 'Marca Personal',
-    duration: '45s',
-    isPinned: true,
-    isProductionMode: true,
-    fullDialogue: 'Contratar a Epotech es más fácil que limpiar una ventana. Solo tienes que seguir estos 3 pasos: Uno, haz clic en el link de mi biografía o envíame un mensaje directo con la palabra INFO. Dos, agendamos una visita rápida o nos envías fotos de lo que necesitas. Tres, te damos un presupuesto transparente y fijamos el día de la transformación.',
-    scenes: [
-      {
-        id: 'p1-e1',
-        title: 'ESCENA 1 — LOS 3 PASOS',
-        talent: {
-          whatToSay: '“Contratar a Epotech es más fácil que limpiar una ventana. Solo sigue estos 3 pasos...”',
-          howToMove: 'Contando con los dedos a cámara.',
-          gesture: 'Sonrisa abierta, tono muy amigable.',
-          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        },
-        camera: {
-          whereToStand: 'Toma cercana (primer plano), fondo desenfocado.',
-          angle: 'Frontal a la altura de los ojos.',
-          movement: 'Ninguno, mantener fijo.',
-          avoid: 'Sombras duras en la cara.',
+          movement: 'Mantén el celular estable. Deja espacio arriba de su cabeza.',
+          avoid: 'No te acerques demasiado. No te muevas.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       },
       {
         id: 'p1-e2',
-        title: 'ESCENA 2 — CONTACTO Y ACCIÓN',
+        title: '🎬 ESCENA 2 — PUERTA (ACCIÓN)',
         talent: {
-          whatToSay: '“Uno, haz clic en mi bio o DM con la palabra INFO. ¡Hablemos!”',
-          howToMove: 'Señalando a la cámara.',
-          gesture: 'Energía alta, invitando a la acción.',
+          whatToSay: '“Es no saber a quién estás dejando entrar a tu casa.”',
+          howToMove: 'No hables al inicio. Abre la puerta y entra.',
+          gesture: 'Acción natural de abrir y entrar.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Toma un poco más abierta (medio cuerpo).',
-          angle: 'Picado suave para dar dinamismo.',
-          movement: 'Un pequeño movimiento lateral.',
-          avoid: 'Cortar las manos cuando señale.',
+          whereToStand: 'Ponte frente a la puerta cerrada mientras Sebastián está adentro.',
+          angle: 'Plano medio de la puerta.',
+          movement: 'Graba cuando abra la puerta. Síguelo un poco al entrar (suave).',
+          avoid: 'No grabes de frente. No cortes rápido.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p1-e3',
+        title: '🎬 ESCENA 3 — INTERIOR (CONEXIÓN)',
+        talent: {
+          whatToSay: '“Porque no es solo limpiar… es entrar a tu espacio, donde está tu familia, tus cosas, tu tranquilidad.”',
+          howToMove: 'Mira alrededor, señala el lugar, señala hacia arriba o lado, señala objetos cerca.',
+          gesture: 'Gesto calmado (mano al pecho o suave).',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Ponte frente a él.',
+          angle: 'Plano de cintura hacia arriba.',
+          movement: 'Quédate quieta.',
+          avoid: 'No cambies ángulo. No hagas zoom.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p1-e4',
+        title: '🎬 ESCENA 4 — AUTORIDAD (TRABAJO)',
+        talent: {
+          whatToSay: '“Mi nombre es Sebastián. Y cada vez que trabajamos en una propiedad, pensamos como si fuera nuestra. Cuidamos, respetamos y dejamos el espacio mejor de como lo encontramos.”',
+          howToMove: 'Mirando a cámara. Movimiento leve (natural). Señala el piso / área.',
+          gesture: 'Gesto con manos. Señala resultado.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Frente o diagonal.',
+          angle: 'Plano medio.',
+          movement: 'Mantén estabilidad.',
+          avoid: 'No grabes muy lejos. No cortes antes de que termine.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        }
+      },
+      {
+        id: 'p1-e5',
+        title: '🎬 ESCENA 5 — CIERRE & CTA',
+        talent: {
+          whatToSay: '“Porque al final… se trata de confianza. Si eso es lo que estás buscando, escríbenos.”',
+          howToMove: 'Pausa corta. Mira directo a cámara.',
+          gesture: 'Serio, seguro.',
+          demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        camera: {
+          whereToStand: 'Mismo lugar.',
+          angle: 'Cámara fija.',
+          movement: 'Buen encuadre.',
+          avoid: 'No te muevas.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
     ],
     steps: [],
     tips: [
-      'Este video responde la duda: "¿Cómo empiezo?".',
-      'Sé muy claro y directo.',
-      'Usa un tono de "estoy listo para ayudarte".'
+      'La clave es la naturalidad en la Escena 2.',
+      'Mantén un tono pausado y seguro.',
+      'Asegúrate de que la casa de fondo se vea impecable.'
     ],
-    checklist: ['Explicación de bio', 'Mención de DM', 'Presupuesto transparente', 'CTA final'],
-    productionHack: 'Pon subtítulos grandes para que se entiendan los pasos sin audio.'
+    checklist: ['Hook afuera', 'Acción puerta', 'Conexión interior', 'Autoridad', 'Cierre confianza'],
+    productionHack: 'Usa luz natural de la mañana para la escena de afuera.'
   },
   {
     id: 'presentacion-2',
@@ -305,22 +228,22 @@ export const guionesPresentacion: Script[] = [
     duration: '50s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'En Utah hay cientos de empresas de limpieza, pero muy pocas invierten en lo que nosotros invertimos. No se trata de echar agua a presión y ya, eso puede dañar tus paredes o tus pisos de epoxy. En Epotech usamos químicos biodegradables y sistemas de filtración que protegen tu inversión. Cuando contratas a un aficionado, pagas dos veces: por el servicio y por el daño. Con nosotros, pagas por la tranquilidad de un estándar industrial en tu propia casa. Aquí te muestro la diferencia real.',
+    fullDialogue: 'Próximamente contenido detallado...',
     scenes: [
       {
         id: 'p2-e1',
-        title: 'ESCENA 1 — LA COMPARACIÓN',
+        title: 'ESCENA 1 — INTRODUCCIÓN',
         talent: {
-          whatToSay: '“Cualquiera puede mojar una pared, pero no cualquiera sabe cuidarla.”',
-          howToMove: 'Sujetando una de las máquinas de Epotech, apuntando a la cámara.',
-          gesture: 'Señala la máquina con orgullo.',
+          whatToSay: 'Esperando guion definitivo...',
+          howToMove: 'Mirando a cámara.',
+          gesture: 'Seguridad.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Toma de medio cuerpo, ligeramente de lado.',
-          angle: 'Casi a la altura de la máquina.',
-          movement: 'Un pequeño zoom suave cuando él señale.',
-          avoid: 'Que no se vea el desorden del camión atrás.',
+          whereToStand: 'Frente a él.',
+          angle: 'Plano medio.',
+          movement: 'Estático.',
+          avoid: 'Cortes abruptos.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
@@ -337,22 +260,22 @@ export const guionesPresentacion: Script[] = [
     duration: '45s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: '¿Quieres saber por qué nuestros clientes no nos cambian? Mira este piso. Estaba lleno de grasa y manchas de años. Después de nuestro proceso, no solo brilla, sino que es seguro y fácil de mantener. No vendemos promesas, vendemos resultados que puedes tocar. Si tu propiedad necesita este nivel de atención, envíame un mensaje directo ahora mismo. Hagamos que tu espacio vuelva a ser un lugar del que te sientas orgulloso.',
+    fullDialogue: 'Próximamente contenido detallado...',
     scenes: [
       {
         id: 'p3-e1',
-        title: 'ESCENA 1 — RESULTADO IMPACTO',
+        title: 'ESCENA 1 — INTRODUCCIÓN',
         talent: {
-          whatToSay: '“Si tu piso no se ve así de limpio, entonces no has probado el Estándar Epotech.”',
-          howToMove: 'Caminando sobre un piso de epoxy recién terminado.',
-          gesture: 'Pulgar arriba al final.',
+          whatToSay: 'Esperando guion definitivo...',
+          howToMove: 'Mirando a cámara.',
+          gesture: 'Seguridad.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Toma baja, siguiendo sus pies y subiendo a su cara.',
-          angle: 'Contrapicado (desde abajo).',
-          movement: 'Gimbal tracking (síguele el paso).',
-          avoid: 'Cuidado con el reflejo de la cámara en el piso brillante.',
+          whereToStand: 'Frente a él.',
+          angle: 'Plano medio.',
+          movement: 'Estático.',
+          avoid: 'Cortes abruptos.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
