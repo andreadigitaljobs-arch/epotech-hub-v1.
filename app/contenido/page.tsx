@@ -529,6 +529,7 @@ function ContenidoContent() {
   const [serviceContext, setServiceContext] = useState<'active' | 'brand'>('active');
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
+  const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro'>('pinned');
   const [showFullScript, setShowFullScript] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showAudioReport, setShowAudioReport] = useState(false);
