@@ -42,6 +42,7 @@ import {
   ChevronUp,
   Search,
   MessageSquare,
+  MessageCircle,
   Share2,
   Download,
   AlertCircle,
