@@ -313,6 +313,7 @@ export default function ContenidoPage() {
 }
 
 function ContenidoContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type') || 'presion';
 
