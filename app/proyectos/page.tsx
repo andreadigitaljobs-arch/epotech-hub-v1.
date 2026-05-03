@@ -55,6 +55,7 @@ const SERVICES = [
     description: "Estrategia de SEO Local para dominar Salt Lake City.",
     Icon: MapPin,
     color: "cyan",
+    isComingSoon: true,
   },
 ];
 
@@ -388,8 +389,11 @@ export default function ProyectosPage() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <h2 className="text-base font-black text-[var(--primary)] tracking-tight">
+                      <h2 className="text-base font-black text-[var(--primary)] tracking-tight flex items-center gap-2">
                         {svc.name}
+                        {svc.isComingSoon && (
+                          <span className="text-[8px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase tracking-widest border border-amber-200">Próximamente</span>
+                        )}
                       </h2>
                       <span className="text-[10px] font-black text-[var(--accent)] ml-3 shrink-0">
                         {done}/{svcTasks.length} listas
