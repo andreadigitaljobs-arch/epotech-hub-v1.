@@ -74,6 +74,11 @@ export function PushNotificationBanner() {
     };
 
     checkState();
+    
+    // Register SW early so it's ready before the user clicks
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(console.error);
+    }
   }, []);
 
   const subscribeUser = async () => {
@@ -89,7 +94,47 @@ export function PushNotificationBanner() {
     }, 15000); // Increased timeout
 
     try {
-      // 1. Pedir permiso INMEDIATAMENTE tras el clic para asegurar el 'user gesture'
+      setCurrentStep("Preparando conexión...");
+      
+      // 1. Obtener el Service Worker YA REGISTRADO (en el useEffect o por next-pwa)
+      let registration = await navigator.serviceWorker.getRegistration();
+      
+      if (!registration) {
+        registration = await navigator.serviceWorker.register('/sw.js');
+      }
+
+      // 2. iOS WebKit FIX: El Service Worker DEBE estar 'active' antes de pedir permisos,
+      // porque si esperamos a que se active *después* de pedir permiso, 
+      // iOS invalida el token de interacción del usuario (user gesture) y lanza InvalidStateError.
+      if (!registration.active) {
+        setCurrentStep("Activando proceso en segundo plano...");
+        registration = await new Promise((resolve, reject) => {
+          const timeoutId = setTimeout(() => reject(new Error("Timeout esperando activación del Service Worker")), 8000);
+          
+          if (registration!.active) {
+            clearTimeout(timeoutId);
+            return resolve(registration!);
+          }
+
+          const worker = registration!.installing || registration!.waiting;
+          if (worker) {
+            worker.addEventListener('statechange', (e: any) => {
+              if (e.target.state === 'activated') {
+                clearTimeout(timeoutId);
+                resolve(registration!);
+              }
+            });
+          } else {
+             // Si por alguna razón no hay worker, usamos .ready como fallback
+             navigator.serviceWorker.ready.then(reg => {
+                clearTimeout(timeoutId);
+                resolve(reg);
+             }).catch(reject);
+          }
+        });
+      }
+
+      // 3. AHORA pedir permiso INMEDIATAMENTE ANTES de suscribir para asegurar el 'user gesture'
       setCurrentStep("Pidiendo permiso...");
       const result = await Notification.requestPermission();
       
@@ -100,15 +145,8 @@ export function PushNotificationBanner() {
         return;
       }
 
-      setCurrentStep("Registrando conexión...");
-      // Explicit registration fix for iOS/Safari
-      if ('serviceWorker' in navigator) {
-        await navigator.serviceWorker.register('/sw.js');
-      }
-      
-      const registration = await navigator.serviceWorker.ready;
-      
       setCurrentStep("Generando llave de acceso...");
+      // Llamar a subscribe directamente después de requestPermission sin otros awaits intermedios
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
