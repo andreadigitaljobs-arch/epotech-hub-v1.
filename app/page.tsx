@@ -162,15 +162,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
-      {/* Texto Tutorial Contextual Premium */}
-      <div className="max-w-6xl mx-auto px-8 md:px-20 pt-6">
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[#48c1d2]">Academia Epotech:</span> Este es tu centro de mando. Aquí podrás aprender a usar la plataforma, gestionar tus notificaciones y acceder a todas las herramientas de producción de 2026.
-          </p>
-        </div>
-      </div>
-
       {/* Header Premium */}
       <div className="bg-[#142d53] pt-12 pb-24 px-8 md:px-20 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 blur-[100px] rounded-full -mr-32 -mt-32"></div>
