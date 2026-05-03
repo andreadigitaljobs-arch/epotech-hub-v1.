@@ -127,8 +127,17 @@ export default function Home() {
       if (permission === 'granted') {
         // Suscribir al Service Worker
         if ('serviceWorker' in navigator) {
-          const registration = await navigator.serviceWorker.ready;
+          let registration = await navigator.serviceWorker.getRegistration();
+          if (!registration) {
+            console.log("Safari Rescue: Forzando registro de Service Worker...");
+            registration = await navigator.serviceWorker.register('/sw.js');
+            await navigator.serviceWorker.ready; // Espera corta segura post-registro
+          }
           
+          if (!registration) {
+            throw new Error("El motor de notificaciones de Apple falló al iniciar.");
+          }
+
           const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
           const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC);
 
