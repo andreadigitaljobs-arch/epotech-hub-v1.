@@ -124,13 +124,35 @@ export default function Home() {
       if (permission === 'granted') {
         // Suscribir al Service Worker
         if ('serviceWorker' in navigator) {
-          console.log("3. Registrando SW y forzando uso...");
-          // Bypass de iOS: register devuelve el registration, no esperamos el 'ready' que se cuelga en iOS
-          const registration = await navigator.serviceWorker.register('/sw.js');
-          console.log("4. Registro obtenido directo:", !!registration);
+          console.log("3. Limpiando y registrando SW...");
           
-          if (!registration) {
-            throw new Error("El motor de notificaciones falló al iniciar.");
+          // FORZAR DESTRUCCIÓN DE SW VIEJOS QUE BLOQUEAN LA FILA
+          const oldRegs = await navigator.serviceWorker.getRegistrations();
+          for (let reg of oldRegs) {
+            await reg.unregister();
+          }
+
+          // Registrar uno nuevo y fresco
+          const registration = await navigator.serviceWorker.register('/sw.js');
+          
+          console.log("4. Esperando activación forzada...");
+          // Espera manual de activación sin usar .ready (que se cuelga en iOS)
+          if (!registration.active) {
+            await new Promise<void>((resolve) => {
+              const worker = registration.installing || registration.waiting;
+              if (worker) {
+                worker.addEventListener('statechange', () => {
+                  if (worker.state === 'activated') resolve();
+                });
+              } else {
+                resolve();
+              }
+            });
+          }
+          console.log("5. SW Activo y listo");
+          
+          if (!registration.active) {
+            throw new Error("El motor no logró activarse.");
           }
 
           const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
@@ -166,7 +188,7 @@ export default function Home() {
       }
     } catch (error: any) {
       console.error("Error completo en suscripción:", error);
-      showToast(`Fallo: ${error.message || "desconocido"}`, "error");
+      showToast(`Fallo: ${error.name ? error.name + ': ' : ''}${error.message || "desconocido"}`, "error");
     }
   };
 
