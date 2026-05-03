@@ -1029,10 +1029,10 @@ function ContenidoContent() {
         </div>
 
         {/* Contenido principal */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar flex flex-col">
           {selectedScript.isProductionMode ? (
             /* NUEVO MODO: EN CÁMARA (PRODUCCIÓN DUAL) */
-            <div className="p-6 space-y-12">
+            <div className="p-6 space-y-12 overflow-x-hidden">
               {showFullScript ? (
                 /* Vista del Guion Completo para Producción */
                 <div className="animate-in fade-in zoom-in-95 duration-500 text-left space-y-8">
