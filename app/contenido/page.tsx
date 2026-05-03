@@ -1274,20 +1274,21 @@ function ContenidoContent() {
           )}
 
           {showFullScript && (
-             <button 
-               onClick={() => {
-                if (selectedScript.isProductionMode) {
-                  setShowFullScript(false);
-                } else {
-                  handleCloseScript();
-                  setShowAudioReport(true);
-                }
-               }}
-               className="w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
-             >
-               {selectedScript.isProductionMode ? "EMPEZAR PRODUCCIÓN POR ESCENAS" : "FINALIZAR Y HACER REPORTE"}
-             </button>
-            {showHelp && teleHelpStep === 5 && createPortal(
+             <>
+               <button 
+                 onClick={() => {
+                  if (selectedScript.isProductionMode) {
+                    setShowFullScript(false);
+                  } else {
+                    handleCloseScript();
+                    setShowAudioReport(true);
+                  }
+                 }}
+                 className="w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
+               >
+                 {selectedScript.isProductionMode ? "EMPEZAR PRODUCCIÓN POR ESCENAS" : "FINALIZAR Y HACER REPORTE"}
+               </button>
+               {showHelp && teleHelpStep === 5 && createPortal(
               <div className="fixed inset-0 z-[30000] flex items-center justify-center p-6 animate-in fade-in duration-500">
                 <div className="absolute inset-0 bg-[#0a192f]/80 backdrop-blur-sm" />
                 <div className="bg-[#48c1d2] text-[#142d53] p-10 rounded-[4rem] text-[12px] font-black shadow-[0_0_150px_rgba(72,193,210,0.6)] w-80 max-w-[calc(100vw-40px)] border-8 border-white animate-in zoom-in duration-500 text-center relative z-10">
@@ -1321,7 +1322,7 @@ function ContenidoContent() {
               </div>,
               document.body
             )}
-           </div>
+           </>
          )}
 
          {/* Si está en modo FULL, mostramos solo el botón de finalizar */}
