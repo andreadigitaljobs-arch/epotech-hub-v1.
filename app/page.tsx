@@ -114,16 +114,23 @@ export default function Home() {
       return;
     }
 
+
     try {
+      console.log("1. Solicitando permiso...");
       const permission = await Notification.requestPermission();
+      console.log("2. Permiso concedido:", permission);
       setNotificationStatus(permission);
 
       if (permission === 'granted') {
         // Suscribir al Service Worker
         if ('serviceWorker' in navigator) {
+          console.log("3. Registrando SW...");
           // Explicit registration fix for iOS/Safari (igual que el código viejo)
           await navigator.serviceWorker.register('/sw.js');
+          
+          console.log("4. Esperando SW ready...");
           const registration = await navigator.serviceWorker.ready;
+          console.log("5. SW Ready obtenido:", !!registration);
           
           if (!registration) {
             throw new Error("El motor de notificaciones falló al iniciar.");
@@ -132,11 +139,14 @@ export default function Home() {
           const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
           const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC);
 
+          console.log("6. Suscribiendo en PushManager...");
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: convertedVapidKey
           });
+          console.log("7. Suscripción generada:", !!subscription);
 
+          console.log("8. Guardando en Supabase...");
           // Guardar en la base de datos DIRECTAMENTE como se hacía en el código antiguo
           const { error } = await supabase.from('push_subscriptions').upsert({
             endpoint: subscription.endpoint,
@@ -146,9 +156,11 @@ export default function Home() {
           }, { onConflict: 'endpoint' });
 
           if (!error) {
+            console.log("9. Guardado exitoso!");
             setIsSubscribed(true);
             showToast("¡Conexión de Élite establecida! Ya recibirás avisos.", "success");
           } else {
+            console.error("ERROR SUPABASE:", error);
             showToast(`Error al guardar: ${error.message}`, "error");
           }
         }
@@ -156,7 +168,7 @@ export default function Home() {
         showToast("No se otorgó el permiso necesario.", "error");
       }
     } catch (error: any) {
-      console.error("Error en suscripción:", error);
+      console.error("Error completo en suscripción:", error);
       showToast(`Fallo: ${error.message || "desconocido"}`, "error");
     }
   };
