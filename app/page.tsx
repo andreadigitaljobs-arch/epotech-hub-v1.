@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Toast, ToastType } from "@/components/ui/Toast";
+import { supabase } from "@/lib/supabase";
 
 const TUTORIAL_CARDS = [
   {
@@ -146,26 +147,19 @@ export default function Home() {
             applicationServerKey: convertedVapidKey
           });
 
-          // Guardar en la base de datos a través de nuestra API
-          const res = await fetch('/api/subscribe', {
-            method: 'POST',
-            body: JSON.stringify(subscription),
-            headers: { 'Content-Type': 'application/json' }
-          });
+          // Guardar en la base de datos DIRECTAMENTE como se hacía en el código antiguo
+          const { error } = await supabase.from('push_subscriptions').upsert({
+            endpoint: subscription.endpoint,
+            keys_p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')!) as any)),
+            keys_auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth')!) as any)),
+            user_id: "sebastian"
+          }, { onConflict: 'endpoint' });
 
-          if (res.ok) {
+          if (!error) {
             setIsSubscribed(true);
             showToast("¡Conexión de Élite establecida! Ya recibirás avisos.", "success");
           } else {
-            let errorMessage = "Error desconocido al registrar.";
-            try {
-              const errData = await res.json();
-              errorMessage = errData.error || errorMessage;
-            } catch (e) {
-              // Si no devuelve JSON, mostramos el status
-              errorMessage = `Error del servidor: ${res.status}`;
-            }
-            showToast(`Error: ${errorMessage}`, "error");
+            showToast(`Error al guardar: ${error.message}`, "error");
           }
         }
       } else {
