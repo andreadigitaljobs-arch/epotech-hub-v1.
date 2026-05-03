@@ -20,6 +20,7 @@ import {
   ArrowLeft
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { Toast, ToastType } from "@/components/ui/Toast";
 
 export default function MasterPanel() {
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,15 @@ export default function MasterPanel() {
   const [reportesAudio, setReportesAudio] = useState<any[]>([]);
   const [locuciones, setLocuciones] = useState<any[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
+    message: "",
+    type: "success",
+    isVisible: false
+  });
+
+  const showToast = (message: string, type: ToastType = "success") => {
+    setToast({ message, type, isVisible: true });
+  };
 
   const formatDate = (dateStr: string) => {
     try {
@@ -122,9 +132,9 @@ export default function MasterPanel() {
 
       setNotificacion({ titulo: "", mensaje: "", tipo: "RECORDATORIO" });
       fetchHistory();
-      alert("¡Notificación enviada con éxito! (Nota: Verifica si llega la alerta al móvil)");
+      showToast("¡Notificación enviada con éxito!", "success");
     } else {
-      alert("Error de base de datos: " + error.message);
+      showToast("Error de base de datos: " + error.message, "error");
     }
     setSending(false);
   }
@@ -175,7 +185,7 @@ export default function MasterPanel() {
       URL.revokeObjectURL(blobUrl);
     } catch (e) {
       console.error("Error forzando descarga:", e);
-      alert("No se pudo descargar automáticamente. Haz clic derecho en el reproductor de arriba y selecciona 'Guardar audio como...'.");
+      showToast("No se pudo descargar automáticamente. Usa el reproductor.", "error");
     }
   }
 
@@ -320,17 +330,17 @@ export default function MasterPanel() {
                     className="py-2 bg-white border-2 border-gray-100 rounded-xl text-[9px] font-black hover:border-blue-400 transition-all text-gray-500"
                     onClick={async () => {
                       const title = (document.getElementById('pub-title') as HTMLInputElement).value;
-                      if (!title) return alert("Ponle un título");
+                      if (!title) return showToast("Ponle un título", "info");
                       
                       const { error } = await supabase.from('registro_publicaciones').insert([
                         { tipo: t, tema: title, plataforma: t === 'POST' ? 'INSTAGRAM' : (t === 'TIKTOK' ? 'TIKTOK' : 'INSTAGRAM') }
                       ]);
 
                       if (!error) {
-                        alert(`¡${t} registrado con éxito!`);
+                        showToast(`¡${t} registrado con éxito!`, "success");
                         (document.getElementById('pub-title') as HTMLInputElement).value = '';
                       } else {
-                        alert("Error al registrar: " + error.message);
+                        showToast("Error al registrar: " + error.message, "error");
                       }
                     }}
                   >
@@ -365,11 +375,11 @@ export default function MasterPanel() {
                 onClick={async () => {
                    const title = (document.getElementById('idea-title') as HTMLInputElement).value;
                    const desc = (document.getElementById('idea-desc') as HTMLTextAreaElement).value;
-                   if (!title || !desc) return alert("Completa ambos campos");
+                   if (!title || !desc) return showToast("Completa ambos campos", "info");
                    
                    const { error } = await supabase.from('ideas_contenido').insert([{ titulo: title, descripcion: desc, tipo: 'NUEVA' }]);
                    if (!error) {
-                     alert("¡Idea plantada con éxito!");
+                     showToast("¡Idea plantada con éxito!", "success");
                      (document.getElementById('idea-title') as HTMLInputElement).value = '';
                      (document.getElementById('idea-desc') as HTMLTextAreaElement).value = '';
                    }
@@ -479,6 +489,12 @@ export default function MasterPanel() {
            )}
          </div>
       </div>
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+      />
     </div>
   );
 }
