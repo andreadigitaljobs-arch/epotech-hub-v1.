@@ -1188,12 +1188,12 @@ function ContenidoContent() {
                           )}
                         </div>
                       </div>
-                    </div>
-                        </>
-                      )}
+                    </>
+                  )}
                     </motion.div>
                   </AnimatePresence>
-                )}
+                </div>
+              )}
             </div>
           ) : (
             /* MODO NORMAL: REELS / HISTORIAS (TELEPROMPTER) */
