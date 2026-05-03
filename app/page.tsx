@@ -98,9 +98,7 @@ export default function Home() {
     return outputArray;
   };
 
-  const [showPrePrompt, setShowPrePrompt] = useState(false);
-
-  const requestNotificationPermission = async () => {
+  const executePermissionRequest = async () => {
     if (!('Notification' in window)) {
       showToast("Este navegador no soporta notificaciones.", "error");
       return;
@@ -116,11 +114,6 @@ export default function Home() {
       return;
     }
 
-    setShowPrePrompt(true);
-  };
-
-  const executePermissionRequest = async () => {
-    setShowPrePrompt(false);
     try {
       const permission = await Notification.requestPermission();
       setNotificationStatus(permission);
@@ -208,7 +201,7 @@ export default function Home() {
           
           <div className="flex flex-col md:flex-row items-center gap-6 mt-10">
             <button 
-              onClick={requestNotificationPermission}
+              onClick={executePermissionRequest}
               className={`w-full md:w-auto px-8 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-3 border-b-4 ${
                 isSubscribed 
                 ? "bg-slate-800 text-[#48c1d2] border-slate-900 cursor-default" 
@@ -309,35 +302,6 @@ export default function Home() {
         onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
       />
 
-      {showPrePrompt && createPortal(
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-6 animate-in fade-in duration-500">
-          <div className="absolute inset-0 bg-[#142d53]/80 backdrop-blur-md" />
-          <div className="bg-white rounded-[3rem] p-10 shadow-2xl w-full max-w-md relative z-10 border border-slate-100 animate-in zoom-in-95 duration-500 text-center">
-            <div className="w-20 h-20 bg-[#48c1d2]/20 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
-              <Bell size={40} className="text-[#48c1d2] animate-bounce" fill="currentColor" />
-            </div>
-            <h3 className="text-2xl font-black text-[#142d53] tracking-tighter mb-4 uppercase italic">Conexión de Élite</h3>
-            <p className="text-slate-500 font-medium leading-relaxed mb-8">
-              Activa las notificaciones para recibir avisos instantáneos sobre nuevos guiones, feedback de producción y alertas clave de tu marca.
-            </p>
-            <div className="flex flex-col gap-3">
-              <button 
-                onClick={executePermissionRequest}
-                className="w-full py-5 bg-[#48c1d2] text-[#142d53] font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-[#48c1d2]/30 hover:scale-[1.02] active:scale-95 transition-all border-b-4 border-[#2d8c9a]"
-              >
-                PERMITIR AHORA
-              </button>
-              <button 
-                onClick={() => setShowPrePrompt(false)}
-                className="w-full py-4 text-slate-400 font-bold text-[10px] uppercase tracking-widest hover:text-slate-600 transition-colors"
-              >
-                Quizás más tarde
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
     </div>
   );
 }
