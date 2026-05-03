@@ -121,15 +121,12 @@ export default function Home() {
       if (permission === 'granted') {
         // Suscribir al Service Worker
         if ('serviceWorker' in navigator) {
-          let registration = await navigator.serviceWorker.getRegistration();
-          if (!registration) {
-            console.log("Safari Rescue: Forzando registro de Service Worker...");
-            registration = await navigator.serviceWorker.register('/sw.js');
-            await navigator.serviceWorker.ready; // Espera corta segura post-registro
-          }
+          // Explicit registration fix for iOS/Safari (igual que el código viejo)
+          await navigator.serviceWorker.register('/sw.js');
+          const registration = await navigator.serviceWorker.ready;
           
           if (!registration) {
-            throw new Error("El motor de notificaciones de Apple falló al iniciar.");
+            throw new Error("El motor de notificaciones falló al iniciar.");
           }
 
           const VAPID_PUBLIC = "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
@@ -158,9 +155,9 @@ export default function Home() {
       } else {
         showToast("No se otorgó el permiso necesario.", "error");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error en suscripción:", error);
-      showToast("Hubo un fallo técnico al conectar.", "error");
+      showToast(`Fallo: ${error.message || "desconocido"}`, "error");
     }
   };
 
