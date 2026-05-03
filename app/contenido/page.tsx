@@ -1188,11 +1188,11 @@ function ContenidoContent() {
                           )}
                         </div>
                       </div>
-                    </>
-                  )}
+                        </>
+                      )}
                     </motion.div>
                   </AnimatePresence>
-                </div>
+                </>
               )}
             </div>
           ) : (
