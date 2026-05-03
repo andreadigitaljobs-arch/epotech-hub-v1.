@@ -175,6 +175,12 @@ export default function ManualPage() {
   return (
     <div className="max-w-5xl mx-auto px-8 py-12 pb-32">
       <div className="space-y-12">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+            <span className="text-[var(--accent)]">Protocolos de Grabación:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes transmita la autoridad de una empresa líder en Utah. El profesionalismo visual genera confianza inmediata.
+          </p>
+        </div>
+
         <header className="relative">
           <div className="flex items-center gap-2 mb-2">
             <div className="bg-[var(--accent)] p-1.5 rounded-lg shadow-lg">
@@ -185,11 +191,6 @@ export default function ManualPage() {
           <h1 className="text-4xl font-black tracking-tighter text-[var(--primary)] mb-4">
             Guía de Grabación Master
           </h1>
-          <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full mb-8">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-              <span className="text-[var(--accent)]">Protocolos de Grabación:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes transmita la autoridad de una empresa líder en Utah. El profesionalismo visual genera confianza inmediata.
-            </p>
-          </div>
         </header>
 
         {/* Nueva Sección de Estrategia Transplantada */}

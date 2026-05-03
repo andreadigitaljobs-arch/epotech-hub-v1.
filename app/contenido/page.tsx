@@ -1337,6 +1337,15 @@ function ContenidoContent() {
 
   return (
     <div className="max-w-md md:max-w-5xl mx-auto pt-6 pb-24 px-4 text-left">
+      {/* Texto Tutorial Contextual Premium */}
+      <div className="mb-8">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+            <span className="text-[#48c1d2]">Estudio de Producción:</span> Aquí es donde ocurre la magia. Envíanos tu reporte de audio al final del día y nosotros generaremos tus guiones estratégicos. También podrás grabar tu voz en off aquí mismo.
+          </p>
+        </div>
+      </div>
+
       <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 flex justify-between items-start gap-4">
         <div>
           <div className="inline-flex items-center gap-2 bg-[#48c1d2]/10 px-3 py-1.5 rounded-full mb-3">
@@ -1352,7 +1361,7 @@ function ContenidoContent() {
         </div>
         <button 
           onClick={() => router.push('/master')}
-          className="mt-1 p-4 bg-white/80 backdrop-blur-md text-red-500 rounded-[1.5rem] border border-red-100 shadow-xl shadow-red-500/5 active:scale-90 transition-all flex flex-col items-center gap-1 group"
+          className="md:hidden mt-1 p-4 bg-white/80 backdrop-blur-md text-red-500 rounded-[1.5rem] border border-red-100 shadow-xl shadow-red-500/5 active:scale-90 transition-all flex flex-col items-center gap-1 group"
         >
           <ShieldCheck size={20} className="group-hover:scale-110 transition-transform" />
           <span className="text-[7px] font-black uppercase tracking-tighter opacity-60">Master</span>

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 import { 
   BookOpen, Video, Briefcase, PlaySquare, Target, 
@@ -53,8 +54,18 @@ const TUTORIAL_CARDS = [
 ];
 
 export default function Home() {
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
+  const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
+    message: "",
+    type: "success",
+    isVisible: false
+  });
+
+  const showToast = (message: string, type: ToastType = "success") => {
+    setToast({ message, type, isVisible: true });
+  };
 
   useEffect(() => {
     if (!('Notification' in window)) {
@@ -84,9 +95,11 @@ export default function Home() {
     return outputArray;
   };
 
+  const [showPrePrompt, setShowPrePrompt] = useState(false);
+
   const requestNotificationPermission = async () => {
     if (!('Notification' in window)) {
-      showToast("Tu navegador no soporta notificaciones.", "info");
+      showToast("Este navegador no soporta notificaciones.", "error");
       return;
     }
 
@@ -100,6 +113,11 @@ export default function Home() {
       return;
     }
 
+    setShowPrePrompt(true);
+  };
+
+  const executePermissionRequest = async () => {
+    setShowPrePrompt(false);
     try {
       const permission = await Notification.requestPermission();
       setNotificationStatus(permission);
@@ -144,6 +162,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
+      {/* Texto Tutorial Contextual Premium */}
+      <div className="max-w-6xl mx-auto px-8 md:px-20 pt-6">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+            <span className="text-[#48c1d2]">Academia Epotech:</span> Este es tu centro de mando. Aquí podrás aprender a usar la plataforma, gestionar tus notificaciones y acceder a todas las herramientas de producción de 2026.
+          </p>
+        </div>
+      </div>
+
       {/* Header Premium */}
       <div className="bg-[#142d53] pt-12 pb-24 px-8 md:px-20 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 blur-[100px] rounded-full -mr-32 -mt-32"></div>
@@ -265,6 +292,36 @@ export default function Home() {
         isVisible={toast.isVisible}
         onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
       />
+
+      {showPrePrompt && createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-6 animate-in fade-in duration-500">
+          <div className="absolute inset-0 bg-[#142d53]/80 backdrop-blur-md" />
+          <div className="bg-white rounded-[3rem] p-10 shadow-2xl w-full max-w-md relative z-10 border border-slate-100 animate-in zoom-in-95 duration-500 text-center">
+            <div className="w-20 h-20 bg-[#48c1d2]/20 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+              <Bell size={40} className="text-[#48c1d2] animate-bounce" fill="currentColor" />
+            </div>
+            <h3 className="text-2xl font-black text-[#142d53] tracking-tighter mb-4 uppercase italic">Conexión de Élite</h3>
+            <p className="text-slate-500 font-medium leading-relaxed mb-8">
+              Activa las notificaciones para recibir avisos instantáneos sobre nuevos guiones, feedback de producción y alertas clave de tu marca.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={executePermissionRequest}
+                className="w-full py-5 bg-[#48c1d2] text-[#142d53] font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-[#48c1d2]/30 hover:scale-[1.02] active:scale-95 transition-all border-b-4 border-[#2d8c9a]"
+              >
+                PERMITIR AHORA
+              </button>
+              <button 
+                onClick={() => setShowPrePrompt(false)}
+                className="w-full py-4 text-slate-400 font-bold text-[10px] uppercase tracking-widest hover:text-slate-600 transition-colors"
+              >
+                Quizás más tarde
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

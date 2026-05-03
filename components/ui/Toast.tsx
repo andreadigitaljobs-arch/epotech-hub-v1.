@@ -78,17 +78,16 @@ export function Toast({ message, type, isVisible, onClose }: ToastProps) {
           {icon}
         </div>
         
-        <div className="flex-1 pr-6 text-left">
+        <div className="flex-1 text-left">
           <p className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em] mb-0.5 opacity-70 italic">Notificación Epotech</p>
-          <p className="text-xs font-bold text-white italic leading-tight tracking-tight">{message}</p>
+          <p className="text-xs font-bold text-white italic leading-tight tracking-tight mb-3">{message}</p>
+          <button 
+            onClick={onClose}
+            className="w-full py-2 bg-white/10 hover:bg-white/20 text-white text-[9px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 border border-white/10"
+          >
+            Entendido
+          </button>
         </div>
-
-        <button 
-          onClick={onClose}
-          className="p-1 hover:bg-white/10 rounded-full transition-colors text-white/20 hover:text-white/60 absolute top-4 right-4"
-        >
-          <X size={14} />
-        </button>
       </div>
     </div>
   );

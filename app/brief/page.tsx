@@ -57,6 +57,13 @@ export default function BrandBriefPage() {
     <div className="min-h-screen bg-[#f8fafc] py-12 pb-32">
       <div className="max-w-5xl mx-auto px-6 space-y-12">
         
+        {/* Texto Tutorial Contextual Premium */}
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+            <span className="text-[#48c1d2]">Arquitectura de Marca:</span> Este es el ADN de Epotech. Consulta tu misión, visión y perfil de cliente para que tu comunicación sea siempre coherente y profesional.
+          </p>
+        </div>
+
         {/* 1. HERO ESTRATÉGICO */}
         <header className="relative p-10 md:p-20 rounded-[3rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border border-white/10">
           <div className="absolute top-0 right-0 p-8 opacity-10 hidden md:block rotate-12">
@@ -77,13 +84,6 @@ export default function BrandBriefPage() {
             </p>
           </div>
         </header>
-
-        {/* Texto Tutorial Contextual Premium */}
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[#48c1d2]">Arquitectura de Marca:</span> Este es el ADN de Epotech. Consulta tu misión, visión y perfil de cliente para que tu comunicación sea siempre coherente y profesional.
-          </p>
-        </div>
 
         {/* 2. PROPUESTA Y DIFERENCIADOR */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

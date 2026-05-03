@@ -327,6 +327,12 @@ export default function ProyectosPage() {
   return (
     <div className="max-w-5xl mx-auto px-8 py-12">
       <div className="space-y-6 pb-20">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-4">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+            <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
+          </p>
+        </div>
+
         {/* Header */}
         <header className="mb-8">
           <div className="flex items-center gap-3 mb-1">
@@ -357,15 +363,7 @@ export default function ProyectosPage() {
         </div>
 
         {activeSubTab === 'proyectos' ? (
-          <>
-            <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-8">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-                <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
-              </p>
-            </div>
-
-            {/* Service cards */}
-            <div className="space-y-4">
+          <div className="space-y-4">
           {SERVICES.map((svc) => {
             const svcTasks = tasks.filter((t) => t.service_id === svc.id);
             const progress = calcProgress(svcTasks);
@@ -388,16 +386,21 @@ export default function ProyectosPage() {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h2 className="text-base font-black text-[var(--primary)] tracking-tight flex items-center gap-2">
-                        {svc.name}
+                    <div className="flex items-start justify-between mb-1 gap-2">
+                      <div className="min-w-0">
+                        <h2 className="text-base font-black text-[var(--primary)] tracking-tight truncate leading-tight">
+                          {svc.name}
+                        </h2>
                         {svc.isComingSoon && (
-                          <span className="text-[8px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase tracking-widest border border-amber-200">Próximamente</span>
+                          <span className="inline-block text-[7px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase tracking-[0.1em] border border-amber-200 mt-1">Próximamente</span>
                         )}
-                      </h2>
-                      <span className="text-[10px] font-black text-[var(--accent)] ml-3 shrink-0">
-                        {done}/{svcTasks.length} listas
-                      </span>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className="text-[10px] font-black text-[var(--accent)] bg-[var(--accent)]/10 px-2 py-0.5 rounded-lg border border-[var(--accent)]/20">
+                          {done}/{svcTasks.length}
+                        </span>
+                        <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest mt-1">SERVICIOS</p>
+                      </div>
                     </div>
 
                     {/* Progress bar */}
@@ -600,9 +603,8 @@ export default function ProyectosPage() {
             );
           })}
         </div>
-      </>
-    ) : (
-      /* Mensajes del Equipo Sub-Tab */
+      ) : (
+        /* Mensajes del Equipo Sub-Tab */
       <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
         {notificaciones.length > 0 ? (
           notificaciones.map((announcement) => (
