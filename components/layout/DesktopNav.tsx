@@ -100,7 +100,7 @@ export function DesktopNav() {
             }`}
           >
             <ShieldCheck size={18} className="group-hover/master:rotate-[360deg] transition-transform duration-1000" />
-            Control Master
+            Panel de Control
           </Link>
         </div>
       </div>

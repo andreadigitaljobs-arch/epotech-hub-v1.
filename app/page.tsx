@@ -295,7 +295,7 @@ export default function Home() {
         if (!error) {
           console.log("9. ¡Guardado exitoso!");
           setIsSubscribed(true);
-          showToast("¡Conexión de Élite establecida! Ya recibirás avisos.", "success");
+          showToast("¡Notificaciones activadas! Ya recibirás avisos.", "success");
         } else {
           console.error("ERROR SUPABASE:", error);
           showToast(`Error al guardar: ${error?.message || "desconocido"}`, "error");
@@ -358,7 +358,7 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${isSubscribed ? 'bg-green-500 shadow-green-500/50' : 'bg-amber-500 shadow-amber-500/50'}`}></div>
               <span className="text-[10px] font-black uppercase text-white/40 tracking-[0.3em] italic">
-                {isSubscribed ? "Sincronización de Élite" : "Esperando Conexión"}
+                {isSubscribed ? "Notificaciones activas" : "Sin notificaciones"}
               </span>
             </div>
           </div>

@@ -69,10 +69,6 @@ export default function ReferenciasPage() {
          
          <div className="relative z-10">
             <div className="flex items-center gap-3 mb-6">
-               <span className="bg-[#48c1d2]/20 backdrop-blur-md border border-[#48c1d2]/30 px-5 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.4em] text-[#48c1d2]">
-                  Creative Intelligence 2026
-               </span>
-            </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 leading-none uppercase italic">
                Motor de <span className="text-[#48c1d2]">Inspiración</span>
             </h1>
@@ -90,7 +86,7 @@ export default function ReferenciasPage() {
                onClick={() => setActiveSubTab('videos')}
                className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
             >
-               <Zap size={14} /> Biblioteca Viral
+               <Zap size={14} /> Videos de Referencia
             </button>
             <button 
                onClick={() => setActiveSubTab('cuentas')}
@@ -125,8 +121,8 @@ export default function ReferenciasPage() {
                <div className="flex items-center gap-4 ml-2">
                   <div className="w-1.5 h-10 bg-[#48c1d2] rounded-full shadow-[0_0_15px_rgba(72,193,210,0.5)]" />
                   <div>
-                     <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Anatomía Viral</h2>
-                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Análisis de Estructura y Rendimiento</span>
+                     <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Análisis de Videos</h2>
+                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Estructura y puntos fuertes de cada referencia</span>
                   </div>
                </div>
 
@@ -154,8 +150,8 @@ export default function ReferenciasPage() {
                <div className="flex items-center gap-4 ml-2">
                   <div className="w-1.5 h-10 bg-[#0a192f] rounded-full" />
                   <div>
-                     <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Canales de Élite</h2>
-                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Benchmarks del Sector Internacional</span>
+                     <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Canales de Referencia</h2>
+                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Cuentas del sector que puedes estudiar y aplicar</span>
                   </div>
                </div>
 
