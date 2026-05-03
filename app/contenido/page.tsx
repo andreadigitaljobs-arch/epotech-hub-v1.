@@ -1543,7 +1543,7 @@ function ContenidoContent() {
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
-                <Sparkles size={15} /> Inspiración
+                <Sparkles size={15} /> Historias
               </button>
               <button
                 onClick={() => handleGuionTabChange('presentacion')}
@@ -1560,7 +1560,7 @@ function ContenidoContent() {
               <div className="bg-[#142d53]/5 p-6 rounded-[2.5rem] border border-[#142d53]/10">
                 <h3 className="text-lg font-black text-[#142d53] mb-2 tracking-tight">
                   {guionTab === 'reels' && 'Estudio de Voz en Off'}
-                  {guionTab === 'historias' && 'Laboratorio de Inspiración'}
+                  {guionTab === 'historias' && 'Laboratorio de Historias'}
                   {guionTab === 'presentacion' && 'Producción Profesional (Cámara)'}
                 </h3>
                 
