@@ -52,7 +52,7 @@ export default function ReferenciasPage() {
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-8 py-12 pb-32 text-left space-y-16">
+    <div className="max-w-5xl mx-auto px-6 py-6 pb-32 text-left space-y-6">
       
       {/* Texto Tutorial Contextual Premium */}
       <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
@@ -62,26 +62,26 @@ export default function ReferenciasPage() {
       </div>
 
       {/* 1. HERO COMPACTO */}
-      <header className="relative p-10 md:p-16 rounded-[3rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border border-white/10 group">
+      <header className="relative p-6 md:p-12 rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border border-white/10 group">
          <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-15 transition-opacity duration-1000 rotate-12">
             <PlaySquare size={180} />
          </div>
          
          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-6">
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 leading-none uppercase italic">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 leading-none uppercase italic">
                Motor de <span className="text-[#48c1d2]">Inspiración</span>
             </h1>
-            <p className="text-xs md:text-base font-bold text-slate-400 italic max-w-xl leading-relaxed opacity-80 border-l-2 border-[#48c1d2]/30 pl-6">
+            <p className="text-xs font-bold text-slate-400 italic max-w-xl leading-relaxed opacity-80 border-l-2 border-[#48c1d2]/30 pl-6">
                "No grabes por grabar. Entiende el código visual de lo que funciona para elevar Epotech al siguiente nivel."
             </p>
          </div>
       </header>
 
+
       {/* 2. NAVEGACIÓN Y FILTROS */}
       <div className="space-y-8">
          {/* Pestañas Principales */}
-         <div className="flex bg-[#0a192f] p-2 rounded-[2.5rem] shadow-2xl border border-white/10 max-w-2xl mx-auto">
+         <div className="flex bg-[#0a192f] p-2 rounded-[2rem] shadow-2xl border border-white/10 max-w-md mx-auto">
             <button 
                onClick={() => setActiveSubTab('videos')}
                className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}

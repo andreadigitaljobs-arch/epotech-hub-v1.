@@ -1336,7 +1336,7 @@ function ContenidoContent() {
   ) : null;
 
   return (
-    <div className="max-w-md md:max-w-5xl mx-auto pt-6 pb-24 px-4 text-left">
+    <div className="max-w-5xl mx-auto px-6 py-6 pb-24 text-left">
       {/* Texto Tutorial Contextual Premium */}
       <div className="mb-8">
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">

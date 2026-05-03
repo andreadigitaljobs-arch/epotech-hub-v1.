@@ -325,7 +325,7 @@ export default function ProyectosPage() {
   if (loading) return <LoadingSpinner message="Cargando proyectos..." />;
 
   return (
-    <div className="max-w-5xl mx-auto px-8 py-12">
+    <div className="max-w-5xl mx-auto px-6 py-6">
       <div className="space-y-6 pb-20">
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-4">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
@@ -347,7 +347,7 @@ export default function ProyectosPage() {
         </header>
 
         {/* Sub-Tabs Switcher */}
-        <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8 gap-2">
+        <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8 gap-2 max-w-md mx-auto">
           <button 
             onClick={() => setActiveSubTab('proyectos')}
             className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'proyectos' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}

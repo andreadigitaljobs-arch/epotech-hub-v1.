@@ -313,11 +313,11 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
       {/* Header Premium */}
-      <div className="bg-[#142d53] pt-12 pb-24 px-8 md:px-20 relative overflow-hidden">
+      <div className="bg-[#142d53] pt-6 pb-12 px-6 md:px-12 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 blur-[100px] rounded-full -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 blur-[80px] rounded-full -ml-32 -mb-32"></div>
         
-        <div className="relative z-10 max-w-6xl mx-auto">
+        <div className="relative z-10 max-w-5xl mx-auto">
           <div className="flex justify-between items-start gap-4">
             <div>
               <div className="flex items-center gap-3 mb-4">
@@ -365,7 +365,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-8 md:px-20 -mt-12 relative z-20">
+      <div className="max-w-5xl mx-auto px-6 md:px-12 -mt-12 relative z-20">
         {/* Quick Help Card */}
         <div className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 mb-12 flex flex-col md:flex-row items-center gap-8 group">
           <div 
