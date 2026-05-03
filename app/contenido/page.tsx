@@ -1355,7 +1355,7 @@ function ContenidoContent() {
                 }}
                 className="w-full py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
               >
-                {selectedScript.isProductionMode ? "EMPEZAR PRODUCCIÓN POR ESCENAS" : "EMPEZAR MODO PASOS (LOCUCIÓN)"}
+                {selectedScript.isProductionMode ? "GRABAR POR ESCENAS 🎬" : "GRABAR POR PARTES 🎙️"}
               </button>
               {showHelp && teleHelpStep === 5 && createPortal(
                 <div className="fixed inset-0 z-[30000] flex items-center justify-center p-6 animate-in fade-in duration-500">
