@@ -8,6 +8,7 @@ import {
   Search, Smartphone, Zap, Bell, ShieldCheck
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Toast, ToastType } from "@/components/ui/Toast";
 
 const TUTORIAL_CARDS = [
@@ -54,6 +55,7 @@ const TUTORIAL_CARDS = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
@@ -168,15 +170,27 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 blur-[80px] rounded-full -ml-32 -mb-32"></div>
         
         <div className="relative z-10 max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/20 flex items-center justify-center border border-[#48c1d2]/30">
-              <BookOpen size={20} className="text-[#48c1d2]" />
+          <div className="flex justify-between items-start gap-4">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/20 flex items-center justify-center border border-[#48c1d2]/30">
+                  <BookOpen size={20} className="text-[#48c1d2]" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Academia Epotech</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 overflow-visible">
+                Centro de Mando: <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#48c1d2] to-white italic" style={{ WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone', padding: '0 0.2em', margin: '0 -0.2em' }}>Tu Guía de Vuelo&nbsp;</span>
+              </h1>
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Academia Epotech</span>
+            
+            <button 
+              onClick={() => router.push('/master')}
+              className="md:hidden mt-1 p-4 bg-white/10 backdrop-blur-md text-[#48c1d2] rounded-[1.5rem] border border-white/10 shadow-xl active:scale-90 transition-all flex flex-col items-center gap-1 group"
+            >
+              <ShieldCheck size={20} className="group-hover:scale-110 transition-transform" />
+              <span className="text-[7px] font-black uppercase tracking-tighter opacity-60">Master</span>
+            </button>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 overflow-visible">
-            Centro de Mando: <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#48c1d2] to-white italic" style={{ WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone', padding: '0 0.2em', margin: '0 -0.2em' }}>Tu Guía de Vuelo&nbsp;</span>
-          </h1>
           <p className="text-slate-400 text-lg max-w-2xl font-medium leading-relaxed">
             Hola Sebastian, aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. ¿Qué quieres lograr hoy?
           </p>

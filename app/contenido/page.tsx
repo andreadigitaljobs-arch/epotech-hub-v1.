@@ -1359,13 +1359,6 @@ function ContenidoContent() {
             <span className="text-[#48c1d2]">Producción</span>
           </h1>
         </div>
-        <button 
-          onClick={() => router.push('/master')}
-          className="md:hidden mt-1 p-4 bg-white/80 backdrop-blur-md text-red-500 rounded-[1.5rem] border border-red-100 shadow-xl shadow-red-500/5 active:scale-90 transition-all flex flex-col items-center gap-1 group"
-        >
-          <ShieldCheck size={20} className="group-hover:scale-110 transition-transform" />
-          <span className="text-[7px] font-black uppercase tracking-tighter opacity-60">Master</span>
-        </button>
       </div>
 
       {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}
