@@ -193,11 +193,10 @@ export default function BrandBriefPage() {
                     ))}
                  </div>
               </div>
-           </div>
-        </div>
+           </div>
         </div>
 
-        {/* 6. PILARES DE ESTRATEGIA VIRAL */}
+        {/* 5. PILARES DE ESTRATEGIA VIRAL */}
         <div className="bg-[#0a192f] p-10 md:p-16 rounded-[3rem] border border-white/10 shadow-2xl relative overflow-hidden">
            <div className="absolute top-0 right-0 w-64 h-64 bg-[#48c1d2]/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>
            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-12">Pilares de Estrategia Viral</h3>
@@ -207,7 +206,7 @@ export default function BrandBriefPage() {
                    <div className="w-8 h-8 rounded-full bg-[#142d53] flex items-center justify-center mx-auto mb-4">
                       <Zap size={14} className="text-[#48c1d2]" />
                    </div>
-                   <p className="text-[10px] font-black text-white uppercase tracking-tight">"{m}"</p>
+                   <p className="text-[10px] font-black text-white uppercase tracking-tight">&quot;{m}&quot;</p>
                 </div>
               ))}
            </div>
@@ -223,7 +222,7 @@ export default function BrandBriefPage() {
                  Este Brief es <span className="text-[#48c1d2]">Tu Brújula</span>
               </h4>
               <p className="text-slate-400 text-sm font-bold italic max-w-lg mx-auto">
-                 "Si no construye confianza o transformación real, no pertenece a Epotech."
+                 &quot;Si no construye confianza o transformación real, no pertenece a Epotech.&quot;
               </p>
            </div>
         </footer>
