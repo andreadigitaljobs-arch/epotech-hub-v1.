@@ -1336,17 +1336,26 @@ function ContenidoContent() {
 
   return (
     <div className="max-w-md md:max-w-5xl mx-auto pt-6 pb-24 px-4 text-left">
-      <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
-        <div className="inline-flex items-center gap-2 bg-[#48c1d2]/10 px-3 py-1.5 rounded-full mb-3">
-          <div className="w-5 h-5 bg-[#48c1d2] rounded-lg flex items-center justify-center">
-            <Sparkles size={12} className="text-[#142d53]" />
+      <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 flex justify-between items-start gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2 bg-[#48c1d2]/10 px-3 py-1.5 rounded-full mb-3">
+            <div className="w-5 h-5 bg-[#48c1d2] rounded-lg flex items-center justify-center">
+              <Sparkles size={12} className="text-[#142d53]" />
+            </div>
+            <span className="text-[10px] font-black text-[#142d53] uppercase tracking-widest">Estudio Epotech 2026</span>
           </div>
-          <span className="text-[10px] font-black text-[#142d53] uppercase tracking-widest">Estudio Epotech 2026</span>
+          <h1 className="text-4xl font-black text-[#142d53] leading-tight tracking-tighter">
+            Estudio de<br />
+            <span className="text-[#48c1d2]">Producción</span>
+          </h1>
         </div>
-        <h1 className="text-4xl font-black text-[#142d53] leading-tight tracking-tighter">
-          Estudio de<br />
-          <span className="text-[#48c1d2]">Producción</span>
-        </h1>
+        <button 
+          onClick={() => router.push('/master')}
+          className="mt-1 p-4 bg-white/80 backdrop-blur-md text-red-500 rounded-[1.5rem] border border-red-100 shadow-xl shadow-red-500/5 active:scale-90 transition-all flex flex-col items-center gap-1 group"
+        >
+          <ShieldCheck size={20} className="group-hover:scale-110 transition-transform" />
+          <span className="text-[7px] font-black uppercase tracking-tighter opacity-60">Master</span>
+        </button>
       </div>
 
       {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}

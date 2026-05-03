@@ -181,37 +181,37 @@ export default function MasterPanel() {
   if (loading) return <LoadingSpinner message="Abriendo Panel de Control..." />;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-10 pb-20 pt-10">
-      <header className="flex items-center justify-between">
+    <div className="max-w-4xl mx-auto space-y-8 pb-20 pt-6 px-4 md:px-0">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
            <div className="flex items-center gap-2 mb-2">
-             <div className="bg-red-500 p-2 rounded-lg text-white">
-                <ShieldCheck size={20} />
+             <div className="bg-red-500 p-1.5 rounded-lg text-white">
+                <ShieldCheck size={16} />
              </div>
-             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600">Acceso Restringido</span>
+             <span className="text-[9px] font-black uppercase tracking-[0.3em] text-red-600">Acceso Restringido</span>
            </div>
-           <h1 className="text-4xl font-black tracking-tight text-[var(--primary)]">Panel de Control Andrea</h1>
-           <p className="text-sm font-bold text-[var(--text-muted)] mt-2">Gestiona lo que Sebastián ve en su pantalla en tiempo real.</p>
+           <h1 className="text-3xl md:text-4xl font-black tracking-tight text-[var(--primary)]">Panel de Control Andrea</h1>
+           <p className="text-xs md:text-sm font-bold text-[var(--text-muted)] mt-1 md:mt-2 leading-relaxed">Gestiona lo que Sebastián ve en su pantalla en tiempo real.</p>
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10">
         
         {/* Formulario de Notificación */}
-        <Card className="lg:col-span-2 p-10 border-2 border-[var(--border)] shadow-xl rounded-[40px]">
+        <Card className="lg:col-span-2 p-6 md:p-10 border-2 border-[var(--border)] shadow-xl rounded-[40px]">
           <div className="flex items-center gap-4 mb-8">
-            <div className="bg-amber-100 p-3 rounded-2xl text-amber-600">
+            <div className="bg-amber-100 p-3 rounded-2xl text-amber-600 shrink-0">
               <Bell size={24} />
             </div>
             <div>
-              <h2 className="text-xl font-black text-[var(--primary)]">Nueva Notificación</h2>
-              <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mt-0.5">Llega directo al dashboard de Seba</p>
+              <h2 className="text-lg md:text-xl font-black text-[var(--primary)]">Nueva Notificación</h2>
+              <p className="text-[10px] md:text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mt-0.5">Directo al dashboard de Seba</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-5">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Título del Aviso</label>
+              <label className="text-[9px] font-black uppercase text-gray-400 tracking-widest ml-1">Título del Aviso</label>
               <input 
                 type="text" 
                 placeholder="Ej: Grabar hoy en Salt Lake..."
@@ -222,7 +222,7 @@ export default function MasterPanel() {
             </div>
 
             <div className="space-y-2">
-               <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Mensaje Detallado</label>
+               <label className="text-[9px] font-black uppercase text-gray-400 tracking-widest ml-1">Mensaje Detallado</label>
                <textarea 
                  rows={4}
                  placeholder="Escribe aquí las instrucciones específicas..."
@@ -232,12 +232,12 @@ export default function MasterPanel() {
                />
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 md:gap-3">
                {["URGENTE", "RECORDATORIO", "TIP", "LOGRO"].map((tipo) => (
                  <button
                    key={tipo}
                    onClick={() => setNotificacion({...notificacion, tipo})}
-                   className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all border-2 ${
+                   className={`px-3 py-2 md:px-4 md:py-2 rounded-xl text-[9px] md:text-[10px] font-black transition-all border-2 ${
                      notificacion.tipo === tipo 
                        ? "bg-[var(--primary)] text-white border-[var(--primary)] scale-105 shadow-lg" 
                        : "bg-white text-gray-400 border-gray-100 hover:border-gray-200"
@@ -251,22 +251,22 @@ export default function MasterPanel() {
             <button 
               onClick={sendNotification}
               disabled={sending}
-              className="mt-4 w-full bg-[var(--accent)] hover:bg-[var(--accent-dark)] text-white font-black py-4 rounded-2xl shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50"
+              className="mt-2 w-full bg-[var(--accent)] hover:bg-[var(--accent-dark)] text-white font-black py-4 rounded-2xl shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50 text-xs md:text-sm"
             >
               {sending ? <RefreshCcw className="animate-spin" /> : <Send size={20} />}
-              ENVIAR NOTIFICACIÓN A SEBAS
+              ENVIAR NOTIFICACIÓN
             </button>
           </div>
         </Card>
 
         {/* Historial Reciente */}
         <div className="space-y-6">
-           <h3 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest flex items-center gap-2">
+           <h3 className="text-xs md:text-sm font-black text-[var(--primary)] uppercase tracking-widest flex items-center gap-2 px-1">
              <MessageSquare size={16} /> Últimos Enviados
            </h3>
            <div className="space-y-4">
              {history.map((h) => (
-               <Card key={h.id} className="p-5 border-none bg-gray-50 relative group">
+               <Card key={h.id} className="p-5 border-none bg-gray-50 relative group rounded-3xl">
                   <div className="flex justify-between items-start mb-2">
                     <span className={`text-[8px] font-black px-2 py-0.5 rounded ${
                       h.tipo === 'URGENTE' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
@@ -281,8 +281,8 @@ export default function MasterPanel() {
                     </button>
                   </div>
                   <h4 className="text-xs font-black text-gray-900">{h.titulo}</h4>
-                  <p className="text-[10px] font-bold text-gray-500 mt-1 line-clamp-2">{h.mensaje}</p>
-                  <p className="text-[8px] font-black text-gray-300 mt-3">{formatDate(h.fecha)}</p>
+                  <p className="text-[10px] font-bold text-gray-500 mt-1 line-clamp-2 leading-snug">{h.mensaje}</p>
+                  <p className="text-[8px] font-black text-gray-300 mt-3 uppercase tracking-widest">{formatDate(h.fecha)}</p>
                </Card>
              ))}
              {history.length === 0 && (
@@ -293,9 +293,9 @@ export default function MasterPanel() {
 
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-         <Card className="p-8 border-2 border-[var(--primary)] bg-blue-50/30">
-            <h3 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-10">
+         <Card className="p-6 md:p-8 border-2 border-[var(--primary)] bg-blue-50/30 rounded-[3rem]">
+            <h3 className="text-xs md:text-sm font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-2">
               <Zap size={18} className="text-amber-500" /> Registrar Producción
             </h3>
             <div className="space-y-4">
@@ -305,11 +305,11 @@ export default function MasterPanel() {
                 className="w-full bg-white border-2 border-gray-100 rounded-xl p-3 text-xs font-bold outline-none focus:border-blue-500"
                 id="pub-title"
               />
-              <div className="flex gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {["REEL", "TIKTOK", "CARRUSEL", "POST"].map((t) => (
                   <button 
                     key={t}
-                    className="flex-1 py-2 bg-white border-2 border-gray-100 rounded-xl text-[9px] font-black hover:border-blue-400 transition-all text-gray-500"
+                    className="py-2 bg-white border-2 border-gray-100 rounded-xl text-[9px] font-black hover:border-blue-400 transition-all text-gray-500"
                     onClick={async () => {
                       const title = (document.getElementById('pub-title') as HTMLInputElement).value;
                       if (!title) return alert("Ponle un título");
@@ -330,15 +330,15 @@ export default function MasterPanel() {
                   </button>
                 ))}
               </div>
-              <p className="text-[9px] font-bold text-gray-400 text-center uppercase tracking-widest italic">
-                Esto actualiza los números del Dashboard de Sebas
+              <p className="text-[9px] font-bold text-gray-400 text-center uppercase tracking-widest italic leading-tight">
+                Actualiza los números del Dashboard de Sebas
               </p>
             </div>
          </Card>
 
-         <Card className="p-8 border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col gap-6">
-            <h3 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest flex items-center gap-2">
-              <Lightbulb size={18} className="text-amber-500" /> Plantar Idea de Contenido
+         <Card className="p-6 md:p-8 border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col gap-6 rounded-[3rem]">
+            <h3 className="text-xs md:text-sm font-black text-[var(--primary)] uppercase tracking-widest flex items-center gap-2">
+              <Lightbulb size={18} className="text-amber-500" /> Plantar Idea
             </h3>
             <div className="space-y-4">
               <input 
@@ -353,7 +353,7 @@ export default function MasterPanel() {
                 id="idea-desc"
               ></textarea>
               <button 
-                className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-[10px] font-black shadow-lg shadow-amber-500/20 transition-all active:scale-95"
+                className="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-[10px] font-black shadow-lg shadow-amber-500/20 transition-all active:scale-95 uppercase tracking-widest"
                 onClick={async () => {
                    const title = (document.getElementById('idea-title') as HTMLInputElement).value;
                    const desc = (document.getElementById('idea-desc') as HTMLTextAreaElement).value;
@@ -367,30 +367,27 @@ export default function MasterPanel() {
                    }
                 }}
               >
-                ENVIAR IDEA AL DASHBOARD
+                ENVIAR AL DASHBOARD
               </button>
             </div>
          </Card>
       </div>
 
-      {/* BANDEJA DE AUDIOS: TU REPORTE PRO */}
-      <div className="mt-16">
-         <h3 className="text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-3">
-           <div className="bg-[#48c1d2] p-2 rounded-xl text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
+      {/* BANDEJA DE AUDIOS */}
+      <div className="mt-12 md:mt-16">
+         <h3 className="text-lg md:text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-3 px-1">
+           <div className="bg-[#48c1d2] p-2 rounded-xl text-[#142d53] shadow-lg shadow-[#48c1d2]/20 shrink-0">
              <Mic size={20} />
            </div>
-           Reportes de Audio Recibidos
+           Audios Recibidos
          </h3>
          
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            {reportesAudio.map(r => (
-             <Card key={r.id} className="p-6 border-2 border-slate-100 bg-white rounded-[2rem] shadow-xl relative group hover:scale-[1.02] transition-transform">
-                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                   <Mic size={40} className="text-[#48c1d2]" />
-                </div>
+             <Card key={r.id} className="p-6 border-2 border-slate-100 bg-white rounded-[2rem] shadow-xl relative group overflow-hidden">
                 <div className="flex justify-between items-start mb-4">
-                   <span className="text-[9px] font-black px-3 py-1.5 bg-[#142d53] text-[#48c1d2] rounded-xl tracking-widest uppercase shadow-md">
-                     {r.proyecto_id === 'manual' ? 'Reporte Libre' : r.proyecto_id}
+                   <span className="text-[8px] font-black px-3 py-1.5 bg-[#142d53] text-[#48c1d2] rounded-xl tracking-widest uppercase shadow-md truncate max-w-[70%]">
+                     {r.proyecto_id === 'manual' ? 'Libre' : r.proyecto_id}
                    </span>
                    <button 
                      onClick={() => deleteAudio(r.id, r.audio_url)}
@@ -401,15 +398,15 @@ export default function MasterPanel() {
                 </div>
                 
                 <div className="space-y-4">
-                   <audio src={r.audio_url} controls className="w-full h-12 rounded-xl" />
+                   <audio src={r.audio_url} controls className="w-full h-10 rounded-xl" />
                    
-                   <div className="flex items-center justify-between pt-2">
-                      <span className="text-[10px] font-bold text-slate-400">
+                   <div className="flex flex-col gap-2 pt-2">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
                         {formatDate(r.created_at)}
                       </span>
                       <button 
                         onClick={() => forceDownload(r.audio_url, r.id)}
-                        className="flex items-center gap-2 text-[10px] font-black text-[#142d53] hover:text-[#48c1d2] transition-colors tracking-widest uppercase bg-[#48c1d2]/10 px-4 py-2 rounded-xl border border-[#48c1d2]/20 active:scale-95"
+                        className="w-full flex items-center justify-center gap-2 text-[9px] font-black text-[#142d53] hover:text-[#48c1d2] transition-colors tracking-widest uppercase bg-[#48c1d2]/10 px-4 py-3 rounded-xl border border-[#48c1d2]/20 active:scale-95"
                       >
                         <Download size={14} /> Descargar
                       </button>
@@ -420,35 +417,32 @@ export default function MasterPanel() {
            {reportesAudio.length === 0 && (
              <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-300 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[3rem]">
                <Mic size={48} className="mb-4 opacity-20" />
-               <p className="text-sm font-bold tracking-widest italic opacity-40">Bandeja vacía. Esperando audios de Sebas...</p>
+               <p className="text-xs font-bold tracking-widest italic opacity-40 px-6 text-center uppercase">Sin audios pendientes</p>
              </div>
            )}
          </div>
       </div>
 
-      {/* BANDEJA DE LOCUCIONES DE GUIONES */}
-      <div className="mt-16">
-         <h3 className="text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-3">
-           <div className="bg-[#142d53] p-2 rounded-xl text-[#48c1d2] shadow-lg shadow-[#142d53]/20">
+      {/* BANDEJA DE LOCUCIONES */}
+      <div className="mt-12 md:mt-16">
+         <h3 className="text-lg md:text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-6 flex items-center gap-3 px-1">
+           <div className="bg-[#142d53] p-2 rounded-xl text-[#48c1d2] shadow-lg shadow-[#142d53]/20 shrink-0">
              <Mic size={20} />
            </div>
-           Locuciones de Guiones
-           <span className="ml-auto text-[10px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1.5 rounded-full border border-[#48c1d2]/20">
-             {locuciones.length} archivo{locuciones.length !== 1 ? 's' : ''}
+           Locuciones
+           <span className="ml-auto text-[8px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1.5 rounded-full border border-[#48c1d2]/20">
+             {locuciones.length}
            </span>
          </h3>
          
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            {locuciones.map(loc => (
-             <Card key={loc.id} className="p-6 border-2 border-[#48c1d2]/20 bg-[#142d53] rounded-[2rem] shadow-xl relative group hover:scale-[1.02] transition-transform">
-                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                   <Mic size={40} className="text-[#48c1d2]" />
-                </div>
+             <Card key={loc.id} className="p-6 border-2 border-[#48c1d2]/20 bg-[#142d53] rounded-[2rem] shadow-xl relative group overflow-hidden">
                 <div className="flex justify-between items-start mb-3">
                    <div className="flex-1 min-w-0 mr-2">
-                     <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-widest block mb-0.5">Locución</span>
-                     <h4 className="text-sm font-black text-white leading-tight truncate">{loc.script_title}</h4>
-                     <p className="text-[9px] font-bold text-white/40 mt-1">{formatDate(loc.created_at)}</p>
+                     <span className="text-[7px] font-black text-[#48c1d2] uppercase tracking-widest block mb-0.5 opacity-60">Locución</span>
+                     <h4 className="text-xs font-black text-white leading-tight truncate">{loc.script_title}</h4>
+                     <p className="text-[8px] font-bold text-white/40 mt-1 uppercase tracking-tighter">{formatDate(loc.created_at)}</p>
                    </div>
                    <button 
                      onClick={() => deleteLocucion(loc.id, loc.audio_url)}
@@ -459,25 +453,24 @@ export default function MasterPanel() {
                 </div>
                 
                 <div className="space-y-3">
-                   <audio src={loc.audio_url} controls className="w-full h-12 rounded-xl opacity-80" />
+                   <audio src={loc.audio_url} controls className="w-full h-10 rounded-xl opacity-80" />
                    <button 
                      onClick={() => forceDownload(loc.audio_url, loc.id)}
-                     className="w-full flex items-center justify-center gap-2 text-[10px] font-black text-[#48c1d2] tracking-widest uppercase bg-[#48c1d2]/10 px-4 py-3 rounded-xl border border-[#48c1d2]/20 active:scale-95 hover:bg-[#48c1d2]/20 transition-all"
+                     className="w-full flex items-center justify-center gap-2 text-[9px] font-black text-[#48c1d2] tracking-widest uppercase bg-[#48c1d2]/10 px-4 py-3 rounded-xl border border-[#48c1d2]/20 active:scale-95 hover:bg-[#48c1d2]/20 transition-all"
                    >
-                     <Download size={14} /> Descargar WAV
+                     <Download size={14} /> Descargar
                    </button>
                 </div>
              </Card>
            ))}
            {locuciones.length === 0 && (
-             <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-300 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[3rem]">
-               <Mic size={48} className="mb-4 opacity-20" />
-               <p className="text-sm font-bold tracking-widest italic opacity-40">Sin locuciones enviadas aún...</p>
+             <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-300 bg-[#142d53]/50 border-2 border-dashed border-white/5 rounded-[3rem]">
+               <Mic size={48} className="mb-4 opacity-10" />
+               <p className="text-xs font-bold tracking-widest italic opacity-40 uppercase">Sin locuciones</p>
              </div>
            )}
          </div>
       </div>
-
     </div>
   );
 }
