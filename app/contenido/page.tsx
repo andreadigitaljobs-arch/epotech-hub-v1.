@@ -1037,15 +1037,18 @@ function ContenidoContent() {
             <h2 className="text-xl font-black text-white leading-tight">{selectedScript.title}</h2>
           </div>
           <div className="flex items-center gap-2">
-            {!selectedScript.isProductionMode && (
-              <button
-                onClick={() => setShowFullScript(!showFullScript)}
-                className={`h-9 px-3 rounded-xl flex items-center gap-2 transition-all whitespace-nowrap ${showFullScript ? "bg-[#48c1d2] text-[#0a192f] shadow-lg" : "bg-white/5 text-white/40 border border-white/5"}`}
-              >
-                {showFullScript ? <Zap size={14} /> : <BookOpen size={14} />}
-                <span className="text-[8px] font-black uppercase tracking-tighter">{showFullScript ? "MODO PASOS" : "VISTA TOTAL"}</span>
-              </button>
-            )}
+            <button
+              onClick={() => setShowFullScript(!showFullScript)}
+              className={`h-9 px-3 rounded-xl flex items-center gap-2 transition-all whitespace-nowrap ${showFullScript ? "bg-white/5 text-white/40 border border-white/5" : "bg-[#48c1d2] text-[#0a192f] shadow-lg"}`}
+            >
+              {showFullScript ? <Zap size={14} /> : <BookOpen size={14} />}
+              <span className="text-[8px] font-black uppercase tracking-tighter">
+                {showFullScript 
+                  ? (selectedScript.isProductionMode ? "MODO ESCENAS" : "MODO PASOS") 
+                  : "GUION COMPLETO"
+                }
+              </span>
+            </button>
             <button onClick={handleCloseScript} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/20 hover:text-white transition-colors border border-white/5">
               <X size={20} />
             </button>
