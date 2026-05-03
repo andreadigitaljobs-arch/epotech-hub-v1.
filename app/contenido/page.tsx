@@ -552,6 +552,18 @@ function ContenidoContent() {
   const [activeVoiceoverAudio, setActiveVoiceoverAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlayingVoiceover, setIsPlayingVoiceover] = useState(false);
 
+  // --- BLOQUEO DE SCROLL CUANDO EL MODAL ESTÁ ABIERTO ---
+  useEffect(() => {
+    if (selectedScript || selectedStory) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedScript, selectedStory]);
+
 
 
   const toggleVoiceoverPlayback = (url: string) => {
