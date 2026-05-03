@@ -1070,7 +1070,6 @@ function ContenidoContent() {
                       "{selectedScript.fullDialogue}"
                     </p>
                   </div>
-                  </div>
                 </div>
               ) : (
                 /* Vista de Escenas (Producción Dual) */
