@@ -607,23 +607,23 @@ export default function ProyectosPage() {
       ) : (
       <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
         {/* Filtros de Mensajes */}
-        <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar px-1">
+        <div className="grid grid-cols-3 gap-1.5 pb-2 px-1">
           {[
             { id: 'todas', label: 'Todas', icon: MessageSquare },
-            { id: 'redes', label: 'Redes Sociales', icon: Share2 },
-            { id: 'tips', label: 'Tips y Recordatorios', icon: Lightbulb }
+            { id: 'redes', label: 'Redes', icon: Share2 },
+            { id: 'tips', label: 'Tips', icon: Lightbulb }
           ].map((f) => (
             <button
               key={f.id}
               onClick={() => setMsgFilter(f.id as any)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${
+              className={`flex flex-col md:flex-row items-center justify-center gap-1 px-2 py-3 md:py-2 rounded-2xl md:rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all border ${
                 msgFilter === f.id 
                   ? 'bg-[#142d53] text-[#48c1d2] border-[#142d53] shadow-md' 
                   : 'bg-white text-slate-400 border-slate-100'
               }`}
             >
-              <f.icon size={12} />
-              {f.label}
+              <f.icon size={12} className="md:size-[14px]" />
+              <span className="text-center">{f.id === 'redes' ? 'Redes' : (f.id === 'tips' ? 'Tips' : f.label)}</span>
             </button>
           ))}
         </div>
