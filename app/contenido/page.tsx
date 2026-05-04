@@ -1662,6 +1662,9 @@ function ContenidoContent() {
                           <div className="text-left flex-1">
                             <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
                             <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                            {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
+                              <p className="text-[9px] font-bold text-slate-400 mt-1 italic italic">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
+                            )}
                           </div>
                           <ChevronRight size={16} className="text-slate-200 group-hover:text-[#48c1d2] transition-all" />
                         </div>
@@ -1972,7 +1975,7 @@ function ContenidoContent() {
                       <div className="flex items-center gap-2 justify-center">
                         <div className={`w-2 h-2 rounded-full ${isRecording && !isPaused ? 'bg-red-500 animate-pulse' : 'bg-slate-600'}`}></div>
                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                          {recordTime >= 3600 ? 'Límite alcanzado' : (isRecording ? (isPaused ? 'Pausado' : 'Grabando...') : 'Listo para MODO PASOS')}
+                          {recordTime >= 3600 ? 'Límite alcanzado' : (isRecording ? (isPaused ? 'Pausado' : 'Grabando...') : 'Listo para Grabar Escenas')}
                         </span>
                       </div>
                     </div>

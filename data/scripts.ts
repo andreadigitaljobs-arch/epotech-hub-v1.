@@ -51,8 +51,8 @@ export interface Script {
 
 export const guiones: Script[] = [
   {
-    id: 'referencia-ventanas',
-    title: '[REFERENCIA] Ventanas de Cristal (Fórmula Epotech)',
+    id: 'ejemplo-practica-ventanas',
+    title: '[EJEMPLO DE PRÁCTICA] Ventanas de Cristal (Fórmula Epotech)',
     category: 'Plantilla de Entrenamiento',
     service: 'Window Cleaning',
     duration: '45s',
