@@ -1399,7 +1399,6 @@ function ContenidoContent() {
       <div className="flex bg-slate-50 p-1 rounded-2xl mb-6 shadow-sm border border-slate-100">
         {[
           { id: 'guiones', name: 'Guiones', icon: Clapperboard, step: 1, help: 'Toca aquí para empezar tu día de grabación.' },
-          { id: 'calendario', name: 'Cronograma', icon: Sparkles },
           { id: 'historial', name: 'Historial', icon: History }
         ].map((tab) => (
           <div key={tab.id} className="flex-1 relative">
@@ -2921,103 +2920,11 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
           )}
         </div>
 
-        <div className="flex justify-between items-center px-2 pt-4">
-          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Repositorio de Publicaciones</h3>
-        </div>
-
-        <button onClick={() => handleSetView('semanas')} style={{ backgroundColor: '#142d53' }} className="w-full p-8 rounded-[2.5rem] flex items-center justify-between border border-white/5 shadow-2xl group relative overflow-hidden transition-all hover:scale-[1.01]">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#48c1d2]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="flex items-center gap-6 relative z-10">
-            <div className="w-16 h-16 bg-[#48c1d2]/10 rounded-3xl flex items-center justify-center text-[#48c1d2]"><History size={32} /></div>
-            <div className="text-left"><h4 className="text-2xl font-black text-white italic tracking-tighter uppercase">Abril 2026</h4><p className="text-[12px] font-black text-[#48c1d2] tracking-widest mt-1 uppercase">85 SEGUIDORES • {publishedPosts.length} VIDEOS</p></div>
-          </div>
-          <ChevronRight className="text-white/20 group-hover:text-white/60 transition-all" />
-        </button>
-
-        {/* Meses anteriores (Persistencia) */}
-        <div className="grid grid-cols-2 gap-4 opacity-40">
-          <div className="p-6 bg-slate-100 rounded-[2rem] border border-slate-200"><h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Marzo 2026</h5></div>
-          <div className="p-6 bg-slate-100 rounded-[2rem] border border-slate-200"><h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Febrero 2026</h5></div>
-        </div>
-      </div>
     );
   }
 
-  if (view === 'semanas') {
-    return (
-      <div className="space-y-6 animate-in slide-in-from-right-4 duration-500 text-left">
-        <button onClick={() => handleSetView('meses')} className="flex items-center gap-2 text-[#142d53] text-[9px] font-black uppercase tracking-widest mb-4"><ChevronRight className="rotate-180" size={12} /> Volver</button>
-        <h3 className="text-xl font-black text-[#142d53] italic uppercase">Semanas de {selectedMonth}</h3>
-        <div className="grid grid-cols-2 gap-4">
-          {weeks.map(w => {
-            const postsInWeek = publishedPosts.filter(([day]) => getWeek(day) === w);
-            return (
-              <button key={w} onClick={() => handleSetWeek(w, 'dias')} style={{ backgroundColor: '#142d53' }} className="p-6 rounded-[2.5rem] flex flex-col items-start gap-4 border border-white/5 shadow-xl text-left group hover:scale-105 transition-all">
-                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center text-[#48c1d2] group-hover:bg-[#48c1d2] group-hover:text-[#142d53] transition-all"><History size={20} /></div>
-                <div><h5 className="text-sm font-black text-white uppercase italic">SEMANA {w}</h5><p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">{postsInWeek.length} VIDEOS</p></div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  const postsInSelectedWeek = publishedPosts.filter(([day]) => getWeek(day) === selectedWeek);
-  return (
-    <div className="space-y-6 animate-in slide-in-from-right-4 duration-500 text-left">
-      <button onClick={() => handleSetView('semanas')} className="flex items-center gap-2 text-[#142d53] text-[9px] font-black uppercase tracking-widest mb-4"><ChevronRight className="rotate-180" size={12} /> Volver</button>
-      <div className="grid grid-cols-1 gap-4">
-        {postsInSelectedWeek.map(([day, post]: any) => (
-          <div key={day} onClick={() => onSelect(day)} style={{ backgroundColor: '#142d53' }} className="p-6 rounded-[3rem] shadow-xl flex flex-col gap-4 border border-white/5 cursor-pointer hover:scale-[1.02] transition-all group">
-            <div className="flex items-center gap-6">
-              <div className="h-16 w-16 rounded-[1.5rem] bg-[#48c1d2] flex flex-col items-center justify-center text-[#142d53] shrink-0 shadow-lg shadow-[#48c1d2]/20"><span className="text-lg font-black leading-none">{day}</span><span className="text-[9px] font-black uppercase opacity-60">ABRIL</span></div>
-              <div className="flex-1 min-w-0 text-left"><span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest">{post.type}</span><h4 className="text-sm font-black text-white uppercase italic truncate mt-0.5">{post.title}</h4><p className="text-xs font-bold text-white/40 italic mt-1 line-clamp-1 opacity-60">"{post.desc}"</p></div>
-              <CheckCircle2 size={24} className="text-[#48c1d2] mr-2" />
-            </div>
-
-            {/* Bloque de Reporte de Audio para la Agencia */}
-            {(() => {
-              const report = audioReports.find(r => r.proyecto_id === post.id || r.proyecto_id === day);
-              if (!report) return null;
-              return (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="p-4 bg-white/5 rounded-[2rem] border border-[#48c1d2]/20 animate-in slide-in-from-top-2"
-                >
-                  <div className="flex flex-col gap-4">
-                    <CustomAudioPlayer src={report.audio_url} />
-                    <div className="flex flex-wrap gap-2">
-                      <a
-                        href={report.audio_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
-                      >
-                        <Download size={12} /> Abrir Solo
-                      </a>
-                      <a
-                        href={report.audio_url}
-                        download={`reporte_epotech_${report.id}.${MediaRecorder.isTypeSupported('audio/mp4') ? 'mp4' : 'webm'}`}
-                        className="flex-1 py-3 bg-[#48c1d2]/10 hover:bg-[#48c1d2]/20 text-[#48c1d2] rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-[#48c1d2]/20"
-                      >
-                        <Download size={12} /> Descargar
-                      </a>
-                      <button
-                        onClick={() => handleDeleteReport(report.id, report.audio_url)}
-                        className="w-12 h-12 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl flex items-center justify-center transition-all border border-red-500/20"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })()}
-          </div>
-        ))}
-      </div>
-    </div>
+  return null;
+}
   );
 }
 

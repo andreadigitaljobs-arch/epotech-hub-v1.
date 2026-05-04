@@ -175,6 +175,7 @@ export default function ProyectosPage() {
   const [addingTask, setAddingTask] = useState<Record<string, string>>({});
   const [newTaskText, setNewTaskText] = useState<Record<string, string>>({});
   const [activeSubTab, setActiveSubTab] = useState<'proyectos' | 'mensajes'>('proyectos');
+  const [msgFilter, setMsgFilter] = useState<'todas' | 'redes' | 'tips'>('todas');
 
   useEffect(() => {
     // Failsafe: 3 segundos max de carga
@@ -604,33 +605,70 @@ export default function ProyectosPage() {
           })}
         </div>
       ) : (
-        /* Mensajes del Equipo Sub-Tab */
       <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        {notificaciones.length > 0 ? (
-          notificaciones.map((announcement) => (
-            <div key={announcement.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 border-l-[#48c1d2] relative overflow-hidden group">
-              <div className="flex justify-between items-start mb-3">
-                <span className="text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded bg-[#48c1d2]/10 text-[#142d53]">
-                  {announcement.tipo}
-                </span>
-                <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
+        {/* Filtros de Mensajes */}
+        <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar px-1">
+          {[
+            { id: 'todas', label: 'Todas', icon: MessageSquare },
+            { id: 'redes', label: 'Redes Sociales', icon: Share2 },
+            { id: 'tips', label: 'Tips y Recordatorios', icon: Lightbulb }
+          ].map((f) => (
+            <button
+              key={f.id}
+              onClick={() => setMsgFilter(f.id as any)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${
+                msgFilter === f.id 
+                  ? 'bg-[#142d53] text-[#48c1d2] border-[#142d53] shadow-md' 
+                  : 'bg-white text-slate-400 border-slate-100'
+              }`}
+            >
+              <f.icon size={12} />
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        {(() => {
+          const filtered = notificaciones.filter(n => {
+            if (msgFilter === 'todas') return true;
+            const type = n.tipo?.toUpperCase() || '';
+            if (msgFilter === 'redes') return type.includes('REDES') || type.includes('PUBLICACIÓN') || type.includes('SOCIAL');
+            if (msgFilter === 'tips') return type.includes('TIP') || type.includes('RECORDATORIO') || type.includes('IDEA');
+            return true;
+          });
+
+          return filtered.length > 0 ? (
+            filtered.map((announcement) => (
+              <div key={announcement.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 border-l-[#48c1d2] relative overflow-hidden group">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded bg-[#48c1d2]/10 text-[#142d53]">
+                      {announcement.tipo}
+                    </span>
+                    {(announcement.tipo?.toUpperCase().includes('REDES') || announcement.tipo?.toUpperCase().includes('PUBLICACIÓN')) && <Share2 size={12} className="text-[#48c1d2]" />}
+                    {(announcement.tipo?.toUpperCase().includes('TIP') || announcement.tipo?.toUpperCase().includes('RECORDATORIO')) && <Lightbulb size={12} className="text-amber-400" />}
+                  </div>
+                  <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
+                </div>
+                <h3 className="font-black text-[#142d53] mb-2 text-sm">
+                  {announcement.titulo}
+                </h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  {announcement.mensaje}
+                </p>
               </div>
-              <h3 className="font-black text-[#142d53] mb-2 text-sm">
-                {announcement.titulo}
-              </h3>
-              <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                {announcement.mensaje}
-              </p>
+            ))
+          ) : (
+            <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
+               <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+                  <Bell size={24} className="text-slate-300" />
+               </div>
+               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                 {msgFilter === 'todas' ? 'Sin avisos recientes por ahora.' : `No hay ${msgFilter === 'redes' ? 'publicaciones' : 'tips'} registrados.`}
+               </p>
             </div>
-          ))
-        ) : (
-          <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
-             <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
-                <Bell size={24} className="text-slate-300" />
-             </div>
-             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sin avisos recientes por ahora.</p>
-          </div>
-        )}
+          );
+        })()}
       </div>
     )}
   </div>
