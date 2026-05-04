@@ -493,6 +493,26 @@ function ContenidoContent() {
   const [serviceContext, setServiceContext] = useState<'active' | 'brand'>('active');
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
+
+  // --- FUNCIÓN PARA FORZAR DESCARGA EN MÓVIL ---
+  const forceDownload = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename.endsWith('.wav') ? filename : `${filename}.wav`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("Error al forzar descarga:", err);
+      // Fallback si el fetch falla (ej: CORS)
+      window.open(url, '_blank');
+    }
+  };
   const [direction, setDirection] = useState(0);
   const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro' | 'series'>('pinned');
   const [showFullScript, setShowFullScript] = useState(false);
@@ -639,6 +659,11 @@ function ContenidoContent() {
       const mergedUrl = URL.createObjectURL(mergedWavBlob);
       setMergedVoiceoverUrl(mergedUrl);
       showToast("Locución unida con éxito", "success");
+      
+      // LIMPIAR BORRADOR TRAS UNIR (Ya no es necesario recuperarlo)
+      if (selectedScript) {
+        deleteVoiceoverDraft(selectedScript.id);
+      }
     } catch (err) {
       console.error("Error uniendo fragments", err);
       showToast("Error al unir el audio. Intenta de nuevo.", "error");
@@ -769,10 +794,13 @@ function ContenidoContent() {
 
     setIsUploading(true);
     try {
-      const fileName = `reporte_${Date.now()}.webm`;
+      // Convertir a WAV antes de enviar para máxima compatibilidad con iOS
+      const wavBlob = await mergeBlobsToWav([audioBlob]);
+      const fileName = `reporte_${Date.now()}.wav`;
+      
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('audios')
-        .upload(fileName, audioBlob);
+        .upload(fileName, wavBlob, { contentType: 'audio/wav' });
 
       if (uploadError) throw uploadError;
 
@@ -831,6 +859,11 @@ function ContenidoContent() {
       if (insertError) throw insertError;
 
       showToast('¡Locución enviada al equipo con éxito! 🎙️', 'success');
+      
+      // LIMPIAR BORRADOR TRAS ENVÍO EXITOSO
+      setVoiceoverFragments([]);
+      setMergedVoiceoverUrl(null);
+      deleteVoiceoverDraft(selectedScript.id);
     } catch (err) {
       console.error(err);
       showToast('Error al enviar la locución', 'error');
@@ -958,6 +991,7 @@ function ContenidoContent() {
       setShowFullScript(false);
       setVoiceoverFragments([]);
       setMergedVoiceoverUrl(null);
+      // No borramos el draft de la DB aquí por si quiere seguir después
     }, 500);
   };
 
@@ -2011,13 +2045,16 @@ function ContenidoContent() {
                       >
                         <Trash2 size={14} /> Borrar
                       </button>
-                      <a
-                        href={recordedAudio}
-                        download="reporte_epotech.webm"
+                      <button
+                        onClick={() => {
+                          if (recordedAudio) {
+                            forceDownload(recordedAudio, `Reporte_Epotech_${Date.now()}.wav`);
+                          }
+                        }}
                         className="flex-1 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-white uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white/10 transition-all"
                       >
                         <Download size={14} /> Descargar
-                      </a>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -2912,9 +2949,12 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                     </div>
                   </div>
                   <CustomAudioPlayer title="Reporte de Audio" src={report.audio_url} />
-                  <a href={report.audio_url} download={`reporte_${report.id}.webm`} className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10">
-                    <Download size={12} /> Descargar
-                  </a>
+                  <button 
+                    onClick={() => forceDownload(report.audio_url, `Reporte_Audio_${report.id}.wav`)}
+                    className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
+                  >
+                    <Download size={12} /> Descargar WAV
+                  </button>
                 </div>
               ))}
             </div>
@@ -2952,9 +2992,12 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                     </button>
                   </div>
                   <CustomAudioPlayer title={loc.script_title} src={loc.audio_url} />
-                  <a href={loc.audio_url} download={`locucion_${loc.script_id}.wav`} className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10">
+                  <button 
+                    onClick={() => forceDownload(loc.audio_url, `Locucion_${loc.id}.wav`)}
+                    className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
+                  >
                     <Download size={12} /> Descargar WAV
-                  </a>
+                  </button>
                 </div>
               ))}
             </div>
