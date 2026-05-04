@@ -2925,8 +2925,6 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
 
   return null;
 }
-  );
-}
 
 
 
