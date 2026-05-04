@@ -59,33 +59,33 @@ export const guiones: Script[] = [
     fullDialogue: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions. Nos especializamos en limpieza exterior de alto nivel y acabados époxicos profesionales para garajes y áreas deportivas. Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
     steps: [
       {
-        label: 'EL SALUDO (Hook)',
+        label: 'EL SALUDO (Voz en off)',
         script: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions.',
-        visualField: 'Toma de frente de Sebastián con una sonrisa segura.',
-        visualStudio: 'Sebastián frente a una casa o su camioneta con logo.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Asegúrate de que se te vea bien la cara y haya buena luz.'],
-          assisted: ['Un ligero zoom hacia adelante mientras hablas queda genial.']
+          solo: ['Habla con energía, como si estuvieras saludando a un cliente en persona.'],
+          assisted: ['Asegúrate de no tener ruidos de fondo (viento o máquinas).']
         }
       },
       {
-        label: 'LA ESPECIALIDAD',
+        label: 'LA ESPECIALIDAD (Voz en off)',
         script: 'Nos especializamos en limpieza exterior de alto nivel y acabados époxicos profesionales para garajes y áreas deportivas.',
-        visualField: 'Tomas de acción de un garaje con epoxy o limpieza de fachada.',
-        visualStudio: 'Sebastián señalando el equipo de trabajo.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Muestra el resultado final de un piso para que brillen.'],
-          assisted: ['Sigue el movimiento de la herramienta mientras trabaja.']
+          solo: ['Pronuncia claro las palabras "alto nivel" y "profesionales".'],
+          assisted: ['Mantén un ritmo constante, sin correr.']
         }
       },
       {
-        label: 'LA PROMESA Y CTA',
+        label: 'LA PROMESA (Voz en off)',
         script: 'Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
-        visualField: 'Sebastián haciendo el gesto de "escríbeme".',
-        visualStudio: 'Toma final con el logo de Epotech de fondo.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Señala hacia abajo donde irá el botón de WhatsApp.'],
-          assisted: ['Un pulgar arriba al final siempre transmite confianza.']
+          solo: ['Haz una pequeña pausa antes de "Contáctanos" para darle fuerza.'],
+          assisted: ['Termina con un tono amable y profesional.']
         }
       }
     ],
