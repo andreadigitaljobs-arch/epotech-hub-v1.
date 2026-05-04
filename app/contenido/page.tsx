@@ -1246,7 +1246,7 @@ function ContenidoContent() {
                     setDirection(-1);
                     setCurrentStepIdx(prev => prev - 1);
                   }}
-                  className={`flex-1 py-5 rounded-[24px] text-[10px] font-black uppercase tracking-[1px] transition-all ${currentStepIdx === 0 ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-white/10 text-white hover:bg-white/20 border border-white/10 active:scale-95'}`}
+                  className={`flex-1 py-5 px-4 rounded-[24px] text-[10px] font-black uppercase tracking-tight transition-all ${currentStepIdx === 0 ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-white/10 text-white hover:bg-white/20 border border-white/10 active:scale-95'}`}
                 >
                   ESCENA ANTERIOR
                 </button>
@@ -1256,7 +1256,7 @@ function ContenidoContent() {
                       setDirection(1);
                       setCurrentStepIdx(prev => prev + 1);
                     }}
-                    className="flex-[2] py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[2px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
+                    className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
                   >
                     SIGUIENTE ESCENA 🎬
                   </button>
@@ -1275,12 +1275,12 @@ function ContenidoContent() {
             !showFullScript && !mergedVoiceoverUrl && (
               <>
                 {currentStepIdx > 0 && (
-                  <button onClick={() => setCurrentStepIdx(prev => prev - 1)} className="flex-1 py-5 bg-white/10 text-white text-[10px] font-black uppercase tracking-[1px] rounded-[24px] border border-white/10 transition-all active:scale-95">Anterior</button>
+                  <button onClick={() => setCurrentStepIdx(prev => prev - 1)} className="flex-1 py-5 px-4 bg-white/10 text-white text-[10px] font-black uppercase tracking-tight rounded-[24px] border border-white/10 transition-all active:scale-95">Anterior</button>
                 )}
                 {currentStepIdx < selectedScript.steps.length - 1 ? (
-                  <button onClick={() => setCurrentStepIdx(prev => prev + 1)} className="flex-[2] py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[1px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]">Siguiente Toma</button>
+                  <button onClick={() => setCurrentStepIdx(prev => prev + 1)} className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]">Siguiente Toma</button>
                 ) : (
-                  <button onClick={mergeVoiceoverFragments} className="flex-[2] py-5 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-[1px] rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] flex items-center justify-center gap-2"><Sparkles size={16} /> UNIR Y DESCARGAR</button>
+                  <button onClick={mergeVoiceoverFragments} className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] flex items-center justify-center gap-2"><Sparkles size={16} /> UNIR Y DESCARGAR</button>
                 )}
               </>
             )
