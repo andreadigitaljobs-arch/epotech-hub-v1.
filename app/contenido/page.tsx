@@ -317,7 +317,7 @@ function ContenidoContent() {
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type') || 'presion';
 
-  const [activeTab, setActiveTab] = useState('calendario');
+  const [activeTab, setActiveTab] = useState('guiones');
   const [guionTab, setGuionTab] = useState<'reels' | 'historias' | 'presentacion'>('reels');
   const [activeCategory, setActiveCategory] = useState<string>('Todas');
   const [activeFormat, setActiveFormat] = useState<string>('Todos');
