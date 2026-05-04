@@ -81,6 +81,26 @@ import { Toast, ToastType } from "@/components/ui/Toast";
 import { guiones, guionesPresentacion, Script } from "@/data/scripts";
 import { mergeBlobsToWav } from "./audioUtils";
 
+// --- FUNCIÓN GLOBAL PARA FORZAR DESCARGA EN MÓVIL ---
+const forceDownload = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename.endsWith('.wav') ? filename : `${filename}.wav`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+  } catch (err) {
+    console.error("Error al forzar descarga:", err);
+    // Fallback si el fetch falla (ej: CORS)
+    window.open(url, '_blank');
+  }
+};
+
 // --- INDEXED DB PARA AUTO-GUARDADO DE AUDIOS (ANTI-RELOAD) ---
 const DB_NAME = 'EpotechAudioDB';
 const STORE_NAME = 'drafts';
@@ -493,26 +513,6 @@ function ContenidoContent() {
   const [serviceContext, setServiceContext] = useState<'active' | 'brand'>('active');
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
-
-  // --- FUNCIÓN PARA FORZAR DESCARGA EN MÓVIL ---
-  const forceDownload = async (url: string, filename: string) => {
-    try {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = filename.endsWith('.wav') ? filename : `${filename}.wav`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (err) {
-      console.error("Error al forzar descarga:", err);
-      // Fallback si el fetch falla (ej: CORS)
-      window.open(url, '_blank');
-    }
-  };
   const [direction, setDirection] = useState(0);
   const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro' | 'series'>('pinned');
   const [showFullScript, setShowFullScript] = useState(false);
