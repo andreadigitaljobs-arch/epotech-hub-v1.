@@ -517,17 +517,23 @@ function ContenidoContent() {
   const [activeVoiceoverAudio, setActiveVoiceoverAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlayingVoiceover, setIsPlayingVoiceover] = useState(false);
 
-  // --- BLOQUEO DE SCROLL CUANDO EL MODAL ESTÁ ABIERTO ---
+  // --- BLOQUEO MAESTRO DE SCROLL (EVITA DOBLE SCROLL EN MÓVIL) ---
   useEffect(() => {
-    if (selectedScript || selectedStory) {
+    const isAnyModalOpen = !!(selectedScript || selectedStory || showAudioReport || selectedProduction);
+    
+    if (isAnyModalOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none'; // Previene scroll táctil accidental en fondo
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     }
+    
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     };
-  }, [selectedScript, selectedStory]);
+  }, [selectedScript, selectedStory, showAudioReport, selectedProduction]);
 
 
 
@@ -927,20 +933,15 @@ function ContenidoContent() {
   const [activeModalTab, setActiveModalTab] = useState<'solo' | 'ayuda' | 'tips'>('solo');
   const [openAdviceIdx, setOpenAdviceIdx] = useState<number | null>(null);
 
-  // Bloquear scroll del fondo cuando el guion está abierto
+  // Sincronización de animaciones para Guion Abierto
   useEffect(() => {
     if (selectedScript) {
-      document.body.style.overflow = 'hidden';
       const timer = setTimeout(() => setIsAnimate(true), 10);
       return () => clearTimeout(timer);
     } else {
-      document.body.style.overflow = 'unset';
       setIsAnimate(false);
       setOpenAdviceIdx(null);
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [selectedScript]);
 
   const handleCloseScript = () => {
