@@ -514,7 +514,6 @@ function ContenidoContent() {
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [showAudioReport, setShowAudioReport] = useState(false);
-  const [historialSubTab, setHistorialSubTab] = useState<'stats' | 'audios'>('stats');
   const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro' | 'series'>('pinned');
   const [showFullScript, setShowFullScript] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -2323,6 +2322,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
   const [selectedAnalyticsWeek, setSelectedAnalyticsWeek] = useState(5);
   const [uploading, setUploading] = useState(false);
   const [isEditingAnalytics, setIsEditingAnalytics] = useState(false);
+  const [historialSubTab, setHistorialSubTab] = useState<'stats' | 'audios'>('stats');
 
   // Sincronizar URL cuando cambian las vistas
   const updateUrl = (newView: string, m?: string, w?: string | number) => {
