@@ -632,21 +632,21 @@ export default function ProyectosPage() {
           const filtered = notificaciones.filter(n => {
             if (msgFilter === 'todas') return true;
             const type = n.tipo?.toUpperCase() || '';
-            if (msgFilter === 'redes') return type.includes('REDES') || type.includes('PUBLICACIÓN') || type.includes('SOCIAL');
-            if (msgFilter === 'tips') return type.includes('TIP') || type.includes('RECORDATORIO') || type.includes('IDEA');
+            if (msgFilter === 'redes') return type === 'REDES SOCIALES';
+            if (msgFilter === 'tips') return type === 'TIPS Y RECORDATORIOS' || type === 'URGENTE';
             return true;
           });
 
           return filtered.length > 0 ? (
             filtered.map((announcement) => (
-              <div key={announcement.id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 border-l-[#48c1d2] relative overflow-hidden group">
+              <div key={announcement.id} className={`bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 relative overflow-hidden group ${announcement.tipo === 'URGENTE' ? 'border-l-red-500 bg-red-50/10' : 'border-l-[#48c1d2]'}`}>
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded bg-[#48c1d2]/10 text-[#142d53]">
+                    <span className={`text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded ${announcement.tipo === 'URGENTE' ? 'bg-red-100 text-red-600' : 'bg-[#48c1d2]/10 text-[#142d53]'}`}>
                       {announcement.tipo}
                     </span>
-                    {(announcement.tipo?.toUpperCase().includes('REDES') || announcement.tipo?.toUpperCase().includes('PUBLICACIÓN')) && <Share2 size={12} className="text-[#48c1d2]" />}
-                    {(announcement.tipo?.toUpperCase().includes('TIP') || announcement.tipo?.toUpperCase().includes('RECORDATORIO')) && <Lightbulb size={12} className="text-amber-400" />}
+                    {announcement.tipo === 'REDES SOCIALES' && <Share2 size={12} className="text-[#48c1d2]" />}
+                    {(announcement.tipo === 'TIPS Y RECORDATORIOS' || announcement.tipo === 'URGENTE') && <Lightbulb size={12} className={announcement.tipo === 'URGENTE' ? 'text-red-500' : 'text-amber-400'} />}
                   </div>
                   <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
                 </div>

@@ -28,7 +28,7 @@ export default function MasterPanel() {
   const [notificacion, setNotificacion] = useState({
     titulo: "",
     mensaje: "",
-    tipo: "RECORDATORIO"
+    tipo: "TIPS Y RECORDATORIOS"
   });
   const [history, setHistory] = useState<any[]>([]);
   const [reportesAudio, setReportesAudio] = useState<any[]>([]);
@@ -139,7 +139,7 @@ export default function MasterPanel() {
         return;
       }
 
-      setNotificacion({ titulo: "", mensaje: "", tipo: "RECORDATORIO" });
+      setNotificacion({ titulo: "", mensaje: "", tipo: "TIPS Y RECORDATORIOS" });
       fetchHistory();
       showToast("¡Notificación enviada con éxito!", "success");
     } else {
@@ -260,7 +260,7 @@ export default function MasterPanel() {
             </div>
 
             <div className="flex flex-wrap gap-2 md:gap-3">
-               {["URGENTE", "RECORDATORIO", "TIP", "LOGRO"].map((tipo) => (
+               {["REDES SOCIALES", "TIPS Y RECORDATORIOS", "URGENTE"].map((tipo) => (
                  <button
                    key={tipo}
                    onClick={() => setNotificacion({...notificacion, tipo})}
