@@ -515,6 +515,9 @@ function ContenidoContent() {
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [showAudioReport, setShowAudioReport] = useState(false);
   const [historialSubTab, setHistorialSubTab] = useState<'stats' | 'audios'>('stats');
+  const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro' | 'series'>('pinned');
+  const [showFullScript, setShowFullScript] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [direction, setDirection] = useState(0);
   const [isClosingAudioReport, setIsClosingAudioReport] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
