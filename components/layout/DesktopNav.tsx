@@ -35,7 +35,7 @@ export function DesktopNav() {
           </div>
         </div>
 
-        <div className="flex-1 space-y-4 relative z-10 overflow-hidden">
+        <div className="flex-1 space-y-4 relative z-10">
           {/* Principal */}
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">
