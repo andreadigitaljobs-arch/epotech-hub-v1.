@@ -513,11 +513,9 @@ function ContenidoContent() {
   const [serviceContext, setServiceContext] = useState<'active' | 'brand'>('active');
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
-  const [direction, setDirection] = useState(0);
-  const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro' | 'series'>('pinned');
-  const [showFullScript, setShowFullScript] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
   const [showAudioReport, setShowAudioReport] = useState(false);
+  const [historialSubTab, setHistorialSubTab] = useState<'stats' | 'audios'>('stats');
+  const [direction, setDirection] = useState(0);
   const [isClosingAudioReport, setIsClosingAudioReport] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -2708,304 +2706,265 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
     }
   };
 
-  if (view === 'analytics') {
-    return (
-      <div
-        onPaste={handlePaste}
-        className="space-y-8 animate-in slide-in-from-bottom-4 duration-700 text-left pb-0"
-      >
-        <div className="flex flex-col gap-6">
-          <button onClick={() => handleSetView('meses')} className="flex items-center gap-2 text-[#142d53] text-xs font-black uppercase tracking-widest">
-            <ChevronRight className="rotate-180" size={14} /> VOLVER AL REPOSITORIO
-          </button>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-            <div className="space-y-1">
-              <h3 className="text-3xl font-black text-[#142d53] tracking-tighter uppercase">LABORATORIO DE ÉXITO</h3>
-              <p className="text-[11px] font-bold text-slate-400 tracking-widest uppercase">
-                {selectedAnalyticsMonth === 'Abril' ? 'rango: 30 mar - 29 abr' : 'reporte estratégico mensual'}
-              </p>
-            </div>
-
-            <div className="flex bg-slate-100 p-1 rounded-xl">
-              {['Abril', 'Mayo', 'Junio'].map(m => (
-                <button
-                  key={m}
-                  onClick={() => handleSetMonth(m)}
-                  className={`flex-1 px-4 py-3 rounded-xl text-[11px] font-black tracking-[2px] transition-all ${selectedAnalyticsMonth === m ? 'bg-[#142d53] text-[#48c1d2] shadow-lg scale-105' : 'text-slate-400 hover:text-slate-600'}`}
-                >
-                  {m.toUpperCase()}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 items-start">
-          {/* Visualizador de Galería Vertical */}
-          <div
-            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={handleDrop}
-            className={`relative group bg-white rounded-[3rem] p-4 border-8 transition-all duration-300 ${isDragging ? 'border-[#48c1d2] scale-[1.02] shadow-[0_0_50px_rgba(72,193,210,0.3)]' : 'border-slate-50 shadow-2xl'}`}
-          >
-            {/* VISTA UNIFICADA: REPORTE OFICIAL */}
-            {analytics[0].images_reels?.length > 0 ? (
-              <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 group/img">
-                <img
-                  src={analytics[0].images_reels[0]}
-                  alt="Reporte Oficial"
-                  className="w-full h-auto block"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex flex-col justify-end p-8 gap-3">
-                  <label className="w-full py-4 bg-[#48c1d2] text-[#142d53] text-[10px] font-black rounded-2xl tracking-widest shadow-xl cursor-pointer text-center hover:scale-105 transition-all">
-                    actualizar captura
-                    <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                  </label>
-                  <button
-                    onClick={handleDeleteImage}
-                    className="w-full py-4 bg-red-500/80 backdrop-blur-md text-white text-[10px] font-black rounded-2xl tracking-widest shadow-xl hover:bg-red-600 transition-all"
-                  >
-                    eliminar captura
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center text-slate-400 p-12 text-center">
-                <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mb-6">
-                  <TrendingUp size={40} className="opacity-30" />
-                </div>
-                <h5 className="text-sm font-black text-slate-500 mb-2">reporte estratégico semanal</h5>
-                <label className="px-8 py-4 bg-[#142d53] text-[#48c1d2] text-[10px] font-black rounded-2xl tracking-widest shadow-2xl cursor-pointer hover:scale-105 transition-all flex items-center gap-3">
-                  <Plus size={16} /> subir captura
-                  <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                </label>
-              </div>
-            )}
-          </div>
-
-          {/* Datos Editables */}
-          <div className="space-y-6 flex flex-col">
-            <div className="grid grid-cols-2 gap-4">
-              {/* Impacto Visual */}
-              <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Video size={40} className="text-[#142d53]" />
-                </div>
-                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">impacto visual</span>
-                <p className="text-2xl font-black text-[#142d53] tracking-tighter">{analytics[0].totalViews}</p>
-                <div className="mt-2 text-xs font-bold text-slate-400 leading-tight tracking-widest uppercase">
-                  reproducciones totales
-                </div>
-              </div>
-
-              {/* Alcance Real */}
-              <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Users size={40} className="text-[#48c1d2]" />
-                </div>
-                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">alcance real</span>
-                <p className="text-2xl font-black text-[#48c1d2] tracking-tighter">{analytics[0].alcance}</p>
-                <div className="mt-2 text-xs font-bold text-green-600 leading-tight tracking-widest uppercase">
-                  personas únicas
-                </div>
-              </div>
-
-              {/* Interés Comercial */}
-              <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <User size={40} className="text-blue-500" />
-                </div>
-                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">interés comercial</span>
-                <p className="text-2xl font-black text-blue-500 tracking-tighter">{analytics[0].interacciones}</p>
-                <div className="mt-2 text-xs font-bold text-blue-400 leading-tight tracking-widest uppercase">
-                  visitas al perfil
-                </div>
-              </div>
-
-              {/* Factor Viral */}
-              <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Share2 size={40} className="text-purple-500" />
-                </div>
-                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">factor viral</span>
-                <p className="text-2xl font-black text-purple-500 tracking-tighter">{parseInt(analytics[0].compartidos) + parseInt(analytics[0].guardados) || 0}</p>
-                <div className="mt-2 text-xs font-bold text-purple-400 leading-tight tracking-widest uppercase">
-                  recomendaciones
-                </div>
-              </div>
-            </div>
-
-            <div className="p-10 bg-[#142d53] rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden group">
-              <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#48c1d2]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
-
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
-                    <Sparkles size={24} />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-black text-[#48c1d2] tracking-[0.2em] uppercase">análisis de la estratega</h4>
-                    <p className="text-[10px] font-bold text-white/30 tracking-[0.4em] mt-1 uppercase">foco: prospección masiva</p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  {analytics[0].insights ? analytics[0].insights.split('\n').map((line, i) => (
-                    <p key={i} className="text-xl font-bold text-white leading-tight flex gap-3">
-                      <span className="text-[#48c1d2] shrink-0">•</span>
-                      <span>{line.replace(/^•\s*/, '')}</span>
-                    </p>
-                  )) : (
-                    <p className="text-sm font-bold text-white/40 italic">pendiente de análisis estratégico...</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Nuevos Seguidores */}
-            <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">crecimiento de comunidad</span>
-                <p className="text-2xl font-black text-[#48c1d2] tracking-tighter">+{analytics[0].seguidores} seguidores ganados</p>
-              </div>
-              <div className="text-right">
-                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">total en cuenta</span>
-                <p className="text-xl font-black text-[#142d53] tracking-tighter">85</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (view === 'meses') {
     return (
-      <div className="space-y-6 animate-in fade-in duration-500 text-left">
-        <div className="flex justify-between items-center px-2">
-          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Gestión de Resultados</h3>
+      <div className="space-y-6 animate-in fade-in duration-500 text-left pb-10">
+        {/* SUB-NAVEGACIÓN DEL HISTORIAL */}
+        <div className="flex bg-slate-100 p-1.5 rounded-[2rem] sticky top-0 z-20 shadow-sm mb-4">
+          <button
+            onClick={() => setHistorialSubTab('stats')}
+            className={`flex-1 py-4 rounded-[1.8rem] text-[10px] font-black tracking-[2px] uppercase transition-all flex items-center justify-center gap-2 ${historialSubTab === 'stats' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+          >
+            <TrendingUp size={14} /> ESTADÍSTICAS
+          </button>
+          <button
+            onClick={() => setHistorialSubTab('audios')}
+            className={`flex-1 py-4 rounded-[1.8rem] text-[10px] font-black tracking-[2px] uppercase transition-all flex items-center justify-center gap-2 ${historialSubTab === 'audios' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+          >
+            <Mic size={14} /> HISTORIAL DE AUDIOS
+          </button>
         </div>
 
-        {/* ÁREA DEDICADA DE RENDIMIENTO */}
-        <div
-          onClick={() => handleSetView('analytics')}
-          className="p-8 rounded-[3rem] bg-gradient-to-br from-[#142d53] to-[#0a1629] border border-[#48c1d2]/20 shadow-2xl cursor-pointer hover:scale-[1.02] transition-all relative overflow-hidden group"
-        >
-          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-            <TrendingUp size={120} />
-          </div>
-          <div className="relative z-10 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-[#48c1d2] rounded-2xl flex items-center justify-center text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
-                <Sparkles size={24} />
+        {historialSubTab === 'stats' ? (
+          <div className="space-y-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+              <div className="space-y-1">
+                <h3 className="text-3xl font-black text-[#142d53] tracking-tighter uppercase">LABORATORIO DE ÉXITO</h3>
+                <p className="text-[11px] font-bold text-slate-400 tracking-widest uppercase">
+                  {selectedAnalyticsMonth === 'Abril' ? 'rango: 30 mar - 29 abr' : 'reporte estratégico mensual'}
+                </p>
               </div>
-              <div>
-                <h4 className="text-xl font-black text-white italic tracking-tighter uppercase">Laboratorio de Rendimiento</h4>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold text-[#48c1d2] uppercase tracking-[0.3em]">Analítica Estratégica</span>
-                  <span className="px-2 py-0.5 bg-green-500 text-[8px] font-black text-[#142d53] rounded-full animate-pulse">¡VIRAL!</span>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-              <p className="text-xs font-bold text-white/70 uppercase tracking-widest leading-relaxed">
-                <span className="text-[#48c1d2]">Tu Brújula de Éxito:</span> Aquí es donde medimos qué tan bien están funcionando tus videos. Sube tus capturas de Instagram y nosotros analizaremos el crecimiento de Epotech para ajustar los próximos guiones y atraer más clientes reales.
-              </p>
-            </div>
-            <button className="flex items-center gap-2 text-[9px] font-black text-[#48c1d2] uppercase tracking-widest">
-              Entrar al Análisis <ChevronRight size={12} />
-            </button>
-          </div>
-        </div>
 
-        {/* === ARCHIVO DE AUDIO: TU REPORTE PRO === */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
-                <Mic size={14} className="text-[#48c1d2]" />
+              <div className="flex bg-slate-100 p-1 rounded-xl">
+                {['Abril', 'Mayo', 'Junio'].map(m => (
+                  <button
+                    key={m}
+                    onClick={() => handleSetMonth(m)}
+                    className={`flex-1 px-4 py-3 rounded-xl text-[11px] font-black tracking-[2px] transition-all ${selectedAnalyticsMonth === m ? 'bg-[#142d53] text-[#48c1d2] shadow-lg scale-105' : 'text-slate-400 hover:text-slate-600'}`}
+                  >
+                    {m.toUpperCase()}
+                  </button>
+                ))}
               </div>
-              <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Tu Reporte Pro</h3>
             </div>
-            <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{audioReports.length} nota{audioReports.length !== 1 ? 's' : ''}</span>
-          </div>
 
-          {audioReports.length === 0 ? (
-            <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aún no hay reportes enviados</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {audioReports.map((report: any) => (
-                <div key={report.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-white/10 space-y-3">
-                  <div className="flex items-center justify-between px-1">
-                    <div>
-                      <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">Reporte de Campo</span>
-                      <p className="text-[11px] font-bold text-white/60 uppercase">{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[9px] font-bold text-white/40 uppercase">{report.duracion || ''}</span>
-                      <button onClick={() => handleDeleteReport(report.id, report.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20">
-                        <Trash2 size={12} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 items-start">
+              {/* Visualizador de Galería Vertical */}
+              <div
+                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={handleDrop}
+                className={`relative group bg-white rounded-[3rem] p-4 border-8 transition-all duration-300 ${isDragging ? 'border-[#48c1d2] scale-[1.02] shadow-[0_0_50px_rgba(72,193,210,0.3)]' : 'border-slate-50 shadow-2xl'}`}
+              >
+                {analytics[0].images_reels?.length > 0 ? (
+                  <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 group/img">
+                    <img
+                      src={analytics[0].images_reels[0]}
+                      alt="Reporte Oficial"
+                      className="w-full h-auto block"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex flex-col justify-end p-8 gap-3">
+                      <label className="w-full py-4 bg-[#48c1d2] text-[#142d53] text-[10px] font-black rounded-2xl tracking-widest shadow-xl cursor-pointer text-center hover:scale-105 transition-all">
+                        actualizar captura
+                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+                      </label>
+                      <button
+                        onClick={handleDeleteImage}
+                        className="w-full py-4 bg-red-500/80 backdrop-blur-md text-white text-[10px] font-black rounded-2xl tracking-widest shadow-xl hover:bg-red-600 transition-all"
+                      >
+                        eliminar captura
                       </button>
                     </div>
                   </div>
-                  <CustomAudioPlayer title="Reporte de Audio" src={report.audio_url} />
-                  <button 
-                    onClick={() => forceDownload(report.audio_url, `Reporte_Audio_${report.id}.wav`)}
-                    className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
-                  >
-                    <Download size={12} /> Descargar WAV
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* === ARCHIVO DE AUDIO: LOCUCIONES DE GUIONES === */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
-                <BookOpen size={14} className="text-[#48c1d2]" />
-              </div>
-              <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Locuciones de Guiones</h3>
-            </div>
-            <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{locuciones.length} locución{locuciones.length !== 1 ? 'es' : ''}</span>
-          </div>
-
-          {locuciones.length === 0 ? (
-            <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aún no hay locuciones enviadas</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {locuciones.map((loc: any) => (
-                <div key={loc.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-[#48c1d2]/10 space-y-3">
-                  <div className="flex items-center justify-between px-1">
-                    <div className="flex-1 min-w-0 mr-3">
-                      <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
-                      <p className="text-sm font-black text-white uppercase italic truncate leading-tight">{loc.script_title}</p>
-                      <p className="text-[10px] font-bold text-white/40 uppercase">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-slate-400 p-12 text-center">
+                    <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mb-6">
+                      <TrendingUp size={40} className="opacity-30" />
                     </div>
-                    <button onClick={() => handleDeleteLocucion(loc.id, loc.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20 shrink-0">
-                      <Trash2 size={12} />
-                    </button>
+                    <h5 className="text-sm font-black text-slate-500 mb-2">reporte estratégico semanal</h5>
+                    <label className="px-8 py-4 bg-[#142d53] text-[#48c1d2] text-[10px] font-black rounded-2xl tracking-widest shadow-2xl cursor-pointer hover:scale-105 transition-all flex items-center gap-3">
+                      <Plus size={16} /> subir captura
+                      <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+                    </label>
                   </div>
-                  <CustomAudioPlayer title={loc.script_title} src={loc.audio_url} />
-                  <button 
-                    onClick={() => forceDownload(loc.audio_url, `Locucion_${loc.id}.wav`)}
-                    className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
-                  >
-                    <Download size={12} /> Descargar WAV
-                  </button>
+                )}
+              </div>
+
+              {/* Datos Editables */}
+              <div className="space-y-6 flex flex-col">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <Video size={40} className="text-[#142d53]" />
+                    </div>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">impacto visual</span>
+                    <p className="text-2xl font-black text-[#142d53] tracking-tighter">{analytics[0].totalViews}</p>
+                    <div className="mt-2 text-xs font-bold text-slate-400 leading-tight tracking-widest uppercase">
+                      reproducciones totales
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <Users size={40} className="text-[#48c1d2]" />
+                    </div>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">alcance real</span>
+                    <p className="text-2xl font-black text-[#48c1d2] tracking-tighter">{analytics[0].alcance}</p>
+                    <div className="mt-2 text-xs font-bold text-green-600 leading-tight tracking-widest uppercase">
+                      personas únicas
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <User size={40} className="text-blue-500" />
+                    </div>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">interés comercial</span>
+                    <p className="text-2xl font-black text-blue-500 tracking-tighter">{analytics[0].interacciones}</p>
+                    <div className="mt-2 text-xs font-bold text-blue-400 leading-tight tracking-widest uppercase">
+                      visitas al perfil
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <Share2 size={40} className="text-purple-500" />
+                    </div>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">factor viral</span>
+                    <p className="text-2xl font-black text-purple-500 tracking-tighter">{parseInt(analytics[0].compartidos) + parseInt(analytics[0].guardados) || 0}</p>
+                    <div className="mt-2 text-xs font-bold text-purple-400 leading-tight tracking-widest uppercase">
+                      recomendaciones
+                    </div>
+                  </div>
                 </div>
-              ))}
+
+                <div className="p-10 bg-[#142d53] rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden group">
+                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#48c1d2]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
+                        <Sparkles size={24} />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-black text-[#48c1d2] tracking-[0.2em] uppercase">análisis de la estratega</h4>
+                        <p className="text-[10px] font-bold text-white/30 tracking-[0.4em] mt-1 uppercase">foco: prospección masiva</p>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      {analytics[0].insights ? analytics[0].insights.split('\n').map((line, i) => (
+                        <p key={i} className="text-xl font-bold text-white leading-tight flex gap-3 text-left">
+                          <span className="text-[#48c1d2] shrink-0">•</span>
+                          <span>{line.replace(/^•\s*/, '')}</span>
+                        </p>
+                      )) : (
+                        <p className="text-sm font-bold text-white/40 italic">pendiente de análisis estratégico...</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">crecimiento de comunidad</span>
+                    <p className="text-2xl font-black text-[#48c1d2] tracking-tighter">+{analytics[0].seguidores} seguidores ganados</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="space-y-10 animate-in slide-in-from-right-4 duration-500">
+            {/* === ARCHIVO DE AUDIO: TU REPORTE PRO === */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
+                    <Mic size={14} className="text-[#48c1d2]" />
+                  </div>
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Tu Reporte Pro</h3>
+                </div>
+                <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{audioReports.length} nota{audioReports.length !== 1 ? 's' : ''}</span>
+              </div>
+
+              {audioReports.length === 0 ? (
+                <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aún no hay reportes enviados</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {audioReports.map((report: any) => (
+                    <div key={report.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-white/10 space-y-3">
+                      <div className="flex items-center justify-between px-1">
+                        <div>
+                          <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">Reporte de Campo</span>
+                          <p className="text-[11px] font-bold text-white/60 uppercase">{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[9px] font-bold text-white/40 uppercase">{report.duracion || ''}</span>
+                          <button onClick={() => handleDeleteReport(report.id, report.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20">
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      </div>
+                      <CustomAudioPlayer title="Reporte de Audio" src={report.audio_url} />
+                      <button 
+                        onClick={() => forceDownload(report.audio_url, `Reporte_Audio_${report.id}.wav`)}
+                        className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
+                      >
+                        <Download size={12} /> Descargar WAV
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* === ARCHIVO DE AUDIO: LOCUCIONES DE GUIONES === */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
+                    <BookOpen size={14} className="text-[#48c1d2]" />
+                  </div>
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Locuciones de Guiones</h3>
+                </div>
+                <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{locuciones.length} locución{locuciones.length !== 1 ? 'es' : ''}</span>
+              </div>
+
+              {locuciones.length === 0 ? (
+                <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aún no hay locuciones enviadas</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {locuciones.map((loc: any) => (
+                    <div key={loc.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-[#48c1d2]/10 space-y-3">
+                      <div className="flex items-center justify-between px-1">
+                        <div className="flex-1 min-w-0 mr-3">
+                          <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
+                          <p className="text-sm font-black text-white uppercase italic truncate leading-tight">{loc.script_title}</p>
+                          <p className="text-[10px] font-bold text-white/40 uppercase">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        </div>
+                        <button onClick={() => handleDeleteLocucion(loc.id, loc.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20 shrink-0">
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                      <CustomAudioPlayer title={loc.script_title} src={loc.audio_url} />
+                      <button 
+                        onClick={() => forceDownload(loc.audio_url, `Locucion_${loc.id}.wav`)}
+                        className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
+                      >
+                        <Download size={12} /> Descargar WAV
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
