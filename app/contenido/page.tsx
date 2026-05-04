@@ -1217,7 +1217,7 @@ function ContenidoContent() {
                           <div className="flex flex-col items-center gap-2">
                             <div className="flex gap-2">
                               <button onClick={() => { const audioUrl = voiceoverFragments.find(f => f.stepIdx === currentStepIdx)?.url; if (audioUrl) toggleVoiceoverPlayback(audioUrl); }} className="px-4 py-2 bg-green-500/20 text-green-600 rounded-full text-[8px] font-black uppercase tracking-tighter border border-green-500/30 hover:bg-green-500/30 flex items-center gap-2 w-[100px] justify-center">{isPlayingVoiceover ? <PauseCircle size={14} /> : <PlayCircle size={14} />} {isPlayingVoiceover ? 'Pausar' : 'Escuchar'}</button>
-                              <button onClick={() => startVoiceoverRecording(currentStepIdx)} className="px-4 py-2 bg-white/40 text-[#0a192f] rounded-full text-[8px] font-black uppercase tracking-tighter border border-white/40 hover:bg-white/60 flex items-center gap-2"><History size={14} /> ReMODO PASOS</button>
+                              <button onClick={() => startVoiceoverRecording(currentStepIdx)} className="px-4 py-2 bg-white/40 text-[#0a192f] rounded-full text-[8px] font-black uppercase tracking-tighter border border-white/40 hover:bg-white/60 flex items-center gap-2"><History size={14} /> REHACER</button>
                               <button onClick={() => deleteVoiceoverFragment(currentStepIdx)} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-full text-[8px] font-black uppercase tracking-tighter border border-red-500/20 hover:bg-red-500/20 flex items-center gap-2"><Trash2 size={14} /> Eliminar</button>
                             </div>
                             <span className="text-[9px] font-bold text-green-600 uppercase tracking-widest">Toma Guardada</span>
@@ -1275,12 +1275,50 @@ function ContenidoContent() {
             !showFullScript && !mergedVoiceoverUrl && (
               <>
                 {currentStepIdx > 0 && (
-                  <button onClick={() => setCurrentStepIdx(prev => prev - 1)} className="flex-1 py-5 px-4 bg-white/10 text-white text-[10px] font-black uppercase tracking-tight rounded-[24px] border border-white/10 transition-all active:scale-95">Anterior</button>
+                  <button 
+                    onClick={() => {
+                      if (isRecordingVoiceover) {
+                        stopVoiceoverRecording();
+                        setTimeout(() => {
+                          setCurrentStepIdx(prev => prev - 1);
+                          startVoiceoverRecording(currentStepIdx - 1);
+                        }, 200);
+                      } else {
+                        setCurrentStepIdx(prev => prev - 1);
+                      }
+                    }} 
+                    className="flex-1 py-5 px-4 bg-white/10 text-white text-[10px] font-black uppercase tracking-tight rounded-[24px] border border-white/10 transition-all active:scale-95"
+                  >
+                    Anterior
+                  </button>
                 )}
                 {currentStepIdx < selectedScript.steps.length - 1 ? (
-                  <button onClick={() => setCurrentStepIdx(prev => prev + 1)} className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]">Siguiente Toma</button>
+                  <button 
+                    onClick={() => {
+                      if (isRecordingVoiceover) {
+                        stopVoiceoverRecording();
+                        setTimeout(() => {
+                          setCurrentStepIdx(prev => prev + 1);
+                          startVoiceoverRecording(currentStepIdx + 1);
+                        }, 200);
+                      } else {
+                        setCurrentStepIdx(prev => prev + 1);
+                      }
+                    }} 
+                    className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
+                  >
+                    Siguiente Toma
+                  </button>
                 ) : (
-                  <button onClick={mergeVoiceoverFragments} className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] flex items-center justify-center gap-2"><Sparkles size={16} /> UNIR Y DESCARGAR</button>
+                  <button 
+                    onClick={() => {
+                      if (isRecordingVoiceover) stopVoiceoverRecording();
+                      mergeVoiceoverFragments();
+                    }} 
+                    className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] flex items-center justify-center gap-2"
+                  >
+                    <Sparkles size={16} /> UNIR Y DESCARGAR
+                  </button>
                 )}
               </>
             )
