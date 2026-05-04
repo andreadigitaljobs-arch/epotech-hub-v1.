@@ -517,23 +517,7 @@ function ContenidoContent() {
   const [activeVoiceoverAudio, setActiveVoiceoverAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlayingVoiceover, setIsPlayingVoiceover] = useState(false);
 
-  // --- BLOQUEO MAESTRO DE SCROLL (EVITA DOBLE SCROLL EN MÓVIL) ---
-  useEffect(() => {
-    const isAnyModalOpen = !!(selectedScript || selectedStory || showAudioReport || selectedProduction);
-    
-    if (isAnyModalOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none'; // Previene scroll táctil accidental en fondo
-    } else {
-      document.body.style.overflow = '';
-      document.body.style.touchAction = '';
-    }
-    
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.touchAction = '';
-    };
-  }, [selectedScript, selectedStory, showAudioReport, selectedProduction]);
+
 
 
 
@@ -888,6 +872,24 @@ function ContenidoContent() {
   }, []);
 
   const [selectedProduction, setSelectedProduction] = useState<any>(null);
+
+  // --- BLOQUEO MAESTRO DE SCROLL (EVITA DOBLE SCROLL EN MÓVIL) ---
+  useEffect(() => {
+    const isAnyModalOpen = !!(selectedScript || selectedStory || showAudioReport || selectedProduction);
+    
+    if (isAnyModalOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none'; // Previene scroll táctil accidental en fondo
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, [selectedScript, selectedStory, showAudioReport, selectedProduction]);
 
   const toggleGlobalStatus = async (day: string) => {
     const newDB = { ...contentDB };
