@@ -512,18 +512,18 @@ export default function ProyectosPage() {
                           </div>
 
                           {/* Observation field */}
-                          <div className="pl-9 space-y-2">
+                          <div className="pl-2 md:pl-9 space-y-2">
                             <div className="flex items-center gap-2">
-                              <MessageSquare size={11} className="text-slate-400" />
-                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                                Observación
+                              <MessageSquare size={13} className="text-[#48c1d2]" />
+                              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                Observación del equipo
                               </span>
                             </div>
                             <div className="flex gap-2">
                               <textarea
-                                rows={2}
-                                placeholder="Ej: Faltó conectar el webhook, retomamos mañana..."
-                                className="flex-1 text-[11px] font-medium text-slate-600 bg-white border border-slate-200 rounded-xl p-3 resize-none outline-none focus:border-[var(--accent)] transition-all placeholder:text-slate-300"
+                                rows={Math.max(3, (obsVal.match(/\n/g) || []).length + 1)}
+                                placeholder="Escribe aquí los detalles del avance..."
+                                className="flex-1 text-[13px] md:text-sm font-bold text-[#142d53] bg-white border border-slate-200 rounded-[1.5rem] p-4 resize-none outline-none focus:border-[var(--accent)] transition-all placeholder:text-slate-300 leading-relaxed"
                                 value={obsVal}
                                 onChange={(e) =>
                                   setObsEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
@@ -533,12 +533,12 @@ export default function ProyectosPage() {
                                 <button
                                   onClick={() => saveObs(task.id)}
                                   disabled={savingObs === task.id}
-                                  className="shrink-0 self-end px-3 py-3 bg-[var(--accent)] text-white rounded-xl active:scale-95 transition-all disabled:opacity-50"
+                                  className="shrink-0 self-end px-4 py-4 bg-[var(--accent)] text-white rounded-2xl active:scale-95 transition-all disabled:opacity-50 shadow-lg shadow-[#48c1d2]/20"
                                 >
                                   {savingObs === task.id ? (
-                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                   ) : (
-                                    <Save size={14} />
+                                    <Save size={18} />
                                   )}
                                 </button>
                               )}
