@@ -32,7 +32,7 @@ const TUTORIAL_CARDS = [
     title: "El Poder de tus Guiones",
     description: "Usa tus notas de voz para que nosotros creemos guiones ganadores para ti.",
     icon: Sparkles,
-    path: "/contenido",
+    path: "/contenido?tab=guiones",
     color: "amber",
     tag: "Contenido"
   },
