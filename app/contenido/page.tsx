@@ -494,7 +494,7 @@ function ContenidoContent() {
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [direction, setDirection] = useState(0);
-  const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro'>('pinned');
+  const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro' | 'series'>('pinned');
   const [showFullScript, setShowFullScript] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showAudioReport, setShowAudioReport] = useState(false);
@@ -1522,12 +1522,16 @@ function ContenidoContent() {
                   <p className="text-[11px] font-bold text-slate-600 leading-relaxed italic">
                     {guionTab === 'reels' && 'Graba tu voz palabra por palabra siguiendo el guion. Este audio servirá como la narración profesional (voice-over) para tus videos.'}
                     {guionTab === 'historias' && 'Cualquier detalle de tu día sirve para conectar. Si estás muy ocupado para subir historias, solo mándanos las fotos o vídeos y nosotros lo hacemos por ti.'}
-                    {guionTab === 'presentacion' && 'Sigue el desglose por escenas para grabarte a ti mismo o dirigir a alguien más. Incluye ángulos, movimientos y guiones exactos.'}
+                    {guionTab === 'presentacion' && (
+                      enCamaraSubTab === 'series' 
+                      ? 'Crea videos que cuenten una historia por capítulos. Esta es la mejor forma de que tus seguidores en Utah se acostumbren a verte y siempre estén esperando tu próximo video.'
+                      : 'Sigue el desglose por escenas para grabarte a ti mismo o dirigir a alguien más. Incluye ángulos, movimientos y guiones exactos.'
+                    )}
                   </p>
                 </div>
 
                 {guionTab === 'presentacion' && (
-                  <div className="flex bg-white/50 p-1.5 rounded-2xl border border-slate-200/50 mb-8 max-w-sm">
+                  <div className="flex bg-white/50 p-1.5 rounded-2xl border border-slate-200/50 mb-8 max-w-md">
                     <button
                       onClick={() => setEnCamaraSubTab('pinned')}
                       className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${enCamaraSubTab === 'pinned' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
@@ -1539,6 +1543,12 @@ function ContenidoContent() {
                       className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${enCamaraSubTab === 'pro' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
                     >
                       🎥 Contenido Pro
+                    </button>
+                    <button
+                      onClick={() => setEnCamaraSubTab('series')}
+                      className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${enCamaraSubTab === 'series' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                    >
+                      🎬 Series
                     </button>
                   </div>
                 )}
@@ -1617,6 +1627,55 @@ function ContenidoContent() {
                             </div>
                           ))}
                         </>
+                      ) : enCamaraSubTab === 'series' ? (
+                        <div className="grid gap-4">
+                          {[
+                            {
+                              id: 'ser1',
+                              title: 'Un día conmigo (El Dueño)',
+                              description: 'Muestra tu rutina real. Desde que preparas el equipo hasta que terminas el trabajo. Así la gente confía en la persona detrás de Epotech.',
+                              icon: User,
+                              color: '#48c1d2',
+                              benefit: 'Genera confianza y autoridad inmediata.'
+                            },
+                            {
+                              id: 'ser2',
+                              title: 'Limpieza de Regalo (En la calle)',
+                              description: 'Busca algo muy sucio en la calle y límpialo gratis. El cambio visual es increíble y a la gente le encanta ver cómo ayudas a la comunidad.',
+                              icon: Heart,
+                              color: '#ff4d4d',
+                              benefit: 'Formato con mayor potencial viral.'
+                            },
+                            {
+                              id: 'ser3',
+                              title: 'Reto: Haciendo crecer a Epotech',
+                              description: 'Muestra cuánto dinero quieres ganar este mes y muestra el progreso. "¿Lograremos llegar a la meta hoy?".',
+                              icon: TrendingUp,
+                              color: '#4ade80',
+                              benefit: 'Crea fans reales de tu negocio.'
+                            }
+                          ].map((serie) => (
+                            <div key={serie.id} className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden group">
+                              <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-110 transition-transform">
+                                <serie.icon size={60} style={{ color: serie.color }} />
+                              </div>
+                              <div className="relative z-10 flex flex-col md:flex-row gap-5 items-start">
+                                <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-md" style={{ backgroundColor: `${serie.color}15`, color: serie.color }}>
+                                  <serie.icon size={28} />
+                                </div>
+                                <div className="text-left flex-1">
+                                  <span className="text-[8px] font-black uppercase tracking-[2px] mb-1 block" style={{ color: serie.color }}>Serie Recomendada</span>
+                                  <h4 className="text-lg font-black text-[#142d53] leading-tight mb-2 italic">{serie.title}</h4>
+                                  <p className="text-xs font-bold text-slate-500 leading-relaxed italic mb-4">"{serie.description}"</p>
+                                  <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-full w-fit">
+                                    <Sparkles size={10} className="text-[#48c1d2]" />
+                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{serie.benefit}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       ) : (
                         <>
                           <div className="py-20 px-8 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center">
