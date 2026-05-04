@@ -8,7 +8,7 @@ import {
   CheckCircle2, Circle, Clock, ChevronDown, ChevronUp,
   Database, Smartphone, Layout, FormInput, Rocket,
   MessageSquare, Save, AlertCircle, Trash2, Plus, Pencil,
-  TrendingUp, Search, Bell, Sparkles, MapPin
+  TrendingUp, Search, Bell, Sparkles, MapPin, Share2, Lightbulb
 } from "lucide-react";
 
 // ─── Static service definitions ─────────────────────────────────────────────
