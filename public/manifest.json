@@ -1,6 +1,6 @@
 {
   "name": "Epotech Hub",
-  "short_name": "Epotech",
+  "short_name": "Epotech Hub",
   "description": "Portal de gestión de marca para Sebastián — Epotech Solutions",
   "start_url": "/",
   "display": "standalone",
