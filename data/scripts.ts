@@ -51,66 +51,55 @@ export interface Script {
 
 export const guiones: Script[] = [
   {
-    id: 'ejemplo-practica-ventanas',
-    title: '[EJEMPLO DE PRÁCTICA] Ventanas de Cristal (Fórmula Epotech)',
+    id: 'ejemplo-practica-oficial',
+    title: '[EJEMPLO DE PRÁCTICA] Presentación Oficial Epotech',
     category: 'Plantilla de Entrenamiento',
-    service: 'Window Cleaning',
-    duration: '45s',
-    fullDialogue: 'Muchos creen que limpiar ventanas es solo pasar un trapo, pero en Utah, el agua dura no perdona. Si usas agua común, dejas minerales que opacan el vidrio para siempre. Por eso en Epotech usamos tecnología de agua pura. Este sistema filtra cada partícula para que el cristal seque solo y quede invisible. Es la diferencia entre una casa limpia y una casa que brilla de verdad. Mira este acabado, sin una sola raya. Si tu vista está borrosa por la suciedad, necesitas el estándar Epotech. Escríbeme y recuperemos la transparencia de tu hogar.',
+    service: 'Marca Personal',
+    duration: '20s',
+    fullDialogue: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions. Nos especializamos en limpieza exterior de alto nivel y acabados époxicos profesionales para garajes y áreas deportivas. Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
     steps: [
       {
-        label: 'GANCHO (El Problema)',
-        script: 'Muchos creen que limpiar ventanas es solo pasar un trapo, pero en Utah, el agua dura no perdona. Si usas agua común, dejas minerales que opacan el vidrio para siempre.',
-        visualField: 'Toma macro de una ventana con manchas de agua blanca y opaca.',
-        visualStudio: 'Sebastián hablando seriamente frente a un ventanal sucio.',
+        label: 'EL SALUDO (Hook)',
+        script: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions.',
+        visualField: 'Toma de frente de Sebastián con una sonrisa segura.',
+        visualStudio: 'Sebastián frente a una casa o su camioneta con logo.',
         advice: {
-          solo: ['Graba la ventana a contraluz para que se vea el sarro'],
-          assisted: ['Toma de Sebastián señalando una mancha difícil']
+          solo: ['Asegúrate de que se te vea bien la cara y haya buena luz.'],
+          assisted: ['Un ligero zoom hacia adelante mientras hablas queda genial.']
         }
       },
       {
-        label: 'LA SOLUCIÓN TÉCNICA',
-        script: 'Por eso en Epotech usamos tecnología de agua pura. Este sistema filtra cada partícula para que el cristal seque solo y quede invisible.',
-        visualField: 'Clip del sistema de filtros funcionando y el agua saliendo por el poste.',
-        visualStudio: 'Toma de la herramienta de agua pura en acción.',
+        label: 'LA ESPECIALIDAD',
+        script: 'Nos especializamos en limpieza exterior de alto nivel y acabados époxicos profesionales para garajes y áreas deportivas.',
+        visualField: 'Tomas de acción de un garaje con epoxy o limpieza de fachada.',
+        visualStudio: 'Sebastián señalando el equipo de trabajo.',
         advice: {
-          solo: ['POV del agua pura mojando el vidrio'],
-          assisted: ['Toma lateral de Sebastián operando el poste telescópico']
+          solo: ['Muestra el resultado final de un piso para que brillen.'],
+          assisted: ['Sigue el movimiento de la herramienta mientras trabaja.']
         }
       },
       {
-        label: 'EL VALOR AGREGADO',
-        script: 'Es la diferencia entre una casa limpia y una casa que brilla de verdad. Mira este acabado, sin una sola raya.',
-        visualField: 'El squeegee bajando y dejando una franja de cristal perfecto.',
-        visualStudio: 'Sebastián sonriendo al ver la transparencia.',
+        label: 'LA PROMESA Y CTA',
+        script: 'Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
+        visualField: 'Sebastián haciendo el gesto de "escríbeme".',
+        visualStudio: 'Toma final con el logo de Epotech de fondo.',
         advice: {
-          solo: ['Graba el "Squeegee Pull" (muy satisfactorio)'],
-          assisted: ['Cámara lenta del agua resbalando por el cristal limpio']
-        }
-      },
-      {
-        label: 'CIERRE Y CTA',
-        script: 'Si tu vista está borrosa por la suciedad, necesitas el estándar Epotech. Escríbeme y recuperemos la transparencia de tu hogar.',
-        visualField: 'Paseo fluido por la fachada con las ventanas brillando.',
-        visualStudio: 'Sebastián con el logo Epotech, invitando a escribir.',
-        advice: {
-          solo: ['Toma de lejos de la casa completa'],
-          assisted: ['Sebastián señalando el sticker de mensaje']
+          solo: ['Señala hacia abajo donde irá el botón de WhatsApp.'],
+          assisted: ['Un pulgar arriba al final siempre transmite confianza.']
         }
       }
     ],
     tips: [
-      'Usa el sonido real del squeegee en el vidrio, a la gente le encanta.',
-      'Asegúrate de que el sol pegue en las ventanas limpias para el efecto brillo.',
-      'Mantén el ritmo del vídeo rápido.'
+      'Habla con entusiasmo, ¡eres el experto!',
+      'Si te trabas, no pasa nada, dale a REHACER y repite solo esa parte.',
+      'Usa el micrófono cerca para que tu voz se oiga potente.'
     ],
     checklist: [
-      'Ventana sucia grabada',
-      'Clip del sistema de filtrado',
-      'Squeegee pull (satisfying) grabado',
-      'Fachada final brillante'
+      'Saludo grabado',
+      'Especialidad grabada',
+      'Llamado a la acción grabado'
     ],
-    productionHack: 'Limpia la lente de tu celular antes de grabar el resultado final.'
+    productionHack: 'Este video es tu carta de presentación. ¡Haz que brille!'
   }
 ];
 
