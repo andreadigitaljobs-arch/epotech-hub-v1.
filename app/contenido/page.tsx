@@ -1651,12 +1651,10 @@ function ContenidoContent() {
                     guionTab === 'reels' ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-[#48c1d2] text-[#142d53]'
                   }`}>
                     {guionTab === 'reels' && <Mic size={16} />}
-                    {guionTab === 'historias' && <Sparkles size={16} />}
                     {guionTab === 'presentacion' && <Clapperboard size={16} />}
                   </div>
                   <p className="text-[11px] font-bold text-slate-600 leading-relaxed italic">
                     {guionTab === 'reels' && 'Graba tu voz palabra por palabra siguiendo el guion. Este audio servirá como la narración profesional (voice-over) para tus videos.'}
-                    {guionTab === 'historias' && 'Cualquier detalle de tu día sirve para conectar. Si estás muy ocupado para subir historias, solo mándanos las fotos o vídeos y nosotros lo hacemos por ti.'}
                     {guionTab === 'presentacion' && (
                       enCamaraSubTab === 'series' 
                       ? 'Crea videos que cuenten una historia por capítulos. Esta es la mejor forma de que tus seguidores en Utah se acostumbren a verte y siempre estén esperando tu próximo video.'
