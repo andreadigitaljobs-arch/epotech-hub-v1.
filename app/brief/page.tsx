@@ -78,14 +78,13 @@ export default function BrandBriefPage() {
           </div>
         </header>
 
-        {/* Texto Tutorial Contextual Premium */}
-        <div className="px-6">
+        <div className="px-6 space-y-6">
+          {/* Texto Tutorial Contextual Premium */}
           <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
               <span className="text-[#48c1d2]">Arquitectura de Marca:</span> Este es el ADN de Epotech. Consulta tu misión, visión y perfil de cliente para que tu comunicación sea siempre coherente y profesional.
             </p>
           </div>
-        </div>
 
         {/* 2. PROPUESTA Y DIFERENCIADOR */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -229,6 +228,7 @@ export default function BrandBriefPage() {
            </div>
         </footer>
 
+        </div>
       </div>
     </div>
   );

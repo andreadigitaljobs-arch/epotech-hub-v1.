@@ -187,20 +187,19 @@ export default function ManualPage() {
           </h1>
         </header>
 
-        <div className="px-6">
+        <div className="px-6 space-y-6">
           <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
               <span className="text-[var(--accent)]">Protocolos de Grabación:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes transmita la autoridad de una empresa líder en Utah. El profesionalismo visual genera confianza inmediata.
             </p>
           </div>
-        </div>
 
-        {/* Nueva Sección de Estrategia Transplantada */}
-        <div className="bg-[#48c1d2] p-6 rounded-[2.5rem] text-[#142d53] shadow-md mt-6">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="bg-white/20 p-2 rounded-xl"><Trophy size={18} /></div>
-            <h4 className="text-lg font-black tracking-tight">Nuestra Estrategia</h4>
-          </div>
+          {/* Nueva Sección de Estrategia Transplantada */}
+          <div className="bg-[#48c1d2] p-6 rounded-[2.5rem] text-[#142d53] shadow-md mt-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white/20 p-2 rounded-xl"><Trophy size={18} /></div>
+              <h4 className="text-lg font-black tracking-tight">Nuestra Estrategia</h4>
+            </div>
           <p className="text-sm font-bold leading-tight mb-4">
             Documental Real: Menos anuncios falsos, más realidad y autoridad.
           </p>
@@ -381,6 +380,7 @@ export default function ManualPage() {
               ))}
             </ul>
           </Card>
+        </div>
         </div>
       </div>
     </div>

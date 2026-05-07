@@ -92,14 +92,13 @@ export default function ReferenciasPage() {
          </div>
       </header>
 
-      {/* Texto Tutorial Contextual Premium */}
-      <div className="px-6">
+      <div className="px-6 space-y-6">
+        {/* Texto Tutorial Contextual Premium */}
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
             <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
           </p>
         </div>
-      </div>
 
 
       {/* 2. NAVEGACIÓN Y FILTROS */}
@@ -259,6 +258,7 @@ export default function ReferenciasPage() {
                )}
             </div>
           )}
+        </div>
       </main>
     </div>
   );
