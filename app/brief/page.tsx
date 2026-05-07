@@ -54,18 +54,11 @@ export default function BrandBriefPage() {
   const CARD_STYLE = "p-8 md:p-12 bg-[#0a192f] border border-white/10 rounded-[2.5rem] shadow-2xl relative overflow-hidden group";
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-6 pb-32">
-      <div className="max-w-5xl mx-auto px-6 space-y-6">
+    <div className="min-h-screen bg-[#f8fafc] pb-32">
+      <div className="max-w-5xl mx-auto space-y-6">
         
-        {/* Texto Tutorial Contextual Premium */}
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[#48c1d2]">Arquitectura de Marca:</span> Este es el ADN de Epotech. Consulta tu misión, visión y perfil de cliente para que tu comunicación sea siempre coherente y profesional.
-          </p>
-        </div>
-
         {/* 1. HERO ESTRATÉGICO */}
-        <header className="relative p-6 md:p-12 rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border border-white/10">
+        <header className="relative p-6 md:p-12 md:rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border-b border-white/10 md:border pt-[calc(1.5rem+env(safe-area-inset-top))]">
           <div className="absolute top-0 right-0 p-8 opacity-10 hidden md:block rotate-12">
             <Compass size={220} />
           </div>
@@ -84,6 +77,15 @@ export default function BrandBriefPage() {
             </p>
           </div>
         </header>
+
+        {/* Texto Tutorial Contextual Premium */}
+        <div className="px-6">
+          <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+              <span className="text-[#48c1d2]">Arquitectura de Marca:</span> Este es el ADN de Epotech. Consulta tu misión, visión y perfil de cliente para que tu comunicación sea siempre coherente y profesional.
+            </p>
+          </div>
+        </div>
 
         {/* 2. PROPUESTA Y DIFERENCIADOR */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

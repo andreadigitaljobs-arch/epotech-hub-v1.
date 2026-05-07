@@ -14,7 +14,7 @@ export function ThemeColorHandler() {
       "/contenido": "#F0F4F8",   // Contenido (Light Gray/Blue)
       "/proyectos": "#F0F4F8",   // Proyectos (Light)
       "/manual": "#142d53",      // Grabación (Navy)
-      "/brief": "#142d53",       // Brief (Navy)
+      "/brief": "#0a192f",       // Brief (Dark Navy)
     };
 
     const color = themeColors[pathname] || "#142d53";
