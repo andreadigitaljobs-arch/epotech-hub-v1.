@@ -381,7 +381,6 @@ export default function ManualPage() {
             </ul>
           </Card>
         </div>
-        </div>
       </div>
     </div>
   );

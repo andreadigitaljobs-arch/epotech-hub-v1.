@@ -258,8 +258,8 @@ export default function ReferenciasPage() {
                )}
             </div>
           )}
-        </div>
       </main>
     </div>
-  );
+  </div>
+);
 }
