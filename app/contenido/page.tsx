@@ -1138,7 +1138,7 @@ function ContenidoContent() {
                       {selectedScript.scenes?.[currentStepIdx] && (
                         <>
                           <h3 className="text-2xl font-black text-white italic tracking-tighter text-center uppercase">
-                            {selectedScript.scenes[currentStepIdx].title}
+                            {selectedScript?.scenes?.[currentStepIdx]?.title}
                           </h3>
 
                           {/* INSTRUCCIONES SEBASTIÁN */}
@@ -1150,16 +1150,16 @@ function ContenidoContent() {
                               <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px]">Para Sebastián (Talento)</span>
                             </div>
                             <div className="p-6 space-y-6">
-                              {selectedScript.scenes[currentStepIdx].talent.whatToSay && (
+                              {selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay && (
                                 <div className="space-y-2">
                                   <div className="flex justify-between items-start mb-2 relative z-20">
                                     <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block italic mt-1">Qué decir:</span>
-                                    <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript.scenes[currentStepIdx].talent.whatToSay); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isSpeaking ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500 hover:text-white' : 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 hover:bg-[#48c1d2] hover:text-[#0a192f]'}`} title={isSpeaking ? "Detener pronunciación" : "Escuchar pronunciación"}>
+                                    <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay || ""); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isSpeaking ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500 hover:text-white' : 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 hover:bg-[#48c1d2] hover:text-[#0a192f]'}`} title={isSpeaking ? "Detener pronunciación" : "Escuchar pronunciación"}>
                                       {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
                                     </button>
                                   </div>
                                   <p className="text-xl font-black text-white leading-tight italic">
-                                    {selectedScript.scenes[currentStepIdx].talent.whatToSay}
+                                    {selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay}
                                   </p>
                                 </div>
                               )}
@@ -1167,7 +1167,7 @@ function ContenidoContent() {
                                 <div>
                                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Cómo moverse:</span>
                                   <p className="text-[11px] font-bold text-white/80 leading-snug">
-                                    {selectedScript.scenes[currentStepIdx].talent.howToMove}
+                                    {selectedScript?.scenes?.[currentStepIdx]?.talent?.howToMove}
                                   </p>
                                 </div>
                                 <div>
