@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Play, ExternalLink, X, Zap } from "lucide-react";
+import { Play, ExternalLink, X, Zap, PlaySquare } from "lucide-react";
 
 const InstagramIcon = ({ size = 24 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -33,78 +33,122 @@ export function VideoCard({
   fuerte,
   porqueFunciona,
 }: VideoCardProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const isIg = platform === "instagram";
   const isTiktok = platform === "tiktok";
 
   return (
-    <div className="group relative flex flex-col bg-[#142d53] rounded-[2rem] border border-white/5 hover:border-[#48c1d2]/50 transition-all duration-700 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] overflow-hidden shadow-2xl">
-      
-      {/* Visual Frame (Simulado) - Super Compacto */}
-      <div className="relative h-32 bg-slate-900 overflow-hidden">
-        {/* Gradiente de video */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#142d53] via-transparent to-black/20 z-10" />
-        
-        {/* Placeholder de Video Style */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity duration-700">
-           <Play size={32} fill="white" className="text-white" />
-        </div>
-
-        {/* Platform Badge */}
-        <div className="absolute top-4 left-4 z-20">
-           <div className={`p-1 rounded-lg backdrop-blur-md border border-white/20 shadow-xl ${
-             isIg ? 'bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-500 text-white' : 
-             isTiktok ? 'bg-black text-white' : 'bg-red-600 text-white'
-           }`}>
-             {isIg ? <InstagramIcon size={10} /> : isTiktok ? <TiktokIcon size={10} /> : <Play size={10} />}
-           </div>
-        </div>
-
-        {/* Título sobre el "Video" */}
-        <div className="absolute bottom-2 left-4 right-4 z-20">
-           <h3 className="text-xs font-black text-white leading-tight tracking-tight uppercase italic line-clamp-1">
-             {titleEs}
-           </h3>
-        </div>
-      </div>
-
-      {/* Production Insights (Glassmorphism) */}
-      <div className="p-4 flex flex-col gap-3 relative z-20">
-        {/* Fuerte (Hook) */}
-        <div className="bg-[#48c1d2]/10 rounded-xl p-3 border border-[#48c1d2]/20 relative overflow-hidden group/hook">
-          <div className="absolute top-0 right-0 p-1 opacity-5">
-             <Zap size={24} fill="currentColor" className="text-[#48c1d2]" />
+    <>
+      <button 
+        onClick={() => setIsOpen(true)}
+        className="group relative flex flex-col bg-[#142d53] rounded-2xl border border-white/5 hover:border-[#48c1d2]/50 transition-all duration-500 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)] overflow-hidden shadow-xl text-left w-full"
+      >
+        {/* Visual Frame - Ultra Compacto */}
+        <div className="relative h-24 sm:h-28 bg-slate-900 overflow-hidden">
+          {/* Gradiente de video */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#142d53] via-transparent to-black/20 z-10" />
+          
+          {/* Placeholder de Video Style */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-30 transition-opacity duration-500">
+             <Play size={24} fill="white" className="text-white" />
           </div>
-          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#48c1d2] mb-1 block font-mono">Hook Maestro</span>
-          <p className="text-xs font-bold text-blue-100 leading-tight italic">"{fuerte}"</p>
+
+          {/* Platform Badge */}
+          <div className="absolute top-2 left-2 z-20">
+             <div className={`p-1 rounded-md backdrop-blur-md border border-white/10 ${
+               isIg ? 'bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-500 text-white' : 
+               isTiktok ? 'bg-black text-white' : 'bg-red-600 text-white'
+             }`}>
+               {isIg ? <InstagramIcon size={8} /> : isTiktok ? <TiktokIcon size={8} /> : <Play size={8} />}
+             </div>
+          </div>
+
+          {/* Título sobre el "Video" */}
+          <div className="absolute bottom-2 left-3 right-3 z-20">
+             <h3 className="text-[10px] font-black text-white leading-tight tracking-tight uppercase italic line-clamp-2">
+               {titleEs}
+             </h3>
+          </div>
         </div>
-
-        {/* Analisis (Director's Notes) */}
-        <div className="px-1">
-          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30 mb-1 block font-mono">Análisis Hedy</span>
-          <p className="text-xs font-medium text-white/60 leading-tight italic">
-            "{porqueFunciona}"
-          </p>
+        
+        {/* Info Indicator */}
+        <div className="px-3 py-1.5 flex items-center justify-between bg-[#0a192f]/50">
+           <span className="text-[7px] font-black uppercase tracking-widest text-[#48c1d2]">Ver Análisis</span>
+           <Zap size={8} className="text-[#48c1d2] opacity-50" />
         </div>
+      </button>
 
-        {/* Action Link */}
-        <a 
-          href={url} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex items-center justify-between w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-[#48c1d2] text-white hover:text-[#142d53] border border-white/10 hover:border-transparent text-[9px] font-black uppercase tracking-widest transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(72,193,210,0.3)] mt-1"
-        >
-          Ver Referencia <ExternalLink size={12} />
-        </a>
-      </div>
+      {/* Modal de Detalles (Portal) */}
+      {isOpen && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-300">
+          <div 
+            className="absolute inset-0" 
+            onClick={() => setIsOpen(false)} 
+          />
+          
+          <div className="relative bg-[#142d53] w-full max-w-lg rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden animate-in zoom-in-95 duration-300">
+            {/* Header del Modal */}
+            <div className="relative h-48 bg-slate-900 overflow-hidden">
+               <div className="absolute inset-0 bg-gradient-to-t from-[#142d53] to-transparent z-10" />
+               <div className="absolute inset-0 flex items-center justify-center opacity-20">
+                  <PlaySquare size={80} className="text-[#48c1d2]" />
+               </div>
+               
+               <button 
+                  onClick={() => setIsOpen(false)}
+                  className="absolute top-6 right-6 z-30 p-3 bg-black/40 hover:bg-white/10 text-white rounded-full backdrop-blur-xl transition-all"
+               >
+                  <X size={20} />
+               </button>
 
-      {/* Decoración Cine */}
-      <div className="absolute bottom-0 right-0 p-1 opacity-10">
-         <div className="flex gap-1">
-            <div className="w-1 h-1 bg-white rounded-full"></div>
-            <div className="w-1 h-1 bg-white rounded-full"></div>
-            <div className="w-1 h-1 bg-white rounded-full"></div>
-         </div>
-      </div>
-    </div>
+               <div className="absolute bottom-6 left-8 right-8 z-20">
+                  <div className={`inline-flex p-1.5 rounded-lg mb-3 ${
+                    isIg ? 'bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-500 text-white' : 
+                    isTiktok ? 'bg-black text-white' : 'bg-red-600 text-white'
+                  }`}>
+                    {isIg ? <InstagramIcon size={12} /> : isTiktok ? <TiktokIcon size={12} /> : <Play size={12} />}
+                  </div>
+                  <h2 className="text-2xl font-black text-white uppercase italic leading-tight tracking-tighter">
+                    {titleEs}
+                  </h2>
+               </div>
+            </div>
+
+            {/* Contenido del Modal */}
+            <div className="p-8 space-y-6">
+               <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-[#48c1d2]">
+                     <Zap size={14} />
+                     <span className="text-[10px] font-black uppercase tracking-[0.3em]">Hook Maestro</span>
+                  </div>
+                  <p className="text-lg font-bold text-blue-50 text-left italic leading-tight">
+                    "{fuerte}"
+                  </p>
+               </div>
+
+               <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-white/40">
+                     <Play size={14} />
+                     <span className="text-[10px] font-black uppercase tracking-[0.3em]">Análisis Estratégico</span>
+                  </div>
+                  <p className="text-sm font-medium text-blue-100/70 text-left leading-relaxed italic">
+                    "{porqueFunciona}"
+                  </p>
+               </div>
+
+               <a 
+                  href={url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 w-full py-5 px-6 rounded-2xl bg-[#48c1d2] text-[#0a192f] text-xs font-black uppercase tracking-[0.2em] transition-all hover:scale-[1.02] hover:shadow-[0_15px_30px_rgba(72,193,210,0.3)] active:scale-95"
+               >
+                  Ver Video Original <ExternalLink size={16} />
+               </a>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
   );
 }

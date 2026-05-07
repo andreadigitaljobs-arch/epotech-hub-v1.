@@ -52,15 +52,15 @@ export interface Script {
 export const guiones: Script[] = [
   {
     id: 'ejemplo-practica-oficial',
-    title: '[EJEMPLO DE PRÁCTICA] Presentación Oficial Epotech',
+    title: '[EJEMPLO DE PRÁCTICA] Epotech Official Presentation',
     category: 'Plantilla de Entrenamiento',
     service: 'Marca Personal',
     duration: '20s',
-    fullDialogue: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions. Nos especializamos en limpieza exterior de alto nivel y acabados époxicos profesionales para garajes y áreas deportivas. Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
+    fullDialogue: 'Ready to make your property stand out in Utah? I\'m Sebastian, from Epotech Solutions. We specialize in high-level exterior cleaning and professional epoxy finishes for garages and sports areas. We leave your spaces spotless from floor to ceiling. Contact us and schedule your appointment!',
     steps: [
       {
-        label: 'EL SALUDO (Voz en off)',
-        script: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions.',
+        label: 'THE GREETING (Voice-over)',
+        script: 'Ready to make your property stand out in Utah? I\'m Sebastian, from Epotech Solutions.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -69,22 +69,22 @@ export const guiones: Script[] = [
         }
       },
       {
-        label: 'LA ESPECIALIDAD (Voz en off)',
-        script: 'Nos especializamos en limpieza exterior de alto nivel y acabados époxicos profesionales para garajes y áreas deportivas.',
+        label: 'THE SPECIALTY (Voice-over)',
+        script: 'We specialize in high-level exterior cleaning and professional epoxy finishes for garages and sports areas.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Pronuncia claro las palabras "alto nivel" y "profesionales".'],
+          solo: ['Pronuncia claro las palabras "high-level" y "professional".'],
           assisted: ['Mantén un ritmo constante, sin correr.']
         }
       },
       {
-        label: 'LA PROMESA (Voz en off)',
-        script: 'Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
+        label: 'THE PROMISE (Voice-over)',
+        script: 'We leave your spaces spotless from floor to ceiling. Contact us and schedule your appointment!',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Haz una pequeña pausa antes de "Contáctanos" para darle fuerza.'],
+          solo: ['Haz una pequeña pausa antes de "Contact us" para darle fuerza.'],
           assisted: ['Termina con un tono amable y profesional.']
         }
       }
@@ -107,18 +107,18 @@ export const guionesPresentacion: Script[] = [
   {
     id: 'presentacion-1',
     title: '1. ¿Quién soy y por qué Epotech? (Confianza)',
-    category: 'PINNED: Confianza',
+    category: 'VIDEO FIJADO: Confianza',
     service: 'Marca Personal',
     duration: '60s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'El mayor error al contratar limpieza… no es el precio. Es no saber a quién estás dejando entrar a tu casa. Porque no es solo limpiar… es entrar a tu espacio, donde está tu familia, tus cosas, tu tranquilidad. Mi nombre es Sebastián. Y cada vez que trabajamos en una propiedad, pensamos como si fuera nuestra. Cuidamos, respetamos y dejamos el espacio mejor de como lo encontramos. Porque al final… se trata de confianza.',
+    fullDialogue: 'The biggest mistake when hiring cleaners… is not the price. It’s not knowing who you’re letting into your home. Because it’s not just cleaning… it’s entering your space, where your family, your things, and your peace of mind are. My name is Sebastián. And every time we work on a property, we treat it as if it were our own. We care, we respect, and we leave the space better than we found it. Because in the end… it’s all about trust. If that’s what you’re looking for, reach out to us.',
     scenes: [
       {
         id: 'p1-e1',
         title: '🎬 ESCENA 1 — HOOK (AFUERA)',
         talent: {
-          whatToSay: '“El mayor error al contratar limpieza… no es el precio.”',
+          whatToSay: '“The biggest mistake when hiring cleaners… is not the price.”',
           howToMove: 'Parado afuera de una casa. Mira directo a cámara.',
           gesture: 'Habla normal (no actuado). Quédate quieto.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -135,16 +135,16 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e2',
         title: '🎬 ESCENA 2 — PUERTA (ACCIÓN)',
         talent: {
-          whatToSay: '“Es no saber a quién estás dejando entrar a tu casa.”',
-          howToMove: 'No hables al inicio. Abre la puerta y entra.',
-          gesture: 'Acción natural de abrir y entrar.',
+          whatToSay: '“It’s not knowing who you’re letting into your home.”',
+          howToMove: 'Ubícate adentro de la casa con la puerta cerrada. Abre la puerta y apenas asomes, di la frase mirando a la cámara.',
+          gesture: 'Gesto de bienvenida natural al abrir la puerta.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Ponte frente a la puerta cerrada mientras Sebastián está adentro.',
+          whereToStand: 'Quédate afuera, de pie frente a la puerta cerrada.',
           angle: 'Plano medio de la puerta.',
-          movement: 'Graba cuando abra la puerta. Síguelo un poco al entrar (suave).',
-          avoid: 'No grabes de frente. No cortes rápido.',
+          movement: 'Empieza a grabar la puerta cerrada. Cuando Sebastián la abra, da unos pasos lentos acercándote hacia él.',
+          avoid: 'No hagas movimientos bruscos al caminar.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       },
@@ -152,13 +152,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e3',
         title: '🎬 ESCENA 3 — INTERIOR (CONEXIÓN)',
         talent: {
-          whatToSay: '“Porque no es solo limpiar… es entrar a tu espacio, donde está tu familia, tus cosas, tu tranquilidad.”',
+          whatToSay: '“Because it’s not just cleaning… it’s entering your space, where your family, your things, and your peace of mind are.”',
           howToMove: 'Mira alrededor, señala el lugar, señala hacia arriba o lado, señala objetos cerca.',
           gesture: 'Gesto calmado (mano al pecho o suave).',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Ponte frente a él.',
+          whereToStand: 'En la sala o comedor. Ponte frente a él.',
           angle: 'Plano de cintura hacia arriba.',
           movement: 'Quédate quieta.',
           avoid: 'No cambies ángulo. No hagas zoom.',
@@ -169,13 +169,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e4',
         title: '🎬 ESCENA 4 — AUTORIDAD (TRABAJO)',
         talent: {
-          whatToSay: '“Mi nombre es Sebastián. Y cada vez que trabajamos en una propiedad, pensamos como si fuera nuestra. Cuidamos, respetamos y dejamos el espacio mejor de como lo encontramos.”',
+          whatToSay: '“My name is Sebastián. And every time we work on a property, we treat it as if it were our own. We care, we respect, and we leave the space better than we found it.”',
           howToMove: 'Mirando a cámara. Movimiento leve (natural). Señala el piso / área.',
           gesture: 'Gesto con manos. Señala resultado.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Frente o diagonal.',
+          whereToStand: 'En la cocina (apoyado en la isla). Graba en diagonal.',
           angle: 'Plano medio.',
           movement: 'Mantén estabilidad.',
           avoid: 'No grabes muy lejos. No cortes antes de que termine.',
@@ -186,13 +186,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e5',
         title: '🎬 ESCENA 5 — CIERRE & CTA',
         talent: {
-          whatToSay: '“Porque al final… se trata de confianza. Si eso es lo que estás buscando, escríbenos.”',
+          whatToSay: '“Because in the end… it’s all about trust. If that’s what you’re looking for, reach out to us.”',
           howToMove: 'Pausa corta. Mira directo a cámara.',
           gesture: 'Serio, seguro.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Mismo lugar.',
+          whereToStand: 'En el patio o pasillo interior de la casa.',
           angle: 'Cámara fija.',
           movement: 'Buen encuadre.',
           avoid: 'No te muevas.',
@@ -212,26 +212,26 @@ export const guionesPresentacion: Script[] = [
   {
     id: 'presentacion-2',
     title: '2. ¿Qué hacemos? (Autoridad y Valor)',
-    category: 'PINNED: Autoridad',
+    category: 'VIDEO FIJADO: Autoridad',
     service: 'Marca Personal',
     duration: '75s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'Si tu driveway se ve así… ya se está dañando. Y la mayoría piensa que es solo suciedad. Pero no. Son manchas que se van metiendo, acumulación que desgasta, y superficies que poco a poco… se deterioran. Y cuando reaccionas… ya es más caro arreglarlo. Por eso no solo limpiamos. Restauramos, protegemos y transformamos espacios con limpieza profesional, epoxy y pintura que sí dura. No es estética. Es cuidar lo que te costó dinero. Mira cómo puede verse así otra vez en nuestro perfil.',
+    fullDialogue: 'If your driveway looks like this… it’s already getting damaged. And most people think it’s just dirt. But it’s not. It’s stains sinking in, buildup causing wear, and surfaces that slowly… deteriorate. And by the time you react… it’s more expensive to fix. That’s why we don’t just clean. We restore, protect, and transform spaces with professional cleaning, epoxy, and paint that actually lasts. It’s not just about aesthetics. It’s about taking care of what cost you money. See how it can look like this again on our profile.',
     scenes: [
       {
         id: 'p2-e1',
         title: '🎬 ESCENA 1 — HOOK',
         talent: {
-          whatToSay: '“Si tu driveway se ve así… ya se está dañando.”',
-          howToMove: 'Señala hacia arriba. Mirada seria.',
+          whatToSay: '“If your driveway looks like this… it’s already getting damaged.”',
+          howToMove: 'OPCIÓN 1: Párate en un driveway sucio y señala el piso. OPCIÓN 2: Párate en la sala y señala hacia arriba (para poner foto del driveway en edición).',
           gesture: 'Autoridad, advertencia.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Afuera de la casa (Driveway).',
+          whereToStand: 'OPCIÓN 1: Afuera en el driveway. OPCIÓN 2: En la sala, dejando aire arriba en el encuadre.',
           angle: 'Plano medio.',
-          movement: 'Fijo. Deja espacio arriba.',
+          movement: 'Fijo.',
           avoid: 'Moverse mucho.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
@@ -240,13 +240,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e2',
         title: '🎬 ESCENA 2 — ERROR (ÁNGULO)',
         talent: {
-          whatToSay: '“Y la mayoría piensa que es solo suciedad.”',
+          whatToSay: '“And most people think it’s just dirt.”',
           howToMove: 'Camina un paso lateral.',
           gesture: 'Gesto leve de negación.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Mismo lugar.',
+          whereToStand: 'OPCIÓN 1: Acera del driveway. OPCIÓN 2: Desde otro ángulo en la sala.',
           angle: 'Ángulo diagonal (cambio visual).',
           movement: 'Acompaña el paso levemente.',
           avoid: 'Frontal perfecto.',
@@ -257,16 +257,16 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e3',
         title: '🎬 ESCENA 3 — EXPLICACIÓN (ACCIÓN)',
         talent: {
-          whatToSay: '“Pero no. Son manchas que se van metiendo, acumulación que desgasta, y superficies que poco a poco… se deterioran.”',
-          howToMove: 'Cerca de una superficie. Pasa la mano por ella. Golpecito o roce.',
-          gesture: 'Mira la superficie (no a cámara).',
+          whatToSay: '“But it’s not. It’s stains sinking in, buildup causing wear, and surfaces that slowly… deteriorate.”',
+          howToMove: 'OPCIÓN 1: Agáchate y pasa la mano por el driveway sucio. OPCIÓN 2: De pie, señala a los lados para fotos de apoyo.',
+          gesture: 'Mira la superficie o las "fotos imaginarias" (no a cámara).',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Cerca de la superficie.',
+          whereToStand: 'OPCIÓN 1: Cerca de la superficie. OPCIÓN 2: Frente a él en la sala.',
           angle: 'Plano detalle / cercano.',
           movement: 'Enfoca manos y acción.',
-          avoid: 'Dejar espacio arriba.',
+          avoid: 'Dejar espacio arriba innecesario.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       },
@@ -274,8 +274,8 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e4',
         title: '🎬 ESCENA 4 — CONSECUENCIA',
         talent: {
-          whatToSay: '“Y cuando reaccionas… ya es más caro arreglarlo.”',
-          howToMove: 'Caminando por el driveway o acera.',
+          whatToSay: '“And by the time you react… it’s more expensive to fix.”',
+          howToMove: 'OPCIÓN 1: Caminando por el driveway. OPCIÓN 2: Caminando por el pasillo/sala de la casa.',
           gesture: 'Mira a cámara al final de la frase.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
@@ -291,7 +291,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e5',
         title: '🎬 ESCENA 5 — SOLUCIÓN',
         talent: {
-          whatToSay: '“Por eso no solo limpiamos. Restauramos, protegemos y transformamos espacios con limpieza profesional, epoxy y pintura que sí dura.”',
+          whatToSay: '“That’s why we don’t just clean. We restore, protect, and transform spaces with professional cleaning, epoxy, and paint that actually lasts.”',
           howToMove: 'En área de trabajo / garaje. Señala herramientas o área. Toma algo (manguera/herramienta).',
           gesture: 'Mirando a cámara, seguro.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -308,13 +308,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e6',
         title: '🎬 ESCENA 6 — CIERRE',
         talent: {
-          whatToSay: '“No es estética. Es cuidar lo que te costó dinero.”',
+          whatToSay: '“It’s not just about aesthetics. It’s about taking care of what cost you money.”',
           howToMove: 'Lugar limpio / neutro.',
           gesture: 'Mano al pecho o gesto firme.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Frente a él.',
+          whereToStand: 'En el patio trasero, con fondo limpio.',
           angle: 'Plano limpio.',
           movement: 'Cámara fija.',
           avoid: 'Fondo desordenado.',
@@ -325,13 +325,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e7',
         title: '🎬 ESCENA 7 — CTA',
         talent: {
-          whatToSay: '“Mira cómo puede verse así otra vez en nuestro perfil.”',
+          whatToSay: '“See how it can look like this again on our profile.”',
           howToMove: 'Señala hacia arriba.',
           gesture: 'Invitación, sonrisa.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Frente a él.',
+          whereToStand: 'Cerca de la van de Epotech o entrada principal.',
           angle: 'Plano estable.',
           movement: 'Deja espacio arriba para overlay.',
           avoid: 'Cortar la cabeza.',
@@ -351,18 +351,18 @@ export const guionesPresentacion: Script[] = [
   {
     id: 'presentacion-3',
     title: '3. Resultados Garantizados (Reseñas)',
-    category: 'PINNED: Resultados',
+    category: 'VIDEO FIJADO: Resultados',
     service: 'Marca Personal',
     duration: '90s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'Esto es lo primero que hacen la mayoría antes de elegirnos… Revisan nuestras reseñas. Y es totalmente válido. Porque hoy en día hay muchas opciones… y no siempre es fácil saber cuál elegir. Por eso dejamos que hablen quienes ya trabajaron con nosotros. Ya hemos trabajado con más de 100 clientes, y cada espacio es diferente. Por eso lo hacemos simple: Nos escribes, vemos tu espacio, y te explicamos exactamente qué necesitas. Sin presión, sin complicaciones. Solo hacer bien el trabajo y que tú estés tranquilo con el resultado. Puedes ver nuestras reseñas… y decidir con total confianza.',
+    fullDialogue: 'This is the first thing most people do before choosing us… They check our reviews. And that’s completely valid. Because today there are many options… and it’s not always easy to know which one to choose. That’s why we let those who have already worked with us do the talking. We’ve worked with over 100 clients, and every space is different. That’s why we keep it simple: You message us, we look at your space, and we explain exactly what you need. No pressure, no complications. Just doing the job right so you can have peace of mind with the result. You can check our reviews… and decide with total confidence.',
     scenes: [
       {
         id: 'p3-e1',
         title: '🎬 ESCENA 1 — HOOK',
         talent: {
-          whatToSay: '“Esto es lo primero que hacen la mayoría antes de elegirnos…”',
+          whatToSay: '“This is the first thing most people do before choosing us…”',
           howToMove: 'Afuera de la casa. Mira a cámara.',
           gesture: 'Gesto leve de intriga.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -379,13 +379,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e2',
         title: '🎬 ESCENA 2 — RESEÑAS',
         talent: {
-          whatToSay: '“Revisan nuestras reseñas.”',
+          whatToSay: '“They check our reviews.”',
           howToMove: 'Señala hacia arriba.',
           gesture: 'Seguridad, invitación visual.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Mismo lugar.',
+          whereToStand: 'En la sala, Sebastián sentado en el sofá.',
           angle: 'Plano limpio.',
           movement: 'Deja espacio arriba (para overlay de estrellas).',
           avoid: 'No dejar aire arriba.',
@@ -396,13 +396,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e3',
         title: '🎬 ESCENA 3 — VALIDACIÓN',
         talent: {
-          whatToSay: '“Y es totalmente válido.”',
+          whatToSay: '“And that’s completely valid.”',
           howToMove: 'Cambia posición levemente.',
           gesture: 'Asiente con la cabeza, natural.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Mismo lugar.',
+          whereToStand: 'En la cocina, Sebastián apoyado en la encimera.',
           angle: 'Ángulo diagonal.',
           movement: 'Mantén el plano.',
           avoid: 'Frontal repetitivo.',
@@ -413,7 +413,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e4',
         title: '🎬 ESCENA 4 — OPCIONES',
         talent: {
-          whatToSay: '“Porque hoy en día hay muchas opciones… y no siempre es fácil saber cuál elegir.”',
+          whatToSay: '“Because today there are many options… and it’s not always easy to know which one to choose.”',
           howToMove: 'Caminando por entrada / driveway.',
           gesture: 'Mira a cámara al final de la frase.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -430,13 +430,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e5',
         title: '🎬 ESCENA 5 — PRUEBA SOCIAL',
         talent: {
-          whatToSay: '“Por eso dejamos que hablen quienes ya trabajaron con nosotros.”',
+          whatToSay: '“That’s why we let those who have already worked with us do the talking.”',
           howToMove: 'Frente a pared o fondo limpio.',
           gesture: 'Señala hacia arriba.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Frente a él.',
+          whereToStand: 'Frente a una pared limpia (interior o exterior).',
           angle: 'Plano estable.',
           movement: 'Deja espacio arriba (para 3-5 reseñas).',
           avoid: 'Zoom innecesario.',
@@ -447,7 +447,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e6',
         title: '🎬 ESCENA 6 — EXPERIENCIA',
         talent: {
-          whatToSay: '“Ya hemos trabajado con más de 100 clientes, y cada espacio es diferente.”',
+          whatToSay: '“We’ve worked with over 100 clients, and every space is different.”',
           howToMove: 'En el área de trabajo.',
           gesture: 'Señala alrededor, gesto abierto.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -464,13 +464,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e7',
         title: '🎬 ESCENA 7 — PROCESO',
         talent: {
-          whatToSay: '“Por eso lo hacemos simple: Nos escribes, vemos tu espacio, y te explicamos exactamente qué necesitas.”',
+          whatToSay: '“That’s why we keep it simple: You message us, we look at your space, and we explain exactly what you need.”',
           howToMove: 'Acércate un poco a cámara. Gesto de celular. Señala alrededor.',
           gesture: 'Señala a cámara al final.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Frente a él.',
+          whereToStand: 'En el patio trasero o terraza de la casa.',
           angle: 'Plano más cercano.',
           movement: 'Fijo.',
           avoid: 'Desenfoque al acercarse.',
@@ -481,13 +481,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e8',
         title: '🎬 ESCENA 8 — TRANQUILIDAD',
         talent: {
-          whatToSay: '“Sin presión, sin complicaciones. Solo hacer bien el trabajo y que tú estés tranquilo con el resultado.”',
+          whatToSay: '“No pressure, no complications. Just doing the job right so you can have peace of mind with the result.”',
           howToMove: 'Pausa leve.',
           gesture: 'Gesto relajado. Mano al pecho.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Mismo lugar.',
+          whereToStand: 'En el garaje o área de trabajo terminada.',
           angle: 'Plano medio.',
           movement: 'Sin movimiento.',
           avoid: 'Distracciones en el fondo.',
@@ -498,13 +498,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e9',
         title: '🎬 ESCENA 9 — CTA',
         talent: {
-          whatToSay: '“Puedes ver nuestras reseñas… y decidir con total confianza.”',
+          whatToSay: '“You can check our reviews… and decide with total confidence.”',
           howToMove: 'Mira directo a cámara.',
           gesture: 'Señala hacia arriba, sonrisa segura.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Mismo lugar.',
+          whereToStand: 'En la puerta principal, Sebastián mirando hacia afuera.',
           angle: 'Plano limpio.',
           movement: 'Deja espacio arriba para reviews finales.',
           avoid: 'Cortar el gesto de señalar.',

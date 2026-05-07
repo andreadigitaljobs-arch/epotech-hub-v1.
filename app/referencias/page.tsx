@@ -60,14 +60,18 @@ export default function ReferenciasPage() {
 
   if (loading) return <LoadingSpinner message="Cargando Inspiración..." />;
 
-  const filteredVideos = data.videos.filter((v: any) => 
-    platformFilter === 'all' ? true : v.platform === platformFilter
-  );
+  const filteredVideos = data.videos
+    .filter((v: any) => platformFilter === 'all' ? true : v.platform === platformFilter)
+    .sort((a: any, b: any) => a.platform.localeCompare(b.platform)); // Instagram before TikTok
 
   const filteredAccounts = data.cuentas.filter((c: any) => {
     const p = c.tipo.toLowerCase();
     return platformFilter === 'all' ? true : p.includes(platformFilter);
   });
+
+  const viralVideos = filteredVideos.filter((v: any) => v.categoria === 'VIRAL');
+  const autoridadVideos = filteredVideos.filter((v: any) => v.categoria === 'AUTORIDAD');
+  const ventasVideos = filteredVideos.filter((v: any) => v.categoria === 'VENTAS');
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-6 pb-32 text-left space-y-6">
@@ -86,7 +90,7 @@ export default function ReferenciasPage() {
          </div>
          
          <div className="relative z-10">
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 leading-none uppercase">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 leading-none uppercase text-white">
                Motor de <span className="text-[#48c1d2]">Inspiración</span>
             </h1>
             <p className="text-xs font-bold text-slate-400 italic max-w-xl leading-relaxed opacity-80 border-l-2 border-[#48c1d2]/30 pl-6">
@@ -134,36 +138,96 @@ export default function ReferenciasPage() {
 
       {/* 3. CONTENIDO DINÁMICO */}
       <main className="animate-in fade-in slide-in-from-bottom-6 duration-700">
-         {activeSubTab === 'videos' ? (
-            <div className="space-y-10">
-               <div className="flex items-center gap-4 ml-2">
-                  <div className="w-1.5 h-10 bg-[#48c1d2] rounded-full shadow-[0_0_15px_rgba(72,193,210,0.5)]" />
-                  <div>
-                     <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Análisis de Videos</h2>
-                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Estructura y puntos fuertes de cada referencia</span>
+          {activeSubTab === 'videos' ? (
+            <div className="space-y-16">
+               {/* CATEGORÍA 1: VIRAL */}
+               {viralVideos.length > 0 && (
+                  <div className="space-y-8">
+                     <div className="flex items-center gap-4 ml-2">
+                        <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#0a192f] shadow-lg shadow-[#48c1d2]/20">
+                           <Zap size={24} />
+                        </div>
+                        <div>
+                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Para Volverte Viral</h2>
+                           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Contenido de alta retención y satisfacción visual</span>
+                        </div>
+                     </div>
+                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        {viralVideos.map((video: any) => (
+                           <VideoCard 
+                              key={video.id}
+                              url={video.url}
+                              platform={video.platform}
+                              titleEs={video.titulo}
+                              fuerte={video.fuerte}
+                              porqueFunciona={video.porqueFunciona}
+                           />
+                        ))}
+                     </div>
                   </div>
-               </div>
+               )}
 
-               {filteredVideos.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                     {filteredVideos.map((video: any) => (
-                        <VideoCard 
-                           key={video.id}
-                           url={video.url}
-                           platform={video.platform}
-                           titleEs={video.titulo}
-                           fuerte={video.fuerte || video.descripcion}
-                           porqueFunciona={video.porqueFunciona || video.porque_funciona || video.porque_seguirlo}
-                        />
-                     ))}
+               {/* CATEGORÍA 2: AUTORIDAD */}
+               {autoridadVideos.length > 0 && (
+                  <div className="space-y-8">
+                     <div className="flex items-center gap-4 ml-2">
+                        <div className="w-12 h-12 rounded-2xl bg-[#142d53] flex items-center justify-center text-white shadow-lg shadow-[#142d53]/20">
+                           <ShieldCheck size={24} />
+                        </div>
+                        <div>
+                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Construye Tu Autoridad</h2>
+                           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Demuestra tu conocimiento técnico y equipo profesional</span>
+                        </div>
+                     </div>
+                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        {autoridadVideos.map((video: any) => (
+                           <VideoCard 
+                              key={video.id}
+                              url={video.url}
+                              platform={video.platform}
+                              titleEs={video.titulo}
+                              fuerte={video.fuerte}
+                              porqueFunciona={video.porqueFunciona}
+                           />
+                        ))}
+                     </div>
                   </div>
-               ) : (
+               )}
+
+               {/* CATEGORÍA 3: VENTAS */}
+               {ventasVideos.length > 0 && (
+                  <div className="space-y-8">
+                     <div className="flex items-center gap-4 ml-2">
+                        <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-[#48c1d2] shadow-lg shadow-black/20">
+                           <Sparkles size={24} />
+                        </div>
+                        <div>
+                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Cierra Más Ventas</h2>
+                           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Resultados finales, testimonios y ganchos de venta</span>
+                        </div>
+                     </div>
+                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        {ventasVideos.map((video: any) => (
+                           <VideoCard 
+                              key={video.id}
+                              url={video.url}
+                              platform={video.platform}
+                              titleEs={video.titulo}
+                              fuerte={video.fuerte}
+                              porqueFunciona={video.porqueFunciona}
+                           />
+                        ))}
+                     </div>
+                  </div>
+               )}
+
+               {filteredVideos.length === 0 && (
                   <div className="py-24 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
                      <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay contenido disponible bajo este filtro</p>
                   </div>
                )}
             </div>
-         ) : (
+          ) : (
             <div className="space-y-10">
                <div className="flex items-center gap-4 ml-2">
                   <div className="w-1.5 h-10 bg-[#0a192f] rounded-full" />
@@ -192,9 +256,8 @@ export default function ReferenciasPage() {
                   </div>
                )}
             </div>
-         )}
+          )}
       </main>
-
     </div>
   );
 }

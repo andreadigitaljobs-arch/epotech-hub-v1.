@@ -74,7 +74,9 @@ import {
   TrendingUp,
   PauseCircle,
   Play,
-  Pause
+  Pause,
+  Volume2,
+  Square
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Toast, ToastType } from "@/components/ui/Toast";
@@ -96,7 +98,6 @@ const forceDownload = async (url: string, filename: string) => {
     window.URL.revokeObjectURL(blobUrl);
   } catch (err) {
     console.error("Error al forzar descarga:", err);
-    // Fallback si el fetch falla (ej: CORS)
     window.open(url, '_blank');
   }
 };
@@ -342,6 +343,37 @@ function ContenidoContent() {
   const [activeCategory, setActiveCategory] = useState<string>('Todas');
   const [activeFormat, setActiveFormat] = useState<string>('Todos');
   const [serviceType, setServiceType] = useState(typeParam);
+  const [voiceSpeed, setVoiceSpeed] = useState<number>(0.85);
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+
+  const handleSpeak = (text: string) => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      if (isSpeaking || window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+        return;
+      }
+      
+      setIsSpeaking(true);
+      const selection = window.getSelection()?.toString().trim();
+      const textToRead = selection ? selection : text;
+      
+      const cleanText = textToRead.replace(/[“”]/g, '');
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'en-US';
+      utterance.rate = voiceSpeed; 
+      
+      const voices = window.speechSynthesis.getVoices();
+      let usVoice = voices.find(v => v.lang === 'en-US' && (v.name.includes('Premium') || v.name.includes('Samantha') || v.name.includes('Google US English') || v.name.includes('Natural')));
+      if (!usVoice) usVoice = voices.find(v => v.lang === 'en-US');
+      if (usVoice) utterance.voice = usVoice;
+      
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
   const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
     message: "",
@@ -1004,18 +1036,30 @@ function ContenidoContent() {
 
       <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[90vh] shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
         {/* Encabezado */}
-        <div className="p-6 border-b border-white/5 bg-black/20 flex justify-between items-center text-left">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px]">{selectedScript.category}</span>
-              {selectedScript.isPinned && <span className="bg-amber-500/20 text-amber-400 text-[7px] font-black px-2 py-0.5 rounded-full uppercase border border-amber-500/30">📌 Video para Fijar</span>}
+        <div className="p-6 border-b border-white/5 bg-black/20 flex flex-col md:flex-row justify-between md:items-center text-left gap-4">
+          <div className="flex-1 flex justify-between items-start md:block">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px]">{selectedScript.category}</span>
+                {selectedScript.isPinned && <span className="bg-amber-500/20 text-amber-400 text-[7px] font-black px-2 py-0.5 rounded-full uppercase border border-amber-500/30">📌 Video para Fijar</span>}
+              </div>
+              <h2 className="text-xl font-black text-white leading-tight pr-4">{selectedScript.title}</h2>
             </div>
-            <h2 className="text-xl font-black text-white leading-tight">{selectedScript.title}</h2>
+            {/* Botón X en móvil */}
+            <button onClick={handleCloseScript} className="md:hidden w-8 h-8 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-white/20 hover:text-white transition-colors border border-white/5">
+              <X size={16} />
+            </button>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-between md:justify-end">
+            <div className="flex items-center bg-white/5 rounded-xl border border-white/5 p-1">
+              <span className="text-[7px] text-white/40 uppercase font-black px-1 mr-1">Voz:</span>
+              <button onClick={() => setVoiceSpeed(0.5)} className={`text-[9px] font-bold px-2 py-1 rounded-md transition-colors ${voiceSpeed === 0.5 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/60 hover:text-white'}`}>0.5x</button>
+              <button onClick={() => setVoiceSpeed(0.85)} className={`text-[9px] font-bold px-2 py-1 rounded-md transition-colors ${voiceSpeed === 0.85 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/60 hover:text-white'}`}>0.8x</button>
+              <button onClick={() => setVoiceSpeed(1)} className={`text-[9px] font-bold px-2 py-1 rounded-md transition-colors ${voiceSpeed === 1 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/60 hover:text-white'}`}>1x</button>
+            </div>
             <button
               onClick={() => setShowFullScript(!showFullScript)}
-              className={`h-9 px-3 rounded-xl flex items-center gap-2 transition-all whitespace-nowrap ${showFullScript ? "bg-white/5 text-white/40 border border-white/5" : "bg-[#48c1d2] text-[#0a192f] shadow-lg"}`}
+              className={`flex-1 md:flex-none h-9 px-3 rounded-xl flex items-center justify-center gap-2 transition-all whitespace-nowrap ${showFullScript ? "bg-white/5 text-white/40 border border-white/5" : "bg-[#48c1d2] text-[#0a192f] shadow-lg"}`}
             >
               {showFullScript ? <Zap size={14} /> : <BookOpen size={14} />}
               <span className="text-[8px] font-black uppercase tracking-tighter">
@@ -1025,7 +1069,7 @@ function ContenidoContent() {
                 }
               </span>
             </button>
-            <button onClick={handleCloseScript} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/20 hover:text-white transition-colors border border-white/5">
+            <button onClick={handleCloseScript} className="hidden md:flex w-10 h-10 rounded-full bg-white/5 items-center justify-center text-white/20 hover:text-white transition-colors border border-white/5">
               <X size={20} />
             </button>
           </div>
@@ -1041,7 +1085,12 @@ function ContenidoContent() {
                 <div className="animate-in fade-in zoom-in-95 duration-500 text-left space-y-8">
                   <div className="p-8 bg-white/5 rounded-[2.5rem] border border-white/10 relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-6 opacity-5"><Mic size={80} className="text-[#48c1d2]" /></div>
-                    <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-4 block">Guion de Referencia</span>
+                    <div className="flex justify-between items-start mb-4 relative z-20">
+                      <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] block mt-2">Guion de Referencia</span>
+                      <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript.fullDialogue); }} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isSpeaking ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500 hover:text-white' : 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 hover:bg-[#48c1d2] hover:text-[#0a192f]'}`} title={isSpeaking ? "Detener pronunciación" : "Escuchar pronunciación"}>
+                        {isSpeaking ? <Square fill="currentColor" size={12} /> : <Volume2 size={18} />}
+                      </button>
+                    </div>
                     <p className="text-xl font-medium text-white/90 leading-relaxed italic relative z-10">
                       "{selectedScript.fullDialogue}"
                     </p>
@@ -1103,7 +1152,12 @@ function ContenidoContent() {
                             <div className="p-6 space-y-6">
                               {selectedScript.scenes[currentStepIdx].talent.whatToSay && (
                                 <div className="space-y-2">
-                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block italic">Qué decir:</span>
+                                  <div className="flex justify-between items-start mb-2 relative z-20">
+                                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block italic mt-1">Qué decir:</span>
+                                    <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript.scenes[currentStepIdx].talent.whatToSay); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isSpeaking ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500 hover:text-white' : 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 hover:bg-[#48c1d2] hover:text-[#0a192f]'}`} title={isSpeaking ? "Detener pronunciación" : "Escuchar pronunciación"}>
+                                      {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
+                                    </button>
+                                  </div>
                                   <p className="text-xl font-black text-white leading-tight italic">
                                     {selectedScript.scenes[currentStepIdx].talent.whatToSay}
                                   </p>
@@ -1203,6 +1257,9 @@ function ContenidoContent() {
                         <div className="flex items-center gap-3">
                           <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[3px]">ACTO {i + 1}</span>
                           <div className="flex-1 h-[1px] bg-white/10" />
+                          <button onClick={(e) => { e.stopPropagation(); handleSpeak(s.script); }} className="w-8 h-8 rounded-full bg-white/5 text-white/40 flex items-center justify-center hover:bg-[#48c1d2]/20 hover:text-[#48c1d2] transition-all border border-white/10">
+                            {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
+                          </button>
                         </div>
                         <p className="text-lg font-medium text-white/90 leading-relaxed italic">"{s.script}"</p>
                         <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
@@ -1238,8 +1295,13 @@ function ContenidoContent() {
                   </div>
                   <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 text-left flex-1">
                     <div className="bg-[#48c1d2] p-8 rounded-[40px] relative shadow-2xl shadow-[#48c1d2]/20">
-                      <div className="absolute top-0 right-0 p-4 opacity-5"><Sparkles size={60} className="text-[#0a192f]" /></div>
-                      <h4 className="text-[9px] font-black text-[#0a192f] uppercase tracking-[0.2em] mb-4 flex items-center gap-2"><Mic size={14} /> Tu guion para leer:</h4>
+                      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><Sparkles size={60} className="text-[#0a192f]" /></div>
+                      <h4 className="text-[9px] font-black text-[#0a192f] uppercase tracking-[0.2em] mb-4 flex items-center justify-between w-full">
+                        <div className="flex items-center gap-2"><Mic size={14} /> Tu guion para leer:</div>
+                        <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript.steps[currentStepIdx].script); }} className="w-8 h-8 rounded-full bg-[#0a192f]/10 text-[#0a192f] flex items-center justify-center hover:bg-[#0a192f]/20 transition-all border border-[#0a192f]/10" title="Escuchar pronunciación">
+                          {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
+                        </button>
+                      </h4>
                       <p className="text-2xl font-black text-[#0a192f] leading-[1.1] tracking-tight italic">"{selectedScript.steps[currentStepIdx].script}"</p>
                       <div className="mt-8 flex flex-col items-center">
                         {isRecordingVoiceover ? (
@@ -1583,7 +1645,8 @@ function ContenidoContent() {
                 </h3>
                 
                 {/* Tarjeta de Instrucciones Dinámica */}
-                <div className="bg-white/60 backdrop-blur-md p-4 rounded-2xl border border-[#142d53]/5 mb-6 flex items-start gap-3 shadow-sm">
+                {guionTab !== 'historias' && (
+                  <div className="bg-white/60 backdrop-blur-md p-4 rounded-2xl border border-[#142d53]/5 mb-6 flex items-start gap-3 shadow-sm">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     guionTab === 'reels' ? 'bg-[#142d53] text-[#48c1d2]' : 
                     guionTab === 'historias' ? 'bg-amber-100 text-amber-600' : 
@@ -1602,7 +1665,8 @@ function ContenidoContent() {
                       : 'Sigue el desglose por escenas para grabarte a ti mismo o dirigir a alguien más. Incluye ángulos, movimientos y guiones exactos.'
                     )}
                   </p>
-                </div>
+                  </div>
+                )}
 
                 {guionTab === 'presentacion' && (
                   <div className="flex bg-white/50 p-1.5 rounded-2xl border border-slate-200/50 mb-8 max-w-md">
@@ -1676,7 +1740,7 @@ function ContenidoContent() {
                         <>
                           <div className="p-6 bg-amber-50 rounded-[2.5rem] border border-amber-100 mb-2 text-left">
                             <h5 className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 flex items-center gap-2">
-                              <ShieldCheck size={12} /> Estrategia de Marca (Pinned)
+                              <ShieldCheck size={12} /> Estrategia de Marca (Video Fijado)
                             </h5>
                             <p className="text-[11px] font-bold text-amber-900/70 leading-relaxed italic">
                               "Estos 3 videos son los pilares de tu perfil. Al fijarlos (Pin), aseguras que cualquier persona nueva entienda de inmediato quién eres y cómo contratarte."
@@ -1773,7 +1837,48 @@ function ContenidoContent() {
                       )}
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
+                      {/* GUÍA ESTRATÉGICA UNIFICADA */}
+                      <div className="bg-gradient-to-br from-[#142d53] to-[#1e3a8a] rounded-[2.5rem] p-8 mb-6 border border-white/10 shadow-2xl relative overflow-hidden group">
+                        {/* Fondo decorativo */}
+                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-700">
+                          <Sparkles size={120} className="text-[#48c1d2]" />
+                        </div>
+                        
+                        <div className="relative z-10 space-y-6">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
+                              <Sparkles size={24} />
+                            </div>
+                            <div>
+                              <h5 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-0.5">Asistente de Contenido Epotech</h5>
+                              <h4 className="text-xl font-black text-white italic tracking-tighter">Guía Estratégica para Historias</h4>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 text-left">
+                            <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-5 rounded-3xl">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-widest block">💡 Autenticidad</span>
+                              </div>
+                              <p className="text-[11px] font-bold text-slate-200 leading-relaxed italic">
+                                "Cualquier detalle de tu día sirve para conectar. Si estás muy ocupado para subir historias, mándanos fotos o vídeos crudos y nosotros los editamos por ti."
+                              </p>
+                            </div>
+                            
+                            <div className="bg-[#48c1d2]/10 border border-[#48c1d2]/30 p-5 rounded-3xl">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-widest block">🤖 Doblaje con IA</span>
+                              </div>
+                              <p className="text-[11px] font-bold text-white leading-relaxed italic">
+                                "Sebastián, habla tranquilamente en <span className="text-[#48c1d2] font-black underline decoration-2 underline-offset-2">español</span>. Nuestra Inteligencia Artificial traducirá tu voz al <span className="text-[#48c1d2] font-black underline decoration-2 underline-offset-2">inglés</span> manteniendo, en lo posible, tu esencia."
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {historiasSituacionales.map((story) => (
                         <div
                           key={story.id}
@@ -1796,7 +1901,8 @@ function ContenidoContent() {
                         </div>
                       ))}
                     </div>
-                  )}
+                  </div>
+                )}
                 </div>
               </div>
             </div>
