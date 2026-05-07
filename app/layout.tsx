@@ -11,6 +11,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "Epotech Hub",
   },
   formatDetection: {
@@ -32,6 +33,7 @@ export const metadata: Metadata = {
 };
 
 import { NotificationListener } from "@/components/features/NotificationListener";
+import { ThemeColorHandler } from "@/components/layout/ThemeColorHandler";
 
 export default function RootLayout({
   children,
@@ -44,6 +46,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className={inter.className}>
+        <ThemeColorHandler />
         <NotificationListener />
         <AppShell>{children}</AppShell>
       </body>

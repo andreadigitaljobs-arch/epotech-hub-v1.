@@ -74,17 +74,10 @@ export default function ReferenciasPage() {
   const ventasVideos = filteredVideos.filter((v: any) => v.categoria === 'VENTAS');
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-6 pb-32 text-left space-y-6">
+    <div className="max-w-5xl mx-auto pb-32 text-left space-y-6">
       
-      {/* Texto Tutorial Contextual Premium */}
-      <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-          <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
-        </p>
-      </div>
-
       {/* 1. HERO COMPACTO */}
-      <header className="relative p-6 md:p-12 rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border border-white/10 group">
+      <header className="relative p-6 md:p-12 md:rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border-b border-white/10 md:border group pt-[calc(1.5rem+env(safe-area-inset-top))]">
          <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-15 transition-opacity duration-1000 rotate-12">
             <PlaySquare size={180} />
          </div>
@@ -98,6 +91,15 @@ export default function ReferenciasPage() {
             </p>
          </div>
       </header>
+
+      {/* Texto Tutorial Contextual Premium */}
+      <div className="px-6">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+            <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
+          </p>
+        </div>
+      </div>
 
 
       {/* 2. NAVEGACIÓN Y FILTROS */}

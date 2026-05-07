@@ -313,7 +313,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
       {/* Header Premium */}
-      <div className="bg-[#142d53] pt-6 pb-20 px-6 md:px-12 relative overflow-hidden">
+      <div className="bg-[#142d53] pt-[calc(1.5rem+env(safe-area-inset-top))] pb-20 px-6 md:px-12 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 blur-[100px] rounded-full -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 blur-[80px] rounded-full -ml-32 -mb-32"></div>
         
