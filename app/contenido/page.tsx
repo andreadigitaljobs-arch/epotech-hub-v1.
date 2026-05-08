@@ -351,23 +351,9 @@ function ContenidoContent() {
   
   // NUEVOS ESTADOS: Búsqueda y Organización
   const [scriptSearchQuery, setScriptSearchQuery] = useState("");
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [favorites, setFavorites] = useState<string[]>([]);
 
-  // Cargar favoritos al inicio
-  useEffect(() => {
-    const savedFavs = localStorage.getItem('epotech_script_favorites');
-    if (savedFavs) setFavorites(JSON.parse(savedFavs));
-  }, []);
-
-  const toggleFavorite = (e: React.MouseEvent, scriptId: string) => {
-    e.stopPropagation();
-    const newFavs = favorites.includes(scriptId) 
-      ? favorites.filter(id => id !== scriptId) 
-      : [...favorites, scriptId];
-    setFavorites(newFavs);
-    localStorage.setItem('epotech_script_favorites', JSON.stringify(newFavs));
-    showToast(favorites.includes(scriptId) ? "Eliminado de favoritos" : "Añadido a favoritos", "info");
+  const normalizeText = (text: string) => {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   };
 
   // Función para agrupar guiones por semana
@@ -1768,7 +1754,6 @@ function ContenidoContent() {
                           </div>
                         </div>
                       </div>
-                      {/* Barra de Búsqueda y Filtros */}
                       <div className="mb-6 space-y-4">
                         <div className="relative group">
                           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-[#48c1d2]">
@@ -1776,30 +1761,22 @@ function ContenidoContent() {
                           </div>
                           <input
                             type="text"
-                            placeholder="Buscar por título, servicio o categoría..."
+                            placeholder="Buscar guion..."
                             value={scriptSearchQuery}
                             onChange={(e) => setScriptSearchQuery(e.target.value)}
                             className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-[#48c1d2] focus:ring-4 focus:ring-[#48c1d2]/5 transition-all shadow-sm"
                           />
-                        </div>
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all border ${showFavoritesOnly ? 'bg-rose-500 text-white border-rose-500' : 'bg-white text-slate-400 border-slate-200'}`}
-                          >
-                            <Heart size={12} fill={showFavoritesOnly ? "currentColor" : "none"} /> Favoritos
-                          </button>
                         </div>
                       </div>
 
                       {/* Listado Agrupado */}
                       {Object.entries(groupScriptsByWeek(
                         guiones.filter(s => {
-                          const matchesSearch = s.title.toLowerCase().includes(scriptSearchQuery.toLowerCase()) || 
-                                              s.service.toLowerCase().includes(scriptSearchQuery.toLowerCase()) ||
-                                              s.category.toLowerCase().includes(scriptSearchQuery.toLowerCase());
-                          const matchesFav = showFavoritesOnly ? favorites.includes(s.id) : true;
-                          return matchesSearch && matchesFav;
+                          if (!scriptSearchQuery) return true;
+                          const query = normalizeText(scriptSearchQuery);
+                          return normalizeText(s.title).includes(query) || 
+                                 normalizeText(s.service).includes(query) ||
+                                 normalizeText(s.category).includes(query);
                         })
                       )).map(([week, weekScripts]) => (
                         <div key={week} className="space-y-4 mb-8">
@@ -1830,12 +1807,6 @@ function ContenidoContent() {
                                   )}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  <button 
-                                    onClick={(e) => toggleFavorite(e, script.id)}
-                                    className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${favorites.includes(script.id) ? 'text-rose-500 bg-rose-50' : 'text-slate-200 hover:text-rose-500'}`}
-                                  >
-                                    <Heart size={16} fill={favorites.includes(script.id) ? "currentColor" : "none"} />
-                                  </button>
                                   <ChevronRight size={16} className="text-slate-200 group-hover:text-[#48c1d2] transition-all" />
                                 </div>
                               </div>
@@ -1877,11 +1848,11 @@ function ContenidoContent() {
                           {Object.entries(groupScriptsByWeek(
                             guionesPresentacion.filter(s => {
                               if (!s.isPinned) return false;
-                              const matchesSearch = s.title.toLowerCase().includes(scriptSearchQuery.toLowerCase()) || 
-                                                  s.service.toLowerCase().includes(scriptSearchQuery.toLowerCase()) ||
-                                                  s.category.toLowerCase().includes(scriptSearchQuery.toLowerCase());
-                              const matchesFav = showFavoritesOnly ? favorites.includes(s.id) : true;
-                              return matchesSearch && matchesFav;
+                              if (!scriptSearchQuery) return true;
+                              const query = normalizeText(scriptSearchQuery);
+                              return normalizeText(s.title).includes(query) || 
+                                     normalizeText(s.service).includes(query) ||
+                                     normalizeText(s.category).includes(query);
                             })
                           )).map(([week, weekScripts]) => (
                             <div key={week} className="space-y-4 mb-8">
@@ -1909,12 +1880,6 @@ function ContenidoContent() {
                                       <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                      <button 
-                                        onClick={(e) => toggleFavorite(e, script.id)}
-                                        className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${favorites.includes(script.id) ? 'text-rose-500 bg-rose-50' : 'text-slate-200 hover:text-rose-500'}`}
-                                      >
-                                        <Heart size={16} fill={favorites.includes(script.id) ? "currentColor" : "none"} />
-                                      </button>
                                       <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
                                     </div>
                                   </div>
