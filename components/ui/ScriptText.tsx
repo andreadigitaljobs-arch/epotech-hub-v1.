@@ -49,7 +49,6 @@ const PRONUNCIATIONS: Record<string, string> = {
   "transform": "transfórm",
   "money": "móni",
   "profile": "prófáil",
-  "reviews": "reviús",
   "worked": "uórkt",
   "different": "díferent",
   "message": "mésads",
