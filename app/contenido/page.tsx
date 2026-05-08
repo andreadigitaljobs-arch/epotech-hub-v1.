@@ -3000,10 +3000,13 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                   <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
                     <Mic size={14} className="text-[#48c1d2]" />
                   </div>
-                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Tu Reporte Pro</h3>
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Notas de tu trabajo</h3>
                 </div>
                 <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{audioReports.length} nota{audioReports.length !== 1 ? 's' : ''}</span>
               </div>
+              <p className="text-[10px] font-bold text-slate-500 leading-relaxed px-1">
+                En esta sección vas a poder encontrar el historial de todas las notas en donde tú nos has enviado las respuestas a las 6 preguntas después de finalizar un trabajo.
+              </p>
 
               {audioReports.length === 0 ? (
                 <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
@@ -3045,10 +3048,13 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                   <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
                     <BookOpen size={14} className="text-[#48c1d2]" />
                   </div>
-                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Locuciones de Guiones</h3>
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Guiones Hablados</h3>
                 </div>
                 <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{locuciones.length} locución{locuciones.length !== 1 ? 'es' : ''}</span>
               </div>
+              <p className="text-[10px] font-bold text-slate-500 leading-relaxed px-1">
+                En esta sección vas a poder encontrar todos los audios que has enviado al equipo sobre los guiones que te hemos dejado.
+              </p>
 
               {locuciones.length === 0 ? (
                 <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
