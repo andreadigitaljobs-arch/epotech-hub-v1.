@@ -12,7 +12,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-transparent md:bg-[var(--bg)] md:flex-row">
+    <div className="flex min-h-[100dvh] flex-col bg-[var(--bg)] md:flex-row">
       <NavigationProgress />
       <DesktopNav />
       

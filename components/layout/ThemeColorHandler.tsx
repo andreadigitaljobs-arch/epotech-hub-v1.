@@ -14,7 +14,8 @@ export function ThemeColorProvider({ children }: { children: ReactNode }) {
   const [color, setColor] = useState("#142d53");
 
   useEffect(() => {
-    // Actualizamos el meta tag theme-color inmediatamente para evitar lag
+    // Solo actualizamos el meta theme-color (controla la barra de estado en iOS)
+    // NO tocamos body.style.backgroundColor para no filtrar color al contenido
     let metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (!metaThemeColor) {
       metaThemeColor = document.createElement('meta');
@@ -22,9 +23,6 @@ export function ThemeColorProvider({ children }: { children: ReactNode }) {
       document.head.appendChild(metaThemeColor);
     }
     metaThemeColor.setAttribute('content', color);
-
-    // Actualizamos el color de fondo del body (para inmersión en Safari móvil)
-    document.body.style.backgroundColor = color;
   }, [color]);
 
   return (
