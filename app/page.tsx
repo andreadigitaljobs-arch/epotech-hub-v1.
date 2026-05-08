@@ -14,10 +14,24 @@ import {
   AlertCircle
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
-import { academy as staticAcademy } from "@/data/academy";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 import { Toast } from "@/components/ui/Toast";
+
+// Fallback data if Supabase is empty
+const DEFAULT_ACADEMY_DATA = {
+  recursos: [
+    { titulo: "Guía de Inicio", descripcion: "Primeros pasos en el Hub", url: "#" },
+    { titulo: "Manual de Marca", descripcion: "Identidad visual Epotech", url: "/brief" },
+    { titulo: "Protocolos", descripcion: "Cómo grabar en campo", url: "/manual" }
+  ],
+  checklist: [
+    "Configura tu perfil de Instagram",
+    "Sube tu primer video de prueba",
+    "Verifica la iluminación de tu equipo",
+    "Crea tu cuenta de Google Business"
+  ]
+};
 
 export default function AcademyPage() {
   useThemeColor("#142d53");
@@ -27,26 +41,23 @@ export default function AcademyPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const { data: aData } = await supabase
-        .from("config_academia")
-        .select("*")
-        .maybeSingle();
-      
-      if (aData) {
-        setData(aData);
-      } else {
-        setData({
-          recursos: staticAcademy.recursos,
-          videos: staticAcademy.videos,
-          checklist: [
-            "Configura tu perfil de Instagram",
-            "Sube tu primer video de prueba",
-            "Verifica la iluminación de tu equipo",
-            "Crea tu cuenta de Google Business"
-          ]
-        });
+      try {
+        const { data: aData } = await supabase
+          .from("config_academia")
+          .select("*")
+          .maybeSingle();
+        
+        if (aData) {
+          setData(aData);
+        } else {
+          setData(DEFAULT_ACADEMY_DATA);
+        }
+      } catch (error) {
+        console.error("Error loading academy:", error);
+        setData(DEFAULT_ACADEMY_DATA);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     fetchData();
   }, []);
@@ -115,7 +126,7 @@ export default function AcademyPage() {
             </div>
             
             <div className="grid grid-cols-1 gap-4">
-              {(data.recursos || []).map((r: any, idx: number) => (
+              {(data?.recursos || []).map((r: any, idx: number) => (
                 <a 
                   key={idx}
                   href={r.url}
@@ -145,7 +156,7 @@ export default function AcademyPage() {
 
             <Card className="p-8 rounded-[3rem] shadow-xl border-white bg-white/50 backdrop-blur-sm">
               <div className="space-y-4">
-                {(data.checklist || []).map((item: string, idx: number) => (
+                {(data?.checklist || []).map((item: string, idx: number) => (
                   <div key={idx} className="flex items-start gap-4 p-4 bg-white/80 rounded-2xl border border-slate-100 shadow-sm">
                     <div className="mt-0.5 w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center shrink-0">
                       <div className="w-2 h-2 rounded-full bg-slate-200"></div>
