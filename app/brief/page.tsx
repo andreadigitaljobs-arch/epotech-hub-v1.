@@ -18,8 +18,10 @@ import {
   Sparkles,
   MapPin
 } from "lucide-react";
+import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
 export default function BrandBriefPage() {
+  useThemeColor("#0a192f");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 

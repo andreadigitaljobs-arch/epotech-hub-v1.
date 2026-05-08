@@ -19,6 +19,7 @@ import {
   Smartphone
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
 const phaseIcons: Record<string, any> = {
   antes: Camera,
@@ -42,6 +43,7 @@ const phaseMessages: Record<string, string> = {
 };
 
 export default function ManualPage() {
+  useThemeColor("#142d53");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activePhase, setActivePhase] = useState("antes");

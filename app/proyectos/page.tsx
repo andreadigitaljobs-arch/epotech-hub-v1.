@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 import { supabase } from "@/lib/supabase";
 import { client } from "@/data/sebastian";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
@@ -164,6 +165,7 @@ interface Notificacion {
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function ProyectosPage() {
+  useThemeColor("#F0F4F8");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);

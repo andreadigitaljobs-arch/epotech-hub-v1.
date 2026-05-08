@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 import { NotificationListener } from "@/components/features/NotificationListener";
-import { ThemeColorHandler } from "@/components/layout/ThemeColorHandler";
+import { ThemeColorProvider } from "@/components/layout/ThemeColorHandler";
 
 export default function RootLayout({
   children,
@@ -46,9 +46,10 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className={inter.className}>
-        <ThemeColorHandler />
-        <NotificationListener />
-        <AppShell>{children}</AppShell>
+        <ThemeColorProvider>
+          <NotificationListener />
+          <AppShell>{children}</AppShell>
+        </ThemeColorProvider>
       </body>
     </html>
   );

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 import { Toast, ToastType } from "@/components/ui/Toast";
 
 const TUTORIAL_CARDS = [
@@ -55,6 +56,7 @@ const TUTORIAL_CARDS = [
 ];
 
 export default function Home() {
+  useThemeColor("#142d53");
   const router = useRouter();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);

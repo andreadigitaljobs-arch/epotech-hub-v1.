@@ -22,8 +22,10 @@ const TiktokIcon = ({ size = 24, className }: { size?: number, className?: strin
 );
 
 import { referencias as staticRefs } from "@/data/referencias";
+import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
 export default function ReferenciasPage() {
+  useThemeColor("#0a192f");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>({ videos: [], cuentas: [] });
   const [activeSubTab, setActiveSubTab] = useState<'videos' | 'cuentas'>('videos');

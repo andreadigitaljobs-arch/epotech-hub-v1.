@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 import { supabase } from "@/lib/supabase";
 import Tesseract from 'tesseract.js';
 import { motion, AnimatePresence } from "framer-motion";
@@ -326,6 +327,7 @@ const getYoutubeId = (url: string) => {
 };
 
 export default function ContenidoPage() {
+  useThemeColor("#F0F4F8");
   return (
     <Suspense fallback={<LoadingSpinner message="Conectando con el Estudio..." />}>
       <ContenidoContent />
