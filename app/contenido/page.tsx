@@ -1510,18 +1510,17 @@ function ContenidoContent() {
                       >
                         ¡LISTO, A TRABAJAR!
                       </button>
+                      </button>
                     </div>
                   </div>
                 </div>
-              , document.body)}
+              ), document.body)}
             </>
           )}
         </div>
       </div>
     </div>
   ), document.body) : null;
-
-  useThemeColor("#ffffff");
 
   return (
     <div className="min-h-screen bg-white pb-24">
