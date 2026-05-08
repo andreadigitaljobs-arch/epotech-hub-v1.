@@ -1907,7 +1907,8 @@ function ContenidoContent() {
                                 </div>
                               ))}
                           </div>
-                        ) : enCamaraSubTab === 'pro' ? (
+                        </>
+                      ) : enCamaraSubTab === 'pro' ? (
                           <>
                             {/* Barra de Búsqueda para Contenido Pro */}
                             <div className="mb-6 space-y-4">
