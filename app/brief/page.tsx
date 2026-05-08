@@ -74,12 +74,12 @@ export default function BrandBriefPage() {
 
       <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20">
         {loading ? (
-          <div className="py-20 flex flex-col items-center justify-center space-y-4 bg-white rounded-[3rem] shadow-xl">
+          <div className="py-32 flex flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />
             <p className="text-[10px] font-black uppercase tracking-widest text-[#142d53]/40 animate-pulse">Sincronizando Estrategia...</p>
           </div>
         ) : (
-          <div className="space-y-8 animate-in fade-in duration-700">
+          <div className="space-y-8 animate-in fade-in duration-1000">
             {/* PROPUESTA Y DIFERENCIADOR */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className={CARD_STYLE}>
@@ -155,7 +155,7 @@ export default function BrandBriefPage() {
               </div>
             </div>
 
-            {/* PILARES VIRALES (RESTORED) */}
+            {/* PILARES VIRALES */}
             <div className="bg-[#0a192f] p-10 md:p-16 rounded-[3rem] border border-white/10 shadow-2xl relative overflow-hidden">
                <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-12">Pilares de Estrategia Viral</h3>
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -168,7 +168,7 @@ export default function BrandBriefPage() {
                </div>
             </div>
 
-            {/* CIERRE (RESTORED) */}
+            {/* CIERRE */}
             <footer className="bg-[#0a192f] p-12 md:p-20 rounded-[3rem] text-center border border-white/10 shadow-2xl relative overflow-hidden">
                <div className="relative z-10 space-y-6">
                   <div className="bg-white p-4 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-2xl"><ShieldCheck size={28} className="text-[#0a192f]" /></div>

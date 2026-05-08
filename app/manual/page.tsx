@@ -125,13 +125,13 @@ export default function ManualPage() {
 
       <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20">
         {loading ? (
-          <div className="py-20 flex flex-col items-center justify-center space-y-4 bg-white rounded-[3rem] shadow-xl">
+          <div className="py-32 flex flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />
             <p className="text-[10px] font-black uppercase tracking-widest text-[#142d53]/40 animate-pulse">Sincronizando Protocolos...</p>
           </div>
         ) : (
-          <div className="space-y-8 animate-in fade-in duration-700">
-            {/* Rutina Diaria (RESTORED) */}
+          <div className="space-y-8 animate-in fade-in duration-1000">
+            {/* Rutina Diaria */}
             <div className="bg-[#48c1d2] p-8 rounded-[3rem] text-[#142d53] shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 p-8 opacity-10"><Trophy size={120} /></div>
               <div className="relative z-10">
@@ -199,7 +199,7 @@ export default function ManualPage() {
                         </div>
                       </div>
                       
-                      <div className={`mb-8 p-6 rounded-[2rem] border transition-all ${activePhase === 'humano' ? 'bg-purple-50 border-purple-100' : 'bg-blue-50/50 border-blue-100/50'}`}>
+                      <div className={`mb-8 p-6 rounded-[2rem] border transition-all ${activePhase === 'humano' ? 'bg-purple-50 border-purple-200' : 'bg-blue-50/50 border-blue-100/50'}`}>
                         <p className={`text-[11px] font-bold uppercase tracking-tight leading-relaxed ${activePhase === 'humano' ? 'text-purple-700' : 'text-[#142d53]'}`}>
                           <span className={`inline-block text-white px-2 py-1 rounded-md mr-3 mb-1 ${activePhase === 'humano' ? 'bg-purple-600' : 'bg-[#142d53]'}`}>ESTRATEGIA 2026:</span>
                           {phaseMessages[activePhase]}

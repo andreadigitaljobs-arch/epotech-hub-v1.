@@ -62,12 +62,12 @@ export default function ReferenciasPage() {
 
       <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20">
         {loading ? (
-          <div className="py-20 flex flex-col items-center justify-center space-y-4 bg-white rounded-[3rem] shadow-xl">
+          <div className="py-32 flex flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />
             <p className="text-[10px] font-black uppercase tracking-widest text-[#142d53]/40 animate-pulse">Cargando Inspiración...</p>
           </div>
         ) : (
-          <div className="space-y-10 animate-in fade-in duration-700">
+          <div className="space-y-10 animate-in fade-in duration-1000">
             <div className="space-y-6">
               <div className="flex bg-[#0a192f] p-2 rounded-[2rem] shadow-2xl border border-white/10 max-w-md mx-auto">
                 <button onClick={() => setActiveSubTab('videos')} className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-slate-500'}`}>
