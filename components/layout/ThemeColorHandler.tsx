@@ -23,9 +23,8 @@ export function ThemeColorProvider({ children }: { children: ReactNode }) {
       }
       metaThemeColor.setAttribute('content', color);
 
-      // Actualizamos el color de fondo del body y la variable CSS global
+      // Actualizamos el color de fondo del body (para inmersión en Safari móvil)
       document.body.style.backgroundColor = color;
-      document.documentElement.style.setProperty('--bg', color);
     }, 50);
 
     return () => clearTimeout(timer);
