@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-const ThemeColorContext = createContext<{
+export const ThemeColorContext = createContext<{
   color: string;
   setColor: (color: string) => void;
 }>({
