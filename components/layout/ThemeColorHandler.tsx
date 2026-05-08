@@ -14,22 +14,17 @@ export function ThemeColorProvider({ children }: { children: ReactNode }) {
   const [color, setColor] = useState("#142d53");
 
   useEffect(() => {
-    // Un delay muy pequeño para asegurar que el componente ya empezó a renderizar
-    const timer = setTimeout(() => {
-      // Actualizamos el meta tag theme-color
-      let metaThemeColor = document.querySelector('meta[name="theme-color"]');
-      if (!metaThemeColor) {
-        metaThemeColor = document.createElement('meta');
-        metaThemeColor.setAttribute('name', 'theme-color');
-        document.head.appendChild(metaThemeColor);
-      }
-      metaThemeColor.setAttribute('content', color);
+    // Actualizamos el meta tag theme-color inmediatamente para evitar lag
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.setAttribute('name', 'theme-color');
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.setAttribute('content', color);
 
-      // Actualizamos el color de fondo del body (para inmersión en Safari móvil)
-      document.body.style.backgroundColor = color;
-    }, 50);
-
-    return () => clearTimeout(timer);
+    // Actualizamos el color de fondo del body (para inmersión en Safari móvil)
+    document.body.style.backgroundColor = color;
   }, [color]);
 
   return (
