@@ -1,463 +1,170 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-
+import { supabase } from "@/lib/supabase";
 import { 
-  BookOpen, Video, Briefcase, PlaySquare, Target, 
-  Sparkles, HelpCircle, ArrowRight, Play, Mic, 
-  Search, Smartphone, Zap, Bell, ShieldCheck
+  Play, 
+  Video, 
+  BookOpen, 
+  ChevronRight, 
+  ExternalLink,
+  Smartphone,
+  Star,
+  CheckCircle2,
+  AlertCircle
 } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/Card";
+import { academy as staticAcademy } from "@/data/academy";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
-import { Toast, ToastType } from "@/components/ui/Toast";
+import { Toast } from "@/components/ui/Toast";
 
-const TUTORIAL_CARDS = [
-  {
-    title: "¿Cómo grabar como un pro?",
-    description: "Aprende a capturar los mejores ángulos de tus trabajos para Reels de alto impacto.",
-    icon: Video,
-    path: "/manual",
-    color: "blue",
-    tag: "Producción"
-  },
-  {
-    title: "Entendiendo mis Proyectos",
-    description: "Sigue nuestro avance diario y mira cómo vamos profesionalizando Epotech.",
-    icon: Briefcase,
-    path: "/proyectos",
-    color: "purple",
-    tag: "Operaciones"
-  },
-  {
-    title: "El Poder de tus Guiones",
-    description: "Usa tus notas de voz para que nosotros creemos guiones ganadores para ti.",
-    icon: Sparkles,
-    path: "/contenido?tab=guiones",
-    color: "amber",
-    tag: "Contenido"
-  },
-  {
-    title: "Motor de Inspiración",
-    description: "Mira los videos y tendencias que usamos como referencia para tus Reels.",
-    icon: PlaySquare,
-    path: "/referencias",
-    color: "cyan",
-    tag: "Creatividad"
-  },
-  {
-    title: "Tu Marca y Estrategia",
-    description: "Conoce a tu cliente ideal y la misión que estamos construyendo juntos.",
-    icon: Target,
-    path: "/brief",
-    color: "emerald",
-    tag: "Estrategia"
-  }
-];
-
-export default function Home() {
+export default function AcademyPage() {
   useThemeColor("#142d53");
-  const router = useRouter();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
-  const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
-    message: "",
-    type: "success",
-    isVisible: false
-  });
-
-  const showToast = (message: string, type: ToastType = "success") => {
-    setToast({ message, type, isVisible: true });
-  };
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState({ isVisible: false, message: "", type: "success" as "success" | "error" | "info" });
 
   useEffect(() => {
-    const prepareNotifications = async () => {
-      if (!("Notification" in window)) {
-        setNotificationStatus("unsupported");
-        return;
+    async function fetchData() {
+      const { data: aData } = await supabase
+        .from("config_academia")
+        .select("*")
+        .maybeSingle();
+      
+      if (aData) {
+        setData(aData);
+      } else {
+        setData({
+          recursos: staticAcademy.recursos,
+          videos: staticAcademy.videos,
+          checklist: [
+            "Configura tu perfil de Instagram",
+            "Sube tu primer video de prueba",
+            "Verifica la iluminación de tu equipo",
+            "Crea tu cuenta de Google Business"
+          ]
+        });
       }
-
-      setNotificationStatus(Notification.permission);
-
-      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-        return;
-      }
-
-      try {
-        const registration = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
-        const readyRegistration = registration.active ? registration : await navigator.serviceWorker.ready;
-        const subscription = await readyRegistration.pushManager.getSubscription();
-        setIsSubscribed(Boolean(subscription));
-      } catch (error) {
-        console.error("No se pudo preparar push:", error);
-      }
-    };
-
-    prepareNotifications();
+      setLoading(false);
+    }
+    fetchData();
   }, []);
 
-  const urlBase64ToUint8Array = (base64String: string) => {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  };
+  if (loading) return <LoadingSpinner message="Preparando tu formación..." />;
 
-  const savePushSubscription = async (subscription: PushSubscription) => {
-    const response = await fetch("/api/subscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...subscription.toJSON(),
-        user_id: "sebastian"
-      })
-    });
-
-    const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.error || "No se pudo guardar la suscripcion push.");
-    }
-
-    return result;
-  };
-
-  const getPushRegistration = async () => {
-    const registration = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
-
-    if (registration.active) {
-      return registration;
-    }
-
-    const worker = registration.installing || registration.waiting;
-    if (worker) {
-      await new Promise<void>((resolve, reject) => {
-        const timeout = window.setTimeout(() => {
-          reject(new Error("El motor de notificaciones no termino de activarse. Cierra y abre la app desde el icono de inicio e intenta otra vez."));
-        }, 15000);
-
-        worker.addEventListener("statechange", () => {
-          if (worker.state === "activated") {
-            window.clearTimeout(timeout);
-            resolve();
-          }
-        });
-      });
-    }
-
-    return navigator.serviceWorker.ready;
-  };
-
-  const getReadyServiceWorker = getPushRegistration;
-
-  const executePermissionRequest = async () => {
-    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
-      showToast("Este navegador no soporta notificaciones web en esta instalacion.", "error");
-      return;
-    }
-
-    if (Notification.permission === "denied") {
-      showToast("Permiso denegado. Activalo en los ajustes del navegador.", "error");
-      return;
-    }
-
-    if (Notification.permission === "granted" && isSubscribed) {
-      showToast("Resincronizando este dispositivo...", "info");
-    }
-
-    try {
-      showToast("Preparando notificaciones...", "info");
-      const registration = await getPushRegistration();
-      const permission = await Notification.requestPermission();
-      setNotificationStatus(permission);
-
-      if (permission !== "granted") {
-        showToast("No se otorgo el permiso necesario.", "error");
-        return;
-      }
-
-      const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-      if (!vapidPublicKey) {
-        throw new Error("Falta configurar NEXT_PUBLIC_VAPID_PUBLIC_KEY.");
-      }
-
-      const existingSubscription = await registration.pushManager.getSubscription();
-      const subscription = existingSubscription || await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
-      });
-
-      const result = await savePushSubscription(subscription);
-      setIsSubscribed(true);
-      showToast(`Notificaciones activas (${result.endpointHost}).`, "success");
-    } catch (error: any) {
-      console.error("Error completo en suscripcion:", error);
-      showToast(error.message || "No se pudo activar notificaciones.", "error");
-    }
-
-    return;
-
-    if (!('Notification' in window)) {
-      showToast("Este navegador no soporta notificaciones.", "error");
-      return;
-    }
-
-    if (Notification.permission === 'denied') {
-      showToast("Permiso denegado. Actívalo en los ajustes de tu navegador.", "error");
-      return;
-    }
-
-    if (Notification.permission === 'granted' && isSubscribed) {
-      showToast("¡Ya estás conectado al 100%! Todo listo.", "success");
-      return;
-    }
-
-    try {
-      // iOS WebKit FIX:
-      // PASO 1: Esperar a que el SW esté activo ANTES de pedir el permiso.
-      // Si hacemos await entre requestPermission() y subscribe(), WebKit destruye el
-      // token de interacción del usuario y lanza InvalidStateError.
-      if ('serviceWorker' in navigator) {
-        console.log("1. Obteniendo o registrando SW...");
-        const registration = await getReadyServiceWorker();
-        showToast("Iniciando motor de notificaciones...", "info");
-        /*
-        let registration = await navigator.serviceWorker.getRegistration();
-        if (!registration) {
-          registration = await navigator.serviceWorker.register('/sw.js');
-        }
-
-        console.log("2. SW obtenido. ¿Activo?:", !!registration.active);
-
-        // Si el SW no está activo, esperamos a que se active (sin recargar)
-        if (!registration.active) {
-          console.log("3. Esperando activación del SW...");
-          showToast("Iniciando motor de notificaciones...", "info");
-          registration = await new Promise<ServiceWorkerRegistration>((resolve, reject) => {
-            const timeoutId = setTimeout(() => reject(new Error("Timeout esperando activación del Service Worker")), 8000);
-
-            const worker = registration!.installing || registration!.waiting;
-            if (worker) {
-              worker.addEventListener('statechange', (e: any) => {
-                if (e.target.state === 'activated') {
-                  clearTimeout(timeoutId);
-                  resolve(registration!);
-                }
-              });
-            } else {
-              navigator.serviceWorker.ready.then(reg => {
-                clearTimeout(timeoutId);
-                resolve(reg);
-              }).catch(reject);
-            }
-          });
-        }
-
-        */
-        console.log("4. SW activo y listo.");
-
-        // PASO 2: Pedir permiso
-        console.log("5. Solicitando permiso al usuario...");
-        const permission = await Notification.requestPermission();
-        console.log("6. Permiso:", permission);
-        setNotificationStatus(permission);
-
-        if (permission !== 'granted') {
-          showToast("No se otorgó el permiso necesario.", "error");
-          return;
-        }
-
-        // PASO 3: Suscribir INMEDIATAMENTE sin awaits intermedios
-        const VAPID_PUBLIC = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BH_P35zpHYXFD-I_YGrPwEKd6MJWxvwb1spwBZgNX01GWX5APZFTab9MwDkcZnTiCizPXTD7W99W08cE7BYXIWY";
-        console.log("7. Suscribiendo en PushManager...");
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC)
-        });
-        const result = await savePushSubscription(subscription);
-        console.log("9. Guardado exitoso:", result.endpointHost);
-        setIsSubscribed(true);
-        showToast(`Conexion lista (${result.endpointHost}). Ya recibiras avisos.`, "success");
-        return;
-        console.log("8. Suscripción generada:", !!subscription);
-
-        // PASO 4: Guardar en Supabase
-        /*
-        const { error } = await supabase.from('push_subscriptions').upsert({
-          endpoint: subscription.endpoint,
-          keys_p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')!) as any)),
-          keys_auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth')!) as any)),
-          user_id: "sebastian"
-        }, { onConflict: 'endpoint' });
-
-        if (!error) {
-          console.log("9. ¡Guardado exitoso!");
-          setIsSubscribed(true);
-          showToast("¡Notificaciones activadas! Ya recibirás avisos.", "success");
-        } else {
-          console.error("ERROR SUPABASE:", error);
-          showToast(`Error al guardar: ${error?.message || "desconocido"}`, "error");
-        }
-        */
-      }
-    } catch (error: any) {
-      console.error("Error completo en suscripción:", error);
-      showToast(`Fallo: ${error.name ? error.name + ': ' : ''}${error.message || "desconocido"}`, "error");
-    }
-  };
-
-  const tutorialVideoId = "dQw4w9WgXcQ"; // Placeholder, se puede cambiar luego
+  const tutorialVideoId = "dQw4w9WgXcQ";
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
-      {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
-      <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
-        <div className="max-w-5xl mx-auto px-6 py-4">
-          <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">
-              <span className="text-[#48c1d2]">Academia Epotech:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* HEADER INTEGRADO CON STATUS BAR */}
+      <div className="bg-[#142d53] pt-[env(safe-area-inset-top)] relative overflow-hidden">
+        {/* Glows Premium */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px] -ml-32 -mb-32"></div>
 
-      {/* Header Premium */}
-      <div className="bg-[#142d53] pt-6 pb-20 px-6 md:px-12 relative overflow-hidden">
-        {/* Glows eliminados para evitar cortes en la barra de estado de iPhone */}
-        
-        <div className="relative z-10 max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 relative z-10">
           <div className="flex justify-between items-start gap-4">
             <div>
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/20 flex items-center justify-center border border-[#48c1d2]/30">
                   <BookOpen size={20} className="text-[#48c1d2]" />
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Academia Epotech</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 overflow-visible">
-                Centro de Mando: <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#48c1d2] to-white italic" style={{ WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone', padding: '0 0.2em', margin: '0 -0.2em' }}>Tu Guía de Vuelo&nbsp;</span>
+              <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white mb-6 leading-none">
+                Domina Tu <br />
+                <span className="text-[#48c1d2]">Plataforma</span>
               </h1>
+              <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md max-w-xl">
+                <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest leading-tight">
+                  <span className="text-[#48c1d2]">Foco del Día:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20 space-y-10">
+        {/* 1. TUTORIAL PRINCIPAL */}
+        <div className="group bg-[#0a192f] p-8 md:p-12 rounded-[3rem] border border-white/10 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-1000">
+            <Video size={180} className="text-[#48c1d2]" />
+          </div>
+          <div className="relative z-10">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#48c1d2] mb-4">Video de Bienvenida</h3>
+            <h2 className="text-3xl font-black text-white mb-8 tracking-tight">Cómo usar tu Epotech Hub</h2>
+            
+            <a 
+              href={`https://youtube.com/watch?v=${tutorialVideoId}`}
+              target="_blank"
+              className="inline-flex items-center gap-3 bg-[#48c1d2] text-[#0a192f] px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl"
+            >
+              <Play size={16} fill="currentColor" /> Reproducir Tutorial
+            </a>
+          </div>
+        </div>
+
+        {/* 2. RECURSOS RÁPIDOS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Recursos Clave</h3>
+              <div className="h-px flex-1 bg-slate-200"></div>
             </div>
             
-            <button 
-              onClick={() => router.push('/master')}
-              className="md:hidden mt-1 p-4 bg-white/10 backdrop-blur-md text-[#48c1d2] rounded-[1.5rem] border border-white/10 shadow-xl active:scale-90 transition-all flex flex-col items-center gap-1 group"
-            >
-              <ShieldCheck size={20} className="group-hover:scale-110 transition-transform" />
-              <span className="text-[7px] font-black uppercase tracking-tighter opacity-60">Master</span>
-            </button>
-          </div>
-          <p className="text-slate-400 text-lg max-w-2xl font-medium leading-relaxed">
-            Hola Sebastian, aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. ¿Qué quieres lograr hoy?
-          </p>
-          
-          <div className="flex flex-col md:flex-row items-center gap-6 mt-10 mb-8">
-            <button 
-              onClick={executePermissionRequest}
-              className={`w-full md:w-auto px-8 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-3 border-b-4 ${
-                isSubscribed 
-                ? "bg-slate-800 text-[#48c1d2] border-slate-900 cursor-default" 
-                : "bg-[#48c1d2] hover:bg-[#35a5b5] text-[#142d53] border-[#2d8c9a] hover:scale-105 active:scale-95 shadow-[#48c1d2]/30"
-              }`}
-            >
-              {isSubscribed ? <ShieldCheck size={20} /> : <Bell size={20} fill="currentColor" />}
-              {isSubscribed ? "Notificaciones Activas" : "Activar Notificaciones"}
-            </button>
-            <div className="flex items-center gap-3">
-              <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${isSubscribed ? 'bg-green-500 shadow-green-500/50' : 'bg-amber-500 shadow-amber-500/50'}`}></div>
-              <span className="text-[10px] font-black uppercase text-white/40 tracking-[0.3em] italic">
-                {isSubscribed ? "Notificaciones activas" : "Sin notificaciones"}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-6 md:px-12 -mt-12 relative z-20">
-        {/* Quick Help Card */}
-        <div className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 mb-12 flex flex-col md:flex-row items-center gap-8 group">
-          <div 
-            onClick={() => setIsPlaying(true)}
-            className="w-full md:w-auto md:min-w-[300px] aspect-[9/16] max-h-[500px] bg-slate-900 rounded-[3rem] relative overflow-hidden flex items-center justify-center border-[12px] border-[#142d53] shadow-2xl group-hover:scale-[1.02] transition-transform duration-500 cursor-pointer mx-auto"
-          >
-            {isPlaying ? (
-              <iframe
-                src={`https://www.youtube.com/embed/${tutorialVideoId}?autoplay=1&rel=0&modestbranding=1`}
-                className="w-full h-full"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-              ></iframe>
-            ) : (
-              <>
-                <div className="absolute inset-0 bg-gradient-to-br from-[#142d53] to-[#48c1d2]/40 opacity-60"></div>
-                <div className="w-16 h-16 rounded-full bg-[#48c1d2] flex items-center justify-center shadow-2xl shadow-[#48c1d2]/50 relative z-10 group-hover:scale-110 transition-transform">
-                  <Play size={24} className="text-[#142d53] ml-1" fill="currentColor" />
-                </div>
-                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-10">
-                  <span className="text-white text-xs font-black uppercase tracking-widest bg-[#142d53]/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-                    Tutorial General
-                  </span>
-                  <span className="text-white/60 text-[10px] font-bold">1:45 min</span>
-                </div>
-              </>
-            )}
-          </div>
-          <div className="flex-1 space-y-4 text-left">
-            <h2 className="text-2xl font-black text-[#142d53] tracking-tight">¡Bienvenido a bordo!</h2>
-            <p className="text-slate-600 font-medium leading-relaxed text-sm">
-              He preparado este video para mostrarte cómo navegar por cada sección. Dale play y descubre cómo estamos organizando todo tu trabajo de 2026.
-            </p>
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="bg-[#48c1d2]/10 text-[#48c1d2] text-[10px] font-black px-3 py-1 rounded-full uppercase">Paso a paso</span>
-              <span className="bg-purple-100 text-purple-600 text-[10px] font-black px-3 py-1 rounded-full uppercase">Navegación</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {TUTORIAL_CARDS.map((card) => {
-            const Icon = card.icon;
-            return (
-              <Link 
-                key={card.title}
-                href={card.path}
-                className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col group"
-              >
-                <div className="flex justify-between items-start mb-6">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-50 group-hover:bg-[#142d53] transition-colors duration-500`}>
-                    <Icon size={24} className="text-[#142d53] group-hover:text-[#48c1d2] transition-colors" />
+            <div className="grid grid-cols-1 gap-4">
+              {(data.recursos || []).map((r: any, idx: number) => (
+                <a 
+                  key={idx}
+                  href={r.url}
+                  target="_blank"
+                  className="flex items-center justify-between p-6 bg-white border border-slate-100 rounded-[2rem] hover:border-[#48c1d2] hover:shadow-xl transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#48c1d2]/10 group-hover:text-[#48c1d2] transition-colors">
+                      <ExternalLink size={20} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-[#142d53] uppercase">{r.titulo}</p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{r.descripcion}</p>
+                    </div>
                   </div>
-                  <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 bg-slate-50 px-3 py-1 rounded-full">
-                    {card.tag}
-                  </span>
-                </div>
-                <h3 className="text-xl font-black text-[#142d53] mb-3 tracking-tight group-hover:text-[#48c1d2] transition-colors">
-                  {card.title}
-                </h3>
-                <p className="text-slate-500 font-medium text-sm leading-relaxed flex-1 mb-6">
-                  {card.description}
-                </p>
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#48c1d2]">
-                  Ir a la sección <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                  <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
+                </a>
+              ))}
+            </div>
+          </div>
 
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Tu Checklist</h3>
+              <div className="h-px flex-1 bg-slate-200"></div>
+            </div>
+
+            <Card className="p-8 rounded-[3rem] shadow-xl border-white bg-white/50 backdrop-blur-sm">
+              <div className="space-y-4">
+                {(data.checklist || []).map((item: string, idx: number) => (
+                  <div key={idx} className="flex items-start gap-4 p-4 bg-white/80 rounded-2xl border border-slate-100 shadow-sm">
+                    <div className="mt-0.5 w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center shrink-0">
+                      <div className="w-2 h-2 rounded-full bg-slate-200"></div>
+                    </div>
+                    <p className="text-xs font-bold text-[#142d53] leading-tight">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+        </div>
       </div>
+
       <Toast 
         message={toast.message}
         type={toast.type}
         isVisible={toast.isVisible}
         onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
       />
-
     </div>
   );
 }

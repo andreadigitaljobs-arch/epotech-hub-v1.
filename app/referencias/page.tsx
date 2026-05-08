@@ -25,7 +25,7 @@ import { referencias as staticRefs } from "@/data/referencias";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
 export default function ReferenciasPage() {
-  useThemeColor("#0a192f");
+  useThemeColor("#142d53");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>({ videos: [], cuentas: [] });
   const [activeSubTab, setActiveSubTab] = useState<'videos' | 'cuentas'>('videos');
@@ -34,19 +34,8 @@ export default function ReferenciasPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        // Priorizamos la información de alta calidad que ya investigamos
-        setData({ 
-          videos: staticRefs.videos, 
-          cuentas: staticRefs.cuentas 
-        });
-
-        // Intentamos cargar de Supabase si es necesario
-        const { data: vDb } = await supabase.from('referencias_videos').select('*');
-        const { data: cDb } = await supabase.from('referencias_cuentas').select('*');
-        
-        if (vDb && vDb.length > 0 && cDb && cDb.length > 0) {
-          // setData({ videos: vDb, cuentas: cDb });
-        }
+        setData({ videos: staticRefs.videos, cuentas: staticRefs.cuentas });
+        setLoading(false);
       } catch (e) {
         console.error("Error loading refs:", e);
       } finally {
@@ -73,187 +62,145 @@ export default function ReferenciasPage() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-32">
-      {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
-      <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
-        <div className="max-w-5xl mx-auto px-6 py-4">
-          <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">
-              <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
+      {/* HEADER INTEGRADO CON STATUS BAR (UNIFICADO A #142d53) */}
+      <div className="bg-[#142d53] pt-[env(safe-area-inset-top)] relative overflow-hidden shadow-2xl">
+        {/* Glows Premium */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#48c1d2]/5 rounded-full blur-[80px] -ml-32 -mb-32"></div>
+
+        <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 relative z-10">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 leading-none uppercase text-white">
+             Motor de <br />
+             <span className="text-[#48c1d2]">Inspiración</span>
+          </h1>
+          <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md max-w-xl">
+            <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-tight">
+              <span className="text-[#48c1d2]">Guía Táctica:</span> No grabes por grabar. Entiende el código visual de lo que funciona para elevar Epotech al siguiente nivel.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto pb-32 text-left space-y-6">
-        {/* 2. HERO COMPACTO */}
-        <header className="relative p-6 md:p-12 md:rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border-b border-white/10 md:border group">
-         <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-15 transition-opacity duration-1000 rotate-12">
-            <PlaySquare size={180} />
-         </div>
-         
-         <div className="relative z-10">
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 leading-none uppercase text-white">
-               Motor de <span className="text-[#48c1d2]">Inspiración</span>
-            </h1>
-            <p className="text-xs font-bold text-slate-400 italic max-w-xl leading-relaxed opacity-80 border-l-2 border-[#48c1d2]/30 pl-6">
-               "No grabes por grabar. Entiende el código visual de lo que funciona para elevar Epotech al siguiente nivel."
-            </p>
-         </div>
-      </header>
+      <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20 space-y-10">
+        {/* NAVEGACIÓN Y FILTROS */}
+        <div className="space-y-6">
+           <div className="flex bg-[#0a192f] p-2 rounded-[2rem] shadow-2xl border border-white/10 max-w-md mx-auto">
+              <button 
+                 onClick={() => setActiveSubTab('videos')}
+                 className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+              >
+                 <Zap size={14} /> Videos de Referencia
+              </button>
+              <button 
+                 onClick={() => setActiveSubTab('cuentas')}
+                 className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'cuentas' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+              >
+                 <ShieldCheck size={14} /> Referentes Top
+              </button>
+           </div>
 
-      {/* 2. NAVEGACIÓN Y FILTROS */}
-      <div className="space-y-8">
-         <div className="flex bg-[#0a192f] p-2 rounded-[2rem] shadow-2xl border border-white/10 max-w-md mx-auto">
-            <button 
-               onClick={() => setActiveSubTab('videos')}
-               className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-            >
-               <Zap size={14} /> Videos de Referencia
-            </button>
-            <button 
-               onClick={() => setActiveSubTab('cuentas')}
-               className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'cuentas' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-            >
-               <ShieldCheck size={14} /> Referentes Top
-            </button>
-         </div>
+           <div className="flex justify-center gap-3">
+              {[
+                 { id: 'all', label: 'Todos', icon: Sparkles },
+                 { id: 'instagram', label: 'Instagram', icon: InstagramIcon },
+                 { id: 'tiktok', label: 'TikTok', icon: TiktokIcon }
+              ].map((p) => (
+                 <button 
+                    key={p.id}
+                    onClick={() => setPlatformFilter(p.id as any)}
+                    className={`px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all border flex items-center gap-3 ${platformFilter === p.id ? 'bg-[#0a192f] text-[#48c1d2] border-[#48c1d2] shadow-xl scale-105' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300 shadow-sm'}`}
+                 >
+                    <p.icon size={12} /> {p.label}
+                 </button>
+              ))}
+           </div>
+        </div>
 
-         <div className="flex justify-center gap-3">
-            {[
-               { id: 'all', label: 'Todos', icon: Sparkles },
-               { id: 'instagram', label: 'Instagram', icon: InstagramIcon },
-               { id: 'tiktok', label: 'TikTok', icon: TiktokIcon }
-            ].map((p) => (
-               <button 
-                  key={p.id}
-                  onClick={() => setPlatformFilter(p.id as any)}
-                  className={`px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all border flex items-center gap-3 ${platformFilter === p.id ? 'bg-[#0a192f] text-[#48c1d2] border-[#48c1d2] shadow-xl scale-105' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300 shadow-sm'}`}
-               >
-                  <p.icon size={12} /> {p.label}
-               </button>
-            ))}
-         </div>
+        <main className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+            {activeSubTab === 'videos' ? (
+              <div className="space-y-16">
+                 {viralVideos.length > 0 && (
+                    <div className="space-y-8">
+                       <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#0a192f] shadow-xl shadow-[#48c1d2]/20">
+                             <Zap size={24} />
+                          </div>
+                          <div>
+                             <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Para Volverte Viral</h2>
+                             <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Contenido de alta retención</span>
+                          </div>
+                       </div>
+                       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                          {viralVideos.map((video: any) => (
+                             <VideoCard key={video.id} {...video} titleEs={video.titulo} />
+                          ))}
+                       </div>
+                    </div>
+                 )}
+
+                 {autoridadVideos.length > 0 && (
+                    <div className="space-y-8">
+                       <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-[#142d53] flex items-center justify-center text-white shadow-xl">
+                             <ShieldCheck size={24} />
+                          </div>
+                          <div>
+                             <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Autoridad</h2>
+                             <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Demuestra tu conocimiento</span>
+                          </div>
+                       </div>
+                       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                          {autoridadVideos.map((video: any) => (
+                             <VideoCard key={video.id} {...video} titleEs={video.titulo} />
+                          ))}
+                       </div>
+                    </div>
+                 )}
+
+                 {ventasVideos.length > 0 && (
+                    <div className="space-y-8">
+                       <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-[#48c1d2] shadow-xl">
+                             <Sparkles size={24} />
+                          </div>
+                          <div>
+                             <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Ventas</h2>
+                             <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Resultados finales</span>
+                          </div>
+                       </div>
+                       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                          {ventasVideos.map((video: any) => (
+                             <VideoCard key={video.id} {...video} titleEs={video.titulo} />
+                          ))}
+                       </div>
+                    </div>
+                 )}
+              </div>
+            ) : (
+              <div className="space-y-10">
+                 <div className="flex items-center gap-4">
+                    <div className="w-1.5 h-10 bg-[#0a192f] rounded-full" />
+                    <div>
+                       <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Canales de Referencia</h2>
+                       <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Cuentas del sector</span>
+                    </div>
+                 </div>
+
+                 {filteredAccounts.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       {filteredAccounts.map((account: any) => (
+                          <AccountCard key={account.id} {...account} fuerte={account.fuerte || account.descripcion} />
+                       ))}
+                    </div>
+                 ) : (
+                    <div className="py-24 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
+                       <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay canales</p>
+                    </div>
+                 )}
+              </div>
+            )}
+        </main>
       </div>
-
-      <main className="animate-in fade-in slide-in-from-bottom-6 duration-700">
-          {activeSubTab === 'videos' ? (
-            <div className="space-y-16">
-               {viralVideos.length > 0 && (
-                  <div className="space-y-8">
-                     <div className="flex items-center gap-4 ml-2">
-                        <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#0a192f] shadow-lg shadow-[#48c1d2]/20">
-                           <Zap size={24} />
-                        </div>
-                        <div>
-                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Para Volverte Viral</h2>
-                           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Contenido de alta retención y satisfacción visual</span>
-                        </div>
-                     </div>
-                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                        {viralVideos.map((video: any) => (
-                           <VideoCard 
-                              key={video.id}
-                              url={video.url}
-                              platform={video.platform}
-                              titleEs={video.titulo}
-                              fuerte={video.fuerte}
-                              porqueFunciona={video.porqueFunciona}
-                           />
-                        ))}
-                     </div>
-                  </div>
-               )}
-
-               {autoridadVideos.length > 0 && (
-                  <div className="space-y-8">
-                     <div className="flex items-center gap-4 ml-2">
-                        <div className="w-12 h-12 rounded-2xl bg-[#142d53] flex items-center justify-center text-white shadow-lg shadow-[#142d53]/20">
-                           <ShieldCheck size={24} />
-                        </div>
-                        <div>
-                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Construye Tu Autoridad</h2>
-                           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Demuestra tu conocimiento técnico y equipo profesional</span>
-                        </div>
-                     </div>
-                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                        {autoridadVideos.map((video: any) => (
-                           <VideoCard 
-                              key={video.id}
-                              url={video.url}
-                              platform={video.platform}
-                              titleEs={video.titulo}
-                              fuerte={video.fuerte}
-                              porqueFunciona={video.porqueFunciona}
-                           />
-                        ))}
-                     </div>
-                  </div>
-               )}
-
-               {ventasVideos.length > 0 && (
-                  <div className="space-y-8">
-                     <div className="flex items-center gap-4 ml-2">
-                        <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-[#48c1d2] shadow-lg shadow-black/20">
-                           <Sparkles size={24} />
-                        </div>
-                        <div>
-                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Cierra Más Ventas</h2>
-                           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Resultados finales, testimonios y ganchos de venta</span>
-                        </div>
-                     </div>
-                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                        {ventasVideos.map((video: any) => (
-                           <VideoCard 
-                              key={video.id}
-                              url={video.url}
-                              platform={video.platform}
-                              titleEs={video.titulo}
-                              fuerte={video.fuerte}
-                              porqueFunciona={video.porqueFunciona}
-                           />
-                        ))}
-                     </div>
-                  </div>
-               )}
-
-               {filteredVideos.length === 0 && (
-                  <div className="py-24 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
-                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay contenido disponible bajo este filtro</p>
-                  </div>
-               )}
-            </div>
-          ) : (
-            <div className="space-y-10">
-               <div className="flex items-center gap-4 ml-2">
-                  <div className="w-1.5 h-10 bg-[#0a192f] rounded-full" />
-                  <div>
-                     <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Canales de Referencia</h2>
-                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Cuentas del sector que puedes estudiar y aplicar</span>
-                  </div>
-               </div>
-
-               {filteredAccounts.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     {filteredAccounts.map((account: any) => (
-                        <AccountCard 
-                           key={account.id}
-                           nombre={account.nombre}
-                           fuerte={account.fuerte || account.descripcion}
-                           tipo={account.tipo}
-                           url={account.url}
-                           porqueFunciona={account.porqueFunciona || account.porque_seguirlo || account.porque_funciona}
-                        />
-                     ))}
-                  </div>
-               ) : (
-                  <div className="py-24 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
-                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay canales en esta categoría</p>
-                  </div>
-               )}
-            </div>
-          )}
-      </main>
     </div>
-  </div>
-);
+  );
 }
