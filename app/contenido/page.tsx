@@ -457,6 +457,7 @@ function ContenidoContent() {
 
   const handleGuionTabChange = (tabId: 'reels' | 'historias' | 'presentacion') => {
     setGuionTab(tabId);
+    setSelectedWeek("");
     localStorage.setItem('epotech_guion_tab', tabId);
     
     const params = new URLSearchParams(window.location.search);
@@ -1868,82 +1869,126 @@ function ContenidoContent() {
                                 type="text"
                                 placeholder="Buscar en Grabación Pro..."
                                 value={scriptSearchQuery}
-                                onChange={(e) => {
-                                  setScriptSearchQuery(e.target.value);
-                                  setSelectedWeek("");
-                                }}
+                                onChange={(e) => setScriptSearchQuery(e.target.value)}
                                 className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-400/5 transition-all shadow-sm"
                               />
                             </div>
                           </div>
 
-                          {/* Sistema de Pestañas de Tiempo para Grabación Pro */}
-                          {(() => {
-                            const filtered = guionesPresentacion.filter(s => {
-                              if (!s.isPinned) return false;
-                              if (!scriptSearchQuery) return true;
-                              const query = normalizeText(scriptSearchQuery);
-                              return normalizeText(s.title).includes(query) || 
-                                     normalizeText(s.service).includes(query) ||
-                                     normalizeText(s.category).includes(query);
-                            });
-                            const groups = groupScriptsByWeek(filtered);
-                            const groupKeys = Object.keys(groups);
-                            
-                            const activeWeek = selectedWeek || groupKeys[0] || "";
-                            
-                            return (
-                              <div className="space-y-6">
-                                {groupKeys.length > 1 && (
-                                  <div className="flex flex-wrap gap-2">
-                                    {groupKeys.map(key => (
-                                      <button
-                                        key={key}
-                                        onClick={() => setSelectedWeek(key)}
-                                        className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${activeWeek === key ? 'bg-amber-600 text-white border-amber-600 shadow-md' : 'bg-white text-slate-400 border-slate-200'}`}
-                                      >
-                                        {key}
-                                      </button>
-                                    ))}
+                          <div className="grid gap-4">
+                            {guionesPresentacion
+                              .filter(s => {
+                                if (!s.isPinned) return false;
+                                if (!scriptSearchQuery) return true;
+                                const query = normalizeText(scriptSearchQuery);
+                                return normalizeText(s.title).includes(query) || 
+                                       normalizeText(s.service).includes(query) ||
+                                       normalizeText(s.category).includes(query);
+                              })
+                              .map((script) => (
+                                <div
+                                  key={script.id}
+                                  onClick={() => {
+                                    setSelectedScript(script);
+                                    setCurrentStepIdx(0);
+                                    setShowFullScript(true);
+                                  }}
+                                  className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-amber-400 transition-all cursor-pointer relative overflow-hidden"
+                                >
+                                  <div className="w-14 h-14 bg-amber-50 rounded-[1.5rem] flex items-center justify-center text-amber-600 group-hover:bg-amber-100 transition-all">
+                                    <Video size={24} />
                                   </div>
-                                )}
+                                  <div className="text-left flex-1">
+                                    <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">{script.category}</span>
+                                    <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                    <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
+                                  </div>
+                                  <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                                </div>
+                              ))}
+                          </div>
+                        ) : enCamaraSubTab === 'pro' ? (
+                          <>
+                            {/* Barra de Búsqueda para Contenido Pro */}
+                            <div className="mb-6 space-y-4">
+                              <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-[#48c1d2]">
+                                  <Search size={18} />
+                                </div>
+                                <input
+                                  type="text"
+                                  placeholder="Buscar en Contenido Pro..."
+                                  value={scriptSearchQuery}
+                                  onChange={(e) => setScriptSearchQuery(e.target.value)}
+                                  className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-[#48c1d2] focus:ring-4 focus:ring-[#48c1d2]/5 transition-all shadow-sm"
+                                />
+                              </div>
+                            </div>
 
-                                <div className="grid gap-4">
-                                  {groups[activeWeek]?.map((script) => (
-                                    <div
-                                      key={script.id}
-                                      onClick={() => {
-                                        setSelectedScript(script);
-                                        setCurrentStepIdx(0);
-                                        setShowFullScript(true);
-                                      }}
-                                      className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-amber-400 transition-all cursor-pointer relative overflow-hidden"
-                                    >
-                                      <div className="w-14 h-14 bg-amber-50 rounded-[1.5rem] flex items-center justify-center text-amber-600 group-hover:bg-amber-100 transition-all">
-                                        <Video size={24} />
-                                      </div>
-                                      <div className="text-left flex-1">
-                                        <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">{script.category}</span>
-                                        <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
-                                        <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
-                                      </div>
-                                      <div className="flex items-center gap-2">
-                                        <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
-                                      </div>
-                                    </div>
-                                  ))}
-
-                                  {groupKeys.length === 0 && (
-                                    <div className="py-12 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
-                                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No se encontraron guiones</p>
+                            {(() => {
+                              const filtered = guionesPresentacion.filter(s => {
+                                if (s.isPinned) return false;
+                                if (!scriptSearchQuery) return true;
+                                const query = normalizeText(scriptSearchQuery);
+                                return normalizeText(s.title).includes(query) || 
+                                       normalizeText(s.service).includes(query) ||
+                                       normalizeText(s.category).includes(query);
+                              });
+                              const groups = groupScriptsByWeek(filtered);
+                              const groupKeys = Object.keys(groups);
+                              
+                              const activeWeek = selectedWeek || groupKeys[0] || "";
+                              
+                              return (
+                                <div className="space-y-6">
+                                  {groupKeys.length > 1 && (
+                                    <div className="flex flex-wrap gap-2">
+                                      {groupKeys.map(key => (
+                                        <button
+                                          key={key}
+                                          onClick={() => setSelectedWeek(key)}
+                                          className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${activeWeek === key ? 'bg-[#142d53] text-white border-[#142d53] shadow-md' : 'bg-white text-slate-400 border-slate-200'}`}
+                                        >
+                                          {key}
+                                        </button>
+                                      ))}
                                     </div>
                                   )}
+
+                                  <div className="grid gap-4">
+                                    {groups[activeWeek]?.map((script) => (
+                                      <div
+                                        key={script.id}
+                                        onClick={() => {
+                                          setSelectedScript(script);
+                                          setCurrentStepIdx(0);
+                                          setShowFullScript(true);
+                                        }}
+                                        className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
+                                      >
+                                        <div className="w-14 h-14 bg-slate-50 rounded-[1.5rem] flex items-center justify-center text-[#142d53] group-hover:bg-slate-100 transition-all">
+                                          <Clapperboard size={24} />
+                                        </div>
+                                        <div className="text-left flex-1">
+                                          <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
+                                          <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                          <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Grabación Pro</p>
+                                        </div>
+                                        <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
+                                      </div>
+                                    ))}
+
+                                    {groupKeys.length === 0 && (
+                                      <div className="py-12 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No hay guiones nuevos aún</p>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            );
-                          })()}
-                        </>
-                      ) : enCamaraSubTab === 'series' ? (
+                              );
+                            })()}
+                          </>
+                        ) : enCamaraSubTab === 'series' ? (
                         <div className="grid gap-4">
                           {[
                             {
