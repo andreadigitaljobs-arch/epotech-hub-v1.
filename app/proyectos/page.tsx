@@ -165,7 +165,7 @@ interface Notificacion {
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function ProyectosPage() {
-  useThemeColor("#F0F4F8");
+  useThemeColor("#ffffff");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
@@ -325,355 +325,204 @@ export default function ProyectosPage() {
     }
   };
 
-  if (loading) return <LoadingSpinner message="Cargando proyectos..." />;
-
   return (
-    <div className="max-w-5xl mx-auto px-6 py-6">
-      <div className="space-y-6 pb-20">
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-4">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
-          </p>
-        </div>
-
-        {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center gap-3 mb-1">
-             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-             <h1 className="text-3xl font-black text-[#142d53] leading-tight tracking-tighter">
-               ¡Hola, {client.name}! 👋🏻
-             </h1>
+    <div className="min-h-screen bg-white pb-24">
+      {/* HEADER INTEGRADO */}
+      {/* HEADER LIMPIO Y PREMIUM */}
+      <div className="pt-[env(safe-area-inset-top)] bg-white">
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-[#142d53] flex items-center justify-center shadow-lg">
+              <Rocket size={20} className="text-[#48c1d2]" />
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Ecosistema Epotech</span>
           </div>
-          <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.2em] ml-5">
-            Hoy es un gran día para hacer crecer a Epotech Solutions
-          </p>
-        </header>
-
-        {/* Sub-Tabs Switcher */}
-        <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8 gap-2 max-w-md mx-auto">
-          <button 
-            onClick={() => setActiveSubTab('proyectos')}
-            className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'proyectos' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
-          >
-            <Rocket size={14} /> Proyectos
-          </button>
-          <button 
-            onClick={() => setActiveSubTab('mensajes')}
-            className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'mensajes' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
-          >
-            <Bell size={14} /> Mensajes {notificaciones.length > 0 && <span className="w-1.5 h-1.5 bg-[#48c1d2] rounded-full animate-pulse" />}
-          </button>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[#142d53] mb-6 leading-none">
+            App de <span className="text-[#48c1d2]">Seguimiento</span>
+          </h1>
+          <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-xl">
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-tight">
+              <span className="text-[#48c1d2]">Estado Actual:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti y qué tan avanzado está cada proyecto.
+            </p>
+          </div>
         </div>
+      </div>
 
-        {activeSubTab === 'proyectos' ? (
-          <div className="space-y-4">
-          {SERVICES.map((svc) => {
-            const svcTasks = tasks.filter((t) => t.service_id === svc.id);
-            const progress = calcProgress(svcTasks);
-            const done = svcTasks.filter((t) => t.status === "completada").length;
-            const isOpen = expanded === svc.id;
-            const { Icon } = svc;
-
-            return (
-              <div
-                key={svc.id}
-                className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden transition-all"
+      <div className="max-w-5xl mx-auto px-6 relative z-20">
+        {loading ? (
+          <div className="py-32 flex flex-col items-center justify-center space-y-4">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#142d53]/40 animate-pulse">Sincronizando Proyectos...</p>
+          </div>
+        ) : (
+          <div className="space-y-8 animate-in fade-in duration-1000">
+            {/* Sub-Tabs Switcher */}
+            <div className="flex bg-[#0a192f] p-2 rounded-[2rem] shadow-2xl border border-white/10 max-w-md mx-auto">
+              <button 
+                onClick={() => setActiveSubTab('proyectos')}
+                className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'proyectos' ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-slate-500'}`}
               >
-                {/* Card header — tap to expand */}
-                <button
-                  onClick={() => setExpanded(isOpen ? null : svc.id)}
-                  className="w-full p-6 flex items-center gap-4 text-left"
-                >
-                  <div className="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                    <Icon size={20} className="text-[var(--primary)]" />
-                  </div>
+                <Rocket size={14} /> Proyectos
+              </button>
+              <button 
+                onClick={() => setActiveSubTab('mensajes')}
+                className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'mensajes' ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-slate-500'}`}
+              >
+                <Bell size={14} /> Mensajes {notificaciones.length > 0 && <span className="w-1.5 h-1.5 bg-[#48c1d2] rounded-full animate-pulse" />}
+              </button>
+            </div>
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between mb-1 gap-2">
-                      <div className="min-w-0">
-                        <h2 className="text-base font-black text-[var(--primary)] tracking-tight leading-tight">
-                          {svc.name}
-                        </h2>
-                        {svc.isComingSoon && (
-                          <span className="inline-block text-[7px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase tracking-[0.1em] border border-amber-200 mt-1">Próximamente</span>
-                        )}
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="text-[10px] font-black text-[var(--accent)] bg-[var(--accent)]/10 px-2 py-0.5 rounded-lg border border-[var(--accent)]/20">
-                          {done}/{svcTasks.length}
-                        </span>
-                        <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest mt-1">SERVICIOS</p>
-                      </div>
-                    </div>
+            {activeSubTab === 'proyectos' ? (
+              <div className="space-y-4">
+                {SERVICES.map((svc) => {
+                  const svcTasks = tasks.filter((t) => t.service_id === svc.id);
+                  const progress = calcProgress(svcTasks);
+                  const done = svcTasks.filter((t) => t.status === "completada").length;
+                  const isOpen = expanded === svc.id;
+                  const { Icon } = svc;
 
-                    {/* Progress bar */}
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] rounded-full transition-all duration-700"
-                          style={{ width: `${progress}%` }}
-                        />
-                      </div>
-                      <span className="text-[11px] font-black text-[var(--primary)] w-8 text-right shrink-0">
-                        {progress}%
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="shrink-0 text-slate-400 ml-2">
-                    {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                  </div>
-                </button>
-
-                {/* Checklist — visible when expanded */}
-                {isOpen && (
-                  <div className="border-t border-slate-50 px-6 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-300">
-                    
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest pt-4 pb-1">
-                      Lista de tareas
-                    </p>
-
-                    {svcTasks.map((task) => {
-                      const obsVal = obsEdits[task.id] ?? task.observacion ?? "";
-                      const isDirty = obsEdits[task.id] !== undefined && obsEdits[task.id] !== (task.observacion ?? "");
-
-                      return (
-                        <div
-                          key={task.id}
-                          className={`rounded-2xl border p-4 space-y-3 transition-colors ${
-                            task.status === "completada"
-                              ? "bg-emerald-50/40 border-emerald-100"
-                              : task.status === "en_proceso"
-                              ? "bg-amber-50/40 border-amber-100"
-                              : "bg-slate-50 border-slate-100"
-                          }`}
-                        >
-                          {/* Task row */}
-                          <div className="flex items-start gap-3">
-                            {/* Status toggle button */}
-                            <button
-                              onClick={() => toggleStatus(task)}
-                              className="shrink-0 mt-0.5 transition-transform active:scale-90"
-                            >
-                              {task.status === "completada" ? (
-                                <CheckCircle2 size={22} className="text-emerald-500" />
-                              ) : task.status === "en_proceso" ? (
-                                <Clock size={22} className="text-amber-500" />
-                              ) : (
-                                <Circle size={22} className="text-slate-300" />
-                              )}
-                            </button>
-
-                            <div className="flex-1 min-w-0">
-                              {editingName === task.id ? (
-                                <input
-                                  autoFocus
-                                  className="w-full text-sm font-bold text-[var(--primary)] bg-white border border-[var(--accent)] rounded-lg px-2 py-1 outline-none"
-                                  value={nameEdits[task.id] ?? task.tarea}
-                                  onChange={(e) =>
-                                    setNameEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
-                                  }
-                                  onBlur={() => saveTaskName(task.id)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === "Enter") saveTaskName(task.id);
-                                    if (e.key === "Escape") setEditingName(null);
-                                  }}
-                                />
-                              ) : (
-                                <button
-                                  onClick={() => {
-                                    setEditingName(task.id);
-                                    setNameEdits((prev) => ({ ...prev, [task.id]: task.tarea }));
-                                  }}
-                                  className={`text-left text-sm font-bold leading-snug w-full group/name flex items-center gap-1 ${
-                                    task.status === "completada"
-                                      ? "line-through text-slate-400"
-                                      : "text-[var(--primary)]"
-                                  }`}
-                                >
-                                  {task.tarea}
-                                  <Pencil size={10} className="text-slate-300 opacity-0 group-hover/name:opacity-100 transition-opacity shrink-0" />
-                                </button>
+                  return (
+                    <div
+                      key={svc.id}
+                      className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden transition-all"
+                    >
+                      <button
+                        onClick={() => setExpanded(isOpen ? null : svc.id)}
+                        className="w-full p-6 flex items-center gap-4 text-left"
+                      >
+                        <div className="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                          <Icon size={20} className="text-[#142d53]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between mb-1 gap-2">
+                            <div className="min-w-0">
+                              <h2 className="text-base font-black text-[#142d53] tracking-tight leading-tight uppercase">
+                                {svc.name}
+                              </h2>
+                              {svc.isComingSoon && (
+                                <span className="inline-block text-[7px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase tracking-[0.1em] border border-amber-200 mt-1">Próximamente</span>
                               )}
                             </div>
-
-                            {/* Status badge */}
-                            <span
-                              className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg border shrink-0 ${STATUS_COLORS[task.status]}`}
-                            >
-                              {STATUS_LABELS[task.status]}
-                            </span>
-
-                            {/* Delete */}
-                            <button
-                              onClick={() => deleteTask(task.id)}
-                              className="shrink-0 p-1 text-slate-200 hover:text-red-400 transition-colors"
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          </div>
-
-                          {/* Observation field */}
-                          <div className="pl-2 md:pl-9 space-y-2">
-                            <div className="flex items-center gap-2">
-                              <MessageSquare size={13} className="text-[#48c1d2]" />
-                              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                                Observación del equipo
+                            <div className="text-right shrink-0">
+                              <span className="text-[10px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-2 py-0.5 rounded-lg border border-[#48c1d2]/20">
+                                {done}/{svcTasks.length}
                               </span>
                             </div>
-                            <div className="flex gap-2">
-                              <textarea
-                                rows={Math.max(3, (obsVal.match(/\n/g) || []).length + 1)}
-                                placeholder="Escribe aquí los detalles del avance..."
-                                className="flex-1 text-[13px] md:text-sm font-bold text-[#142d53] bg-white border border-slate-200 rounded-[1.5rem] p-4 resize-none outline-none focus:border-[var(--accent)] transition-all placeholder:text-slate-300 leading-relaxed"
-                                value={obsVal}
-                                onChange={(e) =>
-                                  setObsEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
-                                }
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-gradient-to-r from-[#142d53] to-[#48c1d2] rounded-full transition-all duration-700"
+                                style={{ width: `${progress}%` }}
                               />
-                              {isDirty && (
-                                <button
-                                  onClick={() => saveObs(task.id)}
-                                  disabled={savingObs === task.id}
-                                  className="shrink-0 self-end px-4 py-4 bg-[var(--accent)] text-white rounded-2xl active:scale-95 transition-all disabled:opacity-50 shadow-lg shadow-[#48c1d2]/20"
-                                >
-                                  {savingObs === task.id ? (
-                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                  ) : (
-                                    <Save size={18} />
-                                  )}
-                                </button>
-                              )}
                             </div>
+                            <span className="text-[11px] font-black text-[#142d53] w-8 text-right shrink-0">
+                              {progress}%
+                            </span>
                           </div>
                         </div>
-                      );
-                    })}
-
-                    {/* Add new task */}
-                    {addingTask[svc.id] !== undefined ? (
-                      <div className="flex gap-2 pt-1">
-                        <input
-                          autoFocus
-                          placeholder="Nombre de la nueva tarea..."
-                          className="flex-1 text-sm font-bold text-[var(--primary)] bg-white border border-[var(--accent)] rounded-xl px-4 py-3 outline-none placeholder:text-slate-300"
-                          value={newTaskText[svc.id] ?? ""}
-                          onChange={(e) =>
-                            setNewTaskText((prev) => ({ ...prev, [svc.id]: e.target.value }))
-                          }
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") addTask(svc.id, svc.name);
-                            if (e.key === "Escape")
-                              setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; });
-                          }}
-                        />
-                        <button
-                          onClick={() => addTask(svc.id, svc.name)}
-                          className="shrink-0 px-4 py-3 bg-[var(--accent)] text-white rounded-xl font-black text-xs active:scale-95 transition-all"
-                        >
-                          <Save size={16} />
-                        </button>
-                        <button
-                          onClick={() =>
-                            setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; })
-                          }
-                          className="shrink-0 px-3 py-3 bg-slate-100 text-slate-500 rounded-xl font-black text-xs active:scale-95 transition-all"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          setAddingTask((prev) => ({ ...prev, [svc.id]: "" }))
-                        }
-                        className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-slate-200 rounded-2xl text-[10px] font-black text-slate-400 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
-                      >
-                        <Plus size={14} /> Agregar tarea
+                        <div className="shrink-0 text-slate-400 ml-2">
+                          {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                        </div>
                       </button>
-                    )}
 
-                    {/* Tip */}
-                    <div className="flex items-start gap-2 pt-1">
-                      <AlertCircle size={12} className="text-slate-300 mt-0.5 shrink-0" />
-                      <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest leading-relaxed">
-                        Toca el nombre de una tarea para editarlo · Toca el ícono para cambiar el estado
-                      </p>
+                      {isOpen && (
+                        <div className="border-t border-slate-50 px-6 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-300">
+                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest pt-4 pb-1">Lista de tareas</p>
+                          {svcTasks.map((task) => {
+                            const obsVal = obsEdits[task.id] ?? task.observacion ?? "";
+                            const isDirty = obsEdits[task.id] !== undefined && obsEdits[task.id] !== (task.observacion ?? "");
+                            return (
+                              <div key={task.id} className={`rounded-2xl border p-4 space-y-3 transition-colors ${task.status === "completada" ? "bg-emerald-50/40 border-emerald-100" : task.status === "en_proceso" ? "bg-amber-50/40 border-amber-100" : "bg-slate-50 border-slate-100"}`}>
+                                <div className="flex items-start gap-3">
+                                  <button onClick={() => toggleStatus(task)} className="shrink-0 mt-0.5 transition-transform active:scale-90">
+                                    {task.status === "completada" ? <CheckCircle2 size={22} className="text-emerald-500" /> : task.status === "en_proceso" ? <Clock size={22} className="text-amber-500" /> : <Circle size={22} className="text-slate-300" />}
+                                  </button>
+                                  <div className="flex-1 min-w-0">
+                                    {editingName === task.id ? (
+                                      <input autoFocus className="w-full text-sm font-bold text-[#142d53] bg-white border border-[#48c1d2] rounded-lg px-2 py-1 outline-none" value={nameEdits[task.id] ?? task.tarea} onChange={(e) => setNameEdits((prev) => ({ ...prev, [task.id]: e.target.value }))} onBlur={() => saveTaskName(task.id)} onKeyDown={(e) => { if (e.key === "Enter") saveTaskName(task.id); if (e.key === "Escape") setEditingName(null); }} />
+                                    ) : (
+                                      <button onClick={() => { setEditingName(task.id); setNameEdits((prev) => ({ ...prev, [task.id]: task.tarea })); }} className={`text-left text-sm font-bold leading-snug w-full group/name flex items-center gap-1 ${task.status === "completada" ? "line-through text-slate-400" : "text-[#142d53]"}`}>
+                                        {task.tarea}
+                                        <Pencil size={10} className="text-slate-300 opacity-0 group-hover/name:opacity-100 transition-opacity shrink-0" />
+                                      </button>
+                                    )}
+                                  </div>
+                                  <span className={`text-[8px] font-black uppercase px-2 py-1 rounded-lg border shrink-0 ${STATUS_COLORS[task.status]}`}>{STATUS_LABELS[task.status]}</span>
+                                  <button onClick={() => deleteTask(task.id)} className="shrink-0 p-1 text-slate-200 hover:text-red-400 transition-colors"><Trash2 size={14} /></button>
+                                </div>
+                                <div className="pl-2 md:pl-9 space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <MessageSquare size={13} className="text-[#48c1d2]" />
+                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Observación del equipo</span>
+                                  </div>
+                                  <div className="flex gap-2">
+                                    <textarea rows={Math.max(3, (obsVal.match(/\n/g) || []).length + 1)} placeholder="Escribe aquí los detalles del avance..." className="flex-1 text-[13px] md:text-sm font-bold text-[#142d53] bg-white border border-slate-200 rounded-[1.5rem] p-4 resize-none outline-none focus:border-[#48c1d2] transition-all placeholder:text-slate-300 leading-relaxed" value={obsVal} onChange={(e) => setObsEdits((prev) => ({ ...prev, [task.id]: e.target.value }))} />
+                                    {isDirty && (
+                                      <button onClick={() => saveObs(task.id)} disabled={savingObs === task.id} className="shrink-0 self-end px-4 py-4 bg-[#48c1d2] text-[#142d53] rounded-2xl active:scale-95 transition-all disabled:opacity-50 shadow-lg shadow-[#48c1d2]/20">
+                                        {savingObs === task.id ? <div className="w-5 h-5 border-2 border-[#142d53] border-t-transparent rounded-full animate-spin" /> : <Save size={18} />}
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                          {addingTask[svc.id] !== undefined ? (
+                            <div className="flex gap-2 pt-1">
+                              <input autoFocus placeholder="Nombre de la nueva tarea..." className="flex-1 text-sm font-bold text-[#142d53] bg-white border border-[#48c1d2] rounded-xl px-4 py-3 outline-none placeholder:text-slate-300" value={newTaskText[svc.id] ?? ""} onChange={(e) => setNewTaskText((prev) => ({ ...prev, [svc.id]: e.target.value }))} onKeyDown={(e) => { if (e.key === "Enter") addTask(svc.id, svc.name); if (e.key === "Escape") setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; }); }} />
+                              <button onClick={() => addTask(svc.id, svc.name)} className="shrink-0 px-4 py-3 bg-[#48c1d2] text-[#142d53] rounded-xl font-black text-xs active:scale-95 transition-all"><Save size={16} /></button>
+                              <button onClick={() => setAddingTask((prev) => { const n = {...prev}; delete n[svc.id]; return n; })} className="shrink-0 px-3 py-3 bg-slate-100 text-slate-500 rounded-xl font-black text-xs active:scale-95 transition-all">✕</button>
+                            </div>
+                          ) : (
+                            <button onClick={() => setAddingTask((prev) => ({ ...prev, [svc.id]: "" }))} className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-slate-200 rounded-2xl text-[10px] font-black text-slate-400 hover:border-[#48c1d2] hover:text-[#48c1d2] transition-all"><Plus size={14} /> Agregar tarea</button>
+                          )}
+                        </div>
+                      )}
                     </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="grid grid-cols-3 gap-1.5 pb-2 px-1">
+                  {[
+                    { id: 'todas', label: 'Todas', icon: MessageSquare },
+                    { id: 'redes', label: 'Redes', icon: Share2 },
+                    { id: 'tips', label: 'Tips', icon: Lightbulb }
+                  ].map((f) => (
+                    <button key={f.id} onClick={() => setMsgFilter(f.id as any)} className={`flex flex-col md:flex-row items-center justify-center gap-1 px-2 py-3 md:py-2 rounded-2xl md:rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all border ${msgFilter === f.id ? 'bg-[#142d53] text-[#48c1d2] border-[#142d53] shadow-md' : 'bg-white text-slate-400 border-slate-100'}`}>
+                      <f.icon size={12} className="md:size-[14px]" />
+                      <span className="text-center">{f.id === 'redes' ? 'Redes' : (f.id === 'tips' ? 'Tips' : f.label)}</span>
+                    </button>
+                  ))}
+                </div>
+                {notificaciones.filter(n => { if (msgFilter === 'todas') return true; const type = n.tipo?.toUpperCase() || ''; if (msgFilter === 'redes') return type === 'REDES SOCIALES'; if (msgFilter === 'tips') return type === 'TIPS Y RECORDATORIOS' || type === 'URGENTE'; return true; }).length > 0 ? (
+                  notificaciones.filter(n => { if (msgFilter === 'todas') return true; const type = n.tipo?.toUpperCase() || ''; if (msgFilter === 'redes') return type === 'REDES SOCIALES'; if (msgFilter === 'tips') return type === 'TIPS Y RECORDATORIOS' || type === 'URGENTE'; return true; }).map((announcement) => (
+                    <div key={announcement.id} className={`bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 relative overflow-hidden group ${announcement.tipo === 'URGENTE' ? 'border-l-red-500 bg-red-50/10' : 'border-l-[#48c1d2]'}`}>
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded ${announcement.tipo === 'URGENTE' ? 'bg-red-100 text-red-600' : 'bg-[#48c1d2]/10 text-[#142d53]'}`}>{announcement.tipo}</span>
+                          {announcement.tipo === 'REDES SOCIALES' && <Share2 size={12} className="text-[#48c1d2]" />}
+                          {(announcement.tipo === 'TIPS Y RECORDATORIOS' || announcement.tipo === 'URGENTE') && <Lightbulb size={12} className={announcement.tipo === 'URGENTE' ? 'text-red-500' : 'text-amber-400'} />}
+                        </div>
+                        <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
+                      </div>
+                      <h3 className="font-black text-[#142d53] mb-2 text-sm">{announcement.titulo}</h3>
+                      <p className="text-xs text-slate-500 leading-relaxed font-medium">{announcement.mensaje}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
+                    <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm"><Bell size={24} className="text-slate-300" /></div>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{msgFilter === 'todas' ? 'Sin avisos recientes por ahora.' : `No hay ${msgFilter === 'redes' ? 'publicaciones' : 'tips'} registrados.`}</p>
                   </div>
                 )}
               </div>
-            );
-          })}
-        </div>
-      ) : (
-      <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        {/* Filtros de Mensajes */}
-        <div className="grid grid-cols-3 gap-1.5 pb-2 px-1">
-          {[
-            { id: 'todas', label: 'Todas', icon: MessageSquare },
-            { id: 'redes', label: 'Redes', icon: Share2 },
-            { id: 'tips', label: 'Tips', icon: Lightbulb }
-          ].map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setMsgFilter(f.id as any)}
-              className={`flex flex-col md:flex-row items-center justify-center gap-1 px-2 py-3 md:py-2 rounded-2xl md:rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all border ${
-                msgFilter === f.id 
-                  ? 'bg-[#142d53] text-[#48c1d2] border-[#142d53] shadow-md' 
-                  : 'bg-white text-slate-400 border-slate-100'
-              }`}
-            >
-              <f.icon size={12} className="md:size-[14px]" />
-              <span className="text-center">{f.id === 'redes' ? 'Redes' : (f.id === 'tips' ? 'Tips' : f.label)}</span>
-            </button>
-          ))}
-        </div>
-
-        {(() => {
-          const filtered = notificaciones.filter(n => {
-            if (msgFilter === 'todas') return true;
-            const type = n.tipo?.toUpperCase() || '';
-            if (msgFilter === 'redes') return type === 'REDES SOCIALES';
-            if (msgFilter === 'tips') return type === 'TIPS Y RECORDATORIOS' || type === 'URGENTE';
-            return true;
-          });
-
-          return filtered.length > 0 ? (
-            filtered.map((announcement) => (
-              <div key={announcement.id} className={`bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 relative overflow-hidden group ${announcement.tipo === 'URGENTE' ? 'border-l-red-500 bg-red-50/10' : 'border-l-[#48c1d2]'}`}>
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded ${announcement.tipo === 'URGENTE' ? 'bg-red-100 text-red-600' : 'bg-[#48c1d2]/10 text-[#142d53]'}`}>
-                      {announcement.tipo}
-                    </span>
-                    {announcement.tipo === 'REDES SOCIALES' && <Share2 size={12} className="text-[#48c1d2]" />}
-                    {(announcement.tipo === 'TIPS Y RECORDATORIOS' || announcement.tipo === 'URGENTE') && <Lightbulb size={12} className={announcement.tipo === 'URGENTE' ? 'text-red-500' : 'text-amber-400'} />}
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
-                </div>
-                <h3 className="font-black text-[#142d53] mb-2 text-sm">
-                  {announcement.titulo}
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                  {announcement.mensaje}
-                </p>
-              </div>
-            ))
-          ) : (
-            <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
-               <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
-                  <Bell size={24} className="text-slate-300" />
-               </div>
-               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                 {msgFilter === 'todas' ? 'Sin avisos recientes por ahora.' : `No hay ${msgFilter === 'redes' ? 'publicaciones' : 'tips'} registrados.`}
-               </p>
-            </div>
-          );
-        })()}
+            )}
+          </div>
+        )}
       </div>
-    )}
-  </div>
-</div>
-);
+    </div>
+  );
 }

@@ -18,7 +18,7 @@ const TiktokIcon = ({ size = 12 }: { size?: number }) => (
 );
 
 export default function ReferenciasPage() {
-  useThemeColor("#142d53");
+  useThemeColor("#ffffff");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>({ videos: [], cuentas: [] });
   const [activeSubTab, setActiveSubTab] = useState<'videos' | 'cuentas'>('videos');
@@ -45,22 +45,28 @@ export default function ReferenciasPage() {
   const filteredAccounts = (data.cuentas || []);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-32">
-      <div className="bg-[#142d53] pt-[env(safe-area-inset-top)] relative overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
-        <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 relative z-10">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 leading-none uppercase text-white">
-             Motor de <br /> <span className="text-[#48c1d2]">Inspiración</span>
+    <div className="min-h-screen bg-white pb-32">
+      {/* HEADER LIMPIO Y PREMIUM */}
+      <div className="pt-[env(safe-area-inset-top)] bg-white">
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-16 relative z-10">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-[#142d53] flex items-center justify-center shadow-lg">
+              <PlaySquare size={20} className="text-[#48c1d2]" />
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Motor de Inspiración</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-6 leading-none uppercase text-[#142d53]">
+             Inspiración <span className="text-[#48c1d2]">Creativa</span>
           </h1>
-          <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md max-w-xl">
-            <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest leading-tight">
+          <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-xl">
+            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-tight">
               <span className="text-[#48c1d2]">Directiva Creativa:</span> Analiza estos videos no para copiarlos, sino para entender su estructura de retención.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20">
+      <div className="max-w-5xl mx-auto px-6 relative z-20">
         {loading ? (
           <div className="py-32 flex flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />

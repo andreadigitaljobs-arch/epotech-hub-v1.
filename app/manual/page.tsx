@@ -43,7 +43,7 @@ const phaseMessages: Record<string, string> = {
 };
 
 export default function ManualPage() {
-  useThemeColor("#142d53");
+  useThemeColor("#ffffff");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activePhase, setActivePhase] = useState("antes");
@@ -102,28 +102,28 @@ export default function ManualPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-32">
-      <div className="bg-[#142d53] pt-[env(safe-area-inset-top)] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
-        <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 relative z-10">
+    <div className="min-h-screen bg-white pb-32">
+      {/* HEADER LIMPIO Y PREMIUM */}
+      <div className="pt-[env(safe-area-inset-top)] bg-white">
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-16 relative z-10">
           <div className="flex items-center gap-2 mb-4">
-            <div className="bg-[#48c1d2] p-1.5 rounded-lg shadow-lg">
-              <Video size={14} className="text-[#142d53]" />
+            <div className="w-10 h-10 rounded-xl bg-[#142d53] flex items-center justify-center shadow-lg">
+              <Video size={14} className="text-[#48c1d2]" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Protocolo de Campo</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Protocolo de Campo</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-6 leading-none">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[#142d53] mb-6 leading-none">
             Guía de Grabación <span className="text-[#48c1d2]">Master</span>
           </h1>
-          <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md max-w-xl">
-            <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest leading-tight">
+          <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-xl">
+            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-tight">
               <span className="text-[#48c1d2]">Instrucción Táctica:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para transmitir autoridad.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20">
+      <div className="max-w-5xl mx-auto px-6 relative z-20">
         {loading ? (
           <div className="py-32 flex flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />

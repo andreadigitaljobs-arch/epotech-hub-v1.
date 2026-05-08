@@ -328,9 +328,8 @@ const getYoutubeId = (url: string) => {
 };
 
 export default function ContenidoPage() {
-  useThemeColor("#F0F4F8");
   return (
-    <Suspense fallback={<LoadingSpinner message="Conectando con el Estudio..." />}>
+    <Suspense fallback={null}>
       <ContenidoContent />
     </Suspense>
   );
@@ -1524,25 +1523,39 @@ function ContenidoContent() {
     </div>, document.body
   ) : null;
 
+  useThemeColor("#ffffff");
+
   return (
-    <div className="max-w-5xl mx-auto px-6 py-6 pb-24 text-left">
-      {/* Texto Tutorial Contextual Premium */}
-      <div className="mb-8">
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[#48c1d2]">Estudio de Producción:</span> Aquí es donde ocurre la magia. Envíanos tu reporte de audio al final del día y nosotros generaremos tus guiones estratégicos. También podrás grabar tu voz en off aquí mismo.
-          </p>
-        </div>
-      </div>
-
-      <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 flex justify-between items-start gap-4">
-        <div>
-          <h1 className="text-4xl font-black text-[#142d53] leading-tight tracking-tighter whitespace-nowrap">
-            Estudio de <span className="text-[#48c1d2]">Producción</span>
+    <div className="min-h-screen bg-white pb-24">
+      {/* HEADER LIMPIO Y PREMIUM */}
+      <div className="pt-[env(safe-area-inset-top)] bg-white">
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-16 relative z-10">
+          <div className="flex items-center gap-3 mb-6 text-left">
+            <div className="w-10 h-10 rounded-xl bg-[#142d53] flex items-center justify-center shadow-lg">
+              <Clapperboard size={20} className="text-[#48c1d2]" />
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Estudio de Producción</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[#142d53] mb-6 leading-none text-left">
+            Creador de <br />
+            <span className="text-[#48c1d2]">Contenido</span>
           </h1>
+          <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-xl">
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-tight text-left">
+              <span className="text-[#48c1d2]">Instrucción Estratégica:</span> Aquí es donde ocurre la magia. Envíanos tu reporte de audio y nosotros generaremos tus guiones profesionales.
+            </p>
+          </div>
         </div>
-
       </div>
+
+      <div className="max-w-5xl mx-auto px-6 relative z-20">
+        {loading ? (
+          <div className="py-32 flex flex-col items-center justify-center space-y-4">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#142d53]/40 animate-pulse text-center">Sincronizando Estudio...</p>
+          </div>
+        ) : (
+          <div className="space-y-8 animate-in fade-in duration-1000 text-left">
 
       {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}
       <div className={`mb-8 px-2 animate-in fade-in slide-in-from-top-6 duration-1000 delay-200 relative`}>
@@ -3477,14 +3490,11 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                   ))}
                 </div>
               )}
-            </div>
           </div>
         )}
       </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 }
 
 

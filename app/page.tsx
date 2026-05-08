@@ -59,7 +59,7 @@ const TUTORIAL_CARDS = [
 
 export default function AcademyPage() {
   const router = useRouter();
-  useThemeColor("#142d53");
+  useThemeColor("#ffffff");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -83,26 +83,22 @@ export default function AcademyPage() {
   const tutorialVideoId = "dQw4w9WgXcQ";
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
-      {/* HEADER INTEGRADO CON STATUS BAR */}
-      <div className="bg-[#142d53] pt-[env(safe-area-inset-top)] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px] -ml-32 -mb-32"></div>
-
-        <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 relative z-10">
+    <div className="min-h-screen bg-white pb-24 md:pb-8">
+      {/* HEADER LIMPIO Y PREMIUM */}
+      <div className="pt-[env(safe-area-inset-top)] bg-white">
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-16 relative z-10">
           <div className="flex justify-between items-start gap-4">
-            <div>
+            <div className="text-left">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/20 flex items-center justify-center border border-[#48c1d2]/30">
+                <div className="w-10 h-10 rounded-xl bg-[#142d53] flex items-center justify-center shadow-lg">
                   <BookOpen size={20} className="text-[#48c1d2]" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Academia Epotech</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Academia Epotech</span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white mb-6 leading-none">
-                Centro de Mando <br />
-                <span className="text-[#48c1d2]">Tu Guía de Vuelo</span>
+              <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-[#142d53] mb-6 leading-none">
+                Centro de <span className="text-[#48c1d2]">Mando</span>
               </h1>
-              <p className="text-slate-400 text-lg max-w-2xl font-medium leading-relaxed mb-8">
+              <p className="text-slate-500 text-lg max-w-2xl font-medium leading-relaxed mb-8">
                 Hola Sebastian, aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel.
               </p>
               
@@ -124,7 +120,7 @@ export default function AcademyPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 -mt-12 relative z-20 space-y-12">
+      <div className="max-w-5xl mx-auto px-6 relative z-20 space-y-12">
         {loading ? (
           <div className="py-32 flex flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />

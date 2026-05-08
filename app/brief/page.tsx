@@ -21,7 +21,7 @@ import {
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
 export default function BrandBriefPage() {
-  useThemeColor("#142d53");
+  useThemeColor("#ffffff");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -52,27 +52,26 @@ export default function BrandBriefPage() {
   const CARD_STYLE = "p-8 md:p-12 bg-[#0a192f] border border-white/10 rounded-[2.5rem] shadow-2xl relative overflow-hidden group";
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-32">
-      {/* HEADER SIEMPRE VISIBLE */}
-      <div className="bg-[#142d53] pt-[env(safe-area-inset-top)] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
-        <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 relative z-10">
+    <div className="min-h-screen bg-white pb-32">
+      {/* HEADER LIMPIO Y PREMIUM */}
+      <div className="pt-[env(safe-area-inset-top)] bg-white">
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-16 relative z-10">
           <div className="flex items-center gap-3 mb-6">
-            <div className="bg-[#48c1d2] p-2 rounded-lg">
-              <Target size={16} className="text-[#142d53]" />
+            <div className="w-10 h-10 rounded-xl bg-[#142d53] flex items-center justify-center shadow-lg">
+              <Target size={16} className="text-[#48c1d2]" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Arquitectura de Marca 2026</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Arquitectura de Marca 2026</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white mb-6 leading-none uppercase">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[#142d53] mb-6 leading-none uppercase">
             El Brief <span className="text-[#48c1d2]">Maestro</span>
           </h1>
-          <p className="text-lg text-slate-300 italic border-l-4 border-[#48c1d2] pl-6 max-w-2xl">
+          <p className="text-lg text-slate-500 italic border-l-4 border-[#48c1d2] pl-6 max-w-2xl">
             "Consulta esta brújula para que tu tono y mensajes sean siempre coherentes."
           </p>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20">
+      <div className="max-w-5xl mx-auto px-6 relative z-20">
         {loading ? (
           <div className="py-32 flex flex-col items-center justify-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />
