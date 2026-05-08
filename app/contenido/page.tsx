@@ -1512,16 +1512,12 @@ function ContenidoContent() {
                       </button>
                     </div>
                   </div>
-                </div>,
-                document.body
-              )}
+                </div>, document.body)}
             </>
           )}
         </div>
 
-      </div>
-    </div>, document.body
-  ) : null;
+    </div>, document.body) : null;
 
   useThemeColor("#ffffff");
 
@@ -2143,11 +2139,10 @@ function ContenidoContent() {
                     </div>
                   </div>
                 )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+      </div>
+    </div>
+  </div>
+)}
         {activeTab === 'calendario' && <CreacionSection contentDB={contentDB} toggleStatus={toggleGlobalStatus} onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} />}
         {activeTab === 'historial' && <HistorialSection contentDB={contentDB} onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} showToast={showToast} activeTab={activeTab} />}
       </div>
@@ -2381,7 +2376,7 @@ function ContenidoContent() {
               <button onClick={handleCloseStory} className="w-full py-5 bg-[#142d53] text-[#48c1d2] text-xs font-black uppercase tracking-[2px] rounded-2xl shadow-xl shadow-[#142d53]/20 transition-all active:scale-95 border-b-4 border-black">¡ENTENDIDO, A GRABAR!</button>
             </div>
           </div>
-        </div>, document.body
+        </div>, document.body)
       )}
       {selectedProduction && (
         <FichaProduccionModal
@@ -2600,8 +2595,9 @@ function ContenidoContent() {
               </button>
             </div>
           </div>
-        </div>, document.body
+        </div>, document.body)
       )}
+      </div>
     </div>
   );
 }
@@ -2691,7 +2687,7 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
           <button onClick={handleClose} className="px-8 py-4 bg-white text-[#142d53] text-[10px] font-bold tracking-widest rounded-2xl shadow-xl active:scale-95 transition-all">Cerrar</button>
         </div>
       </div>
-    </div>, document.body
+    </div>, document.body)
   );
 }
 
