@@ -3,8 +3,10 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 const ThemeColorContext = createContext<{
+  color: string;
   setColor: (color: string) => void;
 }>({
+  color: "#142d53",
   setColor: () => {},
 });
 
@@ -31,7 +33,7 @@ export function ThemeColorProvider({ children }: { children: ReactNode }) {
   }, [color]);
 
   return (
-    <ThemeColorContext.Provider value={{ setColor }}>
+    <ThemeColorContext.Provider value={{ color, setColor }}>
       {children}
     </ThemeColorContext.Provider>
   );
