@@ -2153,18 +2153,6 @@ function ContenidoContent() {
                 </div>
                 <h2 className="text-2xl font-black text-[#142d53] leading-tight tracking-tighter">{selectedSerie.title}</h2>
               </div>
-              <button 
-                onClick={() => {
-                  setIsClosingSerie(true);
-                  setTimeout(() => {
-                    setSelectedSerie(null);
-                    setIsClosingSerie(false);
-                  }, 300);
-                }}
-                className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
-              >
-                <X size={20} />
-              </button>
             </div>
 
             <div className="flex-1 overflow-y-auto p-8 pt-6 space-y-8 custom-scrollbar text-left">
