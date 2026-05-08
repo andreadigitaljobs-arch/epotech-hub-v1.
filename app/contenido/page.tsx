@@ -617,10 +617,10 @@ function ContenidoContent() {
   };
 
   const stopVoiceoverRecording = () => {
-    if (voiceoverRecorder.current) {
+    if (voiceoverRecorder.current && voiceoverRecorder.current.state === "recording") {
       voiceoverRecorder.current.stop();
-      setIsRecordingVoiceover(false);
     }
+    setIsRecordingVoiceover(false);
   };
 
   const deleteVoiceoverFragment = (targetIdx: number) => {
@@ -662,12 +662,12 @@ function ContenidoContent() {
     }
   }, [voiceoverFragments, selectedScript]);
 
-  const mergeVoiceoverFragments = async () => {
+  const mergeVoiceoverFragments = async (isRetry = false) => {
     if (isRecordingVoiceover) {
       stopVoiceoverRecording();
-      showToast("Procesando última toma...", "info");
+      if (!isRetry) showToast("Procesando última toma...", "info");
       // Esperar a que el onstop dispare y guarde el estado antes de unir
-      setTimeout(() => mergeVoiceoverFragments(), 800);
+      setTimeout(() => mergeVoiceoverFragments(true), 800);
       return;
     }
 
