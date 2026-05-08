@@ -6,12 +6,12 @@ export const ThemeColorContext = createContext<{
   color: string;
   setColor: (color: string) => void;
 }>({
-  color: "#142d53",
+  color: "#F0F4F8",
   setColor: () => {},
 });
 
 export function ThemeColorProvider({ children }: { children: ReactNode }) {
-  const [color, setColor] = useState("#142d53");
+  const [color, setColor] = useState("#F0F4F8");
 
   useEffect(() => {
     // Solo actualizamos el meta theme-color (controla la barra de estado en iOS)
