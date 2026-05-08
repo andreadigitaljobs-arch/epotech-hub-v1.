@@ -102,54 +102,6 @@ export const guiones: Script[] = [
     ],
     productionHack: 'Este video es tu carta de presentación. ¡Haz que brille!',
     createdAt: '2026-05-01'
-  },
-  {
-    id: 'script-sample-1',
-    title: 'Limpieza de Ventanas (Promo)',
-    category: 'Venta Directa',
-    service: 'Window Cleaning',
-    duration: '15s',
-    fullDialogue: 'Crystal clear windows in minutes. Professional service for your home.',
-    steps: [],
-    tips: [],
-    checklist: [],
-    createdAt: '2026-05-07'
-  },
-  {
-    id: 'script-sample-2',
-    title: 'Por qué elegir Epotech Floors',
-    category: 'Autoridad',
-    service: 'Epoxy Floors',
-    duration: '30s',
-    fullDialogue: 'Your garage deserves the best finish. We use industrial grade epoxy.',
-    steps: [],
-    tips: [],
-    checklist: [],
-    createdAt: '2026-04-25'
-  },
-  {
-    id: 'script-sample-3',
-    title: 'Diferencia entre Jabón y Presión',
-    category: 'Educativo',
-    service: 'Pressure Washing',
-    duration: '45s',
-    fullDialogue: 'Pressure alone is not enough. You need the right chemicals.',
-    steps: [],
-    tips: [],
-    checklist: [],
-    createdAt: '2026-04-10'
-  },
-  {
-    id: 'script-sample-4',
-    title: 'Presentación de Equipo Nuevo',
-    category: 'Branding',
-    service: 'Pressure Washing',
-    duration: '20s',
-    fullDialogue: 'Check out our new equipment. Ready for the next big job.',
-    steps: [],
-    tips: [],
-    checklist: [],
-    createdAt: '2026-03-15'
   }
 ];
 
