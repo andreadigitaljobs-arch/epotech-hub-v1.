@@ -12,8 +12,7 @@ export function ThemeColorProvider({ children }: { children: ReactNode }) {
   const [color, setColor] = useState("#142d53");
 
   useEffect(() => {
-    // Añadimos un pequeño delay para sincronizar con la animación de fade-in de la página (.25s)
-    // Cambiamos el color a mitad de camino para que se sienta atómico
+    // Un delay muy pequeño para asegurar que el componente ya empezó a renderizar
     const timer = setTimeout(() => {
       // Actualizamos el meta tag theme-color
       let metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -24,9 +23,10 @@ export function ThemeColorProvider({ children }: { children: ReactNode }) {
       }
       metaThemeColor.setAttribute('content', color);
 
-      // También actualizamos el color de fondo del body
+      // Actualizamos el color de fondo del body y la variable CSS global
       document.body.style.backgroundColor = color;
-    }, 150);
+      document.documentElement.style.setProperty('--bg', color);
+    }, 50);
 
     return () => clearTimeout(timer);
   }, [color]);

@@ -6,7 +6,6 @@ import { AppShell } from "@/components/layout/AppShell";
 const inter = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
-  themeColor: "#1B2E5E",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
