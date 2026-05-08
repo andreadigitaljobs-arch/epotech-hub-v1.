@@ -77,8 +77,7 @@ import {
   Play,
   Pause,
   Volume2,
-  Square,
-  Instagram
+  Square
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Toast, ToastType } from "@/components/ui/Toast";
@@ -2264,7 +2263,7 @@ function ContenidoContent() {
                 <section className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-black text-[11px] shrink-0">
-                      <Instagram size={14} />
+                      <Camera size={14} />
                     </div>
                     <h4 className="text-[11px] font-black text-blue-400 uppercase tracking-[0.2em]">Referencias Visuales</h4>
                   </div>
