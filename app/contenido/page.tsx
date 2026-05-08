@@ -348,6 +348,56 @@ function ContenidoContent() {
   const [serviceType, setServiceType] = useState(typeParam);
   const [voiceSpeed, setVoiceSpeed] = useState<number>(0.85);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  
+  // NUEVOS ESTADOS: Búsqueda y Organización
+  const [scriptSearchQuery, setScriptSearchQuery] = useState("");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  // Cargar favoritos al inicio
+  useEffect(() => {
+    const savedFavs = localStorage.getItem('epotech_script_favorites');
+    if (savedFavs) setFavorites(JSON.parse(savedFavs));
+  }, []);
+
+  const toggleFavorite = (e: React.MouseEvent, scriptId: string) => {
+    e.stopPropagation();
+    const newFavs = favorites.includes(scriptId) 
+      ? favorites.filter(id => id !== scriptId) 
+      : [...favorites, scriptId];
+    setFavorites(newFavs);
+    localStorage.setItem('epotech_script_favorites', JSON.stringify(newFavs));
+    showToast(favorites.includes(scriptId) ? "Eliminado de favoritos" : "Añadido a favoritos", "info");
+  };
+
+  // Función para agrupar guiones por semana
+  const groupScriptsByWeek = (scripts: Script[]) => {
+    const groups: { [key: string]: Script[] } = {};
+    const sorted = [...scripts].sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA; // Más recientes primero
+    });
+
+    sorted.forEach(script => {
+      const date = script.createdAt ? new Date(script.createdAt) : new Date();
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - date.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      let key = "";
+      if (diffDays <= 7) key = "Esta Semana";
+      else if (diffDays <= 14) key = "Semana Pasada";
+      else {
+        const month = date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+        key = month.charAt(0).toUpperCase() + month.slice(1);
+      }
+      
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(script);
+    });
+    return groups;
+  };
 
   const handleSpeak = (text: string) => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -1718,27 +1768,79 @@ function ContenidoContent() {
                           </div>
                         </div>
                       </div>
-                      {guiones.map((script) => (
-                        <div
-                          key={script.id}
-                          onClick={() => {
-                            setSelectedScript(script);
-                            setCurrentStepIdx(0);
-                            setShowFullScript(true);
-                            if (showHelp) setTeleHelpStep(1);
-                          }}
-                          className={`bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-[#48c1d2]/50 transition-all cursor-pointer active:scale-95 relative`}>
-                          <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 group-hover:text-[#48c1d2] transition-colors">
-                            <Clapperboard size={20} />
+                      {/* Barra de Búsqueda y Filtros */}
+                      <div className="mb-6 space-y-4">
+                        <div className="relative group">
+                          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-[#48c1d2]">
+                            <Search size={18} />
                           </div>
-                          <div className="text-left flex-1">
-                            <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                            <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
-                            {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
-                              <p className="text-[9px] font-bold text-slate-400 mt-1 italic italic">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
-                            )}
+                          <input
+                            type="text"
+                            placeholder="Buscar por título, servicio o categoría..."
+                            value={scriptSearchQuery}
+                            onChange={(e) => setScriptSearchQuery(e.target.value)}
+                            className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-[#48c1d2] focus:ring-4 focus:ring-[#48c1d2]/5 transition-all shadow-sm"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button 
+                            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all border ${showFavoritesOnly ? 'bg-rose-500 text-white border-rose-500' : 'bg-white text-slate-400 border-slate-200'}`}
+                          >
+                            <Heart size={12} fill={showFavoritesOnly ? "currentColor" : "none"} /> Favoritos
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Listado Agrupado */}
+                      {Object.entries(groupScriptsByWeek(
+                        guiones.filter(s => {
+                          const matchesSearch = s.title.toLowerCase().includes(scriptSearchQuery.toLowerCase()) || 
+                                              s.service.toLowerCase().includes(scriptSearchQuery.toLowerCase()) ||
+                                              s.category.toLowerCase().includes(scriptSearchQuery.toLowerCase());
+                          const matchesFav = showFavoritesOnly ? favorites.includes(s.id) : true;
+                          return matchesSearch && matchesFav;
+                        })
+                      )).map(([week, weekScripts]) => (
+                        <div key={week} className="space-y-4 mb-8">
+                          <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-2 flex items-center gap-3">
+                            {week}
+                            <div className="flex-1 h-[1px] bg-slate-100"></div>
+                          </h5>
+                          <div className="grid gap-4">
+                            {weekScripts.map((script) => (
+                              <div
+                                key={script.id}
+                                onClick={() => {
+                                  setSelectedScript(script);
+                                  setCurrentStepIdx(0);
+                                  setShowFullScript(true);
+                                  if (showHelp) setTeleHelpStep(1);
+                                }}
+                                className={`bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-[#48c1d2]/50 transition-all cursor-pointer active:scale-95 relative overflow-hidden`}
+                              >
+                                <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 group-hover:text-[#48c1d2] transition-colors">
+                                  <Clapperboard size={20} />
+                                </div>
+                                <div className="text-left flex-1">
+                                  <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
+                                  <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                  {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
+                                    <p className="text-[9px] font-bold text-slate-400 mt-1 italic italic">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button 
+                                    onClick={(e) => toggleFavorite(e, script.id)}
+                                    className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${favorites.includes(script.id) ? 'text-rose-500 bg-rose-50' : 'text-slate-200 hover:text-rose-500'}`}
+                                  >
+                                    <Heart size={16} fill={favorites.includes(script.id) ? "currentColor" : "none"} />
+                                  </button>
+                                  <ChevronRight size={16} className="text-slate-200 group-hover:text-[#48c1d2] transition-all" />
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                          <ChevronRight size={16} className="text-slate-200 group-hover:text-[#48c1d2] transition-all" />
                         </div>
                       ))}
                     </>
@@ -1754,25 +1856,70 @@ function ContenidoContent() {
                               "Estos 3 videos son los pilares de tu perfil. Al fijarlos (Pin), aseguras que cualquier persona nueva entienda de inmediato quién eres y cómo contratarte."
                             </p>
                           </div>
-                          {guionesPresentacion.filter(s => s.isPinned).map((script) => (
-                            <div
-                              key={script.id}
-                              onClick={() => {
-                                setSelectedScript(script);
-                                setCurrentStepIdx(0);
-                                setShowFullScript(true);
-                              }}
-                              className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-amber-400 transition-all cursor-pointer relative overflow-hidden"
-                            >
-                              <div className="w-14 h-14 bg-amber-50 rounded-[1.5rem] flex items-center justify-center text-amber-600 group-hover:bg-amber-100 transition-all">
-                                <Video size={24} />
+
+                          {/* Barra de Búsqueda para Grabación Pro */}
+                          <div className="mb-6 space-y-4">
+                            <div className="relative group">
+                              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-amber-500">
+                                <Search size={18} />
                               </div>
-                              <div className="text-left flex-1">
-                                <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">Video a Fijar</span>
-                                <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
-                                <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
+                              <input
+                                type="text"
+                                placeholder="Buscar en Grabación Pro..."
+                                value={scriptSearchQuery}
+                                onChange={(e) => setScriptSearchQuery(e.target.value)}
+                                className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-400/5 transition-all shadow-sm"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Listado Agrupado de Grabación Pro */}
+                          {Object.entries(groupScriptsByWeek(
+                            guionesPresentacion.filter(s => {
+                              if (!s.isPinned) return false;
+                              const matchesSearch = s.title.toLowerCase().includes(scriptSearchQuery.toLowerCase()) || 
+                                                  s.service.toLowerCase().includes(scriptSearchQuery.toLowerCase()) ||
+                                                  s.category.toLowerCase().includes(scriptSearchQuery.toLowerCase());
+                              const matchesFav = showFavoritesOnly ? favorites.includes(s.id) : true;
+                              return matchesSearch && matchesFav;
+                            })
+                          )).map(([week, weekScripts]) => (
+                            <div key={week} className="space-y-4 mb-8">
+                              <h5 className="text-[10px] font-black text-amber-600/50 uppercase tracking-[0.2em] px-2 flex items-center gap-3">
+                                {week}
+                                <div className="flex-1 h-[1px] bg-amber-100"></div>
+                              </h5>
+                              <div className="grid gap-4">
+                                {weekScripts.map((script) => (
+                                  <div
+                                    key={script.id}
+                                    onClick={() => {
+                                      setSelectedScript(script);
+                                      setCurrentStepIdx(0);
+                                      setShowFullScript(true);
+                                    }}
+                                    className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-amber-400 transition-all cursor-pointer relative overflow-hidden"
+                                  >
+                                    <div className="w-14 h-14 bg-amber-50 rounded-[1.5rem] flex items-center justify-center text-amber-600 group-hover:bg-amber-100 transition-all">
+                                      <Video size={24} />
+                                    </div>
+                                    <div className="text-left flex-1">
+                                      <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">{script.category}</span>
+                                      <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                      <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <button 
+                                        onClick={(e) => toggleFavorite(e, script.id)}
+                                        className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${favorites.includes(script.id) ? 'text-rose-500 bg-rose-50' : 'text-slate-200 hover:text-rose-500'}`}
+                                      >
+                                        <Heart size={16} fill={favorites.includes(script.id) ? "currentColor" : "none"} />
+                                      </button>
+                                      <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
-                              <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
                             </div>
                           ))}
                         </>

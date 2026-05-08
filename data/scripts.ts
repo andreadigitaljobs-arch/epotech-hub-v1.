@@ -46,7 +46,8 @@ export interface Script {
   isProductionMode?: boolean;
   tips: string[]; 
   checklist: string[];
-  productionHack?: string; 
+  productionHack?: string;
+  createdAt?: string; 
 }
 
 export const guiones: Script[] = [
@@ -99,7 +100,8 @@ export const guiones: Script[] = [
       'Especialidad grabada',
       'Llamado a la acción grabado'
     ],
-    productionHack: 'Este video es tu carta de presentación. ¡Haz que brille!'
+    productionHack: 'Este video es tu carta de presentación. ¡Haz que brille!',
+    createdAt: '2026-05-01'
   }
 ];
 
@@ -207,7 +209,8 @@ export const guionesPresentacion: Script[] = [
       'Asegúrate de que la casa de fondo se vea impecable.'
     ],
     checklist: ['Hook afuera', 'Acción puerta', 'Conexión interior', 'Autoridad', 'Cierre confianza'],
-    productionHack: 'Usa luz natural de la mañana para la escena de afuera.'
+    productionHack: 'Usa luz natural de la mañana para la escena de afuera.',
+    createdAt: '2026-05-05'
   },
   {
     id: 'presentacion-2',
@@ -346,7 +349,8 @@ export const guionesPresentacion: Script[] = [
       'Asegúrate de que las manos de Sebastián se vean en la Escena 3.'
     ],
     checklist: ['Hook Driveway', 'Cambio Ángulo', 'Acción Superficie', 'Caminata Natural', 'Autoridad Herramientas', 'Cierre Emocional', 'CTA Overlay'],
-    productionHack: 'En la Escena 7, deja suficiente aire arriba para colocar los resultados Antes/Después.'
+    productionHack: 'En la Escena 7, deja suficiente aire arriba para colocar los resultados Antes/Después.',
+    createdAt: '2026-05-06'
   },
   {
     id: 'presentacion-3',
@@ -519,6 +523,7 @@ export const guionesPresentacion: Script[] = [
       'Cambia de lugar al menos 4 veces durante el video.'
     ],
     checklist: ['Hook Curiosidad', 'Reseñas (Overlay)', 'Validación Ángulo', 'Caminata Natural', 'Prueba Social Fuerte', 'Autoridad Clientes', 'Proceso Simple', 'Cierre Tranquilidad', 'CTA Reseñas'],
-    productionHack: 'Captura pantallas de tus mejores reseñas de Google/Yelp para usarlas como overlays en edición.'
+    productionHack: 'Captura pantallas de tus mejores reseñas de Google/Yelp para usarlas como overlays en edición.',
+    createdAt: '2026-05-07'
   }
 ];
