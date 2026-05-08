@@ -37,38 +37,44 @@ export default function ReferenciasPage() {
     loadData();
   }, []);
 
-  const viralVideos = (data.videos || []).filter((v: any) => v.categoria === 'VIRAL' && (platformFilter === 'all' || v.platform === platformFilter));
-  const autoridadVideos = (data.videos || []).filter((v: any) => v.categoria === 'AUTORIDAD' && (platformFilter === 'all' || v.platform === platformFilter));
-  const ventasVideos = (data.videos || []).filter((v: any) => v.categoria === 'VENTAS' && (platformFilter === 'all' || v.platform === platformFilter));
+  const filteredVideos = (data.videos || []).filter((v: any) => platformFilter === 'all' || v.platform === platformFilter);
+  const viralVideos = filteredVideos.filter((v: any) => v.categoria === 'VIRAL');
+  const autoridadVideos = filteredVideos.filter((v: any) => v.categoria === 'AUTORIDAD');
+  const ventasVideos = filteredVideos.filter((v: any) => v.categoria === 'VENTAS');
+
+  const filteredAccounts = (data.cuentas || []);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-32">
-      {/* HEADER SIEMPRE VISIBLE */}
       <div className="bg-[#142d53] pt-[env(safe-area-inset-top)] relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#48c1d2]/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 relative z-10">
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 leading-none uppercase text-white">
              Motor de <br /> <span className="text-[#48c1d2]">Inspiración</span>
           </h1>
+          <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md max-w-xl">
+            <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest leading-tight">
+              <span className="text-[#48c1d2]">Directiva Creativa:</span> Analiza estos videos no para copiarlos, sino para entender su estructura de retención.
+            </p>
+          </div>
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-6 -mt-10 relative z-20">
         {loading ? (
-          <div className="py-20 flex flex-col items-center justify-center space-y-4">
+          <div className="py-20 flex flex-col items-center justify-center space-y-4 bg-white rounded-[3rem] shadow-xl">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#142d53]/10 border-t-[#48c1d2]" />
             <p className="text-[10px] font-black uppercase tracking-widest text-[#142d53]/40 animate-pulse">Cargando Inspiración...</p>
           </div>
         ) : (
           <div className="space-y-10 animate-in fade-in duration-700">
-            {/* NAVEGACIÓN Y FILTROS */}
             <div className="space-y-6">
               <div className="flex bg-[#0a192f] p-2 rounded-[2rem] shadow-2xl border border-white/10 max-w-md mx-auto">
                 <button onClick={() => setActiveSubTab('videos')} className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-slate-500'}`}>
-                  <Zap size={14} /> Videos
+                  <Zap size={14} /> Videos de Referencia
                 </button>
                 <button onClick={() => setActiveSubTab('cuentas')} className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'cuentas' ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-slate-500'}`}>
-                  <ShieldCheck size={14} /> Cuentas
+                  <ShieldCheck size={14} /> Referentes Top
                 </button>
               </div>
               <div className="flex justify-center gap-3">
@@ -85,9 +91,12 @@ export default function ReferenciasPage() {
                 <div className="space-y-16">
                   {viralVideos.length > 0 && (
                     <div className="space-y-8">
-                       <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#0a192f] shadow-xl"><Zap size={24} /></div>
-                          <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic">Virales</h2>
+                       <div className="flex items-center gap-4 ml-2">
+                          <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#0a192f] shadow-lg"><Zap size={24} /></div>
+                          <div>
+                             <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Para Volverte Viral</h2>
+                             <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Contenido de alta retención y satisfacción visual</span>
+                          </div>
                        </div>
                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                           {viralVideos.map((video: any) => <VideoCard key={video.id} {...video} titleEs={video.titulo} />)}
@@ -96,19 +105,36 @@ export default function ReferenciasPage() {
                   )}
                   {autoridadVideos.length > 0 && (
                     <div className="space-y-8">
-                       <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-[#142d53] flex items-center justify-center text-white shadow-xl"><ShieldCheck size={24} /></div>
-                          <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic">Autoridad</h2>
+                       <div className="flex items-center gap-4 ml-2">
+                          <div className="w-12 h-12 rounded-2xl bg-[#142d53] flex items-center justify-center text-white shadow-lg"><ShieldCheck size={24} /></div>
+                          <div>
+                             <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Construye Tu Autoridad</h2>
+                             <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Demuestra tu conocimiento técnico y equipo profesional</span>
+                          </div>
                        </div>
                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                           {autoridadVideos.map((video: any) => <VideoCard key={video.id} {...video} titleEs={video.titulo} />)}
                        </div>
                     </div>
                   )}
+                  {ventasVideos.length > 0 && (
+                    <div className="space-y-8">
+                       <div className="flex items-center gap-4 ml-2">
+                          <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-[#48c1d2] shadow-lg"><Sparkles size={24} /></div>
+                          <div>
+                             <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Cierra Más Ventas</h2>
+                             <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Resultados finales, testimonios y ganchos de venta</span>
+                          </div>
+                       </div>
+                       <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                          {ventasVideos.map((video: any) => <VideoCard key={video.id} {...video} titleEs={video.titulo} />)}
+                       </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {data.cuentas.map((account: any) => <AccountCard key={account.id} {...account} fuerte={account.fuerte || account.descripcion} />)}
+                  {filteredAccounts.map((account: any) => <AccountCard key={account.id} {...account} fuerte={account.fuerte || account.descripcion} />)}
                 </div>
               )}
             </main>
