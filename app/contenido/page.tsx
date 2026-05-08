@@ -81,6 +81,7 @@ import {
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Toast, ToastType } from "@/components/ui/Toast";
+import { ScriptText } from "@/components/ui/ScriptText";
 import { guiones, guionesPresentacion, Script } from "@/data/scripts";
 import { mergeBlobsToWav } from "./audioUtils";
 
@@ -1093,9 +1094,10 @@ function ContenidoContent() {
                         {isSpeaking ? <Square fill="currentColor" size={12} /> : <Volume2 size={18} />}
                       </button>
                     </div>
-                    <p className="text-xl font-medium text-white/90 leading-relaxed italic relative z-10">
-                      "{selectedScript.fullDialogue}"
-                    </p>
+                    <ScriptText 
+                      text={selectedScript.fullDialogue}
+                      className="text-xl font-medium text-white/90 leading-relaxed italic relative z-10"
+                    />
                   </div>
                 </div>
               ) : (
@@ -1160,9 +1162,10 @@ function ContenidoContent() {
                                       {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
                                     </button>
                                   </div>
-                                  <p className="text-xl font-black text-white leading-tight italic">
-                                    {selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay}
-                                  </p>
+                                  <ScriptText 
+                                    text={selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay || ""}
+                                    className="text-xl font-black text-white leading-tight italic"
+                                  />
                                 </div>
                               )}
                               <div className="grid grid-cols-2 gap-4">
