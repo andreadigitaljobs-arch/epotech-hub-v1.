@@ -352,6 +352,8 @@ function ContenidoContent() {
   // NUEVOS ESTADOS: Búsqueda y Organización
   const [scriptSearchQuery, setScriptSearchQuery] = useState("");
   const [selectedWeek, setSelectedWeek] = useState<string>("");
+  const [selectedSerie, setSelectedSerie] = useState<any>(null);
+  const [isClosingSerie, setIsClosingSerie] = useState(false);
 
   const normalizeText = (text: string) => {
     return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -2017,7 +2019,11 @@ function ContenidoContent() {
                               benefit: 'Crea fans reales de tu negocio.'
                             }
                           ].map((serie) => (
-                            <div key={serie.id} className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden group">
+                            <div 
+                              key={serie.id} 
+                              onClick={() => setSelectedSerie(serie)}
+                              className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden group cursor-pointer hover:border-[#48c1d2] transition-all"
+                            >
                               <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-110 transition-transform">
                                 <serie.icon size={60} style={{ color: serie.color }} />
                               </div>
@@ -2134,6 +2140,191 @@ function ContenidoContent() {
       </div>
 
       {modalContent}
+      
+      {/* MODAL DE DETALLES DE SERIE */}
+      {selectedSerie && createPortal(
+        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-center ${isClosingSerie ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
+          <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] relative overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}>
+            <div className="p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100">
+              <div className="text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ backgroundColor: `${selectedSerie.color}15` }}>
+                  <selectedSerie.icon size={14} style={{ color: selectedSerie.color }} />
+                  <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: selectedSerie.color }}>Hoja de Ruta: Series</span>
+                </div>
+                <h2 className="text-2xl font-black text-[#142d53] leading-tight tracking-tighter">{selectedSerie.title}</h2>
+              </div>
+              <button 
+                onClick={() => {
+                  setIsClosingSerie(true);
+                  setTimeout(() => {
+                    setSelectedSerie(null);
+                    setIsClosingSerie(false);
+                  }, 300);
+                }}
+                className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-8 pt-6 space-y-8 custom-scrollbar text-left">
+              {/* Instrucción General */}
+              <section className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-black text-[11px] shrink-0 shadow-lg" style={{ backgroundColor: selectedSerie.color }}>
+                    <Sparkles size={14} />
+                  </div>
+                  <h4 className="text-[11px] font-black text-[#142d53] uppercase tracking-[0.2em]">Instrucciones Clave</h4>
+                </div>
+                <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 relative">
+                  <div className="absolute -left-2 top-6 w-1 h-12 rounded-full" style={{ backgroundColor: selectedSerie.color }} />
+                  <p className="text-sm font-bold text-[#142d53] leading-relaxed italic">
+                    {selectedSerie.id === 'ser1' && "En este formato no es necesario que te grabes hablando todo el tiempo. Buscamos un estilo 'Vlog' natural."}
+                    {selectedSerie.id === 'ser2' && "Esta serie es 'oro puro' para viralizar: ayudas a la comunidad y muestras tu trabajo al mismo tiempo."}
+                    {selectedSerie.id === 'ser3' && "El objetivo aquí es crear una conexión real con tu audiencia compartiendo tus metas de negocio."}
+                  </p>
+                </div>
+              </section>
+
+              {/* Requerimientos */}
+              <section className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-black text-[11px] shrink-0">
+                    <CheckCircle2 size={14} />
+                  </div>
+                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Lo que necesitamos</h4>
+                </div>
+                <div className="grid gap-3">
+                  {selectedSerie.id === 'ser1' && (
+                    <>
+                      <div className="p-5 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                        <h5 className="text-[10px] font-black text-[#142d53] uppercase mb-2 flex items-center gap-2">
+                          <Mic size={12} className="text-blue-500" /> El Audio (Vlog)
+                        </h5>
+                        <p className="text-xs font-medium text-slate-500 leading-relaxed">
+                          Graba una nota de voz contándonos tu día. Ej: "Acompáñame hoy... empezamos a las 9am, llevé a mi esposa al trabajo y luego me preparé para un driveway difícil..."
+                        </p>
+                      </div>
+                      <div className="p-5 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                        <h5 className="text-[10px] font-black text-[#142d53] uppercase mb-2 flex items-center gap-2">
+                          <Video size={12} className="text-purple-500" /> Los Videos (B-Roll)
+                        </h5>
+                        <p className="text-xs font-medium text-slate-500 leading-relaxed">
+                          Graba clips cortos de <strong>todo</strong> lo que menciones en el audio: manejando, preparando el equipo, desayunando, trabajando, etc.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                  {selectedSerie.id === 'ser2' && (
+                    <>
+                      <div className="p-5 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                        <h5 className="text-[10px] font-black text-[#142d53] uppercase mb-2 flex items-center gap-2">
+                          <Camera size={12} className="text-amber-500" /> Equipo Necesario
+                        </h5>
+                        <p className="text-xs font-medium text-slate-500 leading-relaxed">
+                          Usa un trípode para tomas lejanas de antes/después y un micrófono en el cuerpo para captar bien cuando hables con los vecinos.
+                        </p>
+                      </div>
+                      <div className="p-5 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                        <h5 className="text-[10px] font-black text-[#142d53] uppercase mb-2 flex items-center gap-2">
+                          <Users size={12} className="text-emerald-500" /> El Gancho (Pitch)
+                        </h5>
+                        <p className="text-xs font-medium text-slate-500 leading-relaxed">
+                          Toca puertas y ofrece limpiar gratis para tus redes. "Hola, estoy creando contenido y me gustaría limpiar tu driveway gratis para publicidad y ayudar al barrio".
+                        </p>
+                      </div>
+                    </>
+                  )}
+                  {selectedSerie.id === 'ser3' && (
+                    <>
+                      <div className="p-5 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                        <h5 className="text-[10px] font-black text-[#142d53] uppercase mb-2 flex items-center gap-2">
+                          <TrendingUp size={12} className="text-green-500" /> Reto Diario
+                        </h5>
+                        <p className="text-xs font-medium text-slate-500 leading-relaxed">
+                          Establece una meta (ej: $2000 al mes) y comparte el progreso en cada video. Crea suspenso: "¿Lo lograremos hoy?".
+                        </p>
+                      </div>
+                      <div className="p-5 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                        <h5 className="text-[10px] font-black text-[#142d53] uppercase mb-2 flex items-center gap-2">
+                          <MessageSquare size={12} className="text-blue-500" /> Contenido Transparente
+                        </h5>
+                        <p className="text-xs font-medium text-slate-500 leading-relaxed">
+                          "Hoy salió este trabajo, gané tanto... sígueme para ver si llego a la meta". Esto crea fans reales que quieren verte ganar.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </section>
+
+              {/* Referencias (Solo para Serie 1 por ahora) */}
+              {selectedSerie.id === 'ser1' && (
+                <section className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-black text-[11px] shrink-0">
+                      <Instagram size={14} />
+                    </div>
+                    <h4 className="text-[11px] font-black text-blue-400 uppercase tracking-[0.2em]">Referencias Visuales</h4>
+                  </div>
+                  <div className="grid grid-cols-1 gap-3">
+                    <a 
+                      href="https://www.instagram.com/reel/DW7NShpDn7H/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-4 bg-blue-50/50 border border-blue-100 rounded-2xl group hover:bg-blue-50 transition-all"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-blue-600 shadow-sm">
+                          <PlayCircle size={20} />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-[10px] font-black text-[#142d53] uppercase tracking-wider">Referencia #1</p>
+                          <p className="text-[9px] font-bold text-blue-500">instagram.com/reel/DW7...</p>
+                        </div>
+                      </div>
+                      <ChevronRight size={16} className="text-blue-300 group-hover:translate-x-1 transition-all" />
+                    </a>
+                    <a 
+                      href="https://www.instagram.com/reel/DUjMet9Dg5v/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-4 bg-blue-50/50 border border-blue-100 rounded-2xl group hover:bg-blue-50 transition-all"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-blue-600 shadow-sm">
+                          <PlayCircle size={20} />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-[10px] font-black text-[#142d53] uppercase tracking-wider">Referencia #2</p>
+                          <p className="text-[9px] font-bold text-blue-500">instagram.com/reel/DUj...</p>
+                        </div>
+                      </div>
+                      <ChevronRight size={16} className="text-blue-300 group-hover:translate-x-1 transition-all" />
+                    </a>
+                  </div>
+                </section>
+              )}
+            </div>
+
+            <div className="p-8 bg-slate-50 border-t border-slate-100 flex gap-3">
+              <button 
+                onClick={() => {
+                  setIsClosingSerie(true);
+                  setTimeout(() => {
+                    setSelectedSerie(null);
+                    setIsClosingSerie(false);
+                  }, 300);
+                }}
+                className="flex-1 py-4 bg-[#142d53] text-white rounded-[1.5rem] text-xs font-black uppercase tracking-widest shadow-xl shadow-[#142d53]/20 active:scale-95 transition-all"
+              >
+                ENTENDIDO
+              </button>
+            </div>
+          </div>
+        </div>
+      , document.body)}
+
       {selectedStory && createPortal(
         <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-center ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
           <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}>
