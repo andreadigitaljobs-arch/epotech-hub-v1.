@@ -61,9 +61,14 @@ const PRONUNCIATIONS: Record<string, string> = {
 interface ScriptTextProps {
   text: string;
   className?: string;
+  wordClassName?: string;
 }
 
-export const ScriptText: React.FC<ScriptTextProps> = ({ text, className = "" }) => {
+export const ScriptText: React.FC<ScriptTextProps> = ({ 
+  text, 
+  className = "",
+  wordClassName = "text-[#48c1d2] border-b border-[#48c1d2]/30 hover:bg-[#48c1d2]/10"
+}) => {
   const [activeWord, setActiveWord] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLParagraphElement>(null);
@@ -112,7 +117,7 @@ export const ScriptText: React.FC<ScriptTextProps> = ({ text, className = "" }) 
           <span
             key={i}
             onClick={(e) => handleWordClick(e, part, pronunciation)}
-            className="relative inline-block cursor-pointer text-[#48c1d2] border-b border-[#48c1d2]/30 hover:bg-[#48c1d2]/10 px-0.5 rounded transition-colors font-bold"
+            className={`relative inline-block cursor-pointer px-0.5 rounded transition-colors font-bold ${wordClassName}`}
           >
             {part}
           </span>

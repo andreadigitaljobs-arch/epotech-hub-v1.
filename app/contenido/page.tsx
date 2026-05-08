@@ -1266,7 +1266,10 @@ function ContenidoContent() {
                             {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
                           </button>
                         </div>
-                        <p className="text-lg font-medium text-white/90 leading-relaxed italic">"{s.script}"</p>
+                        <ScriptText 
+                          text={s.script}
+                          className="text-lg font-medium text-white/90 leading-relaxed italic"
+                        />
                         <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
                           <h5 className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-2"><Video size={10} /> Referencia Visual</h5>
                           <p className="text-[11px] font-bold text-white/40 leading-snug uppercase">{s.visualField}</p>
@@ -1307,7 +1310,11 @@ function ContenidoContent() {
                           {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
                         </button>
                       </h4>
-                      <p className="text-2xl font-black text-[#0a192f] leading-[1.1] tracking-tight italic">"{selectedScript.steps[currentStepIdx].script}"</p>
+                      <ScriptText 
+                        text={selectedScript.steps[currentStepIdx].script}
+                        className="text-2xl font-black text-[#0a192f] leading-[1.1] tracking-tight italic"
+                        wordClassName="text-[#142d53] border-b border-[#142d53]/40 hover:bg-[#142d53]/10"
+                      />
                       <div className="mt-8 flex flex-col items-center">
                         {isRecordingVoiceover ? (
                           <div className="flex flex-col items-center gap-2">
