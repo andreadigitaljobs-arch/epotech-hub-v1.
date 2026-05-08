@@ -314,8 +314,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
+      {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
+      <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
+        <div className="max-w-5xl mx-auto px-6 py-4">
+          <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">
+              <span className="text-[#48c1d2]">Academia Epotech:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Header Premium */}
-      <div className="bg-[#142d53] pt-[calc(1.5rem+env(safe-area-inset-top))] pb-20 px-6 md:px-12 relative overflow-hidden">
+      <div className="bg-[#142d53] pt-6 pb-20 px-6 md:px-12 relative overflow-hidden">
         {/* Glows eliminados para evitar cortes en la barra de estado de iPhone */}
         
         <div className="relative z-10 max-w-5xl mx-auto">

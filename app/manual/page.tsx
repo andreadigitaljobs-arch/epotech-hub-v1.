@@ -175,9 +175,21 @@ export default function ManualPage() {
   });
 
   return (
-    <div className="max-w-5xl mx-auto pb-32">
-      <div className="space-y-6">
-        <header className="relative bg-[#142d53] p-6 md:p-12 md:rounded-[2rem] text-white pt-[calc(1.5rem+env(safe-area-inset-top))]">
+    <div className="min-h-screen bg-[#f8fafc] pb-32">
+      {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
+      <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
+        <div className="max-w-5xl mx-auto px-6 py-4">
+          <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">
+              <span className="text-[#48c1d2]">Protocolos de Grabación:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes transmita la autoridad de una empresa líder en Utah.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto pb-32">
+        <div className="space-y-6">
+          <header className="relative bg-[#142d53] p-6 md:p-12 md:rounded-[2rem] text-white">
           <div className="flex items-center gap-2 mb-2">
             <div className="bg-[var(--accent)] p-1.5 rounded-lg shadow-lg">
               <Video size={14} className="text-[#142d53]" />
@@ -189,12 +201,6 @@ export default function ManualPage() {
           </h1>
         </header>
 
-        <div className="px-6 space-y-6">
-          <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-              <span className="text-[var(--accent)]">Protocolos de Grabación:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes transmita la autoridad de una empresa líder en Utah. El profesionalismo visual genera confianza inmediata.
-            </p>
-          </div>
 
           {/* Nueva Sección de Estrategia Transplantada */}
           <div className="bg-[#48c1d2] p-6 rounded-[2.5rem] text-[#142d53] shadow-md mt-6">

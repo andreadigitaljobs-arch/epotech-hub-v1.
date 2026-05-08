@@ -75,11 +75,21 @@ export default function ReferenciasPage() {
   const autoridadVideos = filteredVideos.filter((v: any) => v.categoria === 'AUTORIDAD');
   const ventasVideos = filteredVideos.filter((v: any) => v.categoria === 'VENTAS');
 
-  return (
-    <div className="max-w-5xl mx-auto pb-32 text-left space-y-6">
-      
-      {/* 1. HERO COMPACTO */}
-      <header className="relative p-6 md:p-12 md:rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border-b border-white/10 md:border group pt-[calc(1.5rem+env(safe-area-inset-top))]">
+    <div className="min-h-screen bg-[#f8fafc] pb-32">
+      {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
+      <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
+        <div className="max-w-5xl mx-auto px-6 py-4">
+          <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">
+              <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto pb-32 text-left space-y-6">
+        {/* 2. HERO COMPACTO */}
+        <header className="relative p-6 md:p-12 md:rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border-b border-white/10 md:border group">
          <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-15 transition-opacity duration-1000 rotate-12">
             <PlaySquare size={180} />
          </div>
@@ -94,13 +104,6 @@ export default function ReferenciasPage() {
          </div>
       </header>
 
-      <div className="px-6 space-y-6">
-        {/* Texto Tutorial Contextual Premium */}
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
-          </p>
-        </div>
 
 
       {/* 2. NAVEGACIÓN Y FILTROS */}
