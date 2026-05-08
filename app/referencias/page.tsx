@@ -35,20 +35,16 @@ export default function ReferenciasPage() {
     async function loadData() {
       try {
         // Priorizamos la información de alta calidad que ya investigamos
-        // Esto asegura que Sebastian vea la información corregida inmediatamente
         setData({ 
           videos: staticRefs.videos, 
           cuentas: staticRefs.cuentas 
         });
 
-        // Intentamos cargar de Supabase, pero solo si quisiéramos actualizar dinámicamente
-        // Por ahora, el "Master" es el archivo estático para garantizar precisión del 100%
+        // Intentamos cargar de Supabase si es necesario
         const { data: vDb } = await supabase.from('referencias_videos').select('*');
         const { data: cDb } = await supabase.from('referencias_cuentas').select('*');
         
         if (vDb && vDb.length > 0 && cDb && cDb.length > 0) {
-          // Si quisiéramos usar la DB, podríamos activarlo aquí, 
-          // pero hoy priorizamos la corrección manual que pidió el usuario.
           // setData({ videos: vDb, cuentas: cDb });
         }
       } catch (e) {
@@ -64,7 +60,7 @@ export default function ReferenciasPage() {
 
   const filteredVideos = data.videos
     .filter((v: any) => platformFilter === 'all' ? true : v.platform === platformFilter)
-    .sort((a: any, b: any) => a.platform.localeCompare(b.platform)); // Instagram before TikTok
+    .sort((a: any, b: any) => a.platform.localeCompare(b.platform));
 
   const filteredAccounts = data.cuentas.filter((c: any) => {
     const p = c.tipo.toLowerCase();
@@ -75,6 +71,7 @@ export default function ReferenciasPage() {
   const autoridadVideos = filteredVideos.filter((v: any) => v.categoria === 'AUTORIDAD');
   const ventasVideos = filteredVideos.filter((v: any) => v.categoria === 'VENTAS');
 
+  return (
     <div className="min-h-screen bg-[#f8fafc] pb-32">
       {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
       <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
@@ -104,11 +101,8 @@ export default function ReferenciasPage() {
          </div>
       </header>
 
-
-
       {/* 2. NAVEGACIÓN Y FILTROS */}
       <div className="space-y-8">
-         {/* Pestañas Principales */}
          <div className="flex bg-[#0a192f] p-2 rounded-[2rem] shadow-2xl border border-white/10 max-w-md mx-auto">
             <button 
                onClick={() => setActiveSubTab('videos')}
@@ -124,7 +118,6 @@ export default function ReferenciasPage() {
             </button>
          </div>
 
-         {/* Filtros de Plataforma */}
          <div className="flex justify-center gap-3">
             {[
                { id: 'all', label: 'Todos', icon: Sparkles },
@@ -142,11 +135,9 @@ export default function ReferenciasPage() {
          </div>
       </div>
 
-      {/* 3. CONTENIDO DINÁMICO */}
       <main className="animate-in fade-in slide-in-from-bottom-6 duration-700">
           {activeSubTab === 'videos' ? (
             <div className="space-y-16">
-               {/* CATEGORÍA 1: VIRAL */}
                {viralVideos.length > 0 && (
                   <div className="space-y-8">
                      <div className="flex items-center gap-4 ml-2">
@@ -173,7 +164,6 @@ export default function ReferenciasPage() {
                   </div>
                )}
 
-               {/* CATEGORÍA 2: AUTORIDAD */}
                {autoridadVideos.length > 0 && (
                   <div className="space-y-8">
                      <div className="flex items-center gap-4 ml-2">
@@ -200,7 +190,6 @@ export default function ReferenciasPage() {
                   </div>
                )}
 
-               {/* CATEGORÍA 3: VENTAS */}
                {ventasVideos.length > 0 && (
                   <div className="space-y-8">
                      <div className="flex items-center gap-4 ml-2">

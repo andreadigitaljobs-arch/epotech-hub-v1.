@@ -91,7 +91,6 @@ export default function BrandBriefPage() {
           </div>
         </header>
 
-
         {/* 2. PROPUESTA Y DIFERENCIADOR */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className={CARD_STYLE}>
@@ -234,7 +233,6 @@ export default function BrandBriefPage() {
            </div>
         </footer>
 
-        </div>
       </div>
     </div>
   );
