@@ -1512,12 +1512,14 @@ function ContenidoContent() {
                       </button>
                     </div>
                   </div>
-                </div>, document.body)}
+                </div>
+              , document.body)}
             </>
           )}
-        <!-- removed extra div -->
-
-    <!-- removed extra div -->, document.body) : null;
+        </div>
+      </div>
+    </div>
+  ), document.body) : null;
 
   useThemeColor("#ffffff");
 
@@ -1722,7 +1724,7 @@ function ContenidoContent() {
                       : 'Sigue el desglose por escenas para grabarte a ti mismo o dirigir a alguien más. Incluye ángulos, movimientos y guiones exactos.'
                     )}
                   </p>
-                  <!-- removed extra div -->
+                  </div>
                 )}
 
                 {guionTab === 'presentacion' && (
@@ -1844,7 +1846,7 @@ function ContenidoContent() {
                                     )}
                                   </div>
                                   <ChevronRight size={16} className="text-slate-200 group-hover:text-[#48c1d2] transition-all" />
-                                <!-- removed extra div -->
+                                </div>
                               ))}
                               
                               {groupKeys.length === 0 && (
@@ -1915,7 +1917,7 @@ function ContenidoContent() {
                                     <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
                                   </div>
                                   <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
-                                <!-- removed extra div -->
+                                </div>
                               ))}
                           </div>
                         </>
@@ -1987,7 +1989,7 @@ function ContenidoContent() {
                                           <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Grabación Pro</p>
                                         </div>
                                         <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
-                                      <!-- removed extra div -->
+                                      </div>
                                     ))}
 
                                     {groupKeys.length === 0 && (
@@ -2050,7 +2052,7 @@ function ContenidoContent() {
                                   </div>
                                 </div>
                               </div>
-                            <!-- removed extra div -->
+                            </div>
                           ))}
                         </div>
                       ) : (
@@ -2134,23 +2136,15 @@ function ContenidoContent() {
                               {story.sequence[0].script}
                             </p>
                           </div>
-                        <!-- removed extra div -->
-                      ))}
-                    </div>
+                        </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
-        )} 
-      </div>
-    </div>
-  )} 
+        )}
+        )}
         {activeTab === 'calendario' && <CreacionSection contentDB={contentDB} toggleStatus={toggleGlobalStatus} onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} />}
-</div>
-</div>
-</div>
-</div>
         {activeTab === 'historial' && <HistorialSection contentDB={contentDB} onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} showToast={showToast} activeTab={activeTab} />}
       </div>
 
@@ -2609,6 +2603,7 @@ function ContenidoContent() {
   );
 }
 
+}
 function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post: any, onClose: () => void, onToggleStatus: () => void, onSave: (updated: any) => void }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
