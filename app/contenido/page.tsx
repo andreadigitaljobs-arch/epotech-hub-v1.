@@ -77,7 +77,8 @@ import {
   Play,
   Pause,
   Volume2,
-  Square
+  Square,
+  Instagram
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Toast, ToastType } from "@/components/ui/Toast";
