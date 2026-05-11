@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 import { supabase } from "@/lib/supabase";
 import { client } from "@/data/sebastian";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import {
   CheckCircle2, Circle, Clock, ChevronDown, ChevronUp,
   Database, Smartphone, Layout, FormInput, Rocket,
@@ -325,8 +324,6 @@ export default function ProyectosPage() {
     }
   };
 
-  if (loading) return <LoadingSpinner message="Cargando proyectos..." />;
-
   return (
     <div className="max-w-5xl mx-auto px-6 py-6">
       <div className="space-y-6 pb-20">
@@ -522,15 +519,19 @@ export default function ProyectosPage() {
                               </span>
                             </div>
                             <div className="flex gap-2">
+                            <div className="grid w-full">
+                              <div className="invisible whitespace-pre-wrap p-4 text-[13px] md:text-sm font-bold leading-relaxed row-start-1 col-start-1 min-h-[100px]">
+                                {obsVal + " "}
+                              </div>
                               <textarea
-                                rows={Math.max(3, (obsVal.match(/\n/g) || []).length + 1)}
                                 placeholder="Escribe aquí los detalles del avance..."
-                                className="flex-1 text-[13px] md:text-sm font-bold text-[#142d53] bg-white border border-slate-200 rounded-[1.5rem] p-4 resize-none outline-none focus:border-[var(--accent)] transition-all placeholder:text-slate-300 leading-relaxed"
+                                className="row-start-1 col-start-1 w-full text-[13px] md:text-sm font-bold text-[#142d53] bg-white border border-slate-200 rounded-[1.5rem] p-4 resize-none outline-none focus:border-[var(--accent)] transition-all placeholder:text-slate-300 leading-relaxed overflow-hidden"
                                 value={obsVal}
                                 onChange={(e) =>
                                   setObsEdits((prev) => ({ ...prev, [task.id]: e.target.value }))
                                 }
                               />
+                            </div>
                               {isDirty && (
                                 <button
                                   onClick={() => saveObs(task.id)}

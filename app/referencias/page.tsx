@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { AccountCard } from "@/components/ui/AccountCard";
 import { VideoCard } from "@/components/ui/VideoCard";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { PlaySquare, Sparkles, Zap, ShieldCheck } from "lucide-react";
 
 const InstagramIcon = ({ size = 24, className }: { size?: number, className?: string }) => (
@@ -25,7 +24,7 @@ import { referencias as staticRefs } from "@/data/referencias";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
 export default function ReferenciasPage() {
-  useThemeColor("#0a192f");
+  useThemeColor("#f8fafc");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>({ videos: [], cuentas: [] });
   const [activeSubTab, setActiveSubTab] = useState<'videos' | 'cuentas'>('videos');
@@ -56,8 +55,6 @@ export default function ReferenciasPage() {
     loadData();
   }, []);
 
-  if (loading) return <LoadingSpinner message="Cargando Inspiración..." />;
-
   const filteredVideos = data.videos
     .filter((v: any) => platformFilter === 'all' ? true : v.platform === platformFilter)
     .sort((a: any, b: any) => a.platform.localeCompare(b.platform));
@@ -72,30 +69,30 @@ export default function ReferenciasPage() {
   const ventasVideos = filteredVideos.filter((v: any) => v.categoria === 'VENTAS');
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-32">
-      {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
-      <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
-        <div className="max-w-5xl mx-auto px-6 py-4">
-          <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">
-              <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
-            </p>
-          </div>
+    <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24">
+      {/* 1. INSTRUCCIONES PREMIUM */}
+      <div className="mb-4">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+            <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
+          </p>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto pb-32 text-left space-y-6">
+      <div className="text-left space-y-6">
         {/* 2. HERO COMPACTO */}
-        <header className="relative p-6 md:p-12 md:rounded-[2rem] bg-[#0a192f] text-white overflow-hidden shadow-2xl border-b border-white/10 md:border group">
-         <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-15 transition-opacity duration-1000 rotate-12">
-            <PlaySquare size={180} />
-         </div>
+        <header className="relative p-4 md:p-6 overflow-visible group">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:opacity-10 transition-opacity duration-1000 rotate-12">
+               <PlaySquare size={180} />
+            </div>
+          </div>
          
          <div className="relative z-10">
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 leading-none uppercase text-white">
-               Motor de <span className="text-[#48c1d2]">Inspiración</span>
+            <h1 className="text-4xl md:text-7xl font-black tracking-tighter mb-4 leading-[1.1] text-[#142d53]">
+               Motor de <span className="text-[#48c1d2]">inspiración</span>
             </h1>
-            <p className="text-xs font-bold text-slate-400 italic max-w-xl leading-relaxed opacity-80 border-l-2 border-[#48c1d2]/30 pl-6">
+            <p className="text-sm font-medium text-slate-500 italic max-w-xl leading-relaxed">
                "No grabes por grabar. Entiende el código visual de lo que funciona para elevar Epotech al siguiente nivel."
             </p>
          </div>
@@ -103,22 +100,22 @@ export default function ReferenciasPage() {
 
       {/* 2. NAVEGACIÓN Y FILTROS */}
       <div className="space-y-8">
-         <div className="flex bg-[#0a192f] p-2 rounded-[2rem] shadow-2xl border border-white/10 max-w-md mx-auto">
+         <div className="flex bg-slate-100 p-1.5 rounded-[2rem] max-w-md border border-slate-200">
             <button 
                onClick={() => setActiveSubTab('videos')}
-               className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+               className={`flex-1 py-3 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-white text-[#142d53] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
             >
                <Zap size={14} /> Videos de Referencia
             </button>
             <button 
                onClick={() => setActiveSubTab('cuentas')}
-               className={`flex-1 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'cuentas' ? 'bg-[#48c1d2] text-[#0a192f] shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+               className={`flex-1 py-3 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'cuentas' ? 'bg-white text-[#142d53] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
             >
                <ShieldCheck size={14} /> Referentes Top
             </button>
          </div>
 
-         <div className="flex justify-center gap-3">
+         <div className="flex bg-slate-100 p-1.5 rounded-[2rem] max-w-lg border border-slate-200">
             {[
                { id: 'all', label: 'Todos', icon: Sparkles },
                { id: 'instagram', label: 'Instagram', icon: InstagramIcon },
@@ -127,7 +124,7 @@ export default function ReferenciasPage() {
                <button 
                   key={p.id}
                   onClick={() => setPlatformFilter(p.id as any)}
-                  className={`px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all border flex items-center gap-3 ${platformFilter === p.id ? 'bg-[#0a192f] text-[#48c1d2] border-[#48c1d2] shadow-xl scale-105' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300 shadow-sm'}`}
+                   className={`flex-1 py-3 px-2 rounded-[2rem] text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${platformFilter === p.id ? 'bg-[#142d53] text-[#48c1d2] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
                >
                   <p.icon size={12} /> {p.label}
                </button>
@@ -137,7 +134,7 @@ export default function ReferenciasPage() {
 
       <main className="animate-in fade-in slide-in-from-bottom-6 duration-700">
           {activeSubTab === 'videos' ? (
-            <div className="space-y-16">
+            <div className="space-y-10">
                {viralVideos.length > 0 && (
                   <div className="space-y-8">
                      <div className="flex items-center gap-4 ml-2">
@@ -145,8 +142,8 @@ export default function ReferenciasPage() {
                            <Zap size={24} />
                         </div>
                         <div>
-                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Para Volverte Viral</h2>
-                           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Contenido de alta retención y satisfacción visual</span>
+                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter italic leading-none">Para volverte viral</h2>
+                           <span className="text-[8px] font-black tracking-[0.4em] text-slate-400">Contenido de alta retención y satisfacción visual</span>
                         </div>
                      </div>
                      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -171,8 +168,8 @@ export default function ReferenciasPage() {
                            <ShieldCheck size={24} />
                         </div>
                         <div>
-                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter uppercase italic leading-none">Construye Tu Autoridad</h2>
-                           <span className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400">Demuestra tu conocimiento técnico y equipo profesional</span>
+                           <h2 className="text-2xl font-black text-[#0a192f] tracking-tighter italic leading-none">Construye tu autoridad</h2>
+                           <span className="text-[8px] font-black tracking-[0.4em] text-slate-400">Demuestra tu conocimiento técnico y equipo profesional</span>
                         </div>
                      </div>
                      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -217,7 +214,7 @@ export default function ReferenciasPage() {
                )}
 
                {filteredVideos.length === 0 && (
-                  <div className="py-24 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
+                  <div className="py-24 text-left px-10 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
                      <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay contenido disponible bajo este filtro</p>
                   </div>
                )}
@@ -246,7 +243,7 @@ export default function ReferenciasPage() {
                      ))}
                   </div>
                ) : (
-                  <div className="py-24 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
+                  <div className="py-24 text-left px-10 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
                      <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No hay canales en esta categoría</p>
                   </div>
                )}
@@ -255,5 +252,6 @@ export default function ReferenciasPage() {
       </main>
     </div>
   </div>
-);
+  );
 }
+

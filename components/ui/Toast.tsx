@@ -61,7 +61,7 @@ export function Toast({ message, type, isVisible, onClose }: ToastProps) {
 
   const content = (
     <div 
-      className={`fixed top-6 left-0 right-0 mx-auto z-[99999] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] transform w-fit ${
+      className={`fixed top-16 left-0 right-0 mx-auto z-[99999] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] transform w-fit ${
         isVisible 
           ? "translate-y-0 opacity-100 scale-100" 
           : "-translate-y-12 opacity-0 scale-90 pointer-events-none"

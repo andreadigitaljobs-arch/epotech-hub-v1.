@@ -24,7 +24,7 @@ export function BottomNav() {
   }, [pathname]);
 
   return (
-    <div className="fixed bottom-6 left-0 right-0 z-[100] px-4 md:hidden pointer-events-none">
+    <div className="fixed bottom-[calc(1.5rem+var(--safe-bottom))] left-0 right-0 z-[100] px-4 md:hidden pointer-events-none">
       <nav className="mx-auto max-w-[480px] flex bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-2.5 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] pointer-events-auto relative overflow-hidden">
         
         {/* Area del Indicador: Sincronizada con el padding (10px) y 6 pestañas (100/6 = 16.66%) */}

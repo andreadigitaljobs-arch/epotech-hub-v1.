@@ -79,7 +79,6 @@ import {
   Volume2,
   Square
 } from "lucide-react";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { ScriptText } from "@/components/ui/ScriptText";
 import { guiones, guionesPresentacion, Script } from "@/data/scripts";
@@ -329,14 +328,6 @@ const getYoutubeId = (url: string) => {
 
 export default function ContenidoPage() {
   useThemeColor("#F0F4F8");
-  return (
-    <Suspense fallback={<LoadingSpinner message="Conectando con el Estudio..." />}>
-      <ContenidoContent />
-    </Suspense>
-  );
-}
-
-function ContenidoContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type') || 'presion';
@@ -596,7 +587,6 @@ function ContenidoContent() {
   const [isClosingAudioReport, setIsClosingAudioReport] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [recordTime, setRecordTime] = useState(0);
@@ -1525,7 +1515,7 @@ function ContenidoContent() {
   ) : null;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-6 pb-24 text-left">
+    <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 text-left">
       {/* Texto Tutorial Contextual Premium */}
       <div className="mb-8">
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
@@ -1545,7 +1535,7 @@ function ContenidoContent() {
       </div>
 
       {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}
-      <div className={`mb-8 px-2 animate-in fade-in slide-in-from-top-6 duration-1000 delay-200 relative`}>
+      <div className={`mb-8 animate-in fade-in slide-in-from-top-6 duration-1000 delay-200 relative`}>
         {showHelp && dashHelpStep === 1 && (
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
             <div className="flex flex-col gap-2">
@@ -1658,10 +1648,10 @@ function ContenidoContent() {
           <div className="space-y-4">
             {/* Navegación del Estudio de Producción Compacta pero Espaciada */}
             {/* Navegación del Estudio de Producción - Ahora Simplificada */}
-            <div className="flex bg-[#0a192f]/5 p-1.5 rounded-2xl mb-6 gap-1.5 border border-slate-200/60 shadow-inner">
+            <div className="flex overflow-x-auto no-scrollbar bg-[#0a192f]/5 p-1.5 rounded-2xl mb-6 gap-1.5 border border-slate-200/60 shadow-inner">
               <button
                 onClick={() => handleGuionTabChange('reels')}
-                className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'reels'
+                className={`flex-1 py-3 px-2 sm:px-3 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'reels'
                     ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
@@ -1670,7 +1660,7 @@ function ContenidoContent() {
               </button>
               <button
                 onClick={() => handleGuionTabChange('historias')}
-                className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'historias'
+                className={`flex-1 py-3 px-2 sm:px-3 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'historias'
                     ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
@@ -1679,7 +1669,7 @@ function ContenidoContent() {
               </button>
               <button
                 onClick={() => handleGuionTabChange('presentacion')}
-                className={`flex-1 py-3 px-3 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'presentacion'
+                className={`flex-1 py-3 px-2 sm:px-3 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'presentacion'
                     ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
@@ -2382,12 +2372,12 @@ function ContenidoContent() {
 
       {/* MODAL DE REPORTE DE AUDIO (Paso Final) */}
       {showAudioReport && createPortal(
-        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-center ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
+        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-left ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
           <div className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
             <div className="p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20">
               <div>
                 <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block italic opacity-70">Módulo de Mentoría</span>
-                <h2 className="text-2xl font-black text-white italic tracking-tighter uppercase leading-none">Tu Reporte <span className="text-[#48c1d2]">Pro</span></h2>
+                <h2 className="text-2xl font-black text-white italic tracking-tighter leading-none">Tu reporte <span className="text-[#48c1d2]">pro</span></h2>
               </div>
               <button onClick={handleCloseAudioReport} className="w-12 h-12 rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-500 flex items-center justify-center text-white/20 border border-white/10 transition-all"><X size={24} /></button>
             </div>
@@ -2421,10 +2411,10 @@ function ContenidoContent() {
                     <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
                   </div>
                 )}
-                <h4 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest mb-2 flex items-center gap-2 italic">
+                <h4 className="text-[10px] font-black text-[#48c1d2] tracking-widest mb-2 flex items-center gap-2 italic">
                   <Mic size={14} /> Responde con todo el detalle:
                 </h4>
-                <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Tu detalle nos ayuda a crear historias que vendan tu esfuerzo y profesionalismo.</p>
+                <p className="text-[9px] font-bold text-white/40 tracking-widest mb-6 border-b border-white/5 pb-2">Tu detalle nos ayuda a crear historias que vendan tu esfuerzo y profesionalismo.</p>
                 <ul className="space-y-5">
                   {[
                     "¿Dónde estuviste hoy y qué tan grave era el problema?",
@@ -2474,11 +2464,11 @@ function ContenidoContent() {
 
                 {!recordedAudio ? (
                   <>
-                    <div className="text-center mb-4">
+                    <div className="text-left mb-4 flex flex-col items-start">
                       <div className={`text-3xl font-mono font-black tabular-nums mb-2 ${recordTime >= 3600 ? 'text-[#48c1d2] animate-pulse' : 'text-[#48c1d2]'}`}>
                         {formatTime(recordTime)}
                       </div>
-                      <div className="flex items-center gap-2 justify-center">
+                      <div className="flex items-center gap-2 justify-start">
                         <div className={`w-2 h-2 rounded-full ${isRecording && !isPaused ? 'bg-red-500 animate-pulse' : 'bg-slate-600'}`}></div>
                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
                           {recordTime >= 3600 ? 'Límite alcanzado' : (isRecording ? (isPaused ? 'Pausado' : 'Grabando...') : 'Listo para Grabar Escenas')}

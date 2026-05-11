@@ -56,7 +56,7 @@ const TUTORIAL_CARDS = [
 ];
 
 export default function Home() {
-  useThemeColor("#142d53");
+  useThemeColor("#f8fafc");
   const router = useRouter();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -313,54 +313,50 @@ export default function Home() {
   const tutorialVideoId = "dQw4w9WgXcQ"; // Placeholder, se puede cambiar luego
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-24 md:pb-8">
-      {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
-      <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
-        <div className="max-w-5xl mx-auto px-6 py-4">
-          <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">
-              <span className="text-[#48c1d2]">Academia Epotech:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
-            </p>
-          </div>
+    <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 md:pb-8">
+      {/* 1. INSTRUCCIONES PREMIUM */}
+      <div className="mb-4">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+            <span className="text-[#48c1d2]">Academia Epotech:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
+          </p>
         </div>
       </div>
 
-      {/* Header Premium */}
-      <div className="bg-[#142d53] pt-6 pb-20 px-6 md:px-12 relative overflow-hidden">
-        {/* Glows eliminados para evitar cortes en la barra de estado de iPhone */}
-        
-        <div className="relative z-10 max-w-5xl mx-auto">
+      {/* Header Premium - Light */}
+      <div className="pt-2 pb-4 relative overflow-visible">
+        <div className="relative z-10">
           <div className="flex justify-between items-start gap-4">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/20 flex items-center justify-center border border-[#48c1d2]/30">
+                <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/10 flex items-center justify-center border border-[#48c1d2]/20">
                   <BookOpen size={20} className="text-[#48c1d2]" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Academia Epotech</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Academia Epotech</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 overflow-visible">
-                Centro de Mando: <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#48c1d2] to-white italic" style={{ WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone', padding: '0 0.2em', margin: '0 -0.2em' }}>Tu Guía de Vuelo&nbsp;</span>
+              <h1 className="text-4xl md:text-7xl font-black text-[#142d53] tracking-tighter mb-8 overflow-visible max-w-4xl leading-[1.1]">
+                Centro de mando: <br /> <span className="text-[#48c1d2] italic">Tu guía de vuelo&nbsp;</span>
               </h1>
             </div>
             
             <button 
               onClick={() => router.push('/master')}
-              className="md:hidden mt-1 p-4 bg-white/10 backdrop-blur-md text-[#48c1d2] rounded-[1.5rem] border border-white/10 shadow-xl active:scale-90 transition-all flex flex-col items-center gap-1 group"
+              className="md:hidden mt-1 p-4 bg-white text-[#48c1d2] rounded-[1.5rem] border border-slate-200 shadow-sm active:scale-90 transition-all flex flex-col items-center gap-1 group"
             >
               <ShieldCheck size={20} className="group-hover:scale-110 transition-transform" />
-              <span className="text-[7px] font-black uppercase tracking-tighter opacity-60">Master</span>
+              <span className="text-[7px] font-black uppercase tracking-tighter text-slate-400">Master</span>
             </button>
           </div>
-          <p className="text-slate-400 text-lg max-w-2xl font-medium leading-relaxed">
+          <p className="text-slate-500 text-lg max-w-2xl font-medium leading-relaxed">
             Hola Sebastian, aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. ¿Qué quieres lograr hoy?
           </p>
           
-          <div className="flex flex-col md:flex-row items-center gap-6 mt-10 mb-8">
+          <div className="flex flex-col md:flex-row items-center gap-6 mt-10 mb-4">
             <button 
               onClick={executePermissionRequest}
               className={`w-full md:w-auto px-8 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-3 border-b-4 ${
                 isSubscribed 
-                ? "bg-slate-800 text-[#48c1d2] border-slate-900 cursor-default" 
+                ? "bg-slate-100 text-[#48c1d2] border-slate-200 cursor-default" 
                 : "bg-[#48c1d2] hover:bg-[#35a5b5] text-[#142d53] border-[#2d8c9a] hover:scale-105 active:scale-95 shadow-[#48c1d2]/30"
               }`}
             >
@@ -369,7 +365,7 @@ export default function Home() {
             </button>
             <div className="flex items-center gap-3">
               <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${isSubscribed ? 'bg-green-500 shadow-green-500/50' : 'bg-amber-500 shadow-amber-500/50'}`}></div>
-              <span className="text-[10px] font-black uppercase text-white/40 tracking-[0.3em] italic">
+              <span className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em] italic">
                 {isSubscribed ? "Notificaciones activas" : "Sin notificaciones"}
               </span>
             </div>
@@ -377,7 +373,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 md:px-12 -mt-12 relative z-20">
+      <div className="relative z-20">
         {/* Quick Help Card */}
         <div className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 mb-12 flex flex-col md:flex-row items-center gap-8 group">
           <div 

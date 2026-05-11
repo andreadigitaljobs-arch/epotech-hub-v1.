@@ -23,6 +23,10 @@
     --success: #10B981;
     --warning: #F59E0B;
     --danger: #EF4444;
+
+    /* Safe Area Variables */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 
@@ -54,6 +58,10 @@
   
   .glass-panel {
     @apply bg-white/80 backdrop-blur-md border border-white/20;
+  }
+
+  .pt-safe {
+    padding-top: calc(var(--safe-top) + 0.5rem);
   }
 }
 

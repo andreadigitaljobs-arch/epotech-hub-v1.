@@ -16,9 +16,9 @@ import {
   HelpCircle,
   UserCheck,
   Trophy,
-  Smartphone
+  Smartphone,
+  Compass
 } from "lucide-react";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
 const phaseIcons: Record<string, any> = {
@@ -43,8 +43,13 @@ const phaseMessages: Record<string, string> = {
 };
 
 export default function ManualPage() {
-  useThemeColor("#142d53");
-  const [data, setData] = useState<any>(null);
+  useThemeColor("#f8fafc");
+  const [data, setData] = useState<any>({
+    regla_oro: staticManual.regla.ruleEs,
+    haz_list: staticManual.comoGrabar.haz.map(h => h.es),
+    evita_list: staticManual.comoGrabar.evita.map(e => e.es),
+    fases: staticManual.fases
+  });
   const [loading, setLoading] = useState(true);
   const [activePhase, setActivePhase] = useState("antes");
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
@@ -87,8 +92,6 @@ export default function ManualPage() {
     fetchData();
     return () => clearTimeout(timer);
   }, []);
-
-  if (loading) return <LoadingSpinner message="Cargando protocolos..." />;
 
   const phases = (data.fases || staticManual.fases).map((fase: any) => {
     let itemsFinales = [...(fase.items || [])];
@@ -175,35 +178,36 @@ export default function ManualPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-32">
-      {/* 1. INSTRUCCIONES EN EL SAFE AREA (Para evitar corte de color) */}
-      <div className="bg-white border-b border-slate-200 pt-[env(safe-area-inset-top)]">
-        <div className="max-w-5xl mx-auto px-6 py-4">
-          <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">
-              <span className="text-[#48c1d2]">Protocolos de Grabación:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes transmita la autoridad de una empresa líder en Utah.
-            </p>
-          </div>
+    <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24">
+      {/* 1. INSTRUCCIONES PREMIUM */}
+      <div className="mb-4">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+            <span className="text-[#48c1d2]">Protocolos de Grabación:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes transmita la autoridad de una empresa líder en Utah.
+          </p>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto pb-32">
-        <div className="space-y-6">
-          <header className="relative bg-[#142d53] p-6 md:p-12 md:rounded-[2rem] text-white">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="bg-[var(--accent)] p-1.5 rounded-lg shadow-lg">
-              <Video size={14} className="text-[#142d53]" />
+      <div className="space-y-6">
+        <header className="relative p-6 md:p-8 bg-transparent text-[#0a192f] overflow-visible">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-[2rem]">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.03] rotate-12">
+              <Compass size={220} />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Protocolo de Campo</span>
           </div>
-          <h1 className="text-4xl font-black tracking-tighter text-white mb-4">
-            Guía de Grabación Master
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-[#48c1d2]/10 p-1.5 rounded-lg">
+              <Video size={14} className="text-[#48c1d2]" />
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Protocolo de Campo</span>
+          </div>
+          <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-[#142d53] mb-4 leading-[1.1]">
+            Guía de grabación <span className="text-[#48c1d2]">master</span>
           </h1>
         </header>
 
-
-          {/* Nueva Sección de Estrategia Transplantada */}
-          <div className="bg-[#48c1d2] p-6 rounded-[2.5rem] text-[#142d53] shadow-md mt-6">
+        {/* Nueva Sección de Estrategia */}
+        <div className="bg-[#48c1d2] p-6 rounded-[2.5rem] text-[#142d53] shadow-md">
             <div className="flex items-center gap-3 mb-3">
               <div className="bg-white/20 p-2 rounded-xl"><Trophy size={18} /></div>
               <h4 className="text-lg font-black tracking-tight">Nuestra Estrategia</h4>
@@ -232,7 +236,7 @@ export default function ManualPage() {
                   <div key={idx} className="flex items-start gap-3 bg-white/10 p-4 rounded-xl border border-white/20">
                     <span className="text-xl font-black opacity-30 leading-none mt-0.5">{idx + 1}</span>
                     <div>
-                      <p className="text-xs font-black uppercase leading-none mb-1.5">{s.step}</p>
+                      <p className="text-xs font-black leading-none mb-1.5">{s.step}</p>
                       <p className="text-[11px] font-bold opacity-90 leading-tight">{s.desc}</p>
                     </div>
                   </div>
@@ -242,12 +246,12 @@ export default function ManualPage() {
         </div>
 
         {/* Regla de Oro Compacta */}
-        <div className="group bg-[var(--primary)] rounded-[2.5rem] p-6 text-white relative overflow-hidden shadow-xl">
-          <div className="absolute -right-6 -bottom-6 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Zap size={120} />
+        <div className="group bg-white rounded-[2.5rem] p-6 relative overflow-hidden shadow-sm border border-slate-100">
+          <div className="absolute -right-6 -bottom-6 opacity-[0.04] group-hover:opacity-10 transition-opacity">
+            <Zap size={120} className="text-[#48c1d2]" />
           </div>
-          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--accent)] mb-2">La Regla de Oro Mundial</h3>
-          <p className="text-lg font-black italic leading-tight text-balance">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2] mb-2">La Regla de Oro Mundial</h3>
+          <p className="text-lg font-black italic leading-tight text-balance text-[#142d53]">
             "{data.regla_oro}"
           </p>
         </div>
@@ -294,14 +298,14 @@ export default function ManualPage() {
                     </div>
                     <div>
                       <h3 className="text-xl font-black text-[var(--primary)] tracking-tighter">{fase.titulo}</h3>
-                      <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-0.5">Checklist de grabación</p>
+                      <p className="text-[10px] font-bold text-[var(--text-muted)] tracking-widest mt-0.5">Checklist de grabación</p>
                     </div>
                   </div>
 
                   <div className={`mb-6 p-5 rounded-2xl border transition-all ${activePhase === 'humano' ? 'bg-purple-50 border-purple-200' : 'bg-blue-50/50 border-blue-100/50'}`}>
                     <p className={`text-xs font-black uppercase tracking-tight leading-relaxed ${activePhase === 'humano' ? 'text-purple-700' : 'text-[#142d53]'}`}>
                       <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 ${activePhase === 'humano' ? 'bg-purple-600' : 'bg-[#142d53]'}`}>
-                        ESTRATEGIA 2026:
+                        Estrategia 2026:
                       </span>
                       {phaseMessages[activePhase]}
                     </p>
@@ -391,6 +395,5 @@ export default function ManualPage() {
         </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
