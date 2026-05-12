@@ -760,14 +760,23 @@ export default function ProyectosPage() {
                       )}
                     </button>
 
-                    <div className="flex-1 text-left pt-1">
-                      <div className="flex justify-between items-start mb-1">
-                        <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">{meta.categoria}</span>
-                        <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border ${STATUS_COLORS[item.status]}`}>
-                          {STATUS_LABELS[item.status]}
-                        </span>
-                      </div>
-                      <h4 className={`text-sm font-black leading-tight mb-2 ${item.status === 'completada' ? 'text-slate-400 line-through' : 'text-[#142d53]'}`}>{item.tarea}</h4>
+                      <div className="flex-1 text-left pt-1">
+                        <div className="flex justify-between items-start mb-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">{meta.categoria}</span>
+                            <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border ${STATUS_COLORS[item.status]}`}>
+                              {STATUS_LABELS[item.status]}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => deleteTask(item.id)}
+                            className="text-slate-200 hover:text-red-400 transition-colors p-1"
+                            title="Eliminar tarea"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                        <h4 className={`text-sm font-black leading-tight mb-2 ${item.status === 'completada' ? 'text-slate-400 line-through' : 'text-[#142d53]'}`}>{item.tarea}</h4>
                       <p className="text-[11px] font-medium text-slate-500 leading-relaxed italic mb-4">
                         {item.observacion}
                       </p>
