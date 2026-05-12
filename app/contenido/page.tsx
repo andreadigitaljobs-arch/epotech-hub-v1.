@@ -755,7 +755,7 @@ export default function ContenidoPage() {
         setRecordedAudio(URL.createObjectURL(draft.blob));
         setRecordTime(draft.duration || 0);
         setIsClosingAudioReport(false);
-        setShowAudioReport(true); // Abrir el modal si hay un borrador pendiente
+        // NO abrir el modal automáticamente para no ser invasivo
       }
     });
   }, []);
@@ -1591,6 +1591,13 @@ export default function ContenidoPage() {
           <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center relative z-10 border border-white/10 group-hover:bg-white/10 transition-all">
             <ChevronRight size={20} className="text-[#48c1d2]" />
           </div>
+
+          {recordedAudio && (
+            <div className="absolute top-3 right-12 flex items-center gap-1.5 bg-[#48c1d2] text-[#142d53] px-2.5 py-1 rounded-full text-[7px] font-black animate-pulse border border-[#142d53]/20 shadow-lg">
+              <div className="w-1 h-1 bg-[#142d53] rounded-full"></div>
+              BORRADOR PENDIENTE
+            </div>
+          )}
         </button>
         <p className="text-[8px] text-slate-400 font-bold uppercase tracking-[0.15em] mt-3 opacity-60">* Úsalo al terminar tu día para transformar tus videos crudos en historias reales.</p>
       </div>
