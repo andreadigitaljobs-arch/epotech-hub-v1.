@@ -99,12 +99,12 @@ export default function BrandBriefPage() {
           </div>
 
           <div className={CARD_STYLE}>
-            <div className="absolute -right-10 -bottom-10 text-amber-500/5 group-hover:scale-110 transition-transform duration-1000">
+            <div className="absolute -right-10 -bottom-10 text-[#48c1d2]/5 group-hover:scale-110 transition-transform duration-1000">
                <Star size={200} />
             </div>
             <div className="relative z-10">
               <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                <div className="w-2 h-2 rounded-full bg-[#48c1d2]"></div>
                 Diferenciador Único
               </h2>
               <p className="text-xl font-bold text-[#142d53] leading-snug">
@@ -177,14 +177,14 @@ export default function BrandBriefPage() {
 
               <div className={CARD_STYLE}>
                  <div className="absolute top-0 right-0 p-8 opacity-[0.03]">
-                    <Paintbrush size={100} className="text-amber-500" />
+                    <Paintbrush size={100} className="text-[#48c1d2]" />
                  </div>
-                 <h4 className="text-[10px] font-black uppercase text-amber-500 tracking-[0.3em] mb-4">Renovación Premium</h4>
+                 <h4 className="text-[10px] font-black uppercase text-[#48c1d2] tracking-[0.3em] mb-4">Renovación Premium</h4>
                  <div className="space-y-3 relative z-10">
                     {(data.servicios_premium || []).map((s: string, idx: number) => (
                       <div key={idx} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
                          <span className="text-xs font-bold text-[#142d53] uppercase">{s}</span>
-                         <Zap size={14} className="text-amber-500 opacity-50" />
+                         <Zap size={14} className="text-[#48c1d2] opacity-50" />
                       </div>
                     ))}
                  </div>

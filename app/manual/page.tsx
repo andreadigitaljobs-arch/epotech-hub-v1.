@@ -30,7 +30,7 @@ const phaseIcons: Record<string, any> = {
 
 const phaseColors: Record<string, string> = {
   antes: "bg-blue-50 text-blue-600 border-blue-100",
-  durante: "bg-amber-50 text-amber-600 border-amber-100",
+  durante: "bg-[#48c1d2]/10 text-[#48c1d2] border-[#48c1d2]/20",
   despues: "bg-emerald-50 text-emerald-600 border-emerald-100",
   humano: "bg-purple-50 text-purple-600 border-purple-100",
 };
@@ -291,7 +291,7 @@ export default function ManualPage() {
 
             return (
               <div key={fase.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <Card className="p-6 border-t-8 shadow-xl rounded-[2.5rem]" style={{ borderTopColor: fase.id === 'antes' ? '#3b82f6' : fase.id === 'durante' ? '#f59e0b' : fase.id === 'despues' ? '#10b981' : '#a855f7' }}>
+                <Card className="p-6 border-t-8 shadow-xl rounded-[2.5rem]" style={{ borderTopColor: fase.id === 'antes' ? '#3b82f6' : fase.id === 'durante' ? '#48c1d2' : fase.id === 'despues' ? '#10b981' : '#a855f7' }}>
                   <div className="flex items-center gap-3 mb-6">
                     <div className={`p-3 rounded-xl border ${colorStyles}`}>
                       <Icon size={18} />
@@ -313,41 +313,50 @@ export default function ManualPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 relative">
                     {fase.items.map((item: any, idx: number) => (
-                      <div key={idx} className="group flex items-start gap-3 p-4 bg-gray-50/50 rounded-2xl border border-gray-100 hover:bg-white hover:border-[var(--accent)] transition-all">
-                        <div className="mt-0.5 bg-white border border-[var(--border)] group-hover:border-[var(--accent)] rounded-lg w-6 h-6 flex items-center justify-center shrink-0 text-[10px] font-black text-[var(--accent)]">
+                      <button 
+                        key={idx} 
+                        onClick={() => {
+                          if (item.tooltip) {
+                            setActiveTooltip(activeTooltip === idx ? null : idx);
+                          }
+                        }}
+                        className={`group w-full flex items-start text-left gap-4 p-5 bg-gray-50/50 rounded-2xl border border-gray-100 hover:bg-white hover:border-[var(--accent)] hover:shadow-xl hover:shadow-[#48c1d2]/5 transition-all active:scale-[0.98] cursor-pointer ${activeTooltip === idx ? 'border-[var(--accent)] bg-white shadow-lg' : ''}`}
+                      >
+                        <div className={`mt-0.5 rounded-xl w-8 h-8 flex items-center justify-center shrink-0 text-[11px] font-black transition-all ${activeTooltip === idx ? 'bg-[var(--accent)] text-white' : 'bg-white border border-[var(--border)] group-hover:border-[var(--accent)] text-[var(--accent)]'}`}>
                           {idx + 1}
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-bold text-[var(--primary)] leading-tight pt-0.5 pr-6 relative flex items-center justify-between gap-2">
-                            <span className="block">{(item.es || item)}</span>
+                          <div className="flex items-center justify-between gap-4">
+                            <p className={`text-sm font-black leading-tight transition-colors ${activeTooltip === idx ? 'text-[var(--primary)]' : 'text-[var(--primary)]/80 group-hover:text-[var(--primary)]'}`}>
+                              {(item.es || item)}
+                            </p>
                             {item.tooltip && (
-                              <button
-                                onClick={() => setActiveTooltip(activeTooltip === idx ? null : idx)}
-                                className="shrink-0 px-3 py-1.5 bg-[#142d53] hover:bg-[#48c1d2] text-white text-[9px] font-black uppercase rounded-lg transition-all shadow-lg flex items-center gap-1 active:scale-95"
-                              >
-                                <HelpCircle size={10} /> ¿CÓMO GRABARLO?
-                              </button>
+                              <div className={`shrink-0 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase flex items-center gap-1.5 transition-all ${activeTooltip === idx ? 'bg-[var(--accent)] text-white' : 'bg-slate-200/50 text-slate-500 group-hover:bg-[#142d53] group-hover:text-white'}`}>
+                                <HelpCircle size={10} /> 
+                                <span className="hidden md:inline">¿CÓMO GRABARLO?</span>
+                                <span className="md:hidden">INFO</span>
+                              </div>
                             )}
-                          </p>
+                          </div>
                           
                           {/* Tooltip Detallado */}
                           {activeTooltip === idx && item.tooltip && (
-                            <div className="mt-4 p-4 bg-[#142d53] text-white rounded-xl text-[10px] font-medium leading-relaxed animate-in zoom-in-95 duration-200 shadow-2xl relative border border-white/10 whitespace-pre-line">
+                            <div className="mt-4 p-4 bg-[#142d53] text-white rounded-xl text-[10px] font-medium leading-relaxed animate-in zoom-in-95 duration-200 shadow-2xl relative border border-white/10 whitespace-pre-line" onClick={(e) => e.stopPropagation()}>
                               <div className="absolute -top-2 right-6 w-4 h-4 bg-[#142d53] rotate-45 border-l border-t border-white/10"></div>
                               <span className="text-[#48c1d2] font-black uppercase block mb-1">Instrucción Táctica:</span>
                               {item.tooltip}
                             </div>
                           )}
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
 
                   <div className="mt-8 pt-6 border-t border-gray-100 flex items-center gap-3">
-                    <div className="bg-amber-100 p-1.5 rounded-lg text-amber-600">
+                    <div className="bg-[#48c1d2]/20 p-1.5 rounded-lg text-[#48c1d2]">
                       <AlertCircle size={14} />
                     </div>
-                    <p className="text-[11px] font-black text-amber-900 uppercase tracking-tight leading-tight">
+                    <p className="text-[11px] font-black text-[#142d53] uppercase tracking-tight leading-tight">
                       Consejo Pro: Los clips deben durar máximo 5 segundos para que sean dinámicos.
                     </p>
                   </div>

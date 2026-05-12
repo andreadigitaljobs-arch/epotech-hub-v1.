@@ -63,7 +63,7 @@ const SERVICES = [
     name: "Tu Parte",
     description: "Cosas que necesitamos de Sebastián.",
     Icon: UserCheck,
-    color: "amber",
+    color: "cyan",
     hidden: true
   }
 ];
@@ -168,7 +168,7 @@ const STATUS_LABELS: Record<TaskStatus, string> = {
 
 const STATUS_COLORS: Record<TaskStatus, string> = {
   pendiente: "bg-slate-100 text-slate-500 border-slate-200",
-  en_proceso: "bg-amber-50 text-amber-600 border-amber-200",
+  en_proceso: "bg-[#48c1d2]/10 text-[#48c1d2] border-[#48c1d2]/20",
   completada: "bg-emerald-50 text-emerald-600 border-emerald-200",
 };
 
@@ -435,7 +435,7 @@ export default function ProyectosPage() {
                           {svc.name}
                         </h2>
                         {svc.isComingSoon && (
-                          <span className="inline-block text-[7px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase tracking-[0.1em] border border-amber-200 mt-1">Próximamente</span>
+                          <span className="inline-block text-[7px] font-black bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 mt-1">Próximamente</span>
                         )}
                       </div>
                       <div className="text-right shrink-0">
@@ -484,7 +484,7 @@ export default function ProyectosPage() {
                             task.status === "completada"
                               ? "bg-emerald-50/40 border-emerald-100"
                               : task.status === "en_proceso"
-                              ? "bg-amber-50/40 border-amber-100"
+                              ? "bg-[#48c1d2]/10 border-[#48c1d2]/20"
                               : "bg-slate-50 border-slate-100"
                           }`}
                         >
@@ -498,7 +498,7 @@ export default function ProyectosPage() {
                               {task.status === "completada" ? (
                                 <CheckCircle2 size={22} className="text-emerald-500" />
                               ) : task.status === "en_proceso" ? (
-                                <Clock size={22} className="text-amber-500" />
+                                <Clock size={22} className="text-[#48c1d2]" />
                               ) : (
                                 <Circle size={22} className="text-slate-300" />
                               )}
@@ -694,7 +694,7 @@ export default function ProyectosPage() {
                           {announcement.tipo}
                         </span>
                         {announcement.tipo === 'REDES SOCIALES' && <Share2 size={12} className="text-[#48c1d2]" />}
-                        {(announcement.tipo === 'TIPS Y RECORDATORIOS' || announcement.tipo === 'URGENTE') && <Lightbulb size={12} className={announcement.tipo === 'URGENTE' ? 'text-red-500' : 'text-amber-400'} />}
+                        {(announcement.tipo === 'TIPS Y RECORDATORIOS' || announcement.tipo === 'URGENTE') && <Lightbulb size={12} className={announcement.tipo === 'URGENTE' ? 'text-red-500' : 'text-[#48c1d2]'} />}
                       </div>
                       <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
                     </div>
@@ -723,13 +723,13 @@ export default function ProyectosPage() {
         {activeSubTab === 'pendientes' && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Header explicativo */}
-            <div className="bg-amber-50 border border-amber-100 p-6 rounded-[2.5rem] relative overflow-hidden">
+            <div className="bg-[#48c1d2]/5 border border-[#48c1d2]/20 p-6 rounded-[2.5rem] relative overflow-hidden">
                <div className="absolute top-0 right-0 p-6 opacity-10">
-                  <Sparkles size={80} className="text-amber-500" />
+                  <Sparkles size={80} className="text-[#48c1d2]" />
                </div>
                <div className="relative z-10">
-                  <h3 className="text-lg font-black text-amber-900 mb-1 tracking-tight">Cosas que necesitamos de ti</h3>
-                  <p className="text-[10px] font-bold text-amber-900/60 uppercase tracking-widest leading-relaxed">Sebastian, completa esto para que el equipo pueda avanzar</p>
+                  <h3 className="text-lg font-black text-[#142d53] mb-1 tracking-tight">Cosas que necesitamos de ti</h3>
+                  <p className="text-[10px] font-bold text-[#142d53]/60 uppercase tracking-widest leading-relaxed">Sebastian, completa esto para que el equipo pueda avanzar</p>
                </div>
             </div>
 
@@ -739,7 +739,7 @@ export default function ProyectosPage() {
                 const { Icon } = meta;
 
                 return (
-                  <div key={item.id} className={`bg-white p-6 rounded-[2.5rem] border shadow-sm flex flex-col md:flex-row items-start gap-5 group transition-all ${item.status === 'completada' ? 'border-emerald-100 bg-emerald-50/10' : 'border-slate-100 hover:border-amber-400'}`}>
+                  <div key={item.id} className={`bg-white p-6 rounded-[2.5rem] border shadow-sm flex flex-col md:flex-row items-start gap-5 group transition-all ${item.status === 'completada' ? 'border-emerald-100 bg-emerald-50/10' : 'border-slate-100 hover:border-[#48c1d2]'}`}>
                     {/* Status toggle button */}
                     <button
                       onClick={() => toggleStatus(item)}
@@ -750,7 +750,7 @@ export default function ProyectosPage() {
                           <CheckCircle2 size={28} />
                         </div>
                       ) : item.status === "en_proceso" ? (
-                        <div className="w-14 h-14 bg-amber-100 rounded-[1.5rem] flex items-center justify-center text-amber-600 shadow-sm">
+                        <div className="w-14 h-14 bg-[#48c1d2]/20 rounded-[1.5rem] flex items-center justify-center text-[#48c1d2] shadow-sm">
                           <Clock size={28} />
                         </div>
                       ) : (
@@ -763,7 +763,7 @@ export default function ProyectosPage() {
                       <div className="flex-1 text-left pt-1">
                         <div className="flex justify-between items-start mb-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">{meta.categoria}</span>
+                            <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{meta.categoria}</span>
                             <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border ${STATUS_COLORS[item.status]}`}>
                               {STATUS_LABELS[item.status]}
                             </span>
@@ -797,7 +797,7 @@ export default function ProyectosPage() {
 
             {/* Agregar nuevo pendiente */}
             {addingTask['sebastian'] !== undefined ? (
-              <div className="flex gap-2 p-2 bg-white rounded-[2rem] border border-amber-200 shadow-sm animate-in zoom-in-95 duration-200">
+              <div className="flex gap-2 p-2 bg-white rounded-[2rem] border border-[#48c1d2]/30 shadow-sm animate-in zoom-in-95 duration-200">
                 <input
                   autoFocus
                   placeholder="¿Qué necesitamos de Sebastián?..."
@@ -814,7 +814,7 @@ export default function ProyectosPage() {
                 />
                 <button
                   onClick={() => addTask('sebastian', 'Tu Parte')}
-                  className="shrink-0 px-5 py-3 bg-amber-500 text-white rounded-[1.5rem] font-black text-xs active:scale-95 transition-all shadow-lg shadow-amber-500/20"
+                  className="shrink-0 px-5 py-3 bg-[#48c1d2] text-white rounded-[1.5rem] font-black text-xs active:scale-95 transition-all shadow-lg shadow-[#48c1d2]/20"
                 >
                   <Save size={16} />
                 </button>
@@ -832,9 +832,9 @@ export default function ProyectosPage() {
                 onClick={() =>
                   setAddingTask((prev) => ({ ...prev, ['sebastian']: "" }))
                 }
-                className="w-full flex items-center justify-center gap-2 py-5 border-2 border-dashed border-amber-200 rounded-[2.5rem] text-[10px] font-black text-amber-500/50 hover:border-amber-400 hover:text-amber-500 hover:bg-amber-50/30 transition-all group"
+                className="w-full flex items-center justify-center gap-2 py-5 border-2 border-dashed border-[#48c1d2]/30 rounded-[2.5rem] text-[10px] font-black text-[#48c1d2]/50 hover:border-[#48c1d2] hover:text-[#48c1d2] hover:bg-[#48c1d2]/10 transition-all group"
               >
-                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-8 h-8 rounded-full bg-[#48c1d2]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Plus size={16} />
                 </div>
                 AGREGAR REQUERIMIENTO

@@ -34,7 +34,7 @@ const TUTORIAL_CARDS = [
     description: "Usa tus notas de voz para que nosotros creemos guiones ganadores para ti.",
     icon: Sparkles,
     path: "/contenido?tab=guiones",
-    color: "amber",
+    color: "cyan",
     tag: "Contenido"
   },
   {
@@ -364,7 +364,7 @@ export default function Home() {
               {isSubscribed ? "Notificaciones Activas" : "Activar Notificaciones"}
             </button>
             <div className="flex items-center gap-3">
-              <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${isSubscribed ? 'bg-green-500 shadow-green-500/50' : 'bg-amber-500 shadow-amber-500/50'}`}></div>
+              <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${isSubscribed ? 'bg-green-500 shadow-green-500/50' : 'bg-[#48c1d2] shadow-[#48c1d2]/50'}`}></div>
               <span className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em] italic">
                 {isSubscribed ? "Notificaciones activas" : "Sin notificaciones"}
               </span>

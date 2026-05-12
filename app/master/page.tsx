@@ -227,7 +227,7 @@ export default function MasterPanel() {
         {/* Formulario de Notificación */}
         <Card className="lg:col-span-2 p-6 md:p-10 border-2 border-[var(--border)] shadow-xl rounded-[40px]">
           <div className="flex items-center gap-4 mb-8">
-            <div className="bg-amber-100 p-3 rounded-2xl text-amber-600 shrink-0">
+            <div className="bg-[#48c1d2]/20 p-3 rounded-2xl text-[#48c1d2] shrink-0">
               <Bell size={24} />
             </div>
             <div>

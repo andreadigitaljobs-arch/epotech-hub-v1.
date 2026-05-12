@@ -237,7 +237,7 @@ function MiniPerformanceItem({ title, views, perf }: any) {
   return (
     <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-[#48c1d2]/30 transition-all">
        <div className="flex items-center gap-3">
-          <div className={`h-2 w-2 rounded-full ${perf === 'success' ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-amber-500'}`}></div>
+          <div className={`h-2 w-2 rounded-full ${perf === 'success' ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-[#48c1d2]'}`}></div>
           <span className="text-[10px] font-black text-[var(--primary)] uppercase italic leading-tight line-clamp-1">{title}</span>
        </div>
        <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-lg border border-slate-100">

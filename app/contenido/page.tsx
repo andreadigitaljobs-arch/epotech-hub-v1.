@@ -1,4 +1,5 @@
 "use client";
+// Refined Narrative Workflow & Brand Colors Alignment
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { createPortal } from "react-dom";
@@ -260,7 +261,7 @@ const CustomAudioPlayer = ({ src, title = "Reporte de Audio" }: { src: string, t
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background: #48c1d2;
+          background: [#48c1d2];
           cursor: pointer;
           box-shadow: 0 0 10px rgba(72,193,210,0.5);
         }
@@ -311,7 +312,7 @@ const CustomAudioPlayer = ({ src, title = "Reporte de Audio" }: { src: string, t
             }}
             className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer custom-slider outline-none"
             style={{
-              background: `linear-gradient(to right, #48c1d2 ${progress}%, rgba(255,255,255,0.1) ${progress}%)`
+              background: `linear-gradient(to right, [#48c1d2] ${progress}%, rgba(255,255,255,0.1) ${progress}%)`
             }}
           />
         </div>
@@ -477,7 +478,7 @@ export default function ContenidoPage() {
       id: 'h1',
       title: 'Buenos Días Familia ☀️',
       mood: 'Humano y Auténtico',
-      color: '#48c1d2',
+      color: '[#48c1d2]',
       icon: Sun,
       sequence: [
         {
@@ -586,6 +587,7 @@ export default function ContenidoPage() {
   const [showHelp, setShowHelp] = useState(false);
   const [direction, setDirection] = useState(0);
   const [isClosingAudioReport, setIsClosingAudioReport] = useState(false);
+  const [expandedTip, setExpandedTip] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState<string | null>(null);
@@ -1075,7 +1077,7 @@ export default function ContenidoPage() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px]">{selectedScript.category}</span>
-                {selectedScript.isPinned && <span className="bg-amber-500/20 text-amber-400 text-[7px] font-black px-2 py-0.5 rounded-full uppercase border border-amber-500/30">📌 Video para Fijar</span>}
+                {selectedScript.isPinned && <span className="bg-[#48c1d2]/20 text-[#48c1d2] text-[7px] font-black px-2 py-0.5 rounded-full uppercase border border-[#48c1d2]/30">📌 Video para Fijar</span>}
               </div>
               <h2 className="text-xl font-black text-white leading-tight pr-4">{selectedScript.title}</h2>
             </div>
@@ -1540,7 +1542,7 @@ export default function ContenidoPage() {
         {showHelp && dashHelpStep === 1 && (
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
             <div className="flex flex-col gap-2">
-              <span>PASO 1: ¡Aquí empieza todo! Antes de los guiones, necesitamos tu reporte. Cuéntanos cómo te fue hoy.</span>
+              <span>PASO 1: ¡Aquí empieza todo! Antes de los guiones, necesitamos tu narración. Cuéntanos la historia de lo que grabaste hoy.</span>
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={(e) => { e.stopPropagation(); setShowAudioReport(true); setReportHelpStep(1); }}
@@ -1565,15 +1567,15 @@ export default function ContenidoPage() {
               <Mic className="text-[#48c1d2]" size={24} />
             </div>
             <div className="text-left">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] leading-none mb-1 text-white italic">REPORTE DE AUDIO</h3>
-              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-[0.1em]">REPORTE DE CIERRE DE JORNADA</p>
+              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] leading-none mb-1 text-white italic">TU NARRACIÓN DEL DÍA</h3>
+              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-[0.1em]">MIRA TU DRIVE Y CUÉNTANOS LA HISTORIA</p>
             </div>
           </div>
           <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center relative z-10 border border-white/10 group-hover:bg-white/10 transition-all">
             <ChevronRight size={20} className="text-[#48c1d2]" />
           </div>
         </button>
-        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-[0.15em] mt-3 opacity-60">* Úsalo al terminar tu día para enviarnos los detalles finales de la obra.</p>
+        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-[0.15em] mt-3 opacity-60">* Úsalo al terminar tu día para transformar tus videos crudos en historias reales.</p>
       </div>
 
       <div className="flex bg-slate-50 p-1 rounded-2xl mb-6 shadow-sm border border-slate-100">
@@ -1843,11 +1845,11 @@ export default function ContenidoPage() {
                     <div className="grid gap-4">
                       {enCamaraSubTab === 'pinned' ? (
                         <>
-                          <div className="p-6 bg-amber-50 rounded-[2.5rem] border border-amber-100 mb-2 text-left">
-                            <h5 className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 flex items-center gap-2">
+                          <div className="p-6 bg-[#48c1d2]/5 rounded-[2.5rem] border border-[#48c1d2]/20 mb-2 text-left">
+                            <h5 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest mb-2 flex items-center gap-2">
                               <ShieldCheck size={12} /> Estrategia de Marca (Video Fijado)
                             </h5>
-                            <p className="text-[11px] font-bold text-amber-900/70 leading-relaxed italic">
+                            <p className="text-[11px] font-bold text-slate-900/70 leading-relaxed italic">
                               "Estos 3 videos son los pilares de tu perfil. Al fijarlos (Pin), aseguras que cualquier persona nueva entienda de inmediato quién eres y cómo contratarte."
                             </p>
                           </div>
@@ -1855,7 +1857,7 @@ export default function ContenidoPage() {
                           {/* Barra de Búsqueda para Grabación Pro */}
                           <div className="mb-6 space-y-4">
                             <div className="relative group">
-                              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-amber-500">
+                              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-[#48c1d2]">
                                 <Search size={18} />
                               </div>
                               <input
@@ -1863,7 +1865,7 @@ export default function ContenidoPage() {
                                 placeholder="Buscar en Grabación Pro..."
                                 value={scriptSearchQuery}
                                 onChange={(e) => setScriptSearchQuery(e.target.value)}
-                                className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-400/5 transition-all shadow-sm"
+                                className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-[#48c1d2] focus:ring-4 focus:ring-[#48c1d2]/5 transition-all shadow-sm"
                               />
                             </div>
                           </div>
@@ -1886,17 +1888,17 @@ export default function ContenidoPage() {
                                     setCurrentStepIdx(0);
                                     setShowFullScript(true);
                                   }}
-                                  className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-amber-400 transition-all cursor-pointer relative overflow-hidden"
+                                  className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
                                 >
-                                  <div className="w-14 h-14 bg-amber-50 rounded-[1.5rem] flex items-center justify-center text-amber-600 group-hover:bg-amber-100 transition-all">
+                                  <div className="w-14 h-14 bg-[#48c1d2]/5 rounded-[1.5rem] flex items-center justify-center text-[#48c1d2] group-hover:bg-[#48c1d2]/20 transition-all">
                                     <Video size={24} />
                                   </div>
                                   <div className="text-left flex-1">
-                                    <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">{script.category}</span>
+                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
                                     <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
                                     <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
                                   </div>
-                                  <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                                  <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
                                 </div>
                               ))}
                           </div>
@@ -1990,7 +1992,7 @@ export default function ContenidoPage() {
                               title: 'Un día conmigo (El Dueño)',
                               description: 'Muestra tu rutina real. Desde que preparas el equipo hasta que terminas el trabajo. Así la gente confía en la persona detrás de Epotech.',
                               icon: User,
-                              color: '#48c1d2',
+                              color: '[#48c1d2]',
                               benefit: 'Genera confianza y autoridad inmediata.'
                             },
                             {
@@ -2198,7 +2200,7 @@ export default function ContenidoPage() {
                     <>
                       <div className="p-5 bg-white border border-slate-100 rounded-3xl shadow-sm">
                         <h5 className="text-[10px] font-black text-[#142d53] uppercase mb-2 flex items-center gap-2">
-                          <Camera size={12} className="text-amber-500" /> Equipo Necesario
+                          <Camera size={12} className="text-[#48c1d2]" /> Equipo Necesario
                         </h5>
                         <p className="text-xs font-medium text-slate-500 leading-relaxed">
                           Usa un trípode para tomas lejanas de antes/después y un micrófono en el cuerpo para captar bien cuando hables con los vecinos.
@@ -2377,8 +2379,8 @@ export default function ContenidoPage() {
           <div className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
             <div className="p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20">
               <div>
-                <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block italic opacity-70">Módulo de Mentoría</span>
-                <h2 className="text-2xl font-black text-white italic tracking-tighter leading-none">Tu reporte <span className="text-[#48c1d2]">pro</span></h2>
+                <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block italic opacity-70">Módulo de Mentoría Narrativa</span>
+                <h2 className="text-2xl font-black text-white italic tracking-tighter leading-none">Tu Narración <span className="text-[#48c1d2]">del Día</span></h2>
               </div>
               <button onClick={handleCloseAudioReport} className="w-12 h-12 rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-500 flex items-center justify-center text-white/20 border border-white/10 transition-all"><X size={24} /></button>
             </div>
@@ -2389,7 +2391,7 @@ export default function ContenidoPage() {
                 {showHelp && reportHelpStep === 1 && (
                   <div className="absolute -top-36 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
                     <div className="flex flex-col gap-2">
-                      <span>PASO 2: Responde estas 5 preguntas rápidas. Tu honestidad nos ayuda a crear guiones que venden de verdad.</span>
+                      <span>PASO 2: Abre tu Drive, mira tus capturas de hoy y cuéntanos la historia detrás de cada imagen.</span>
                       <div className="flex gap-2 justify-end">
                         <button
                           onClick={(e) => {
@@ -2412,22 +2414,79 @@ export default function ContenidoPage() {
                     <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
                   </div>
                 )}
+
+                {/* RECORDATORIO STOP ENFÁTICO */}
+                <div className="mb-8 p-6 bg-red-500/10 border-2 border-red-500/30 rounded-[2.5rem] relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+                    <AlertCircle size={60} className="text-red-500" />
+                  </div>
+                  <div className="flex items-start gap-4 relative z-10">
+                    <div className="w-12 h-12 rounded-2xl bg-red-500 flex items-center justify-center text-white shadow-lg shrink-0 animate-pulse">
+                      <span className="text-xl font-black">🛑</span>
+                    </div>
+                    <div className="text-left">
+                      <h3 className="text-lg font-black text-white italic tracking-tighter mb-1 uppercase">¡STOP! Primero lo primero...</h3>
+                      <p className="text-xs font-bold text-red-200/80 leading-relaxed italic">
+                        Antes de grabar este audio, asegúrate de haber subido tus fotos y videos al Drive. <span className="text-white underline decoration-2 underline-offset-2">Abre la carpeta, mírala</span> y cuéntanos la historia de lo que ves hoy.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 <h4 className="text-[10px] font-black text-[#48c1d2] tracking-widest mb-2 flex items-center gap-2 italic">
-                  <Mic size={14} /> Responde con todo el detalle:
+                  <Mic size={14} /> Guía de Narración (Basada en tus imágenes):
                 </h4>
                 <p className="text-[9px] font-bold text-white/40 tracking-widest mb-6 border-b border-white/5 pb-2">Tu detalle nos ayuda a crear historias que vendan tu esfuerzo y profesionalismo.</p>
-                <ul className="space-y-5">
+                <ul className="space-y-6">
                   {[
-                    "¿Dónde estuviste hoy y qué tan grave era el problema?",
-                    "¿Estuviste solo o acompañado? Cuéntanos quién te ayudó y cómo se dividieron, o si lo hiciste solo, ¿cómo resolviste el reto tú solo hoy?",
-                    "¿Hubo algo difícil o que te preocupara cuidar? ¡Cuéntalo con todo detalle!",
-                    "¿Qué herramienta fue el héroe hoy?",
-                    "¿Qué fue lo que más le gustó al cliente al final?",
-                    "¿Qué consejo le darías a alguien que tiene este mismo problema en su casa? ¡Esa es tu voz de experto!"
-                  ].map((q, idx) => (
+                    {
+                      label: "EL GANCHO VISUAL",
+                      q: "Viendo las fotos del 'Antes' que subiste... descríbenos qué tan grave era la situación. ¿Qué fue lo primero que pensaste al ver ese desastre?",
+                      tip: "Hoy llegamos a una casa en Draper y el driveway estaba literalmente verde por el moho. Lo primero que pensé fue: 'Esto va a ser un cambio increíble para el video...'"
+                    },
+                    {
+                      label: "LA DINÁMICA DEL EQUIPO",
+                      q: "Si Jenkryfer sale en los videos hoy. Cuéntanos, ¿cómo se dividieron el trabajo en este proyecto específico? ¿Hubo alguna risa o momento curioso mientras grababan?",
+                      tip: "Jenkryfer estuvo dándole a las ventanas mientras yo hacía el techo. Hubo un momento en que casi me empapa con la manguera por accidente y nos estuvimos riendo un buen rato."
+                    },
+                    {
+                      label: "EL SECRETO DE LA TÉCNICA",
+                      q: "En los videos donde sales usando la maquinaria... ¿qué es lo que la gente no sabe de manejar esa herramienta? ¿Qué es lo más difícil de lograr ese resultado que vemos?",
+                      tip: "Mucha gente cree que es solo presión, pero el secreto está en el químico que aplicamos antes. Si no lo dejas actuar 10 minutos, la mancha de aceite no sale ni con toda la presión del mundo."
+                    },
+                    {
+                      label: "LA SATISFACCIÓN DEL 'DESPUÉS'",
+                      q: "Mira la foto del 'Después'. Es un cambio brutal. Si tuvieras que explicarle a un cliente por qué este resultado es superior a la competencia usando esa imagen, ¿qué le dirías?",
+                      tip: "Mira este brillo. Esto no es solo limpieza, es protección. A diferencia de otros que solo tiran agua, nosotros sellamos el poro para que no se vuelva a ensuciar en meses."
+                    },
+                    {
+                      label: "EL MOMENTO HUMANO",
+                      q: "De todo lo que grabaste hoy en esa carpeta, ¿cuál es el clip que más te gusta y por qué? ¿Qué estaba pasando en ese momento?",
+                      tip: "Hay un video de un perrito que se acercó a curiosear mientras recogíamos todo. Ese momento me recordó por qué me gusta trabajar en estos barrios tan tranquilos."
+                    }
+                  ].map((item, idx) => (
                     <li key={idx} className="flex gap-4 items-start">
-                      <span className="text-[#48c1d2] font-black text-xs">{idx + 1}.</span>
-                      <p className="text-xs font-bold text-white/80 leading-snug">{q}</p>
+                      <span className="text-[#48c1d2] font-black text-xs mt-0.5">{idx + 1}.</span>
+                      <div className="flex-1">
+                        <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px] block mb-1 opacity-80">{item.label}</span>
+                        <p className="text-xs font-bold text-white/90 leading-relaxed italic">{item.q}</p>
+                        
+                        <button 
+                          onClick={() => setExpandedTip(expandedTip === idx ? null : idx)}
+                          className={`mt-2 text-[9px] font-black uppercase tracking-widest flex items-center gap-1 transition-all px-2 py-1 rounded-lg ${expandedTip === idx ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-[#48c1d2]/10 text-[#48c1d2] hover:bg-[#48c1d2]/20'}`}
+                        >
+                          <Sparkles size={10} /> {expandedTip === idx ? 'Ocultar ejemplo' : 'Ver ejemplo de voz'}
+                        </button>
+                        
+                        {expandedTip === idx && (
+                          <div className="mt-2 p-4 bg-[#48c1d2]/5 border border-[#48c1d2]/10 rounded-2xl animate-in slide-in-from-top-2 duration-300">
+                            <p className="text-[10px] font-bold text-[#48c1d2]/80 leading-relaxed italic">
+                              <span className="text-white opacity-40 mr-1 italic">Di algo como:</span>
+                              {item.tip}
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </li>
                   ))}
                 </ul>

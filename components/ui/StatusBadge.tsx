@@ -15,8 +15,8 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     },
     pending: {
       label: "Pendiente",
-      className: "bg-amber-100 text-amber-800 border-amber-200",
-      dot: "bg-amber-500",
+      className: "bg-[#48c1d2]/10 text-[#48c1d2] border-[#48c1d2]/20",
+      dot: "bg-[#48c1d2]",
     },
     completed: {
       label: "Completado",
