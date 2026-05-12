@@ -229,7 +229,7 @@ export default function ManualPage() {
               <div className="grid gap-2">
                 {[
                   { step: "1. Captura en sitio", desc: "Sigue el checklist de las 4 fases: graba lo que hay Antes de empezar, clips del proceso Durante el trabajo, el resultado Al final, y tu Video Humano hablando a cámara." },
-                  { step: "2. Tu Reporte Pro", desc: "Abre la app, ve a Tu Reporte Pro y graba un audio respondiendo las 6 preguntas del día: dónde estuviste, qué tan grave era, si fuiste solo o acompañado, qué fue lo difícil, qué herramienta fue el héroe y qué le gustó al cliente." },
+                  { step: "2. Tu Narración del Día", desc: "Abre el módulo de Mentoría Narrativa y graba un audio basándote en las 5 claves: el gancho visual, la dinámica de equipo, el secreto técnico, el impacto final y el lado humano." },
                   { step: "3. Guion", desc: "Nosotros tomamos tu reporte y lo convertimos en un guion profesional listo para leer. Tú no escribes nada." },
                   { step: "4. Narración del Guion", desc: "Abre el guion en la app, lee cada escena en el teleprompter y graba tu voz en off. Cuando termines, envíanoslo con un clic." }
                 ].map((s, idx) => (
