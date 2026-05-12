@@ -413,6 +413,19 @@ export default function ContenidoPage() {
   const [voiceSpeed, setVoiceSpeed] = useState<number>(0.85);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isOffline, setIsOffline] = useState<boolean>(typeof navigator !== 'undefined' ? !navigator.onLine : false);
+  
+  // Detector de Conexión
+  useEffect(() => {
+    const handleOnline = () => { setIsOffline(false); showToast("Conexión recuperada", "success"); };
+    const handleOffline = () => { setIsOffline(true); showToast("Modo Offline activado", "info"); };
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
   
   // NUEVOS ESTADOS: Búsqueda y Organización
   const [scriptSearchQuery, setScriptSearchQuery] = useState("");
@@ -1017,32 +1030,46 @@ export default function ContenidoPage() {
 
   useEffect(() => {
     async function fetchProductionPlan() {
-      const { data: ideas } = await supabase
-        .from('ideas_contenido')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (ideas && ideas.length > 0) {
-        const mappedPlan: any = {};
-        const now = new Date();
-        const currentMonthShort = now.toLocaleString('es-ES', { month: 'short' });
-        ideas.forEach((idea, index) => {
-          // Empezar a mapear desde el día 1 o basado en el día actual
-          const day = (index + 1).toString().padStart(2, '0');
-          mappedPlan[day] = {
-            status: idea.status || 'Pendiente',
-            title: idea.titulo,
-            type: idea.tipo || 'Reel',
-            objetivo: 'Branding',
-            desc: idea.descripcion,
-            copy: 'Cargando texto estratégico...',
-            hashtags: '#EpotechSolutions #PisosEpoxy',
-            date: `${day} ${currentMonthShort}`
-          };
-        });
-        setContentDB(mappedPlan);
+      // Cargar caché inicial si existe
+      const cachedPlan = localStorage.getItem('epotech_production_plan');
+      if (cachedPlan) {
+        try {
+          setContentDB(JSON.parse(cachedPlan));
+          setLoading(false);
+        } catch(e) {}
       }
-      setLoading(false);
+
+      try {
+        const { data: ideas } = await supabase
+          .from('ideas_contenido')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (ideas && ideas.length > 0) {
+          const mappedPlan: any = {};
+          const now = new Date();
+          const currentMonthShort = now.toLocaleString('es-ES', { month: 'short' });
+          ideas.forEach((idea, index) => {
+            const day = (index + 1).toString().padStart(2, '0');
+            mappedPlan[day] = {
+              status: idea.status || 'Pendiente',
+              title: idea.titulo,
+              type: idea.tipo || 'Reel',
+              objetivo: 'Branding',
+              desc: idea.descripcion,
+              copy: 'Cargando texto estratégico...',
+              hashtags: '#EpotechSolutions #PisosEpoxy',
+              date: `${day} ${currentMonthShort}`
+            };
+          });
+          setContentDB(mappedPlan);
+          localStorage.setItem('epotech_production_plan', JSON.stringify(mappedPlan));
+        }
+      } catch (err) {
+        console.error("Error al cargar plan de producción:", err);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchProductionPlan();
   }, []);
@@ -1606,7 +1633,18 @@ export default function ContenidoPage() {
   ) : null;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 text-left">
+    <div className="min-h-screen bg-[#F0F4F8] pb-32">
+      {/* INDICADOR OFF-LINE */}
+      {isOffline && (
+        <div className="fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-[#142d53] text-[10px] font-black uppercase tracking-widest py-2 px-4 flex items-center justify-center gap-2 shadow-lg animate-in slide-in-from-top duration-300">
+          <WifiOff size={14} />
+          <span>Trabajando en Modo Offline - Datos Cargados de Caché</span>
+        </div>
+      )}
+
+      {/* HEADER PREMIUM */}
+      <header className={`sticky top-0 z-50 bg-[#F0F4F8]/80 backdrop-blur-xl border-b border-slate-200 transition-all duration-300 ${isOffline ? 'pt-10' : ''}`}>
+        <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 text-left">
       {/* Texto Tutorial Contextual Premium */}
       <div className="mb-8">
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
@@ -3061,6 +3099,18 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
       await supabase.from('reportes_audio').update({ estado: newStatus }).eq('id', reportId);
       setAudioReports(prev => prev.map(r => r.id === reportId ? { ...r, estado: newStatus } : r));
       showToast(`Estado actualizado a ${newStatus.toUpperCase()}`, "success");
+
+      // NOTIFICACIÓN AUTOMÁTICA
+      if (newStatus === 'completado') {
+        fetch('/api/push', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            titulo: "¡Guiones Listos! 📝",
+            mensaje: "Tu reporte de campo ha sido procesado. ¡Entra a grabar tus locuciones!"
+          })
+        }).catch(e => console.error("Push error:", e));
+      }
     } catch (err) {
       showToast("Error al actualizar estado", "error");
     }
@@ -3071,6 +3121,18 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
       await supabase.from('locuciones').update({ estado: newStatus }).eq('id', locId);
       setLocuciones(prev => prev.map(l => l.id === locId ? { ...l, estado: newStatus } : l));
       showToast(`Estado actualizado a ${newStatus.toUpperCase()}`, "success");
+
+      // NOTIFICACIÓN AUTOMÁTICA
+      if (newStatus === 'publicado') {
+        fetch('/api/push', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            titulo: "¡Video Publicado! 🎬",
+            mensaje: "Tu locución ya está en redes sociales. ¡Buen trabajo!"
+          })
+        }).catch(e => console.error("Push error:", e));
+      }
     } catch (err) {
       showToast("Error al actualizar estado", "error");
     }
