@@ -3675,7 +3675,8 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                         <Download size={12} /> Descargar WAV
                       </button>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -3762,7 +3763,8 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                         <Download size={12} /> Descargar WAV
                       </button>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
