@@ -3056,6 +3056,26 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
     }
   };
 
+  const handleUpdateReportStatus = async (reportId: string, newStatus: string) => {
+    try {
+      await supabase.from('reportes_audio').update({ estado: newStatus }).eq('id', reportId);
+      setAudioReports(prev => prev.map(r => r.id === reportId ? { ...r, estado: newStatus } : r));
+      showToast(`Estado actualizado a ${newStatus.toUpperCase()}`, "success");
+    } catch (err) {
+      showToast("Error al actualizar estado", "error");
+    }
+  };
+
+  const handleUpdateLocucionStatus = async (locId: string, newStatus: string) => {
+    try {
+      await supabase.from('locuciones').update({ estado: newStatus }).eq('id', locId);
+      setLocuciones(prev => prev.map(l => l.id === locId ? { ...l, estado: newStatus } : l));
+      showToast(`Estado actualizado a ${newStatus.toUpperCase()}`, "success");
+    } catch (err) {
+      showToast("Error al actualizar estado", "error");
+    }
+  };
+
   useEffect(() => {
     async function fetchAll() {
       const [{ data: reports }, { data: locs }] = await Promise.all([
@@ -3635,16 +3655,30 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                             </span>
                           </div>
                           {editingItemId === report.id ? (
-                            <div className="flex items-center gap-2 mt-1">
-                              <input 
-                                type="text" 
-                                value={editingTitle} 
-                                onChange={(e) => setEditingTitle(e.target.value)}
-                                className="flex-1 bg-white/5 border border-[#48c1d2]/30 rounded-lg px-2 py-1 text-xs font-bold text-white outline-none"
-                                autoFocus
-                              />
-                              <button onClick={() => handleUpdateReportTitle(report.id, editingTitle)} className="p-1.5 bg-[#48c1d2] text-[#142d53] rounded-lg"><CheckCircle2 size={12} /></button>
-                              <button onClick={() => setEditingItemId(null)} className="p-1.5 bg-white/5 text-white/40 rounded-lg"><X size={12} /></button>
+                            <div className="space-y-2 mt-2">
+                              <div className="flex items-center gap-2">
+                                <input 
+                                  type="text" 
+                                  value={editingTitle} 
+                                  onChange={(e) => setEditingTitle(e.target.value)}
+                                  className="flex-1 bg-white/5 border border-[#48c1d2]/30 rounded-lg px-2 py-1 text-xs font-bold text-white outline-none"
+                                  autoFocus
+                                />
+                                <button onClick={() => handleUpdateReportTitle(report.id, editingTitle)} className="p-1.5 bg-[#48c1d2] text-[#142d53] rounded-lg"><CheckCircle2 size={12} /></button>
+                                <button onClick={() => setEditingItemId(null)} className="p-1.5 bg-white/5 text-white/40 rounded-lg"><X size={12} /></button>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[7px] font-black text-white/30 uppercase tracking-widest">Cambiar Estado:</span>
+                                <select 
+                                  value={report.estado || 'pendiente'} 
+                                  onChange={(e) => handleUpdateReportStatus(report.id, e.target.value)}
+                                  className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[8px] font-bold text-[#48c1d2] outline-none"
+                                >
+                                  <option value="pendiente" className="bg-[#142d53]">RECIBIDO</option>
+                                  <option value="en_proceso" className="bg-[#142d53]">PROCESANDO</option>
+                                  <option value="completado" className="bg-[#142d53]">GUIONES LISTOS</option>
+                                </select>
+                              </div>
                             </div>
                           ) : (
                             <div className="flex items-center gap-2 group/title">
@@ -3716,25 +3750,39 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                     return (
                     <div key={loc.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-[#48c1d2]/10 space-y-3">
                       <div className="flex items-center justify-between px-1">
-                        <div className="flex-1 min-w-0 mr-3">
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
                             <span className={`text-[7px] font-black px-2 py-0.5 rounded-full border ${statusStyles}`}>
                               {statusLabel}
                             </span>
                           </div>
-                          
+
                           {editingItemId === loc.id ? (
-                            <div className="flex items-center gap-2 mt-1">
-                              <input 
-                                type="text" 
-                                value={editingTitle} 
-                                onChange={(e) => setEditingTitle(e.target.value)}
-                                className="flex-1 bg-white/5 border border-[#48c1d2]/30 rounded-lg px-2 py-1 text-xs font-bold text-white outline-none"
-                                autoFocus
-                              />
-                              <button onClick={() => handleUpdateLocucionTitle(loc.id, editingTitle)} className="p-1.5 bg-[#48c1d2] text-[#142d53] rounded-lg"><CheckCircle2 size={12} /></button>
-                              <button onClick={() => setEditingItemId(null)} className="p-1.5 bg-white/5 text-white/40 rounded-lg"><X size={12} /></button>
+                            <div className="space-y-2 mt-2">
+                              <div className="flex items-center gap-2">
+                                <input 
+                                  type="text" 
+                                  value={editingTitle} 
+                                  onChange={(e) => setEditingTitle(e.target.value)}
+                                  className="flex-1 bg-white/5 border border-[#48c1d2]/30 rounded-lg px-2 py-1 text-xs font-bold text-white outline-none"
+                                  autoFocus
+                                />
+                                <button onClick={() => handleUpdateLocucionTitle(loc.id, editingTitle)} className="p-1.5 bg-[#48c1d2] text-[#142d53] rounded-lg"><CheckCircle2 size={12} /></button>
+                                <button onClick={() => setEditingItemId(null)} className="p-1.5 bg-white/5 text-white/40 rounded-lg"><X size={12} /></button>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[7px] font-black text-white/30 uppercase tracking-widest">Cambiar Estado:</span>
+                                <select 
+                                  value={loc.estado || 'recibido'} 
+                                  onChange={(e) => handleUpdateLocucionStatus(loc.id, e.target.value)}
+                                  className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[8px] font-bold text-[#48c1d2] outline-none"
+                                >
+                                  <option value="recibido" className="bg-[#142d53]">VOZ ENVIADA</option>
+                                  <option value="editando" className="bg-[#142d53]">EN EDICIÓN</option>
+                                  <option value="publicado" className="bg-[#142d53]">PUBLICADO</option>
+                                </select>
+                              </div>
                             </div>
                           ) : (
                             <div className="flex items-center gap-2 group/title">
@@ -3748,6 +3796,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                               </button>
                             </div>
                           )}
+
                           
                           <p className="text-[10px] font-bold text-white/40 uppercase mt-0.5">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         </div>
