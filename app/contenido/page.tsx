@@ -2524,11 +2524,11 @@ export default function ContenidoPage() {
 
                 {!recordedAudio ? (
                   <>
-                    <div className="text-left mb-4 flex flex-col items-start">
+                    <div className="text-center mb-4 flex flex-col items-center">
                       <div className={`text-3xl font-mono font-black tabular-nums mb-2 ${recordTime >= 3600 ? 'text-[#48c1d2] animate-pulse' : 'text-[#48c1d2]'}`}>
                         {formatTime(recordTime)}
                       </div>
-                      <div className="flex items-center gap-2 justify-start">
+                      <div className="flex items-center gap-2 justify-center">
                         <div className={`w-2 h-2 rounded-full ${isRecording && !isPaused ? 'bg-red-500 animate-pulse' : 'bg-slate-600'}`}></div>
                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
                           {recordTime >= 3600 ? 'Límite alcanzado' : (isRecording ? (isPaused ? 'Pausado' : 'Grabando...') : 'Listo para Grabar Escenas')}
