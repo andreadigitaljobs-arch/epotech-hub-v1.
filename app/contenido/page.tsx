@@ -2797,6 +2797,7 @@ export default function ContenidoPage() {
         onCancel={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
       />
     </div>
+    </div>
   );
 }
 
