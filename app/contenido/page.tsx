@@ -743,6 +743,8 @@ export default function ContenidoPage() {
   const [reportHelpStep, setReportHelpStep] = useState(1);
   const [dashHelpStep, setDashHelpStep] = useState(1);
   const [teleHelpStep, setTeleHelpStep] = useState(1);
+  const [reportTitle, setReportTitle] = useState('');
+  const [locucionTitle, setLocucionTitle] = useState('');
 
   // Recuperar borrador al cargar la app
   useEffect(() => {
@@ -878,6 +880,7 @@ export default function ContenidoPage() {
 
       const { error: insertError } = await supabase.from('reportes_audio').insert({
         proyecto_id: selectedScript?.id || 'manual',
+        titulo: reportTitle || 'Reporte de Campo',
         audio_url: publicUrl.publicUrl,
         duracion: formatTime(recordTime)
       });
@@ -920,7 +923,7 @@ export default function ContenidoPage() {
 
       const { error: insertError } = await supabase.from('locuciones').insert({
         script_id: selectedScript.id,
-        script_title: selectedScript.title,
+        script_title: locucionTitle || selectedScript.title,
         audio_url: publicUrlData.publicUrl
       });
 
@@ -1314,8 +1317,21 @@ export default function ContenidoPage() {
               ) : mergedVoiceoverUrl ? (
                 <div className="flex flex-col items-center justify-center flex-1 space-y-6 animate-in zoom-in duration-500">
                   <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/30"><CheckCircle2 size={48} className="text-green-400" /></div>
-                  <h3 className="text-xl font-black text-white uppercase tracking-widest text-center">Locución Completada</h3>
-                  <div className="w-full max-w-xs mt-4"><CustomAudioPlayer title="Vista Previa" src={mergedVoiceoverUrl} /></div>
+                  <div className="text-center">
+                    <h3 className="text-xl font-black text-white uppercase tracking-widest">Locución Completada</h3>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Dale un nombre a tu audio:</p>
+                  </div>
+                  
+                  <div className="w-full max-w-xs">
+                    <input 
+                      type="text" 
+                      value={locucionTitle || selectedScript.title} 
+                      onChange={(e) => setLocucionTitle(e.target.value)}
+                      placeholder="Ej: Locución Final V1"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm font-bold text-white outline-none focus:border-[#48c1d2]/50 transition-all mb-4"
+                    />
+                    <CustomAudioPlayer title={locucionTitle || selectedScript.title} src={mergedVoiceoverUrl} />
+                  </div>
                   <div className="flex flex-col w-full max-w-xs gap-3 mt-4">
                     <button onClick={handleSendLocucion} disabled={isUploadingLocucion} className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${isUploadingLocucion ? 'bg-white/10 text-white/30' : 'bg-[#48c1d2] text-[#0a192f] hover:scale-105 shadow-xl shadow-[#48c1d2]/20'}`}>
                       {isUploadingLocucion ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Enviando...</> : <><Share2 size={16} /> Enviar al Equipo</>}
@@ -2584,8 +2600,18 @@ export default function ContenidoPage() {
                   </>
                 ) : (
                   <div className="w-full bg-black/40 p-6 rounded-[2.5rem] border border-white/5 space-y-6 animate-in zoom-in-95">
-                    <div className="w-full">
-                      <CustomAudioPlayer title="Tu Grabación" src={recordedAudio} />
+                    <div className="space-y-4">
+                      <div className="px-2">
+                        <label className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest block mb-2">Nombre de la Nota:</label>
+                        <input 
+                          type="text" 
+                          value={reportTitle} 
+                          onChange={(e) => setReportTitle(e.target.value)}
+                          placeholder="Ej: Reporte Draper - Antes"
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm font-bold text-white outline-none focus:border-[#48c1d2]/50 transition-all"
+                        />
+                      </div>
+                      <CustomAudioPlayer title={reportTitle || "Tu Grabación"} src={recordedAudio} />
                       <div className="flex justify-between items-center px-2 mt-4">
                         <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">Listo para enviar al equipo</span>
                         <span className="text-[10px] font-bold text-slate-500 uppercase">{formatTime(recordTime)}</span>
@@ -2910,6 +2936,30 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
 
   const [audioReports, setAudioReports] = useState<any[]>([]);
   const [locuciones, setLocuciones] = useState<any[]>([]);
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState('');
+
+  const handleUpdateReportTitle = async (reportId: string, newTitle: string) => {
+    try {
+      await supabase.from('reportes_audio').update({ titulo: newTitle }).eq('id', reportId);
+      setAudioReports(prev => prev.map(r => r.id === reportId ? { ...r, titulo: newTitle } : r));
+      setEditingItemId(null);
+      showToast("Título del reporte actualizado", "success");
+    } catch (err) {
+      showToast("Error al actualizar título", "error");
+    }
+  };
+
+  const handleUpdateLocucionTitle = async (locId: string, newTitle: string) => {
+    try {
+      await supabase.from('locuciones').update({ script_title: newTitle }).eq('id', locId);
+      setLocuciones(prev => prev.map(l => l.id === locId ? { ...l, script_title: newTitle } : l));
+      setEditingItemId(null);
+      showToast("Título de la locución actualizado", "success");
+    } catch (err) {
+      showToast("Error al actualizar título", "error");
+    }
+  };
 
   useEffect(() => {
     async function fetchAll() {
@@ -3459,9 +3509,32 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                   {audioReports.map((report: any) => (
                     <div key={report.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-white/10 space-y-3">
                       <div className="flex items-center justify-between px-1">
-                        <div>
+                        <div className="flex-1 mr-4">
                           <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">Reporte de Campo</span>
-                          <p className="text-[11px] font-bold text-white/60 uppercase">{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                          {editingItemId === report.id ? (
+                            <div className="flex items-center gap-2 mt-1">
+                              <input 
+                                type="text" 
+                                value={editingTitle} 
+                                onChange={(e) => setEditingTitle(e.target.value)}
+                                className="flex-1 bg-white/5 border border-[#48c1d2]/30 rounded-lg px-2 py-1 text-xs font-bold text-white outline-none"
+                                autoFocus
+                              />
+                              <button onClick={() => handleUpdateReportTitle(report.id, editingTitle)} className="p-1.5 bg-[#48c1d2] text-[#142d53] rounded-lg"><CheckCircle2 size={12} /></button>
+                              <button onClick={() => setEditingItemId(null)} className="p-1.5 bg-white/5 text-white/40 rounded-lg"><X size={12} /></button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2 group/title">
+                              <p className="text-[11px] font-bold text-white/90 uppercase">{report.titulo || 'Sin Título'}</p>
+                              <button 
+                                onClick={() => { setEditingItemId(report.id); setEditingTitle(report.titulo || ''); }}
+                                className="opacity-0 group-hover/title:opacity-100 p-1 hover:text-[#48c1d2] transition-all"
+                              >
+                                <Edit3 size={10} />
+                              </button>
+                            </div>
+                          )}
+                          <p className="text-[9px] font-bold text-white/40 uppercase mt-0.5">{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-[9px] font-bold text-white/40 uppercase">{report.duracion || ''}</span>
@@ -3470,7 +3543,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                           </button>
                         </div>
                       </div>
-                      <CustomAudioPlayer title="Reporte de Audio" src={report.audio_url} />
+                      <CustomAudioPlayer title={report.titulo || "Reporte de Audio"} src={report.audio_url} />
                       <button 
                         onClick={() => forceDownload(report.audio_url, `Reporte_Audio_${report.id}.wav`)}
                         className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
@@ -3509,8 +3582,32 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                       <div className="flex items-center justify-between px-1">
                         <div className="flex-1 min-w-0 mr-3">
                           <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
-                          <p className="text-sm font-black text-white uppercase italic truncate leading-tight">{loc.script_title}</p>
-                          <p className="text-[10px] font-bold text-white/40 uppercase">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                          
+                          {editingItemId === loc.id ? (
+                            <div className="flex items-center gap-2 mt-1">
+                              <input 
+                                type="text" 
+                                value={editingTitle} 
+                                onChange={(e) => setEditingTitle(e.target.value)}
+                                className="flex-1 bg-white/5 border border-[#48c1d2]/30 rounded-lg px-2 py-1 text-xs font-bold text-white outline-none"
+                                autoFocus
+                              />
+                              <button onClick={() => handleUpdateLocucionTitle(loc.id, editingTitle)} className="p-1.5 bg-[#48c1d2] text-[#142d53] rounded-lg"><CheckCircle2 size={12} /></button>
+                              <button onClick={() => setEditingItemId(null)} className="p-1.5 bg-white/5 text-white/40 rounded-lg"><X size={12} /></button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2 group/title">
+                              <p className="text-sm font-black text-white uppercase italic truncate leading-tight">{loc.script_title}</p>
+                              <button 
+                                onClick={() => { setEditingItemId(loc.id); setEditingTitle(loc.script_title || ''); }}
+                                className="opacity-0 group-hover/title:opacity-100 p-1 hover:text-[#48c1d2] transition-all"
+                              >
+                                <Edit3 size={12} />
+                              </button>
+                            </div>
+                          )}
+                          
+                          <p className="text-[10px] font-bold text-white/40 uppercase mt-0.5">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         </div>
                         <button onClick={() => handleDeleteLocucion(loc.id, loc.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20 shrink-0">
                           <Trash2 size={12} />
