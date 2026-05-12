@@ -3694,8 +3694,8 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                           )}
                           <p className="text-[9px] font-bold text-white/40 uppercase mt-0.5">{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[9px] font-bold text-white/40 uppercase">{report.duracion || ''}</span>
+                        <div className="flex items-center gap-2 shrink-0 ml-2">
+                          <span className="text-[9px] font-bold text-white/40 uppercase whitespace-nowrap">{report.duracion || ''}</span>
                           <button onClick={() => handleDeleteReport(report.id, report.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20">
                             <Trash2 size={12} />
                           </button>
@@ -3800,7 +3800,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                           
                           <p className="text-[10px] font-bold text-white/40 uppercase mt-0.5">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         </div>
-                        <button onClick={() => handleDeleteLocucion(loc.id, loc.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20 shrink-0">
+                        <button onClick={() => handleDeleteLocucion(loc.id, loc.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20 shrink-0 ml-2">
                           <Trash2 size={12} />
                         </button>
                       </div>
