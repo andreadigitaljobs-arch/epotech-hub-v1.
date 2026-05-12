@@ -14,14 +14,6 @@ import { Toast, ToastType } from "@/components/ui/Toast";
 
 const TUTORIAL_CARDS = [
   {
-    title: "¿Cómo grabar como un pro?",
-    description: "Aprende a capturar los mejores ángulos de tus trabajos para Reels de alto impacto.",
-    icon: Video,
-    path: "/manual",
-    color: "blue",
-    tag: "Producción"
-  },
-  {
     title: "Entendiendo mis Proyectos",
     description: "Sigue nuestro avance diario y mira cómo vamos profesionalizando Epotech.",
     icon: Briefcase,
@@ -36,6 +28,14 @@ const TUTORIAL_CARDS = [
     path: "/contenido?tab=guiones",
     color: "cyan",
     tag: "Contenido"
+  },
+  {
+    title: "¿Cómo grabar como un pro?",
+    description: "Aprende a capturar los mejores ángulos de tus trabajos para Reels de alto impacto.",
+    icon: Video,
+    path: "/manual",
+    color: "blue",
+    tag: "Producción"
   },
   {
     title: "Motor de Inspiración",
