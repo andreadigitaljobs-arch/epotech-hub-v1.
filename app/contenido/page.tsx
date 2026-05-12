@@ -1593,7 +1593,7 @@ export default function ContenidoPage() {
           </div>
 
           {recordedAudio && (
-            <div className="absolute top-3 right-12 flex items-center gap-1.5 bg-[#48c1d2] text-[#142d53] px-2.5 py-1 rounded-full text-[7px] font-black animate-pulse border border-[#142d53]/20 shadow-lg">
+            <div className="absolute top-2 right-2 flex items-center gap-1 bg-[#48c1d2] text-[#142d53] px-2 py-0.5 rounded-full text-[6px] font-black animate-pulse border border-[#142d53]/20 shadow-lg z-20">
               <div className="w-1 h-1 bg-[#142d53] rounded-full"></div>
               BORRADOR PENDIENTE
             </div>
