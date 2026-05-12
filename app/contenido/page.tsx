@@ -3529,7 +3529,8 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                               <p className="text-[11px] font-bold text-white/90 uppercase">{report.titulo || 'Sin Título'}</p>
                               <button 
                                 onClick={() => { setEditingItemId(report.id); setEditingTitle(report.titulo || ''); }}
-                                className="opacity-0 group-hover/title:opacity-100 p-1 hover:text-[#48c1d2] transition-all"
+                                className="p-1.5 bg-white/5 text-[#48c1d2] rounded-lg hover:bg-[#48c1d2]/20 transition-all ml-1"
+                                title="Editar nombre"
                               >
                                 <Edit3 size={10} />
                               </button>
@@ -3601,7 +3602,8 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
                               <p className="text-sm font-black text-white uppercase italic truncate leading-tight">{loc.script_title}</p>
                               <button 
                                 onClick={() => { setEditingItemId(loc.id); setEditingTitle(loc.script_title || ''); }}
-                                className="opacity-0 group-hover/title:opacity-100 p-1 hover:text-[#48c1d2] transition-all"
+                                className="p-1.5 bg-white/5 text-[#48c1d2] rounded-lg hover:bg-[#48c1d2]/20 transition-all ml-1"
+                                title="Editar nombre"
                               >
                                 <Edit3 size={12} />
                               </button>
