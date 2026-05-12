@@ -3613,11 +3613,27 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {audioReports.map((report: any) => (
+                  {audioReports.map((report: any) => {
+                    const status = report.estado || 'pendiente';
+                    const statusStyles = 
+                      status === 'completado' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+                      status === 'en_proceso' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
+                      'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                    const statusLabel = 
+                      status === 'completado' ? 'GUIONES LISTOS' :
+                      status === 'en_proceso' ? 'PROCESANDO' :
+                      'RECIBIDO';
+
+                    return (
                     <div key={report.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-white/10 space-y-3">
                       <div className="flex items-center justify-between px-1">
                         <div className="flex-1 mr-4">
-                          <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">Reporte de Campo</span>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">Reporte de Campo</span>
+                            <span className={`text-[7px] font-black px-2 py-0.5 rounded-full border ${statusStyles} animate-pulse`}>
+                              {statusLabel}
+                            </span>
+                          </div>
                           {editingItemId === report.id ? (
                             <div className="flex items-center gap-2 mt-1">
                               <input 
@@ -3685,11 +3701,27 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {locuciones.map((loc: any) => (
+                  {locuciones.map((loc: any) => {
+                    const status = loc.estado || 'recibido';
+                    const statusStyles = 
+                      status === 'publicado' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+                      status === 'editando' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
+                      'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                    const statusLabel = 
+                      status === 'publicado' ? 'VIDEO PUBLICADO' :
+                      status === 'editando' ? 'EN EDICIÓN' :
+                      'VOZ ENVIADA';
+
+                    return (
                     <div key={loc.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-[#48c1d2]/10 space-y-3">
                       <div className="flex items-center justify-between px-1">
                         <div className="flex-1 min-w-0 mr-3">
-                          <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
+                            <span className={`text-[7px] font-black px-2 py-0.5 rounded-full border ${statusStyles}`}>
+                              {statusLabel}
+                            </span>
+                          </div>
                           
                           {editingItemId === loc.id ? (
                             <div className="flex items-center gap-2 mt-1">
