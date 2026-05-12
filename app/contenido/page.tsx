@@ -1644,7 +1644,17 @@ export default function ContenidoPage() {
 
       {/* HEADER PREMIUM */}
       <header className={`sticky top-0 z-50 bg-[#F0F4F8]/80 backdrop-blur-xl border-b border-slate-200 transition-all duration-300 ${isOffline ? 'pt-10' : ''}`}>
-        <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 text-left">
+        <div className="max-w-5xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[#142d53] rounded-2xl flex items-center justify-center shadow-lg shadow-[#142d53]/20">
+              <img src="/logo.png" alt="Epotech" className="w-6 h-6 brightness-0 invert" />
+            </div>
+            <span className="text-[14px] font-black text-[#142d53] uppercase tracking-tighter">Epotech <span className="text-[#48c1d2]">Hub</span></span>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 text-left">
       {/* Texto Tutorial Contextual Premium */}
       <div className="mb-8">
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
@@ -2798,6 +2808,7 @@ export default function ContenidoPage() {
         onConfirm={confirmDialog.onConfirm}
         onCancel={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
       />
+    </div>
     </div>
   );
 }
