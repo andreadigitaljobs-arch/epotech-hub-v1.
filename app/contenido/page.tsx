@@ -1070,9 +1070,9 @@ export default function ContenidoPage() {
         onClick={handleCloseScript}
       />
 
-      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[90vh] shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
+      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[82vh] md:max-h-[90vh] shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
         {/* Encabezado */}
-        <div className="p-6 border-b border-white/5 bg-black/20 flex flex-col md:flex-row justify-between md:items-center text-left gap-4">
+        <div className="p-5 md:p-6 border-b border-white/5 bg-black/20 flex flex-col md:flex-row justify-between md:items-center text-left gap-4">
           <div className="flex-1 flex justify-between items-start md:block">
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -2137,7 +2137,7 @@ export default function ContenidoPage() {
       {/* MODAL DE DETALLES DE SERIE */}
       {selectedSerie && createPortal(
         <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-center ${isClosingSerie ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] relative overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}>
+          <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[90vh] relative overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}>
             <div className="p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100">
               <div className="text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ backgroundColor: `${selectedSerie.color}15` }}>
@@ -2308,8 +2308,8 @@ export default function ContenidoPage() {
 
       {selectedStory && createPortal(
         <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-center ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}>
-            <div className="p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100">
+          <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[90vh] relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}>
+            <div className="p-6 md:p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100">
               <div className="text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ backgroundColor: `${selectedStory.color}15` }}>
                   <selectedStory.icon size={14} style={{ color: selectedStory.color }} />
@@ -2376,8 +2376,8 @@ export default function ContenidoPage() {
       {/* MODAL DE REPORTE DE AUDIO (Paso Final) */}
       {showAudioReport && createPortal(
         <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-left ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
-            <div className="p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20">
+          <div className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[90vh] relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
+            <div className="p-6 md:p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20">
               <div>
                 <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block italic opacity-70">Módulo de Mentoría Narrativa</span>
                 <h2 className="text-2xl font-black text-white italic tracking-tighter leading-none">Tu Narración <span className="text-[#48c1d2]">del Día</span></h2>
@@ -2385,7 +2385,7 @@ export default function ContenidoPage() {
               <button onClick={handleCloseAudioReport} className="w-12 h-12 rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-500 flex items-center justify-center text-white/20 border border-white/10 transition-all"><X size={24} /></button>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-8 pt-4 space-y-10">
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-5 md:p-8 pt-4 space-y-6 md:space-y-10">
               <div className={`bg-white/5 p-8 rounded-[2.5rem] border border-white/10 text-left relative transition-all shadow-inner ${showHelp && reportHelpStep === 1 ? "z-50 bg-[#48c1d2]/10 border-[#48c1d2]/30 mt-32" : ""}`}>
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-[#48c1d2]/20 to-transparent rounded-[2.5rem] blur opacity-30 pointer-events-none" />
                 {showHelp && reportHelpStep === 1 && (
