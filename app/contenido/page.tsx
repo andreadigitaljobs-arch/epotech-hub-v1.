@@ -328,6 +328,51 @@ const getYoutubeId = (url: string) => {
   return (match && match[2].length === 11) ? match[2] : null;
 };
 
+const ConfirmationDialog = ({ 
+  isOpen, 
+  title, 
+  message, 
+  confirmText, 
+  onConfirm, 
+  onCancel 
+}: { 
+  isOpen: boolean, 
+  title: string, 
+  message: string, 
+  confirmText: string, 
+  onConfirm: () => void, 
+  onCancel: () => void 
+}) => {
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0a192f]/80 backdrop-blur-md animate-in fade-in duration-300">
+      <div className="bg-white rounded-[3rem] p-8 max-w-sm w-full shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+        <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 mb-6 mx-auto">
+          <AlertCircle size={32} />
+        </div>
+        <h3 className="text-xl font-black text-[#142d53] text-center mb-2 uppercase tracking-tight">{title}</h3>
+        <p className="text-sm font-medium text-slate-500 text-center mb-8 leading-relaxed">{message}</p>
+        <div className="flex flex-col gap-3">
+          <button
+            onClick={(e) => { e.stopPropagation(); onConfirm(); }}
+            className="w-full py-4 bg-red-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95"
+          >
+            {confirmText}
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); onCancel(); }}
+            className="w-full py-4 bg-slate-100 text-slate-400 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+};
+
 export default function ContenidoPage() {
   useThemeColor("#F0F4F8");
   const router = useRouter();
@@ -335,6 +380,32 @@ export default function ContenidoPage() {
   const typeParam = searchParams.get('type') || 'presion';
 
   const [activeTab, setActiveTab] = useState('guiones');
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    confirmText: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Confirmar',
+    onConfirm: () => {}
+  });
+
+  const requestConfirm = (title: string, message: string, onConfirm: () => void, confirmText = 'ELIMINAR') => {
+    setConfirmDialog({
+      isOpen: true,
+      title,
+      message,
+      confirmText,
+      onConfirm: () => {
+        onConfirm();
+        setConfirmDialog(prev => ({ ...prev, isOpen: false }));
+      }
+    });
+  };
   const [guionTab, setGuionTab] = useState<'reels' | 'historias' | 'presentacion'>('reels');
   const [activeCategory, setActiveCategory] = useState<string>('Todas');
   const [activeFormat, setActiveFormat] = useState<string>('Todos');
@@ -2153,7 +2224,15 @@ export default function ContenidoPage() {
           </div>
         )}
         {activeTab === 'calendario' && <CreacionSection contentDB={contentDB} toggleStatus={toggleGlobalStatus} onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} />}
-        {activeTab === 'historial' && <HistorialSection contentDB={contentDB} onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} showToast={showToast} activeTab={activeTab} />}
+        {activeTab === 'historial' && (
+          <HistorialSection 
+            contentDB={contentDB} 
+            onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} 
+            showToast={showToast} 
+            activeTab={activeTab} 
+            requestConfirm={requestConfirm}
+          />
+        )}
       </div>
 
       {modalContent}
@@ -2673,6 +2752,14 @@ export default function ContenidoPage() {
           </div>
         </div>, document.body
       )}
+      <ConfirmationDialog 
+        isOpen={confirmDialog.isOpen}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        confirmText={confirmDialog.confirmText}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
+      />
     </div>
   );
 }
@@ -2895,7 +2982,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
     </div>
   );
 }
-function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { contentDB: any, onSelect: (key: string) => void, showToast: (msg: string, type?: ToastType) => void, activeTab: string }) {
+function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestConfirm }: { contentDB: any, onSelect: (key: string) => void, showToast: (msg: string, type?: ToastType) => void, activeTab: string, requestConfirm: (title: string, msg: string, onC: () => void, text?: string) => void }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -2982,29 +3069,41 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab }: { conte
   }, []);
 
   const handleDeleteReport = async (reportId: string, audioUrl: string) => {
-    if (!confirm("¿Borrar este reporte para ahorrar espacio?")) return;
-    try {
-      const fileName = audioUrl.split('/').pop();
-      if (fileName) await supabase.storage.from('audios').remove([fileName]);
-      await supabase.from('reportes_audio').delete().eq('id', reportId);
-      setAudioReports(prev => prev.filter(r => r.id !== reportId));
-      showToast("Reporte eliminado y espacio liberado", "success");
-    } catch (err) {
-      showToast("Error al eliminar", "error");
-    }
+    requestConfirm(
+      "¿Eliminar Reporte?",
+      "Esta acción borrará el audio permanentemente de la nube para ahorrar espacio. No se puede deshacer.",
+      async () => {
+        try {
+          const fileName = audioUrl.split('/').pop();
+          if (fileName) await supabase.storage.from('audios').remove([fileName]);
+          await supabase.from('reportes_audio').delete().eq('id', reportId);
+          setAudioReports(prev => prev.filter(r => r.id !== reportId));
+          showToast("Reporte eliminado y espacio liberado", "success");
+        } catch (err) {
+          showToast("Error al eliminar", "error");
+        }
+      },
+      "ELIMINAR AHORA"
+    );
   };
 
   const handleDeleteLocucion = async (locId: string, audioUrl: string) => {
-    if (!confirm("¿Borrar esta locución?")) return;
-    try {
-      const fileName = audioUrl.split('/').pop();
-      if (fileName) await supabase.storage.from('audios').remove([fileName]);
-      await supabase.from('locuciones').delete().eq('id', locId);
-      setLocuciones(prev => prev.filter(l => l.id !== locId));
-      showToast("Locución eliminada", "success");
-    } catch (err) {
-      showToast("Error al eliminar", "error");
-    }
+    requestConfirm(
+      "¿Eliminar Locución?",
+      "Se borrará el audio final de tu voz en off. Asegúrate de tener una copia si la necesitas.",
+      async () => {
+        try {
+          const fileName = audioUrl.split('/').pop();
+          if (fileName) await supabase.storage.from('audios').remove([fileName]);
+          await supabase.from('locuciones').delete().eq('id', locId);
+          setLocuciones(prev => prev.filter(l => l.id !== locId));
+          showToast("Locución eliminada", "success");
+        } catch (err) {
+          showToast("Error al eliminar", "error");
+        }
+      },
+      "BORRAR DEFINITIVO"
+    );
   };
 
   const [analyticsTab, setAnalyticsTab] = useState<'reels' | 'account'>('reels');
