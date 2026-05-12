@@ -89,7 +89,7 @@ const INITIAL_TASKS: Record<string, { tarea: string; orden: number; status?: Tas
     { tarea: "Estudio de Voz & Historial de Éxitos", status: "completada", observacion: "Sincronización automática de notas de voz, calendario y análisis de viralidad (Caso Abril).", orden: 4 },
     { tarea: "Centro de Notificaciones & Reporte Diario", status: "completada", observacion: "Alertas push en tiempo real y formulario inteligente para creación reactiva de guiones.", orden: 5 },
     { tarea: "Triada de Marca (Guiones Finales)", status: "en_proceso", observacion: "Sustitución de borradores por los 3 guiones de presentación final de alta conversión.", orden: 6 },
-    { tarea: "Manual de Usuario y Tutoriales", status: "en_proceso", observacion: "Creación de guías de uso específicas para garantizar la autonomía total de Sebastian.", orden: 7 },
+    { tarea: "Manual de Usuario y Tutoriales", status: "en_proceso", observacion: "Creación de guías de uso específicas para garantizar la autonomía total de Sebastián.", orden: 7 },
   ],
 
   landing: [
@@ -729,7 +729,7 @@ export default function ProyectosPage() {
                </div>
                <div className="relative z-10">
                   <h3 className="text-lg font-black text-[#142d53] mb-1 tracking-tight">Cosas que necesitamos de ti</h3>
-                  <p className="text-[10px] font-bold text-[#142d53]/60 uppercase tracking-widest leading-relaxed">Sebastian, completa esto para que el equipo pueda avanzar</p>
+                  <p className="text-[10px] font-bold text-[#142d53]/60 uppercase tracking-widest leading-relaxed">Sebastián, completa esto para que el equipo pueda avanzar</p>
                </div>
             </div>
 

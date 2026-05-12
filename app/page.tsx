@@ -137,7 +137,7 @@ export default function Home() {
     if (worker) {
       await new Promise<void>((resolve, reject) => {
         const timeout = window.setTimeout(() => {
-          reject(new Error("El motor de notificaciones no termino de activarse. Cierra y abre la app desde el icono de inicio e intenta otra vez."));
+          reject(new Error("El motor de notificaciones no terminó de activarse. Cierra y abre la app desde el icono de inicio e intenta otra vez."));
         }, 15000);
 
         worker.addEventListener("statechange", () => {
@@ -156,7 +156,7 @@ export default function Home() {
 
   const executePermissionRequest = async () => {
     if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
-      showToast("Este navegador no soporta notificaciones web en esta instalacion.", "error");
+      showToast("Este navegador no soporta notificaciones web en esta instalación.", "error");
       return;
     }
 
@@ -176,7 +176,7 @@ export default function Home() {
       setNotificationStatus(permission);
 
       if (permission !== "granted") {
-        showToast("No se otorgo el permiso necesario.", "error");
+        showToast("No se otorgó el permiso necesario.", "error");
         return;
       }
 
@@ -281,7 +281,7 @@ export default function Home() {
         const result = await savePushSubscription(subscription);
         console.log("9. Guardado exitoso:", result.endpointHost);
         setIsSubscribed(true);
-        showToast(`Conexion lista (${result.endpointHost}). Ya recibiras avisos.`, "success");
+        showToast(`Conexión lista (${result.endpointHost}). Ya recibirás avisos.`, "success");
         return;
         console.log("8. Suscripción generada:", !!subscription);
 
@@ -348,7 +348,7 @@ export default function Home() {
             </button>
           </div>
           <p className="text-slate-500 text-lg max-w-2xl font-medium leading-relaxed">
-            Hola Sebastian, aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. ¿Qué quieres lograr hoy?
+            Hola Sebastián, aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. ¿Qué quieres lograr hoy?
           </p>
           
           <div className="flex flex-col md:flex-row items-center gap-6 mt-10 mb-4">
