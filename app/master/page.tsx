@@ -217,7 +217,7 @@ export default function MasterPanel() {
              </div>
              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-red-600">Acceso Restringido</span>
            </div>
-           <h1 className="text-3xl md:text-4xl font-black tracking-tight text-[var(--primary)]">Panel de Control Andrea</h1>
+           <h1 className="text-2xl md:text-5xl font-black tracking-tight text-[var(--primary)] leading-[1.1]">Panel de Control Andrea</h1>
            <p className="text-xs md:text-sm font-bold text-[var(--text-muted)] mt-1 md:mt-2 leading-relaxed">Gestiona lo que Sebastián ve en su pantalla en tiempo real.</p>
         </div>
       </header>

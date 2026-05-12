@@ -334,7 +334,7 @@ export default function Home() {
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Academia Epotech</span>
               </div>
-              <h1 className="text-4xl md:text-7xl font-black text-[#142d53] tracking-tighter mb-8 overflow-visible max-w-4xl leading-[1.1]">
+              <h1 className="text-2xl md:text-5xl font-black text-[#142d53] tracking-tighter mb-8 overflow-visible max-w-4xl leading-[1.1]">
                 Centro de mando: <br /> <span className="text-[#48c1d2] italic">Tu guía de vuelo&nbsp;</span>
               </h1>
             </div>

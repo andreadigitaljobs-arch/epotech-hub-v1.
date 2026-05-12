@@ -99,7 +99,7 @@ export default function ChecklistPage() {
       <header className="mb-4">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-[var(--primary)] flex items-center gap-2">
+            <h1 className="text-2xl md:text-5xl font-black tracking-tight text-[var(--primary)] flex items-center gap-2 leading-[1.1]">
               <ListTodo size={24} className="text-[var(--accent)]" /> 
               Checklist
             </h1>

@@ -201,7 +201,7 @@ export default function ManualPage() {
             </div>
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Protocolo de Campo</span>
           </div>
-          <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-[#142d53] mb-4 leading-[1.1]">
+          <h1 className="text-2xl md:text-5xl font-black tracking-tighter text-[#142d53] mb-4 leading-[1.1]">
             Guía de grabación <span className="text-[#48c1d2]">master</span>
           </h1>
         </header>

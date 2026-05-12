@@ -75,7 +75,7 @@ export default function AvancesPage() {
           <BarChart3 size={14} className="text-[var(--accent)]" />
           <span className="text-[10px] font-semibold text-[var(--accent)] font-mono">Estrategia y Análisis</span>
         </div>
-        <h1 className="text-2xl font-black tracking-tight text-[#142d53]">Centro de Avances</h1>
+        <h1 className="text-2xl md:text-5xl font-black tracking-tight text-[#142d53] leading-[1.1]">Centro de Avances</h1>
       </header>
 
       {/* Sub-Tabs */}

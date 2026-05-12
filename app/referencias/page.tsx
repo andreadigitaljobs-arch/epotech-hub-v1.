@@ -89,7 +89,7 @@ export default function ReferenciasPage() {
           </div>
          
          <div className="relative z-10">
-            <h1 className="text-4xl md:text-7xl font-black tracking-tighter mb-4 leading-[1.1] text-[#142d53]">
+            <h1 className="text-2xl md:text-5xl font-black tracking-tighter mb-4 leading-[1.1] text-[#142d53]">
                Motor de <span className="text-[#48c1d2]">inspiración</span>
             </h1>
             <p className="text-sm font-medium text-slate-500 italic max-w-xl leading-relaxed">

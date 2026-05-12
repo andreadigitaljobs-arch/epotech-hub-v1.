@@ -339,6 +339,7 @@ export default function ContenidoPage() {
   const [serviceType, setServiceType] = useState(typeParam);
   const [voiceSpeed, setVoiceSpeed] = useState<number>(0.85);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   
   // NUEVOS ESTADOS: Búsqueda y Organización
   const [scriptSearchQuery, setScriptSearchQuery] = useState("");
@@ -1527,7 +1528,7 @@ export default function ContenidoPage() {
 
       <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 flex justify-between items-start gap-4">
         <div>
-          <h1 className="text-4xl font-black text-[#142d53] leading-tight tracking-tighter whitespace-nowrap">
+          <h1 className="text-2xl md:text-5xl font-black text-[#142d53] leading-[1.1] tracking-tighter">
             Estudio de <span className="text-[#48c1d2]">Producción</span>
           </h1>
         </div>

@@ -81,7 +81,7 @@ export default function EstrategiaPage() {
               Plan Maestro 2024
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-6 leading-[1.1] tracking-tighter">
+          <h1 className="text-2xl md:text-5xl font-black text-white mb-6 leading-[1.1] tracking-tighter">
             Estrategia de <br />Crecimiento
           </h1>
           <p className="text-white/80 text-lg font-medium leading-relaxed max-w-xl italic">

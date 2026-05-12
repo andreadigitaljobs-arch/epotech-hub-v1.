@@ -13,7 +13,7 @@ export default function RutinaPage() {
   return (
     <div className="space-y-8">
       <header className="mb-6 border-b border-[var(--border)] pb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--primary)] flex items-center gap-2">
+        <h1 className="text-2xl md:text-5xl font-black tracking-tight text-[var(--primary)] flex items-center gap-2 leading-[1.1]">
           <Calendar size={24} className="text-[var(--accent)]" /> 
           Rutina y Constancia
         </h1>

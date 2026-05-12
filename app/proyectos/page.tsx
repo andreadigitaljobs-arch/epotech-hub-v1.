@@ -8,7 +8,8 @@ import {
   CheckCircle2, Circle, Clock, ChevronDown, ChevronUp,
   Database, Smartphone, Layout, FormInput, Rocket,
   MessageSquare, Save, AlertCircle, Trash2, Plus, Pencil,
-  TrendingUp, Search, Bell, Sparkles, MapPin, Share2, Lightbulb
+  TrendingUp, Search, Bell, Sparkles, MapPin, Share2, Lightbulb,
+  UserCheck, Camera, ClipboardCheck
 } from "lucide-react";
 
 // ─── Static service definitions ─────────────────────────────────────────────
@@ -57,7 +58,20 @@ const SERVICES = [
     color: "cyan",
     isComingSoon: true,
   },
+  {
+    id: "sebastian",
+    name: "Tu Parte",
+    description: "Cosas que necesitamos de Sebastián.",
+    Icon: UserCheck,
+    color: "amber",
+    hidden: true
+  }
 ];
+
+const PENDIENTES_METADATA: Record<string, { Icon: any, categoria: string, referencia?: string }> = {
+  "Sesión de fotos profesional (Solo y con esposa)": { Icon: Camera, categoria: "Multimedia" },
+  "Mandar a imprimir Afiche de Testimonio": { Icon: ClipboardCheck, categoria: "Marketing Físico", referencia: "/images/referencia-afiche.jpg" }
+};
 
 // ─── Initial tasks per service (seeded once if table is empty) ───────────────
 const INITIAL_TASKS: Record<string, { tarea: string; orden: number; status?: TaskStatus; observacion?: string | null }[]> = {
@@ -110,6 +124,10 @@ const INITIAL_TASKS: Record<string, { tarea: string; orden: number; status?: Tas
     { tarea: "Responder 100% de Reviews", status: "pendiente", observacion: "Interacción obligatoria para el algoritmo de Google.", orden: 6 },
     { tarea: "Nivel PRO: Website Sync", status: "pendiente", observacion: "Keywords iguales en web + perfil de Google.", orden: 7 },
   ],
+  sebastian: [
+    { tarea: "Sesión de fotos profesional (Solo y con esposa)", status: "pendiente", observacion: "Necesitamos fotos tuyas con tus herramientas y también con tu esposa en un lugar bonito de Utah. Es para el contenido de presentación del equipo.", orden: 1 },
+    { tarea: "Mandar a imprimir Afiche de Testimonio", status: "pendiente", observacion: "Un afiche que diga: 'Fui cliente de Epotech y los recomiendo 100%'. Es para que te tomes fotos con los clientes al terminar el trabajo.", orden: 2 },
+  ]
 };
 
 type TaskStatus = "pendiente" | "en_proceso" | "completada";
@@ -175,7 +193,7 @@ export default function ProyectosPage() {
   const [editingName, setEditingName] = useState<string | null>(null);
   const [addingTask, setAddingTask] = useState<Record<string, string>>({});
   const [newTaskText, setNewTaskText] = useState<Record<string, string>>({});
-  const [activeSubTab, setActiveSubTab] = useState<'proyectos' | 'mensajes'>('proyectos');
+  const [activeSubTab, setActiveSubTab] = useState<'proyectos' | 'mensajes' | 'pendientes'>('proyectos');
   const [msgFilter, setMsgFilter] = useState<'todas' | 'redes' | 'tips'>('todas');
 
   useEffect(() => {
@@ -296,7 +314,6 @@ export default function ProyectosPage() {
     await supabase.from("tareas_servicio").delete().eq("id", taskId);
   };
 
-  // ── Add new task ──────────────────────────────────────────────────────────
   const addTask = async (serviceId: string, serviceName: string) => {
     const text = newTaskText[serviceId]?.trim();
     if (!text) return;
@@ -320,7 +337,27 @@ export default function ProyectosPage() {
     if (!error && data) {
       setTasks((prev) => [...prev, data]);
       setNewTaskText((prev) => ({ ...prev, [serviceId]: "" }));
-      setAddingTask((prev) => ({ ...prev, [serviceId]: "" }));
+      setAddingTask((prev) => {
+        const next = { ...prev };
+        delete next[serviceId];
+        return next;
+      });
+
+      // Si es una tarea para Sebastián, enviamos notificación Push
+      if (serviceId === 'sebastian') {
+        try {
+          fetch('/api/push', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              titulo: '🚀 Nuevo pendiente asignado',
+              mensaje: `Se ha agregado: "${text}". Revisa la pestaña "Tu Parte" en tu Hub.`
+            })
+          });
+        } catch (e) {
+          console.error("Error enviando push:", e);
+        }
+      }
     }
   };
 
@@ -337,7 +374,7 @@ export default function ProyectosPage() {
         <header className="mb-8">
           <div className="flex items-center gap-3 mb-1">
              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-             <h1 className="text-3xl font-black text-[#142d53] leading-tight tracking-tighter">
+             <h1 className="text-2xl md:text-5xl font-black text-[#142d53] leading-[1.1] tracking-tighter">
                ¡Hola, {client.name}! 👋🏻
              </h1>
           </div>
@@ -350,21 +387,27 @@ export default function ProyectosPage() {
         <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8 gap-2 max-w-md mx-auto">
           <button 
             onClick={() => setActiveSubTab('proyectos')}
-            className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'proyectos' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
+            className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-tighter md:tracking-widest transition-all flex items-center justify-center gap-1.5 ${activeSubTab === 'proyectos' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
           >
-            <Rocket size={14} /> Proyectos
+            <Rocket size={13} /> Proyectos
           </button>
           <button 
             onClick={() => setActiveSubTab('mensajes')}
-            className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeSubTab === 'mensajes' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
+            className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-tighter md:tracking-widest transition-all flex items-center justify-center gap-1.5 ${activeSubTab === 'mensajes' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
           >
-            <Bell size={14} /> Mensajes {notificaciones.length > 0 && <span className="w-1.5 h-1.5 bg-[#48c1d2] rounded-full animate-pulse" />}
+            <Bell size={13} /> Mensajes {notificaciones.length > 0 && <span className="w-1.5 h-1.5 bg-[#48c1d2] rounded-full animate-pulse" />}
+          </button>
+          <button 
+            onClick={() => setActiveSubTab('pendientes')}
+            className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-tighter md:tracking-widest transition-all flex items-center justify-center gap-1.5 ${activeSubTab === 'pendientes' ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'}`}
+          >
+            <UserCheck size={13} /> Tu Parte
           </button>
         </div>
 
-        {activeSubTab === 'proyectos' ? (
-          <div className="space-y-4">
-          {SERVICES.map((svc) => {
+        {activeSubTab === 'proyectos' && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {SERVICES.filter(s => !s.hidden).map((svc) => {
             const svcTasks = tasks.filter((t) => t.service_id === svc.id);
             const progress = calcProgress(svcTasks);
             const done = svcTasks.filter((t) => t.status === "completada").length;
@@ -607,73 +650,193 @@ export default function ProyectosPage() {
             );
           })}
         </div>
-      ) : (
-      <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        {/* Filtros de Mensajes */}
-        <div className="grid grid-cols-3 gap-1.5 pb-2 px-1">
-          {[
-            { id: 'todas', label: 'Todas', icon: MessageSquare },
-            { id: 'redes', label: 'Redes', icon: Share2 },
-            { id: 'tips', label: 'Tips', icon: Lightbulb }
-          ].map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setMsgFilter(f.id as any)}
-              className={`flex flex-col md:flex-row items-center justify-center gap-1 px-2 py-3 md:py-2 rounded-2xl md:rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all border ${
-                msgFilter === f.id 
-                  ? 'bg-[#142d53] text-[#48c1d2] border-[#142d53] shadow-md' 
-                  : 'bg-white text-slate-400 border-slate-100'
-              }`}
-            >
-              <f.icon size={12} className="md:size-[14px]" />
-              <span className="text-center">{f.id === 'redes' ? 'Redes' : (f.id === 'tips' ? 'Tips' : f.label)}</span>
-            </button>
-          ))}
-        </div>
+        )}
 
-        {(() => {
-          const filtered = notificaciones.filter(n => {
-            if (msgFilter === 'todas') return true;
-            const type = n.tipo?.toUpperCase() || '';
-            if (msgFilter === 'redes') return type === 'REDES SOCIALES';
-            if (msgFilter === 'tips') return type === 'TIPS Y RECORDATORIOS' || type === 'URGENTE';
-            return true;
-          });
-
-          return filtered.length > 0 ? (
-            filtered.map((announcement) => (
-              <div key={announcement.id} className={`bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 relative overflow-hidden group ${announcement.tipo === 'URGENTE' ? 'border-l-red-500 bg-red-50/10' : 'border-l-[#48c1d2]'}`}>
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded ${announcement.tipo === 'URGENTE' ? 'bg-red-100 text-red-600' : 'bg-[#48c1d2]/10 text-[#142d53]'}`}>
-                      {announcement.tipo}
-                    </span>
-                    {announcement.tipo === 'REDES SOCIALES' && <Share2 size={12} className="text-[#48c1d2]" />}
-                    {(announcement.tipo === 'TIPS Y RECORDATORIOS' || announcement.tipo === 'URGENTE') && <Lightbulb size={12} className={announcement.tipo === 'URGENTE' ? 'text-red-500' : 'text-amber-400'} />}
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
-                </div>
-                <h3 className="font-black text-[#142d53] mb-2 text-sm">
-                  {announcement.titulo}
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                  {announcement.mensaje}
-                </p>
-              </div>
-            ))
-          ) : (
-            <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
-               <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
-                  <Bell size={24} className="text-slate-300" />
-               </div>
-               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                 {msgFilter === 'todas' ? 'Sin avisos recientes por ahora.' : `No hay ${msgFilter === 'redes' ? 'publicaciones' : 'tips'} registrados.`}
-               </p>
+        {activeSubTab === 'mensajes' && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Filtros de Mensajes */}
+            <div className="grid grid-cols-3 gap-1.5 pb-2 px-1">
+              {[
+                { id: 'todas', label: 'Todas', icon: MessageSquare },
+                { id: 'redes', label: 'Redes', icon: Share2 },
+                { id: 'tips', label: 'Tips', icon: Lightbulb }
+              ].map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setMsgFilter(f.id as any)}
+                  className={`flex flex-col md:flex-row items-center justify-center gap-1 px-2 py-3 md:py-2 rounded-2xl md:rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all border ${
+                    msgFilter === f.id 
+                      ? 'bg-[#142d53] text-[#48c1d2] border-[#142d53] shadow-md' 
+                      : 'bg-white text-slate-400 border-slate-100'
+                  }`}
+                >
+                  <f.icon size={12} className="md:size-[14px]" />
+                  <span className="text-center">{f.id === 'redes' ? 'Redes' : (f.id === 'tips' ? 'Tips' : f.label)}</span>
+                </button>
+              ))}
             </div>
-          );
-        })()}
-      </div>
-    )}
+
+            {(() => {
+              const filtered = notificaciones.filter(n => {
+                if (msgFilter === 'todas') return true;
+                const type = n.tipo?.toUpperCase() || '';
+                if (msgFilter === 'redes') return type === 'REDES SOCIALES';
+                if (msgFilter === 'tips') return type === 'TIPS Y RECORDATORIOS' || type === 'URGENTE';
+                return true;
+              });
+
+              return filtered.length > 0 ? (
+                filtered.map((announcement) => (
+                  <div key={announcement.id} className={`bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm border-l-4 relative overflow-hidden group ${announcement.tipo === 'URGENTE' ? 'border-l-red-500 bg-red-50/10' : 'border-l-[#48c1d2]'}`}>
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[8px] font-black uppercase tracking-[0.15em] px-2 py-1 rounded ${announcement.tipo === 'URGENTE' ? 'bg-red-100 text-red-600' : 'bg-[#48c1d2]/10 text-[#142d53]'}`}>
+                          {announcement.tipo}
+                        </span>
+                        {announcement.tipo === 'REDES SOCIALES' && <Share2 size={12} className="text-[#48c1d2]" />}
+                        {(announcement.tipo === 'TIPS Y RECORDATORIOS' || announcement.tipo === 'URGENTE') && <Lightbulb size={12} className={announcement.tipo === 'URGENTE' ? 'text-red-500' : 'text-amber-400'} />}
+                      </div>
+                      <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{formatDate(announcement.fecha)}</span>
+                    </div>
+                    <h3 className="font-black text-[#142d53] mb-2 text-sm">
+                      {announcement.titulo}
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                      {announcement.mensaje}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div className="bg-slate-50/50 text-center py-12 rounded-[2.5rem] border-2 border-dashed border-slate-100">
+                  <div className="bg-white h-12 w-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+                      <Bell size={24} className="text-slate-300" />
+                  </div>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    {msgFilter === 'todas' ? 'Sin avisos recientes por ahora.' : `No hay ${msgFilter === 'redes' ? 'publicaciones' : 'tips'} registrados.`}
+                  </p>
+                </div>
+              );
+            })()}
+          </div>
+        )}
+
+        {activeSubTab === 'pendientes' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Header explicativo */}
+            <div className="bg-amber-50 border border-amber-100 p-6 rounded-[2.5rem] relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-6 opacity-10">
+                  <Sparkles size={80} className="text-amber-500" />
+               </div>
+               <div className="relative z-10">
+                  <h3 className="text-lg font-black text-amber-900 mb-1 tracking-tight">Cosas que necesitamos de ti</h3>
+                  <p className="text-[10px] font-bold text-amber-900/60 uppercase tracking-widest leading-relaxed">Sebastian, completa esto para que el equipo pueda avanzar</p>
+               </div>
+            </div>
+
+            <div className="grid gap-4">
+              {tasks.filter(t => t.service_id === 'sebastian').map((item) => {
+                const meta = PENDIENTES_METADATA[item.tarea] || { Icon: ClipboardCheck, categoria: "Tarea" };
+                const { Icon } = meta;
+
+                return (
+                  <div key={item.id} className={`bg-white p-6 rounded-[2.5rem] border shadow-sm flex flex-col md:flex-row items-start gap-5 group transition-all ${item.status === 'completada' ? 'border-emerald-100 bg-emerald-50/10' : 'border-slate-100 hover:border-amber-400'}`}>
+                    {/* Status toggle button */}
+                    <button
+                      onClick={() => toggleStatus(item)}
+                      className="shrink-0 mt-1 transition-transform active:scale-90"
+                    >
+                      {item.status === "completada" ? (
+                        <div className="w-14 h-14 bg-emerald-100 rounded-[1.5rem] flex items-center justify-center text-emerald-600 shadow-sm">
+                          <CheckCircle2 size={28} />
+                        </div>
+                      ) : item.status === "en_proceso" ? (
+                        <div className="w-14 h-14 bg-amber-100 rounded-[1.5rem] flex items-center justify-center text-amber-600 shadow-sm">
+                          <Clock size={28} />
+                        </div>
+                      ) : (
+                        <div className="w-14 h-14 bg-slate-50 rounded-[1.5rem] flex items-center justify-center text-slate-300 shadow-sm">
+                           <Icon size={24} />
+                        </div>
+                      )}
+                    </button>
+
+                    <div className="flex-1 text-left pt-1">
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="text-[8px] font-black text-amber-500 uppercase tracking-[2px]">{meta.categoria}</span>
+                        <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border ${STATUS_COLORS[item.status]}`}>
+                          {STATUS_LABELS[item.status]}
+                        </span>
+                      </div>
+                      <h4 className={`text-sm font-black leading-tight mb-2 ${item.status === 'completada' ? 'text-slate-400 line-through' : 'text-[#142d53]'}`}>{item.tarea}</h4>
+                      <p className="text-[11px] font-medium text-slate-500 leading-relaxed italic mb-4">
+                        {item.observacion}
+                      </p>
+
+                      {meta.referencia && (
+                        <div className="mt-4 space-y-2">
+                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Referencia visual:</p>
+                          <div className="rounded-2xl overflow-hidden border border-slate-100 shadow-inner max-w-sm">
+                             <img src={meta.referencia} alt="Referencia" className="w-full h-auto" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Agregar nuevo pendiente */}
+            {addingTask['sebastian'] !== undefined ? (
+              <div className="flex gap-2 p-2 bg-white rounded-[2rem] border border-amber-200 shadow-sm animate-in zoom-in-95 duration-200">
+                <input
+                  autoFocus
+                  placeholder="¿Qué necesitamos de Sebastián?..."
+                  className="flex-1 text-sm font-bold text-[#142d53] bg-transparent px-4 py-3 outline-none placeholder:text-slate-300"
+                  value={newTaskText['sebastian'] ?? ""}
+                  onChange={(e) =>
+                    setNewTaskText((prev) => ({ ...prev, ['sebastian']: e.target.value }))
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") addTask('sebastian', 'Tu Parte');
+                    if (e.key === "Escape")
+                      setAddingTask((prev) => { const n = {...prev}; delete n['sebastian']; return n; });
+                  }}
+                />
+                <button
+                  onClick={() => addTask('sebastian', 'Tu Parte')}
+                  className="shrink-0 px-5 py-3 bg-amber-500 text-white rounded-[1.5rem] font-black text-xs active:scale-95 transition-all shadow-lg shadow-amber-500/20"
+                >
+                  <Save size={16} />
+                </button>
+                <button
+                  onClick={() =>
+                    setAddingTask((prev) => { const n = {...prev}; delete n['sebastian']; return n; })
+                  }
+                  className="shrink-0 px-4 py-3 bg-slate-50 text-slate-400 rounded-[1.5rem] font-black text-xs active:scale-95 transition-all"
+                >
+                  ✕
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() =>
+                  setAddingTask((prev) => ({ ...prev, ['sebastian']: "" }))
+                }
+                className="w-full flex items-center justify-center gap-2 py-5 border-2 border-dashed border-amber-200 rounded-[2.5rem] text-[10px] font-black text-amber-500/50 hover:border-amber-400 hover:text-amber-500 hover:bg-amber-50/30 transition-all group"
+              >
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Plus size={16} />
+                </div>
+                AGREGAR REQUERIMIENTO
+              </button>
+            )}
+
+            <div className="p-8 border-2 border-dashed border-slate-200 rounded-[2.5rem] text-center">
+               <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Toca el ícono de la tarea para cambiar su estado</p>
+            </div>
+          </div>
+        )}
   </div>
 </div>
 );
