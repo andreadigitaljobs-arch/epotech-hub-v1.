@@ -78,7 +78,8 @@ import {
   Play,
   Pause,
   Volume2,
-  Square
+  Square,
+  Edit3
 } from "lucide-react";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { ScriptText } from "@/components/ui/ScriptText";
