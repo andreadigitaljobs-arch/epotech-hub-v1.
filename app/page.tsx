@@ -5,12 +5,13 @@ import { createPortal } from "react-dom";
 import { 
   BookOpen, Video, Briefcase, PlaySquare, Target, 
   Sparkles, HelpCircle, ArrowRight, Play, Mic, 
-  Search, Smartphone, Zap, Bell, ShieldCheck
+  Search, Smartphone, Zap, Bell, ShieldCheck, PenTool
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 import { Toast, ToastType } from "@/components/ui/Toast";
+import { SignatureModal } from "@/components/ui/SignatureModal";
 
 const TUTORIAL_CARDS = [
   {
@@ -61,6 +62,8 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
+  const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
+  const [savedSignature, setSavedSignature] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
     message: "",
     type: "success",
@@ -95,7 +98,17 @@ export default function Home() {
     };
 
     prepareNotifications();
+
+    // Cargar firma guardada
+    const saved = localStorage.getItem('epotech_signature');
+    if (saved) setSavedSignature(saved);
   }, []);
+
+  const handleSaveSignature = (data: string) => {
+    localStorage.setItem('epotech_signature', data);
+    setSavedSignature(data);
+    showToast("Firma guardada y protegida.", "success");
+  };
 
   const urlBase64ToUint8Array = (base64String: string) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -315,7 +328,39 @@ export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 md:pb-8">
       {/* 1. INSTRUCCIONES PREMIUM */}
-      <div className="mb-4">
+      <div className="mb-4 space-y-4">
+        {/* Card de Firma Digital - Acceso Rápido */}
+        <div 
+          onClick={() => setIsSignatureModalOpen(true)}
+          className="bg-gradient-to-br from-[#142d53] to-[#1e3a8a] p-6 rounded-[2.5rem] shadow-xl border border-white/10 flex items-center justify-between group cursor-pointer hover:scale-[1.01] transition-all overflow-hidden relative"
+        >
+          {/* Fondo decorativo */}
+          <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
+            <PenTool size={120} className="text-[#48c1d2]" />
+          </div>
+
+          <div className="flex items-center gap-6 relative z-10">
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${savedSignature ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-[#48c1d2] text-[#142d53] shadow-lg shadow-[#48c1d2]/20'}`}>
+              {savedSignature ? <ShieldCheck size={28} /> : <PenTool size={28} />}
+            </div>
+            <div>
+              <h3 className="text-white text-lg font-black tracking-tight leading-none mb-2">
+                {savedSignature ? "Tu Firma está Lista" : "Registra tu Firma Digital"}
+              </h3>
+              <p className="text-[#48c1d2] text-[10px] font-black uppercase tracking-widest opacity-80">
+                {savedSignature ? "Protegida y lista para descargar" : "Click aquí para firmar ahora"}
+              </p>
+            </div>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-3 relative z-10">
+            <span className="text-[9px] font-black uppercase text-white/40 tracking-[0.2em]">Trámites Legales</span>
+            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:translate-x-1 transition-transform">
+              <ArrowRight size={16} />
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
             <span className="text-[#48c1d2]">Academia Epotech:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
@@ -452,6 +497,13 @@ export default function Home() {
         type={toast.type}
         isVisible={toast.isVisible}
         onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+      />
+
+      <SignatureModal 
+        isOpen={isSignatureModalOpen}
+        onClose={() => setIsSignatureModalOpen(false)}
+        onSave={handleSaveSignature}
+        savedSignature={savedSignature}
       />
 
     </div>
