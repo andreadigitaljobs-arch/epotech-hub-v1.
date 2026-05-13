@@ -354,7 +354,7 @@ export default function Home() {
           </div>
 
           <div className="hidden sm:flex items-center gap-3 relative z-10">
-            <span className="text-[9px] font-black uppercase text-white/40 tracking-[0.2em]">Trámites Legales</span>
+            <span className="text-[9px] font-black uppercase text-white/40 tracking-[0.2em]">Identidad de Marca</span>
             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:translate-x-1 transition-transform">
               <ArrowRight size={16} />
             </div>

@@ -227,7 +227,7 @@ export function SignatureModal({ isOpen, onClose, onSave, savedSignature }: Sign
 
         <div className="p-6 bg-slate-50/50 border-t border-slate-100 text-center">
           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest italic">
-            * Al guardar, la firma se exportará con fondo transparente para uso en documentos legales.
+            * La firma se exportará con fondo transparente para su aplicación en branding, landing pages y contenido personalizado.
           </p>
         </div>
       </div>
