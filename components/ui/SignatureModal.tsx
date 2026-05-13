@@ -8,10 +8,11 @@ interface SignatureModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (signatureData: string) => void;
+  onReset: () => void;
   savedSignature?: string | null;
 }
 
-export function SignatureModal({ isOpen, onClose, onSave, savedSignature }: SignatureModalProps) {
+export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignature }: SignatureModalProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasSignature, setHasSignature] = useState(false);
@@ -22,6 +23,9 @@ export function SignatureModal({ isOpen, onClose, onSave, savedSignature }: Sign
     setMounted(true);
     if (savedSignature) {
       setIsLocked(true);
+    } else {
+      setIsLocked(false);
+      setHasSignature(false);
     }
   }, [savedSignature]);
 
@@ -139,6 +143,17 @@ export function SignatureModal({ isOpen, onClose, onSave, savedSignature }: Sign
     }
   };
 
+  const handleReset = () => {
+    if (confirm("¿Estás seguro de que quieres eliminar esta firma? Tendrás que realizarla de nuevo.")) {
+      onReset();
+      setIsLocked(false);
+      setHasSignature(false);
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
+      ctx?.clearRect(0, 0, canvas?.width || 0, canvas?.height || 0);
+    }
+  };
+
   if (!mounted || !isOpen) return null;
 
   return createPortal(
@@ -215,12 +230,20 @@ export function SignatureModal({ isOpen, onClose, onSave, savedSignature }: Sign
                 </button>
               </>
             ) : (
-              <button
-                onClick={download}
-                className="w-full bg-[#142d53] text-[#48c1d2] py-5 rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
-              >
-                <Download size={20} /> Descargar PNG Transparente
-              </button>
+              <div className="w-full flex flex-col gap-3">
+                <button
+                  onClick={download}
+                  className="w-full bg-[#142d53] text-[#48c1d2] py-5 rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
+                >
+                  <Download size={20} /> Descargar PNG Transparente
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="w-full py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 hover:bg-red-50 transition-all flex items-center justify-center gap-2"
+                >
+                  <Trash2 size={14} /> Eliminar Firma y Volver a Empezar
+                </button>
+              </div>
             )}
           </div>
         </div>

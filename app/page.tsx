@@ -110,6 +110,12 @@ export default function Home() {
     showToast("Firma guardada y protegida.", "success");
   };
 
+  const handleResetSignature = () => {
+    localStorage.removeItem('epotech_signature');
+    setSavedSignature(null);
+    showToast("Firma eliminada.", "success");
+  };
+
   const urlBase64ToUint8Array = (base64String: string) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -503,6 +509,7 @@ export default function Home() {
         isOpen={isSignatureModalOpen}
         onClose={() => setIsSignatureModalOpen(false)}
         onSave={handleSaveSignature}
+        onReset={handleResetSignature}
         savedSignature={savedSignature}
       />
 
