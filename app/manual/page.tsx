@@ -34,7 +34,7 @@ const phaseColors: Record<string, string> = {
   antes: "bg-blue-50 text-blue-600 border-blue-100",
   durante: "bg-[#48c1d2]/10 text-[#48c1d2] border-[#48c1d2]/20",
   despues: "bg-emerald-50 text-emerald-600 border-emerald-100",
-  humano: "bg-purple-50 text-purple-600 border-purple-100",
+  humano: "bg-[#48c1d2]/10 text-[#142d53] border-[#48c1d2]/20",
 };
 
 const phaseMessages: Record<string, any> = {
@@ -336,14 +336,14 @@ export default function ManualPage() {
                     {activePhase === 'humano' ? (
                       <div className="space-y-4">
                         <div className="flex flex-col md:flex-row gap-4">
-                          <div className="flex-1 bg-white p-4 rounded-2xl border border-purple-200 shadow-sm">
-                            <h4 className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                              <AlertCircle size={14} /> {phaseMessages.humano.regla_oro.titulo}
+                          <div className="flex-1 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                            <h4 className="text-[10px] font-black text-[#142d53] uppercase tracking-widest mb-3 flex items-center gap-2">
+                              <AlertCircle size={14} className="text-[#48c1d2]" /> {phaseMessages.humano.regla_oro.titulo}
                             </h4>
                             <ul className="space-y-2">
                               {phaseMessages.humano.regla_oro.items.map((item: string, i: number) => (
                                 <li key={i} className="text-[11px] font-bold text-slate-700 flex items-start gap-2">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" />
+                                  <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] mt-1.5 shrink-0" />
                                   {item}
                                 </li>
                               ))}
@@ -363,13 +363,13 @@ export default function ManualPage() {
                             </div>
                           </div>
                         </div>
-                        <p className="text-[11px] font-black text-purple-700 uppercase italic text-center pt-2">
+                        <p className="text-[11px] font-black text-[#142d53] uppercase italic text-center pt-2">
                           "Cambia el enfoque de 'HABLAR' por 'NARRAR'. Narrar es documentar."
                         </p>
                       </div>
                     ) : (
-                      <p className={`text-xs font-black uppercase tracking-tight leading-relaxed ${activePhase === 'humano' ? 'text-purple-700' : 'text-[#142d53]'}`}>
-                        <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 ${activePhase === 'humano' ? 'bg-purple-600' : 'bg-[#142d53]'}`}>
+                      <p className={`text-xs font-black uppercase tracking-tight leading-relaxed ${activePhase === 'humano' ? 'text-[#142d53]' : 'text-[#142d53]'}`}>
+                        <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 ${activePhase === 'humano' ? 'bg-[#48c1d2]' : 'bg-[#142d53]'}`}>
                           Estrategia 2026:
                         </span>
                         {phaseMessages[activePhase]}
@@ -386,10 +386,10 @@ export default function ManualPage() {
                             setActiveTooltip(activeTooltip === idx ? null : idx);
                           }
                         }}
-                        className={`group w-full flex flex-col items-start text-left p-5 bg-white rounded-[2.5rem] border transition-all active:scale-[0.98] cursor-pointer ${activeTooltip === idx ? 'border-purple-400 bg-white shadow-xl ring-4 ring-purple-50' : 'border-slate-100 bg-gray-50/50 hover:bg-white hover:border-[#48c1d2]/50 hover:shadow-lg'}`}
+                        className={`group w-full flex flex-col items-start text-left p-5 bg-white rounded-[2.5rem] border transition-all active:scale-[0.98] cursor-pointer ${activeTooltip === idx ? 'border-[#48c1d2] bg-white shadow-xl ring-4 ring-[#48c1d2]/5' : 'border-slate-100 bg-gray-50/50 hover:bg-white hover:border-[#48c1d2]/50 hover:shadow-lg'}`}
                       >
                         <div className="flex items-start gap-4 w-full">
-                          <div className={`mt-0.5 rounded-2xl w-10 h-10 flex items-center justify-center shrink-0 text-sm font-black transition-all ${activeTooltip === idx ? 'bg-purple-600 text-white' : 'bg-white border border-slate-100 text-slate-400 group-hover:text-[#48c1d2]'}`}>
+                          <div className={`mt-0.5 rounded-2xl w-10 h-10 flex items-center justify-center shrink-0 text-sm font-black transition-all ${activeTooltip === idx ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-white border border-slate-100 text-slate-400 group-hover:text-[#48c1d2]'}`}>
                             {idx + 1}
                           </div>
                           <div className="flex-1">
@@ -397,7 +397,7 @@ export default function ManualPage() {
                               <p className={`text-sm md:text-base font-black leading-tight transition-colors ${activeTooltip === idx ? 'text-[#142d53]' : 'text-slate-600 group-hover:text-[#142d53]'}`}>
                                 {(item.es || item)}
                               </p>
-                              <div className={`shrink-0 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase flex items-center gap-1.5 transition-all ${activeTooltip === idx ? 'bg-purple-600 text-white' : 'bg-slate-200/50 text-slate-500 group-hover:bg-[#142d53] group-hover:text-white'}`}>
+                              <div className={`shrink-0 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase flex items-center gap-1.5 transition-all ${activeTooltip === idx ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-slate-200/50 text-slate-500 group-hover:bg-[#142d53] group-hover:text-white'}`}>
                                 <HelpCircle size={10} /> 
                                 <span className="hidden md:inline">¿CÓMO GRABARLO?</span>
                                 <span className="md:hidden">INFO</span>
@@ -414,8 +414,8 @@ export default function ManualPage() {
                         {activeTooltip === idx && activePhase === 'humano' && (
                           <div className="mt-6 w-full space-y-4 animate-in slide-in-from-top-2 duration-300" onClick={(e) => e.stopPropagation()}>
                             <div className="grid grid-cols-1 gap-4">
-                                <div className="bg-purple-50 p-4 rounded-2xl border border-purple-100">
-                                  <span className="text-[8px] font-black text-purple-600 uppercase tracking-[0.2em] block mb-2">📍 Objetivo Táctico</span>
+                                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                  <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em] block mb-2">📍 Objetivo Táctico</span>
                                   <p className="text-[11px] font-bold text-[#142d53] leading-snug">{item.objetivo}</p>
                                 </div>
                                 
