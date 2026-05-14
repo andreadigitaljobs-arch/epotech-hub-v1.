@@ -60,13 +60,13 @@ export const manual = {
     },
     {
       id: "humano",
-      titulo: "🎥 Contenido Humano",
+      titulo: "Contenido Humano",
       subtitulo: "Humaniza la marca y genera confianza",
       emoji: "📱",
       color: "purple",
       items: [
         {
-          es: "📍 Explicando qué se va a hacer",
+          es: "Explicando qué se va a hacer",
           objetivo: "Dar contexto antes del trabajo.",
           grabar: "Graba la casa o área mientras caminas lentamente.",
           narrar: "Qué problema tiene, qué van a limpiar, qué resultado esperan.",
@@ -76,7 +76,7 @@ export const manual = {
           demo: "“Hoy vamos a limpiar este driveway porque tenía mucha suciedad acumulada y manchas negras.”"
         },
         {
-          es: "🧼 Explicando el problema del cliente",
+          es: "Explicando el problema del cliente",
           objetivo: "Hacer que el espectador diga: “mi casa también está así”.",
           grabar: "Acércate bastante al área sucia.",
           narrar: "Qué causó eso, por qué pasa, si puede empeorar.",
@@ -84,14 +84,14 @@ export const manual = {
           demo: "“Estas manchas negras normalmente salen por humedad y acumulación de suciedad con el tiempo.”"
         },
         {
-          es: "🔥 Explicando por qué el proceso importa",
+          es: "Explicando por qué el proceso importa",
           objetivo: "Educar sin parecer profesor.",
           grabar: "Mientras trabajas: grabar agua, químicos, herramientas, limpieza.",
           narrar: "Por qué hacen ese paso, por qué usan cierta herramienta, qué diferencia hace.",
           demo: "“Usamos esta punta porque limpia profundo sin dañar el concreto.”"
         },
         {
-          es: "👀 Mini vlog del trabajo (tipo POV)",
+          es: "Mini vlog del trabajo (tipo POV)",
           objetivo: "Hacer sentir al espectador dentro del trabajo.",
           grabar: "Graba: llegando, bajando herramientas, preparando máquinas, conectando agua, caminando.",
           duracion: "Tomas cortas: 3-5 segundos.",
@@ -99,26 +99,26 @@ export const manual = {
           narrar: "Puedes hablar o no (narrar es documentar)."
         },
         {
-          es: "😮 Reacción al resultado final",
+          es: "Reacción al resultado final",
           objetivo: "Transmitir satisfacción humana.",
           grabar: "Graba el resultado terminado.",
           regla: "Natural, NO actuar exagerado.",
           demo: "“Quedó brutal... mira la diferencia. Esto tomó varias horas pero valió la pena.”"
         },
         {
-          es: "🛠️ Detrás de cámaras",
+          es: "Detrás de cámaras",
           objetivo: "Mostrar trabajo real.",
           grabar: "Preparando químicos, moviendo mangueras, setup, errores, cansancio, detalles reales.",
           regla: "Esto NO necesita verse perfecto. Mientras más real, mejor."
         },
         {
-          es: "📖 Storytelling del trabajo",
+          es: "Storytelling del trabajo",
           objetivo: "Convertir un trabajo normal en historia.",
           grabar: "Mientras grabas la propiedad explica: cuánto tiempo tomó, qué era lo más difícil, qué encontraron, qué cambió.",
           demo: "“Pensamos que esto iba a tomar dos horas y terminamos haciendo mucho más porque había demasiada suciedad acumulada.”"
         },
         {
-          es: "🏡 Lifestyle / Marca personal ligera",
+          es: "Lifestyle / Marca personal ligera",
           objetivo: "Que la cuenta se sienta humana (NO influencer).",
           grabar: "Cosas simples: manejando al trabajo, café en la mañana, cargando herramientas, sunset después del trabajo, camino a casa.",
           regla: "NO actuar, solo documentar."

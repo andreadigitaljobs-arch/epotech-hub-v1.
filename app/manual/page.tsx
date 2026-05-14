@@ -43,7 +43,7 @@ const phaseMessages: Record<string, any> = {
   despues: "El espectador recuerda primero lo último que vio. Que sea satisfactorio.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
   humano: {
     id: "humano",
-    titulo: "🎥 Contenido Humano",
+    titulo: "Contenido Humano",
     subtitulo: "Humaniza la marca y genera confianza",
     regla_oro: {
       titulo: "⚠️ REGLA IMPORTANTE",
@@ -321,7 +321,7 @@ export default function ManualPage() {
 
             return (
               <div key={fase.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <Card className="p-6 border-t-8 shadow-xl rounded-[2.5rem]" style={{ borderTopColor: fase.id === 'antes' ? '#3b82f6' : fase.id === 'durante' ? '#48c1d2' : fase.id === 'despues' ? '#10b981' : '#a855f7' }}>
+                <Card className="p-6 border-t-8 shadow-xl rounded-[2.5rem]" style={{ borderTopColor: fase.id === 'antes' ? '#3b82f6' : fase.id === 'durante' ? '#48c1d2' : fase.id === 'despues' ? '#10b981' : '#48c1d2' }}>
                   <div className="flex items-center gap-3 mb-6">
                     <div className={`p-3 rounded-xl border ${colorStyles}`}>
                       <Icon size={18} />
