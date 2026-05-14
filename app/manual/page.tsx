@@ -412,65 +412,69 @@ export default function ManualPage() {
                         
                         {/* Tooltip Detallado (Phase Humano) */}
                         {activeTooltip === idx && activePhase === 'humano' && (
-                          <div className="mt-6 w-full space-y-4 animate-in slide-in-from-top-2 duration-300" onClick={(e) => e.stopPropagation()}>
-                            <div className="grid grid-cols-1 gap-4">
-                                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                  <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em] block mb-2">📍 Objetivo Táctico</span>
-                                  <p className="text-[11px] font-bold text-[#142d53] leading-snug">{item.objetivo}</p>
+                          <div className="mt-6 w-full space-y-3 animate-in slide-in-from-top-2 duration-300" onClick={(e) => e.stopPropagation()}>
+                            <div className="grid grid-cols-1 gap-3">
+                                {/* Objetivo */}
+                                <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
+                                  <div className="flex items-center gap-2 mb-1.5">
+                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Objetivo Táctico</span>
+                                  </div>
+                                  <p className="text-[12px] font-bold text-[#142d53] leading-relaxed">{item.objetivo}</p>
                                 </div>
                                 
-                                <div className="bg-slate-900 p-4 rounded-2xl border border-white/10">
+                                {/* Grabación */}
+                                <div className="bg-slate-50/80 p-4 rounded-2xl border-l-4 border-[#142d53] shadow-sm">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <Smartphone size={12} className="text-[#48c1d2]" />
-                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Cómo Grabarlo</span>
+                                    <Smartphone size={14} className="text-[#142d53]" />
+                                    <span className="text-[8px] font-black text-[#142d53] uppercase tracking-[0.2em]">Guía de Grabación</span>
                                   </div>
-                                  <p className="text-[11px] font-bold text-slate-200 leading-snug mb-3">{item.grabar}</p>
+                                  <p className="text-[12px] font-bold text-slate-700 leading-relaxed mb-3">{item.grabar}</p>
                                   
-                                  {item.ejemplos && (
-                                    <div className="flex flex-wrap gap-1.5">
-                                      {item.ejemplos.map((ej: string, i: number) => (
-                                        <span key={i} className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[8px] font-black text-[#48c1d2]/80 uppercase">{ej}</span>
+                                  {(item.ejemplos || item.detalles) && (
+                                    <div className="flex flex-wrap gap-1.5 pt-1">
+                                      {item.ejemplos?.map((ej: string, i: number) => (
+                                        <span key={i} className="px-2 py-1 bg-white border border-slate-200 rounded-lg text-[8px] font-black text-[#48c1d2] uppercase">{ej}</span>
                                       ))}
-                                    </div>
-                                  )}
-
-                                  {item.detalles && (
-                                    <div className="flex flex-wrap gap-1.5">
-                                      {item.detalles.map((det: string, i: number) => (
-                                        <span key={i} className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[8px] font-black text-red-400/80 uppercase">⚠️ {det}</span>
+                                      {item.detalles?.map((det: string, i: number) => (
+                                        <span key={i} className="px-2 py-1 bg-white border border-red-100 rounded-lg text-[8px] font-black text-red-500 uppercase">Aviso: {det}</span>
                                       ))}
                                     </div>
                                   )}
                                 </div>
 
-                                <div className="bg-[#48c1d2]/10 p-4 rounded-2xl border border-[#48c1d2]/30">
+                                {/* Narración */}
+                                <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <Mic size={12} className="text-[#142d53]" />
-                                    <span className="text-[8px] font-black text-[#142d53] uppercase tracking-[0.2em]">Qué Narrar</span>
+                                    <Mic size={14} className="text-[#48c1d2]" />
+                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Guía de Narración</span>
                                   </div>
-                                  <p className="text-[11px] font-bold text-[#142d53] leading-snug mb-4">{item.narrar}</p>
+                                  <p className="text-[12px] font-bold text-[#142d53] leading-relaxed mb-4">{item.narrar}</p>
                                   
                                   {item.demo && (
-                                    <div className="bg-white p-3 rounded-xl border border-[#48c1d2]/20 shadow-sm relative italic">
-                                      <div className="absolute -top-1.5 left-4 bg-[#48c1d2] text-[#142d53] px-2 py-0.5 rounded text-[7px] font-black uppercase">Ejemplo real</div>
-                                      <p className="text-[10px] font-black text-[#142d53] opacity-80">{item.demo}</p>
+                                    <div className="bg-[#142d53]/5 p-4 rounded-xl border border-[#142d53]/10 relative group/demo transition-all hover:bg-[#142d53]/10">
+                                      <div className="absolute -top-2 left-4 bg-[#142d53] text-white px-3 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest">Ejemplo de guion</div>
+                                      <p className="text-[11px] font-medium text-[#142d53] italic leading-relaxed pt-1">"{item.demo}"</p>
                                     </div>
                                   )}
                                 </div>
 
-                                <div className="flex items-center justify-between pt-2">
-                                  {item.duracion && (
-                                    <div className="flex items-center gap-1.5 text-slate-400">
-                                      <Clock size={12} />
-                                      <span className="text-[9px] font-black uppercase tracking-widest">{item.duracion}</span>
-                                    </div>
-                                  )}
-                                  {item.regla && (
-                                    <div className="bg-red-50 text-red-600 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-wider border border-red-100 flex items-center gap-1.5">
-                                      <AlertCircle size={10} /> {item.regla}
-                                    </div>
-                                  )}
-                                </div>
+                                {/* Duración/Reglas */}
+                                {(item.duracion || item.regla) && (
+                                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                                    {item.duracion && (
+                                      <div className="flex items-center gap-2 text-[#142d53]/60">
+                                        <Clock size={12} />
+                                        <span className="text-[9px] font-black uppercase tracking-wider">{item.duracion}</span>
+                                      </div>
+                                    )}
+                                    {item.regla && (
+                                      <div className="bg-red-50 px-4 py-2 rounded-full border border-red-100 flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                                        <span className="text-[9px] font-black text-red-600 uppercase tracking-wider">{item.regla}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
                             </div>
                           </div>
                         )}
