@@ -332,44 +332,50 @@ export default function ManualPage() {
                     </div>
                   </div>
 
-                  <div className={`mb-6 p-5 rounded-2xl border transition-all ${activePhase === 'humano' ? 'bg-purple-50 border-purple-200' : 'bg-blue-50/50 border-blue-100/50'}`}>
+                  <div className={`mb-8 p-6 rounded-3xl border border-slate-100 bg-slate-50/50 transition-all`}>
                     {activePhase === 'humano' ? (
-                      <div className="space-y-4">
-                        <div className="flex flex-col md:flex-row gap-4">
-                          <div className="flex-1 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                            <h4 className="text-[10px] font-black text-[#142d53] uppercase tracking-widest mb-3 flex items-center gap-2">
-                              <AlertCircle size={14} className="text-[#48c1d2]" /> {phaseMessages.humano.regla_oro.titulo}
+                      <div className="space-y-6">
+                        <div className="flex flex-col md:flex-row gap-6">
+                          {/* Regla Importante */}
+                          <div className="flex-1 bg-white p-5 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
+                            <h4 className="text-[10px] font-black text-[#142d53] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                              Regla Importante
                             </h4>
-                            <ul className="space-y-2">
+                            <ul className="space-y-3">
                               {phaseMessages.humano.regla_oro.items.map((item: string, i: number) => (
-                                <li key={i} className="text-[11px] font-bold text-slate-700 flex items-start gap-2">
+                                <li key={i} className="text-[11px] font-bold text-slate-600 flex items-start gap-2.5">
                                   <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] mt-1.5 shrink-0" />
                                   {item}
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div className="flex-1 bg-[#142d53] p-4 rounded-2xl border border-white/10 shadow-sm">
-                            <h4 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest mb-3 flex items-center gap-2">
-                              <Settings size={14} /> {phaseMessages.humano.reglas_generales.titulo}
+                          
+                          {/* Reglas Generales */}
+                          <div className="flex-1 bg-[#142d53] p-5 rounded-2xl shadow-xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16" />
+                            <h4 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.2em] mb-4 flex items-center gap-2 relative z-10">
+                              Reglas Generales
                             </h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 relative z-10">
                               {phaseMessages.humano.reglas_generales.items.map((item: string, i: number) => (
-                                <div key={i} className="text-[9px] font-bold text-slate-300 flex items-center gap-2">
-                                  <CheckCircle2 size={10} className="text-[#48c1d2]" />
+                                <div key={i} className="text-[10px] font-bold text-slate-300 flex items-center gap-2">
+                                  <CheckCircle2 size={12} className="text-[#48c1d2]" />
                                   {item}
                                 </div>
                               ))}
                             </div>
                           </div>
                         </div>
-                        <p className="text-[11px] font-black text-[#142d53] uppercase italic text-center pt-2">
-                          "Cambia el enfoque de 'HABLAR' por 'NARRAR'. Narrar es documentar."
-                        </p>
+                        <div className="text-center pt-2">
+                          <p className="text-[11px] font-black text-[#142d53] uppercase tracking-widest italic opacity-80">
+                            "Cambia el enfoque de 'HABLAR' por 'NARRAR'. Narrar es documentar."
+                          </p>
+                        </div>
                       </div>
                     ) : (
-                      <p className={`text-xs font-black uppercase tracking-tight leading-relaxed ${activePhase === 'humano' ? 'text-[#142d53]' : 'text-[#142d53]'}`}>
-                        <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 ${activePhase === 'humano' ? 'bg-[#48c1d2]' : 'bg-[#142d53]'}`}>
+                      <p className={`text-xs font-black uppercase tracking-tight leading-relaxed text-[#142d53]`}>
+                        <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 bg-[#142d53]`}>
                           Estrategia 2026:
                         </span>
                         {phaseMessages[activePhase]}
