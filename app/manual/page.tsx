@@ -35,11 +35,34 @@ const phaseColors: Record<string, string> = {
   humano: "bg-purple-50 text-purple-600 border-purple-100",
 };
 
-const phaseMessages: Record<string, string> = {
+const phaseMessages: Record<string, any> = {
   antes: "El antes es lo que vende el después. Si el problema no se ve claro, la transformación perderá impacto.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
   durante: "Múltiples ángulos = versátil. Clips cortos = dinámico. Valor agregado = diferenciador. Jenkryfer en video = humanidad.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
   despues: "El espectador recuerda primero lo último que vio. Que sea satisfactorio.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
-  humano: "Estos videos son la pieza clave para tus STORIES. Al grabarlos, humanizas tu marca y generas confianza diaria.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
+  humano: {
+    title: "🎥 CONTENIDO HUMANO",
+    subtitle: "Humaniza la marca y genera confianza",
+    regla_oro: {
+      titulo: "⚠️ REGLA IMPORTANTE",
+      items: [
+        "No necesitas hablar inglés frente a cámara.",
+        "Puedes grabar el lugar, tus manos o POV y narrar en español.",
+        "Nosotros traducimos la voz después."
+      ]
+    },
+    reglas_generales: {
+      titulo: "🎬 REGLAS GENERALES",
+      items: [
+        "Clips cortos (3-10 segundos)",
+        "Grabar siempre en vertical",
+        "Movimientos lentos y suaves",
+        "NO usar zoom digital",
+        "Limpiar el lente antes de empezar",
+        "Grabar múltiples ángulos",
+        "NO música de fondo mientras hablas/narras"
+      ]
+    }
+  }
 };
 
 export default function ManualPage() {
@@ -303,52 +326,157 @@ export default function ManualPage() {
                   </div>
 
                   <div className={`mb-6 p-5 rounded-2xl border transition-all ${activePhase === 'humano' ? 'bg-purple-50 border-purple-200' : 'bg-blue-50/50 border-blue-100/50'}`}>
-                    <p className={`text-xs font-black uppercase tracking-tight leading-relaxed ${activePhase === 'humano' ? 'text-purple-700' : 'text-[#142d53]'}`}>
-                      <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 ${activePhase === 'humano' ? 'bg-purple-600' : 'bg-[#142d53]'}`}>
-                        Estrategia 2026:
-                      </span>
-                      {phaseMessages[activePhase]}
-                    </p>
+                    {activePhase === 'humano' ? (
+                      <div className="space-y-4">
+                        <div className="flex flex-col md:flex-row gap-4">
+                          <div className="flex-1 bg-white p-4 rounded-2xl border border-purple-200 shadow-sm">
+                            <h4 className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                              <AlertCircle size={14} /> {phaseMessages.humano.regla_oro.titulo}
+                            </h4>
+                            <ul className="space-y-2">
+                              {phaseMessages.humano.regla_oro.items.map((item: string, i: number) => (
+                                <li key={i} className="text-[11px] font-bold text-slate-700 flex items-start gap-2">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" />
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="flex-1 bg-[#142d53] p-4 rounded-2xl border border-white/10 shadow-sm">
+                            <h4 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest mb-3 flex items-center gap-2">
+                              <Settings size={14} /> {phaseMessages.humano.reglas_generales.titulo}
+                            </h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+                              {phaseMessages.humano.reglas_generales.items.map((item: string, i: number) => (
+                                <div key={i} className="text-[9px] font-bold text-slate-300 flex items-center gap-2">
+                                  <CheckCircle2 size={10} className="text-[#48c1d2]" />
+                                  {item}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-[11px] font-black text-purple-700 uppercase italic text-center pt-2">
+                          "Cambia el enfoque de 'HABLAR' por 'NARRAR'. Narrar es documentar."
+                        </p>
+                      </div>
+                    ) : (
+                      <p className={`text-xs font-black uppercase tracking-tight leading-relaxed ${activePhase === 'humano' ? 'text-purple-700' : 'text-[#142d53]'}`}>
+                        <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 ${activePhase === 'humano' ? 'bg-purple-600' : 'bg-[#142d53]'}`}>
+                          Estrategia 2026:
+                        </span>
+                        {phaseMessages[activePhase]}
+                      </p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 relative">
                     {fase.items.map((item: any, idx: number) => (
-                      <button 
+                      <div 
                         key={idx} 
                         onClick={() => {
-                          if (item.tooltip) {
+                          if (item.tooltip || activePhase === 'humano') {
                             setActiveTooltip(activeTooltip === idx ? null : idx);
                           }
                         }}
-                        className={`group w-full flex items-start text-left gap-4 p-5 bg-gray-50/50 rounded-2xl border border-gray-100 hover:bg-white hover:border-[var(--accent)] hover:shadow-xl hover:shadow-[#48c1d2]/5 transition-all active:scale-[0.98] cursor-pointer ${activeTooltip === idx ? 'border-[var(--accent)] bg-white shadow-lg' : ''}`}
+                        className={`group w-full flex flex-col items-start text-left p-5 bg-white rounded-[2.5rem] border transition-all active:scale-[0.98] cursor-pointer ${activeTooltip === idx ? 'border-purple-400 bg-white shadow-xl ring-4 ring-purple-50' : 'border-slate-100 bg-gray-50/50 hover:bg-white hover:border-[#48c1d2]/50 hover:shadow-lg'}`}
                       >
-                        <div className={`mt-0.5 rounded-xl w-8 h-8 flex items-center justify-center shrink-0 text-[11px] font-black transition-all ${activeTooltip === idx ? 'bg-[var(--accent)] text-white' : 'bg-white border border-[var(--border)] group-hover:border-[var(--accent)] text-[var(--accent)]'}`}>
-                          {idx + 1}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between gap-4">
-                            <p className={`text-sm font-black leading-tight transition-colors ${activeTooltip === idx ? 'text-[var(--primary)]' : 'text-[var(--primary)]/80 group-hover:text-[var(--primary)]'}`}>
-                              {(item.es || item)}
-                            </p>
-                            {item.tooltip && (
-                              <div className={`shrink-0 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase flex items-center gap-1.5 transition-all ${activeTooltip === idx ? 'bg-[var(--accent)] text-white' : 'bg-slate-200/50 text-slate-500 group-hover:bg-[#142d53] group-hover:text-white'}`}>
+                        <div className="flex items-start gap-4 w-full">
+                          <div className={`mt-0.5 rounded-2xl w-10 h-10 flex items-center justify-center shrink-0 text-sm font-black transition-all ${activeTooltip === idx ? 'bg-purple-600 text-white' : 'bg-white border border-slate-100 text-slate-400 group-hover:text-[#48c1d2]'}`}>
+                            {idx + 1}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between gap-4">
+                              <p className={`text-sm md:text-base font-black leading-tight transition-colors ${activeTooltip === idx ? 'text-[#142d53]' : 'text-slate-600 group-hover:text-[#142d53]'}`}>
+                                {(item.es || item)}
+                              </p>
+                              <div className={`shrink-0 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase flex items-center gap-1.5 transition-all ${activeTooltip === idx ? 'bg-purple-600 text-white' : 'bg-slate-200/50 text-slate-500 group-hover:bg-[#142d53] group-hover:text-white'}`}>
                                 <HelpCircle size={10} /> 
                                 <span className="hidden md:inline">¿CÓMO GRABARLO?</span>
                                 <span className="md:hidden">INFO</span>
                               </div>
+                            </div>
+                            
+                            {activePhase === 'humano' && !activeTooltip && (
+                              <p className="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.objetivo}</p>
                             )}
                           </div>
-                          
-                          {/* Tooltip Detallado */}
-                          {activeTooltip === idx && item.tooltip && (
-                            <div className="mt-4 p-4 bg-[#142d53] text-white rounded-xl text-[10px] font-medium leading-relaxed animate-in zoom-in-95 duration-200 shadow-2xl relative border border-white/10 whitespace-pre-line" onClick={(e) => e.stopPropagation()}>
-                              <div className="absolute -top-2 right-6 w-4 h-4 bg-[#142d53] rotate-45 border-l border-t border-white/10"></div>
-                              <span className="text-[#48c1d2] font-black uppercase block mb-1">Instrucción Táctica:</span>
-                              {item.tooltip}
-                            </div>
-                          )}
                         </div>
-                      </button>
+                        
+                        {/* Tooltip Detallado (Phase Humano) */}
+                        {activeTooltip === idx && activePhase === 'humano' && (
+                          <div className="mt-6 w-full space-y-4 animate-in slide-in-from-top-2 duration-300" onClick={(e) => e.stopPropagation()}>
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="bg-purple-50 p-4 rounded-2xl border border-purple-100">
+                                  <span className="text-[8px] font-black text-purple-600 uppercase tracking-[0.2em] block mb-2">📍 Objetivo Táctico</span>
+                                  <p className="text-[11px] font-bold text-[#142d53] leading-snug">{item.objetivo}</p>
+                                </div>
+                                
+                                <div className="bg-slate-900 p-4 rounded-2xl border border-white/10">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Smartphone size={12} className="text-[#48c1d2]" />
+                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Cómo Grabarlo</span>
+                                  </div>
+                                  <p className="text-[11px] font-bold text-slate-200 leading-snug mb-3">{item.grabar}</p>
+                                  
+                                  {item.ejemplos && (
+                                    <div className="flex flex-wrap gap-1.5">
+                                      {item.ejemplos.map((ej: string, i: number) => (
+                                        <span key={i} className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[8px] font-black text-[#48c1d2]/80 uppercase">{ej}</span>
+                                      ))}
+                                    </div>
+                                  )}
+
+                                  {item.detalles && (
+                                    <div className="flex flex-wrap gap-1.5">
+                                      {item.detalles.map((det: string, i: number) => (
+                                        <span key={i} className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[8px] font-black text-red-400/80 uppercase">⚠️ {det}</span>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+
+                                <div className="bg-[#48c1d2]/10 p-4 rounded-2xl border border-[#48c1d2]/30">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Mic size={12} className="text-[#142d53]" />
+                                    <span className="text-[8px] font-black text-[#142d53] uppercase tracking-[0.2em]">Qué Narrar</span>
+                                  </div>
+                                  <p className="text-[11px] font-bold text-[#142d53] leading-snug mb-4">{item.narrar}</p>
+                                  
+                                  {item.demo && (
+                                    <div className="bg-white p-3 rounded-xl border border-[#48c1d2]/20 shadow-sm relative italic">
+                                      <div className="absolute -top-1.5 left-4 bg-[#48c1d2] text-[#142d53] px-2 py-0.5 rounded text-[7px] font-black uppercase">Ejemplo real</div>
+                                      <p className="text-[10px] font-black text-[#142d53] opacity-80">{item.demo}</p>
+                                    </div>
+                                  )}
+                                </div>
+
+                                <div className="flex items-center justify-between pt-2">
+                                  {item.duracion && (
+                                    <div className="flex items-center gap-1.5 text-slate-400">
+                                      <Clock size={12} />
+                                      <span className="text-[9px] font-black uppercase tracking-widest">{item.duracion}</span>
+                                    </div>
+                                  )}
+                                  {item.regla && (
+                                    <div className="bg-red-50 text-red-600 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-wider border border-red-100 flex items-center gap-1.5">
+                                      <AlertCircle size={10} /> {item.regla}
+                                    </div>
+                                  )}
+                                </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tooltip Detallado (Original Phases) */}
+                        {activeTooltip === idx && activePhase !== 'humano' && item.tooltip && (
+                          <div className="mt-4 p-4 bg-[#142d53] text-white rounded-xl text-[10px] font-medium leading-relaxed animate-in zoom-in-95 duration-200 shadow-2xl relative border border-white/10 whitespace-pre-line w-full" onClick={(e) => e.stopPropagation()}>
+                            <div className="absolute -top-2 left-6 w-4 h-4 bg-[#142d53] rotate-45 border-l border-t border-white/10"></div>
+                            <span className="text-[#48c1d2] font-black uppercase block mb-1">Instrucción Táctica:</span>
+                            {item.tooltip}
+                          </div>
+                        )}
+                      </div>
                     ))}
                   </div>
 

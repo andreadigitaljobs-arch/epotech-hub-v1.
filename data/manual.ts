@@ -60,16 +60,69 @@ export const manual = {
     },
     {
       id: "humano",
-      titulo: "Video humano",
-      titleEn: "Human Video",
-      emoji: "🎤",
-      color: "navy",
+      titulo: "🎥 CONTENIDO HUMANO",
+      subtitulo: "Humaniza la marca y genera confianza",
+      emoji: "📱",
+      color: "purple",
       items: [
-        { en: "Explaining what was done", es: "Explicando qué se hizo", tooltip: "Selfie (modo vlog): 'Acabamos de lavar a presión la entrada de esta casa de 3,000 sqft en la ciudad de...'" },
-        { en: "Saying what problem the client had", es: "Diciendo qué problema tenía el cliente", tooltip: "Seguir grabando y contar: 'El cliente tenía años de acumulación negra por culpa de los árboles cercanos y le daba pena que lo vieran los vecinos'." },
-        { en: "Saying why that process matters", es: "Diciendo por qué ese proceso importa", tooltip: "Voz de experto: 'Usamos este químico azul porque la boquilla roja habría destruido el acabado del ladrillo de esta casa del siglo 19'." },
-        { en: "Daily log for stories", es: "Diario de Obra (Para Historias)", tooltip: "Graba un clip rápido de 15 segundos contando una curiosidad o avance del momento. Sin guion, solo tú y la cámara hablando de forma auténtica." },
-        { en: "Reacting to the result or saying thank you", es: "Reaccionando al resultado o agradeciendo", tooltip: "Cerrar con energía: '¡Quedó brutal, parece concreto nuevo! Míralo nada más.' o grabando al cliente si se anima a decir 'Guau'." },
+        {
+          es: "📍 Explicando qué se va a hacer",
+          objetivo: "Dar contexto antes del trabajo.",
+          grabar: "Graba la casa o área mientras caminas lentamente.",
+          narrar: "Qué problema tiene, qué van a limpiar, qué resultado esperan.",
+          regla: "❌ NO grabes tu cara obligatoriamente.",
+          ejemplos: ["La entrada", "el concreto", "las ventanas", "el driveway", "herramientas"],
+          duracion: "15-30 segundos.",
+          demo: "“Hoy vamos a limpiar este driveway porque tenía mucha suciedad acumulada y manchas negras.”"
+        },
+        {
+          es: "🧼 Explicando el problema del cliente",
+          objetivo: "Hacer que el espectador diga: “mi casa también está así”.",
+          grabar: "Acércate bastante al área sucia.",
+          narrar: "Qué causó eso, por qué pasa, si puede empeorar.",
+          detalles: ["Manchas", "mugre", "moho", "tierra", "líneas negras"],
+          demo: "“Estas manchas negras normalmente salen por humedad y acumulación de suciedad con el tiempo.”"
+        },
+        {
+          es: "🔥 Explicando por qué el proceso importa",
+          objetivo: "Educar sin parecer profesor.",
+          grabar: "Mientras trabajas: grabar agua, químicos, herramientas, limpieza.",
+          narrar: "Por qué hacen ese paso, por qué usan cierta herramienta, qué diferencia hace.",
+          demo: "“Usamos esta punta porque limpia profundo sin dañar el concreto.”"
+        },
+        {
+          es: "👀 Mini vlog del trabajo (tipo POV)",
+          objetivo: "Hacer sentir al espectador dentro del trabajo.",
+          grabar: "Graba: llegando, bajando herramientas, preparando máquinas, conectando agua, caminando.",
+          duracion: "Tomas cortas: 3-5 segundos.",
+          regla: "Debe sentirse real, no busques perfección.",
+          narrar: "Puedes hablar o no (narrar es documentar)."
+        },
+        {
+          es: "😮 Reacción al resultado final",
+          objetivo: "Transmitir satisfacción humana.",
+          grabar: "Graba el resultado terminado.",
+          regla: "Natural, NO actuar exagerado.",
+          demo: "“Quedó brutal... mira la diferencia. Esto tomó varias horas pero valió la pena.”"
+        },
+        {
+          es: "🛠️ Detrás de cámaras",
+          objetivo: "Mostrar trabajo real.",
+          grabar: "Preparando químicos, moviendo mangueras, setup, errores, cansancio, detalles reales.",
+          regla: "Esto NO necesita verse perfecto. Mientras más real, mejor."
+        },
+        {
+          es: "📖 Storytelling del trabajo",
+          objetivo: "Convertir un trabajo normal en historia.",
+          grabar: "Mientras grabas la propiedad explica: cuánto tiempo tomó, qué era lo más difícil, qué encontraron, qué cambió.",
+          demo: "“Pensamos que esto iba a tomar dos horas y terminamos haciendo mucho más porque había demasiada suciedad acumulada.”"
+        },
+        {
+          es: "🏡 Lifestyle / Marca personal ligera",
+          objetivo: "Que la cuenta se sienta humana (NO influencer).",
+          grabar: "Cosas simples: manejando al trabajo, café en la mañana, cargando herramientas, sunset después del trabajo, camino a casa.",
+          regla: "NO actuar, solo documentar."
+        }
       ],
     },
   ],
