@@ -60,7 +60,7 @@ export const manual = {
     },
     {
       id: "humano",
-      titulo: "🎥 CONTENIDO HUMANO",
+      titulo: "🎥 Contenido Humano",
       subtitulo: "Humaniza la marca y genera confianza",
       emoji: "📱",
       color: "purple",

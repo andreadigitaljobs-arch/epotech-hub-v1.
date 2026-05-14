@@ -42,8 +42,9 @@ const phaseMessages: Record<string, any> = {
   durante: "Múltiples ángulos = versátil. Clips cortos = dinámico. Valor agregado = diferenciador. Jenkryfer en video = humanidad.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
   despues: "El espectador recuerda primero lo último que vio. Que sea satisfactorio.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
   humano: {
-    title: "🎥 CONTENIDO HUMANO",
-    subtitle: "Humaniza la marca y genera confianza",
+    id: "humano",
+    titulo: "🎥 Contenido Humano",
+    subtitulo: "Humaniza la marca y genera confianza",
     regla_oro: {
       titulo: "⚠️ REGLA IMPORTANTE",
       items: [
@@ -192,9 +193,13 @@ export default function ManualPage() {
 
     // 4. VALIDACIÓN RÁPIDA (Universal al final de CADA fase)
     if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('VALIDACIÓN RÁPIDA'))) {
+      const isHumano = fase.id === 'humano';
       itemsFinales.push({
         en: "✅ QUICK VALIDATION",
         es: "✅ VALIDACIÓN RÁPIDA",
+        objetivo: isHumano ? "Asegurar que el contenido sea humano y auténtico." : undefined,
+        grabar: isHumano ? "Revisa tus clips grabados antes de irte." : undefined,
+        narrar: isHumano ? "¿Grabé el problema? ¿El proceso? ¿Mi reacción natural?" : undefined,
         tooltip: "Antes de irte del cliente, verifica:\n\n• ¿Grabé ANTES (panorámica + problema)?\n• ¿Grabé DURANTE (múltiples ángulos)?\n• ¿Grabé DESPUÉS (recorrido + resultado)?\n• ¿Todos los videos se ven nítidos y bien iluminados?\n• ¿Tengo mínimo 15 minutos de material?\n\n⚠️ SI respondiste 'No' a alguno → REGRESA Y GRABA AHORA"
       });
     }
