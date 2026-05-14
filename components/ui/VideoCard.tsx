@@ -37,6 +37,16 @@ export function VideoCard({
   const isIg = platform === "instagram";
   const isTiktok = platform === "tiktok";
 
+  // Bloqueo de Scroll
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
   return (
     <>
       <button 
@@ -80,13 +90,13 @@ export function VideoCard({
 
       {/* Modal de Detalles (Portal) */}
       {isOpen && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[1000] flex items-start md:items-center justify-center p-2 md:p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto pt-10 md:pt-4">
           <div 
             className="absolute inset-0" 
             onClick={() => setIsOpen(false)} 
           />
           
-          <div className="relative bg-[#142d53] w-full max-w-lg rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="relative bg-[#142d53] w-full max-w-lg rounded-[2rem] md:rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden animate-in zoom-in-95 duration-300 max-h-[95vh] md:max-h-[90vh] flex flex-col">
             {/* Header del Modal */}
             <div className="relative h-48 bg-slate-900 overflow-hidden">
                <div className="absolute inset-0 bg-gradient-to-t from-[#142d53] to-transparent z-10" />
@@ -115,7 +125,7 @@ export function VideoCard({
             </div>
 
             {/* Contenido del Modal */}
-            <div className="p-8 space-y-6">
+            <div className="p-6 md:p-8 space-y-6 overflow-y-auto flex-1">
                <div className="space-y-2">
                   <div className="flex items-center gap-2 text-[#48c1d2]">
                      <Zap size={14} />

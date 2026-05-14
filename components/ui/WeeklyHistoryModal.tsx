@@ -35,6 +35,12 @@ export function WeeklyHistoryModal({ onClose }: { onClose: () => void }) {
     }, 500);
   }, []);
 
+  // Bloqueo de Scroll
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = 'unset'; };
+  }, []);
+
   const modal = (
     <div
       className="modal-backdrop"
@@ -43,12 +49,14 @@ export function WeeklyHistoryModal({ onClose }: { onClose: () => void }) {
         inset: 0,
         zIndex: 9999,
         display: "flex",
-        alignItems: "center",
+        alignItems: "start",
+        paddingTop: "2.5rem",
         justifyContent: "center",
-        padding: "1rem",
-        background: "rgba(240, 244, 248, 0.85)",
+        padding: "0.5rem",
+        background: "rgba(10, 25, 47, 0.85)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
+        overflowY: "auto"
       }}
       onClick={onClose}
     >
@@ -57,13 +65,13 @@ export function WeeklyHistoryModal({ onClose }: { onClose: () => void }) {
         style={{
           width: "100%",
           maxWidth: "450px",
-          maxHeight: "85vh",
+          maxHeight: "95vh",
           background: "#fff",
-          borderRadius: "32px",
+          borderRadius: "2rem",
           display: "flex",
           flexDirection: "column",
-          boxShadow: "0 30px 70px rgba(27,46,94,0.2)",
-          border: "1px solid rgba(226,232,240,1)",
+          boxShadow: "0 30px 70px rgba(0,0,0,0.4)",
+          border: "1px solid rgba(255,255,255,0.1)",
           overflow: "hidden"
         }}
         onClick={e => e.stopPropagation()}

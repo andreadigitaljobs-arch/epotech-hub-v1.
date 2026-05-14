@@ -29,6 +29,16 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
     }
   }, [savedSignature]);
 
+  // Bloqueo de Scroll
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
   useEffect(() => {
     if (isOpen && canvasRef.current && !isLocked) {
       const canvas = canvasRef.current;
@@ -157,8 +167,8 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
   if (!mounted || !isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#0a192f]/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-[10000] flex items-start md:items-center justify-center bg-[#0a192f]/80 backdrop-blur-sm p-2 md:p-4 animate-in fade-in duration-300 overflow-y-auto pt-10 md:pt-4">
+      <div className="bg-white w-full max-w-2xl rounded-[2rem] md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] md:max-h-[90vh] animate-in zoom-in-95 duration-300">
         <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/10 flex items-center justify-center text-[#48c1d2]">

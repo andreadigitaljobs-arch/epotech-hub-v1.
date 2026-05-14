@@ -19,7 +19,18 @@ import {
   Smartphone,
   Compass,
   Mic,
-  Clock
+  Clock,
+  FileText,
+  Ban,
+  Star,
+  Flag,
+  Flame,
+  Award,
+  Target,
+  ShieldCheck,
+  XCircle,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
@@ -38,13 +49,13 @@ const phaseColors: Record<string, string> = {
 };
 
 const phaseMessages: Record<string, any> = {
-  antes: "El problema es la razón por la que te contrataron. Si no lo grabas, el resultado final no tiene impacto.\n\nSi no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
-  durante: "Múltiples ángulos = versátil. Clips cortos = dinámico. Valor agregado = diferenciador. Jenkryfer en video = humanidad.\n\nSi no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
-  despues: "El espectador recuerda primero lo último que vio. Que sea satisfactorio.\n\nSi no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
+  antes: "Aquí tienes la lista de lo que debes grabar al llegar. Es vital capturar el problema real antes de empezar para que luego se note la diferencia.",
+  durante: "Aquí verás los clips que necesitamos mientras trabajas. Captura el proceso y los detalles para mostrar cómo resuelves el problema.",
+  despues: "Aquí tienes lo que debes grabar al terminar. Muestra el resultado final impecable para probar que el servicio se cumplió con éxito.",
   humano: {
     id: "humano",
-    titulo: "Contenido Humano",
-    subtitulo: "Humaniza la marca y genera confianza",
+    titulo: "Stories Diarias",
+    subtitulo: "Aquí tienes ideas para tus historias diarias. Muestra tu cara o narra lo que haces para generar confianza.",
     regla_oro: {
       titulo: "⚠️ REGLA IMPORTANTE",
       items: [
@@ -65,7 +76,7 @@ const phaseMessages: Record<string, any> = {
         "NO música de fondo mientras hablas/narras"
       ]
     }
-  }
+  },
 };
 
 export default function ManualPage() {
@@ -79,12 +90,13 @@ export default function ManualPage() {
   const [loading, setLoading] = useState(true);
   const [activePhase, setActivePhase] = useState("antes");
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+  const [expandedProtocol, setExpandedProtocol] = useState<string | null>("reglas");
 
   useEffect(() => {
     // Failsafe: 3 segundos max de carga
     const timer = setTimeout(() => setLoading(false), 3000);
 
-    async function fetchData() {
+    /* async function fetchData() {
       try {
         const { data: mData } = await supabase
           .from("config_manual")
@@ -115,11 +127,21 @@ export default function ManualPage() {
         clearTimeout(timer);
       }
     }
-    fetchData();
+    fetchData(); */
+    setData({
+      regla_oro: staticManual.regla.ruleEs,
+      haz_list: staticManual.comoGrabar.haz.map(h => h.es),
+      evita_list: staticManual.comoGrabar.evita.map(e => e.es),
+      fases: staticManual.fases
+    });
+    setLoading(false);
+    clearTimeout(timer);
     return () => clearTimeout(timer);
   }, []);
 
-  const phases = (data.fases || staticManual.fases).map((fase: any) => {
+  const phases = (data.fases || staticManual.fases)
+    .filter((f: any) => f.id !== 'protocolo')
+    .map((fase: any) => {
     let itemsFinales = [...(fase.items || [])];
 
     // 1. CONFIGURACIÓN TÉCNICA (Antes)
@@ -128,9 +150,9 @@ export default function ManualPage() {
       if (!hasTecnica) {
         itemsFinales = [
           {
-            en: "⚙️ TECHNICAL SETUP",
-            es: "⚙️ CONFIGURACIÓN TÉCNICA",
-            tooltip: "Asegura la mejor calidad antes de grabar:\n\n• Resolución: 4K 60fps (si es posible)\n• Formato: Vertical (9:16) para redes\n• Iluminación: Luz natural, evitar contraluz\n• Movimiento: Suave, no abrupto\n• Audio: Que se escuche la máquina real\n\nDISPOSITIVOS:\n• iPhone = POV (punto de vista) + detalles\n• GoPro = Vista externa con trípode"
+            en: "⚙️ HOW TO SETUP YOUR PHONE",
+            es: "⚙️ CÓMO PREPARAR EL CELULAR",
+            tooltip: "Asegúrate de que todo esté bien antes de empezar:\n\n• Calidad: Usa la máxima resolución de tu celular\n• Posición: Graba con el celular parado (vertical)\n• Luz: Trata de que el sol te dé de frente, no por detrás\n• Lente: Limpia la cámara con tu camisa antes de grabar\n• Audio: Acércate al celular si vas a hablar para que se escuche bien"
           },
           ...itemsFinales
         ];
@@ -175,7 +197,7 @@ export default function ManualPage() {
         itemsFinales.push({ 
           en: "EXTRA VALUE (DOORS, BINS, EXTRAS)", 
           es: "VALOR AGREGADO (PUERTAS, BOTES, EXTRAS)", 
-          tooltip: "¿Hay algo extra que van a hacer hoy? (Ej: Puertas, botes de basura, etc.)\n\nSI → Grabar ANTES + PROCESO + DESPUÉS del extra.\nNO → Continuar con el trabajo normal.\n\nRecuerda: Esto es lo que te diferencia de la competencia. Si no lo grabas, es como si nunca lo hiciste." 
+          tooltip: "¿Hay algo extra que van a hacer hoy? (Ej: Puertas, botes de basura, etc.)\n\nSI → Grabar ANTES + PROCESO + DESPUÉS del extra.\nNO → Continuar con el trabajo normal.\n\nRecuerda: Mostrar estos detalles ayuda a que se aprecie todo el esfuerzo que pones en el trabajo." 
         });
       }
     }
@@ -191,18 +213,6 @@ export default function ManualPage() {
       }
     }
 
-    // 4. VALIDACIÓN RÁPIDA (Universal al final de CADA fase)
-    if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('VALIDACIÓN RÁPIDA'))) {
-      const isHumano = fase.id === 'humano';
-      itemsFinales.push({
-        en: "QUICK VALIDATION",
-        es: "VALIDACIÓN RÁPIDA",
-        objetivo: isHumano ? "Asegurar que el contenido sea humano y auténtico." : undefined,
-        grabar: isHumano ? "Revisa tus clips grabados antes de irte." : undefined,
-        narrar: isHumano ? "¿Grabé el problema? ¿El proceso? ¿Mi reacción natural?" : undefined,
-        tooltip: "Antes de irte del cliente, verifica:\n\n• ¿Grabé ANTES (panorámica + problema)?\n• ¿Grabé DURANTE (múltiples ángulos)?\n• ¿Grabé DESPUÉS (recorrido + resultado)?\n• ¿Todos los videos se ven nítidos y bien iluminados?\n• ¿Tengo mínimo 15 minutos de material?\n\n⚠️ SI respondiste 'No' a alguno → REGRESA Y GRABA AHORA"
-      });
-    }
 
     return { ...fase, items: itemsFinales };
   });
@@ -213,7 +223,7 @@ export default function ManualPage() {
       <div className="mb-4">
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[#48c1d2]">Protocolos de Grabación:</span> Sigue estos protocolos tácticos sobre luz, audio y encuadre para que cada video que grabes transmita la autoridad de una empresa líder en Utah.
+            <span className="text-[#48c1d2]">Guía completa de grabación:</span> Esta página te muestra exactamente qué necesitamos que grabes o fotografíes en cada momento del día. Navega por las pestañas para conocer lo que debes capturar en el "Antes", "Durante" y "Después" del trabajo, además de ideas para tus historias diarias. <span className="text-[#142d53] bg-[#48c1d2]/20 px-1 rounded">(Toca los elementos con "?" para ver consejos técnicos)</span>
           </p>
         </div>
       </div>
@@ -229,65 +239,38 @@ export default function ManualPage() {
             <div className="bg-[#48c1d2]/10 p-1.5 rounded-lg">
               <Video size={14} className="text-[#48c1d2]" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Protocolo de Campo</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Manual de Grabación</span>
           </div>
           <h1 className="text-2xl md:text-5xl font-black tracking-tighter text-[#142d53] mb-4 leading-[1.1]">
-            Guía de grabación <span className="text-[#48c1d2]">master</span>
+            Guía para grabar <span className="text-[#48c1d2]">Videos</span>
           </h1>
         </header>
 
-        {/* Nueva Sección de Estrategia */}
-        <div className="bg-[#48c1d2] p-6 rounded-[2.5rem] text-[#142d53] shadow-md">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-white/20 p-2 rounded-xl"><Trophy size={18} /></div>
-              <h4 className="text-lg font-black tracking-tight">Nuestra Estrategia</h4>
-            </div>
-          <p className="text-sm font-bold leading-tight mb-4">
-            Documental Real: Menos anuncios falsos, más realidad y autoridad.
-          </p>
-          
-          <a 
-            href="https://www.tiktok.com/@allsidespressurewashing" 
-            target="_blank" 
-            className="inline-flex items-center gap-2 bg-[#142d53] text-[#48c1d2] px-6 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all mb-6 shadow-lg"
-          >
-            <Smartphone size={14} /> Ver Referencia
-          </a>
 
-            <div className="space-y-3">
-              <h5 className="text-[8px] font-black uppercase tracking-[0.2em] opacity-60">Rutina Diaria:</h5>
-              <div className="grid gap-2">
-                {[
-                  { step: "1. Captura en sitio", desc: "Sigue el checklist de las 4 fases: graba lo que hay Antes de empezar, clips del proceso Durante el trabajo, el resultado Al final, y tu Video Humano hablando a cámara." },
-                  { step: "2. Tu Narración del Día", desc: "Abre el módulo de Mentoría Narrativa y graba un audio basándote en las 5 claves: el gancho visual, la dinámica de equipo, el secreto técnico, el impacto final y el lado humano." },
-                  { step: "3. Guion", desc: "Nosotros tomamos tu reporte y lo convertimos en un guion profesional listo para leer. Tú no escribes nada." },
-                  { step: "4. Narración del Guion", desc: "Abre el guion en la app, lee cada escena en el teleprompter y graba tu voz en off. Cuando termines, envíanoslo con un clic." }
-                ].map((s, idx) => (
-                  <div key={idx} className="flex items-start gap-3 bg-white/10 p-4 rounded-xl border border-white/20">
-                    <span className="text-xl font-black opacity-30 leading-none mt-0.5">{idx + 1}</span>
-                    <div>
-                      <p className="text-xs font-black leading-none mb-1.5">{s.step}</p>
-                      <p className="text-[11px] font-bold opacity-90 leading-tight">{s.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-        </div>
-
-        {/* Regla de Oro Compacta */}
-        <div className="group bg-white rounded-[2.5rem] p-6 relative overflow-hidden shadow-sm border border-slate-100">
-          <div className="absolute -right-6 -bottom-6 opacity-[0.04] group-hover:opacity-10 transition-opacity">
-            <Zap size={120} className="text-[#48c1d2]" />
+        {/* Regla de Oro Compacta - Premium Glassmorphism */}
+        <div className="group bg-gradient-to-br from-[#142d53] to-[#1e3a8a] rounded-[2.5rem] p-8 relative overflow-hidden shadow-2xl border border-white/10">
+          <div className="absolute -right-6 -bottom-6 opacity-[0.1] group-hover:opacity-20 transition-all duration-700 group-hover:scale-110">
+            <Zap size={140} className="text-[#48c1d2]" />
           </div>
-          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2] mb-2">La Regla de Oro Mundial</h3>
-          <p className="text-lg font-black italic leading-tight text-balance text-[#142d53]">
-            "{data.regla_oro}"
-          </p>
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-6 h-6 rounded-lg bg-[#48c1d2] flex items-center justify-center text-[#142d53]">
+                <Star size={12} fill="currentColor" />
+              </div>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Lo más importante</h3>
+            </div>
+            <p className="text-xl md:text-2xl font-black italic leading-tight text-white tracking-tight">
+              "{data.regla_oro}"
+            </p>
+            <div className="mt-4 flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] animate-pulse" />
+              <span className="text-[8px] font-black uppercase tracking-widest text-white/40">Calidad Epotech</span>
+            </div>
+          </div>
         </div>
 
         {/* Selector de Fase Compacto */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
           {phases.map((fase: any) => {
             const Icon = phaseIcons[fase.id] || Camera;
             const isActive = activePhase === fase.id;
@@ -335,217 +318,243 @@ export default function ManualPage() {
                   <div className={`mb-8 p-6 rounded-3xl border border-slate-100 bg-slate-50/50 transition-all`}>
                     {activePhase === 'humano' ? (
                       <div className="space-y-6">
-                        <div className="flex flex-col md:flex-row gap-6">
-                          {/* Regla Importante */}
-                          <div className="flex-1 bg-white p-5 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
-                            <h4 className="text-[10px] font-black text-[#142d53] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                              Regla Importante
-                            </h4>
-                            <ul className="space-y-3">
-                              {phaseMessages.humano.regla_oro.items.map((item: string, i: number) => (
-                                <li key={i} className="text-[11px] font-bold text-slate-600 flex items-start gap-2.5">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] mt-1.5 shrink-0" />
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          
-                          {/* Reglas Generales */}
-                          <div className="flex-1 bg-[#142d53] p-5 rounded-2xl shadow-xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16" />
-                            <h4 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.2em] mb-4 flex items-center gap-2 relative z-10">
-                              Reglas Generales
-                            </h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 relative z-10">
-                              {phaseMessages.humano.reglas_generales.items.map((item: string, i: number) => (
-                                <div key={i} className="text-[10px] font-bold text-slate-300 flex items-center gap-2">
-                                  <CheckCircle2 size={12} className="text-[#48c1d2]" />
-                                  {item}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-center pt-2">
+                        <p className={`text-xs font-black uppercase tracking-tight leading-relaxed text-[#142d53] mb-4`}>
+                          <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 bg-[#142d53]`}>
+                            Qué hacer aquí:
+                          </span>
+                          Aquí tienes ideas y reglas básicas para crear historias que generen confianza. No se trata de vender, sino de mostrar quién está detrás del trabajo y cómo es el día a día.
+                        </p>
+                        <div className="text-center pt-4">
                           <p className="text-[11px] font-black text-[#142d53] uppercase tracking-widest italic opacity-80">
-                            "Cambia el enfoque de 'HABLAR' por 'NARRAR'. Narrar es documentar."
+                            "No necesitas actuar. Solo cuenta lo que estás haciendo como si se lo explicaras a un amigo."
                           </p>
                         </div>
                       </div>
                     ) : (
                       <p className={`text-xs font-black uppercase tracking-tight leading-relaxed text-[#142d53]`}>
                         <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 bg-[#142d53]`}>
-                          Estrategia 2026:
+                          Qué hacer aquí:
                         </span>
                         {phaseMessages[activePhase]}
                       </p>
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 relative">
-                    {fase.items.map((item: any, idx: number) => (
-                      <div 
-                        key={idx} 
-                        onClick={() => {
-                          if (item.tooltip || activePhase === 'humano') {
-                            setActiveTooltip(activeTooltip === idx ? null : idx);
-                          }
-                        }}
-                        className={`group w-full flex flex-col items-start text-left p-5 bg-white rounded-[2.5rem] border transition-all active:scale-[0.98] cursor-pointer ${activeTooltip === idx ? 'border-[#48c1d2] bg-white shadow-xl ring-4 ring-[#48c1d2]/5' : 'border-slate-100 bg-gray-50/50 hover:bg-white hover:border-[#48c1d2]/50 hover:shadow-lg'}`}
-                      >
-                        <div className="flex items-start gap-4 w-full">
-                          <div className={`mt-0.5 rounded-2xl w-10 h-10 flex items-center justify-center shrink-0 text-sm font-black transition-all ${activeTooltip === idx ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-white border border-slate-100 text-slate-400 group-hover:text-[#48c1d2]'}`}>
-                            {idx + 1}
+                  {/* 📋 LISTADO DE ITEMS (Fases normales) */}
+                  {activePhase !== 'protocolo' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 relative">
+                      {fase.items.map((item: any, idx: number) => (
+                        <div 
+                          key={idx} 
+                          onClick={() => {
+                            if (item.tooltip || activePhase === 'humano') {
+                              setActiveTooltip(activeTooltip === idx ? null : idx);
+                            }
+                          }}
+                          className={`group w-full flex flex-col items-start text-left p-5 bg-white rounded-[2rem] border transition-all active:scale-[0.98] cursor-pointer ${activeTooltip === idx ? 'border-[#48c1d2] bg-white shadow-xl ring-4 ring-[#48c1d2]/5' : 'border-slate-100 bg-gray-50/50 hover:bg-white hover:border-[#48c1d2]/50 hover:shadow-lg'}`}
+                        >
+                          <div className="flex items-start gap-3 w-full">
+                            <div className={`mt-0.5 rounded-xl w-8 h-8 flex items-center justify-center shrink-0 text-xs font-black transition-all ${activeTooltip === idx ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-white border border-slate-100 text-slate-400 group-hover:text-[#48c1d2]'}`}>
+                              {idx + 1}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <p className={`text-sm md:text-base font-black leading-tight transition-colors whitespace-normal ${activeTooltip === idx ? 'text-[#142d53]' : 'text-slate-600 group-hover:text-[#142d53]'}`}>
+                                  {(item.es || item)}
+                                </p>
+                                <div className={`shrink-0 self-start sm:self-center px-2 py-1 rounded-lg text-[8px] font-black uppercase flex items-center gap-1 transition-all ${activeTooltip === idx ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-slate-200/50 text-slate-500 group-hover:bg-[#142d53] group-hover:text-white'}`}>
+                                  <HelpCircle size={10} /> 
+                                  <span className="hidden md:inline">{activeTooltip === idx ? 'CERRAR' : '¿CÓMO GRABARLO?'}</span>
+                                  <span className="md:hidden">{activeTooltip === idx ? 'CERRAR' : 'TOCA PARA VER'}</span>
+                                </div>
+                              </div>
+                              
+                              {activePhase === 'humano' && !activeTooltip && (
+                                <p className="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.objetivo}</p>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between gap-4">
-                              <p className={`text-sm md:text-base font-black leading-tight transition-colors ${activeTooltip === idx ? 'text-[#142d53]' : 'text-slate-600 group-hover:text-[#142d53]'}`}>
-                                {(item.es || item)}
-                              </p>
-                              <div className={`shrink-0 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase flex items-center gap-1.5 transition-all ${activeTooltip === idx ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-slate-200/50 text-slate-500 group-hover:bg-[#142d53] group-hover:text-white'}`}>
-                                <HelpCircle size={10} /> 
-                                <span className="hidden md:inline">¿CÓMO GRABARLO?</span>
-                                <span className="md:hidden">INFO</span>
+                          
+                          {/* Tooltip Detallado (Phase Humano) */}
+                          {activeTooltip === idx && activePhase === 'humano' && (
+                            <div className="mt-6 w-full space-y-3 animate-in slide-in-from-top-2 duration-300" onClick={(e) => e.stopPropagation()}>
+                              <div className="grid grid-cols-1 gap-3">
+                                  {/* Objetivo */}
+                                  <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
+                                    <div className="flex items-center gap-2 mb-1.5">
+                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Objetivo Táctico</span>
+                                    </div>
+                                    <p className="text-[12px] font-bold text-[#142d53] leading-relaxed">{item.objetivo}</p>
+                                  </div>
+                                  
+                                  {/* Grabación */}
+                                  <div className="bg-slate-50/80 p-4 rounded-2xl border-l-4 border-[#142d53] shadow-sm">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <Smartphone size={14} className="text-[#142d53]" />
+                                      <span className="text-[8px] font-black text-[#142d53] uppercase tracking-[0.2em]">Guía de Grabación</span>
+                                    </div>
+                                    <p className="text-[12px] font-bold text-slate-700 leading-relaxed mb-3">{item.grabar}</p>
+                                    
+                                    {(item.ejemplos || item.detalles) && (
+                                      <div className="flex flex-wrap gap-1.5 pt-1">
+                                        {item.ejemplos?.map((ej: string, i: number) => (
+                                          <span key={i} className="px-2 py-1 bg-white border border-slate-200 rounded-lg text-[8px] font-black text-[#48c1d2] uppercase">{ej}</span>
+                                        ))}
+                                        {item.detalles?.map((det: string, i: number) => (
+                                          <span key={i} className="px-2 py-1 bg-white border border-red-100 rounded-lg text-[8px] font-black text-red-500 uppercase">Aviso: {det}</span>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* Narración */}
+                                  <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <Mic size={14} className="text-[#48c1d2]" />
+                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Guía de Narración</span>
+                                    </div>
+                                    <p className="text-[12px] font-bold text-[#142d53] leading-relaxed mb-4">{item.narrar}</p>
+                                    
+                                    {item.demo && (
+                                      <div className="bg-[#142d53]/5 p-4 rounded-xl border border-[#142d53]/10 relative group/demo transition-all hover:bg-[#142d53]/10">
+                                        <div className="absolute -top-2 left-4 bg-[#142d53] text-white px-3 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest">Ejemplo de guion</div>
+                                        <p className="text-[11px] font-medium text-[#142d53] italic leading-relaxed pt-1">"{item.demo}"</p>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* Duración/Reglas */}
+                                  {(item.duracion || item.regla) && (
+                                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                                      {item.duracion && (
+                                        <div className="flex items-center gap-2 text-[#142d53]/60">
+                                          <Clock size={12} />
+                                          <span className="text-[9px] font-black uppercase tracking-wider">{item.duracion}</span>
+                                        </div>
+                                      )}
+                                      {item.regla && (
+                                        <div className="bg-red-50 px-4 py-2 rounded-full border border-red-100 flex items-center gap-2">
+                                          <div className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                                          <span className="text-[9px] font-black text-red-600 uppercase tracking-wider">{item.regla}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
                               </div>
                             </div>
-                            
-                            {activePhase === 'humano' && !activeTooltip && (
-                              <p className="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.objetivo}</p>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {/* Tooltip Detallado (Phase Humano) */}
-                        {activeTooltip === idx && activePhase === 'humano' && (
-                          <div className="mt-6 w-full space-y-3 animate-in slide-in-from-top-2 duration-300" onClick={(e) => e.stopPropagation()}>
-                            <div className="grid grid-cols-1 gap-3">
-                                {/* Objetivo */}
-                                <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
-                                  <div className="flex items-center gap-2 mb-1.5">
-                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Objetivo Táctico</span>
-                                  </div>
-                                  <p className="text-[12px] font-bold text-[#142d53] leading-relaxed">{item.objetivo}</p>
-                                </div>
-                                
-                                {/* Grabación */}
-                                <div className="bg-slate-50/80 p-4 rounded-2xl border-l-4 border-[#142d53] shadow-sm">
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <Smartphone size={14} className="text-[#142d53]" />
-                                    <span className="text-[8px] font-black text-[#142d53] uppercase tracking-[0.2em]">Guía de Grabación</span>
-                                  </div>
-                                  <p className="text-[12px] font-bold text-slate-700 leading-relaxed mb-3">{item.grabar}</p>
-                                  
-                                  {(item.ejemplos || item.detalles) && (
-                                    <div className="flex flex-wrap gap-1.5 pt-1">
-                                      {item.ejemplos?.map((ej: string, i: number) => (
-                                        <span key={i} className="px-2 py-1 bg-white border border-slate-200 rounded-lg text-[8px] font-black text-[#48c1d2] uppercase">{ej}</span>
-                                      ))}
-                                      {item.detalles?.map((det: string, i: number) => (
-                                        <span key={i} className="px-2 py-1 bg-white border border-red-100 rounded-lg text-[8px] font-black text-red-500 uppercase">Aviso: {det}</span>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
+                          )}
 
-                                {/* Narración */}
-                                <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <Mic size={14} className="text-[#48c1d2]" />
-                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Guía de Narración</span>
-                                  </div>
-                                  <p className="text-[12px] font-bold text-[#142d53] leading-relaxed mb-4">{item.narrar}</p>
-                                  
-                                  {item.demo && (
-                                    <div className="bg-[#142d53]/5 p-4 rounded-xl border border-[#142d53]/10 relative group/demo transition-all hover:bg-[#142d53]/10">
-                                      <div className="absolute -top-2 left-4 bg-[#142d53] text-white px-3 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest">Ejemplo de guion</div>
-                                      <p className="text-[11px] font-medium text-[#142d53] italic leading-relaxed pt-1">"{item.demo}"</p>
-                                    </div>
-                                  )}
-                                </div>
-
-                                {/* Duración/Reglas */}
-                                {(item.duracion || item.regla) && (
-                                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                                    {item.duracion && (
-                                      <div className="flex items-center gap-2 text-[#142d53]/60">
-                                        <Clock size={12} />
-                                        <span className="text-[9px] font-black uppercase tracking-wider">{item.duracion}</span>
-                                      </div>
-                                    )}
-                                    {item.regla && (
-                                      <div className="bg-red-50 px-4 py-2 rounded-full border border-red-100 flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                                        <span className="text-[9px] font-black text-red-600 uppercase tracking-wider">{item.regla}</span>
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
+                          {/* Tooltip Detallado (Original Phases) */}
+                          {activeTooltip === idx && activePhase !== 'humano' && item.tooltip && (
+                            <div className="mt-4 p-4 bg-[#142d53] text-white rounded-xl text-[10px] font-medium leading-relaxed animate-in zoom-in-95 duration-200 shadow-2xl relative border border-white/10 whitespace-pre-line w-full" onClick={(e) => e.stopPropagation()}>
+                              <div className="absolute -top-2 left-6 w-4 h-4 bg-[#142d53] rotate-45 border-l border-t border-white/10"></div>
+                              <span className="text-[#48c1d2] font-black uppercase block mb-1">Instrucción Táctica:</span>
+                              {item.tooltip}
                             </div>
-                          </div>
-                        )}
-
-                        {/* Tooltip Detallado (Original Phases) */}
-                        {activeTooltip === idx && activePhase !== 'humano' && item.tooltip && (
-                          <div className="mt-4 p-4 bg-[#142d53] text-white rounded-xl text-[10px] font-medium leading-relaxed animate-in zoom-in-95 duration-200 shadow-2xl relative border border-white/10 whitespace-pre-line w-full" onClick={(e) => e.stopPropagation()}>
-                            <div className="absolute -top-2 left-6 w-4 h-4 bg-[#142d53] rotate-45 border-l border-t border-white/10"></div>
-                            <span className="text-[#48c1d2] font-black uppercase block mb-1">Instrucción Táctica:</span>
-                            {item.tooltip}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-8 pt-6 border-t border-gray-100 flex items-center gap-3">
-                    <div className="bg-[#48c1d2]/20 p-1.5 rounded-lg text-[#48c1d2]">
-                      <AlertCircle size={14} />
+                          )}
+                        </div>
+                      ))}
                     </div>
-                    <p className="text-[11px] font-black text-[#142d53] uppercase tracking-tight leading-tight">
-                      Consejo Pro: Los clips deben durar máximo 5 segundos para que sean dinámicos.
-                    </p>
-                  </div>
+                  )}
                 </Card>
               </div>
             );
           })}
-        </div>
-
-        {/* Protocolos de acción compactos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="p-6 bg-emerald-50/30 border-emerald-100 rounded-3xl">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="bg-emerald-500 p-1.5 rounded-lg text-white">
-                 <CheckCircle2 size={16} />
+          
+          {/* 📂 ACORDEONES DE CALIDAD (Movidos FUERA del loop para evitar redundancia "infinita") */}
+          <div className="mt-12 space-y-4 pt-10 border-t-2 border-slate-100">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-[#48c1d2]/10 flex items-center justify-center text-[#48c1d2]">
+                  <ShieldCheck size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-[#142d53] tracking-tighter">Protocolos de Calidad Globales</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reglas maestras para todo el contenido</p>
+                </div>
               </div>
-              <h4 className="text-sm font-black text-emerald-900 uppercase">Protocolo "SÍ"</h4>
+              <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+                Aplica para: Todas las Fases
+              </p>
             </div>
-            <ul className="space-y-2">
-              {(data.haz_list || []).map((item: string, idx: number) => (
-                <li key={idx} className="flex items-start gap-2 text-xs font-bold text-emerald-800">
-                  <div className="mt-1.5 h-1 w-1 rounded-full bg-emerald-500 shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </Card>
 
-          <Card className="p-6 bg-red-50/30 border-red-100 rounded-3xl">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="bg-red-500 p-1.5 rounded-lg text-white">
-                 <AlertCircle size={16} />
-              </div>
-              <h4 className="text-sm font-black text-red-900 uppercase">Protocolo "NO"</h4>
+            {/* ACORDEÓN: REGLAS TÁCTICAS */}
+            <div className="space-y-2">
+              <button 
+                onClick={() => setExpandedProtocol(expandedProtocol === 'reglas' ? null : 'reglas')}
+                className={`w-full flex items-center justify-between p-5 rounded-[2rem] border transition-all ${expandedProtocol === 'reglas' ? 'bg-[#142d53] border-transparent shadow-xl' : 'bg-white border-slate-100 hover:border-[#48c1d2]/30 shadow-sm'}`}
+              >
+                <div className="flex-1 min-w-0 flex items-center gap-4">
+                  <div className={`p-2.5 rounded-xl border shrink-0 ${expandedProtocol === 'reglas' ? 'bg-[#48c1d2] border-white/10 text-[#142d53]' : 'bg-[#48c1d2]/5 border-[#48c1d2]/10 text-[#48c1d2]'}`}>
+                    <CheckCircle2 size={18} />
+                  </div>
+                  <div className="text-left min-w-0">
+                    <h4 className={`text-base font-black tracking-tight leading-tight whitespace-normal ${expandedProtocol === 'reglas' ? 'text-white' : 'text-[#142d53]'}`}>Guía de estilo: Así sí / Evitar</h4>
+                    <p className={`text-[8px] font-black uppercase tracking-widest opacity-60 ${expandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-400'}`}>Protocolo visual básico</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 shrink-0 ml-4">
+                  <span className={`text-[8px] font-black uppercase tracking-widest ${expandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-300'}`}>
+                    {expandedProtocol === 'reglas' ? 'Cerrar' : 'Toca para abrir'}
+                  </span>
+                  <div className={`${expandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-300'}`}>
+                    {expandedProtocol === 'reglas' ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                  </div>
+                </div>
+              </button>
+
+              {expandedProtocol === 'reglas' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in zoom-in-95 duration-300 mt-2">
+                  <div className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-lg space-y-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 rounded-full bg-[#48c1d2]/20 flex items-center justify-center text-[#48c1d2]">
+                        <CheckCircle2 size={12} />
+                      </div>
+                      <h4 className="text-xs font-black text-[#142d53] uppercase tracking-widest">Lo que genera impacto (Así sí)</h4>
+                    </div>
+                    <ul className="grid grid-cols-1 gap-2.5">
+                      {(staticManual.fases.find(f => f.id === 'protocolo')?.secciones as any)?.si.map((item: string, i: number) => (
+                        <li key={i} className="flex items-start gap-3 bg-slate-50/50 p-3.5 rounded-2xl border border-slate-100 transition-all hover:bg-white hover:border-[#48c1d2]/30 group/item">
+                          <div className="mt-0.5 text-[#48c1d2] opacity-40 group-hover/item:opacity-100 transition-opacity">
+                            <CheckCircle2 size={12} />
+                          </div>
+                          <span className="text-[11px] font-bold text-[#142d53] leading-tight uppercase tracking-tight">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+ 
+                  <div className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-lg space-y-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+                        <XCircle size={12} />
+                      </div>
+                      <h4 className="text-xs font-black text-[#142d53] uppercase tracking-widest">Lo que daña el video (Evitar)</h4>
+                    </div>
+                    <ul className="grid grid-cols-1 gap-2.5">
+                      {(staticManual.fases.find(f => f.id === 'protocolo')?.secciones as any)?.no.map((item: string, i: number) => (
+                        <li key={i} className="flex items-start gap-3 bg-red-50/20 p-3.5 rounded-2xl border border-red-100/20 transition-all hover:bg-white hover:border-red-200 group/item">
+                          <div className="mt-0.5 text-red-300 group-hover/item:text-red-500 transition-colors">
+                            <Ban size={12} />
+                          </div>
+                          <span className="text-[11px] font-bold text-slate-500 leading-tight uppercase tracking-tight">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
             </div>
-            <ul className="space-y-2">
-              {(data.evita_list || []).map((item: string, idx: number) => (
-                <li key={idx} className="flex items-start gap-2 text-xs font-bold text-red-800">
-                  <div className="mt-1.5 h-1 w-1 rounded-full bg-red-500 shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </Card>
+          </div>
+
+          <div className="mt-8 flex items-center gap-3">
+            <div className="bg-[#48c1d2]/10 p-1 rounded-lg text-[#48c1d2]">
+              <AlertCircle size={12} />
+            </div>
+            <p className="text-[10px] font-bold text-[#142d53] uppercase tracking-tight">
+              Tip: Clips de 5 segundos máximo para dinamismo.
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -60,8 +60,8 @@ export const manual = {
     },
     {
       id: "humano",
-      titulo: "Contenido Humano",
-      subtitulo: "Humaniza la marca y genera confianza",
+      titulo: "Stories Diarias",
+      subtitulo: "Contenido real para conectar con tu audiencia",
       emoji: "📱",
       color: "purple",
       items: [
@@ -124,6 +124,74 @@ export const manual = {
           regla: "NO actuar, solo documentar."
         }
       ],
+    },
+    {
+      id: "protocolo",
+      titulo: "Protocolo 2026",
+      subtitulo: "Reglas de oro para un contenido de alto impacto",
+      color: "navy",
+      items: [],
+      secciones: {
+        si: [
+          "Graba siempre vertical",
+          "Usa la cámara normal (sin acercar la imagen)",
+          "Haz videos cortos",
+          "Graba de cerca",
+          "Graba desde diferentes lados",
+          "Muévete lento al grabar",
+          "Limpia la cámara antes de empezar",
+          "Muestra bien la suciedad o el problema",
+          "Muestra bien el resultado final",
+          "Graba mientras trabajas",
+          "Graba detalles de cerca",
+          "Graba más videos de los que crees necesarios",
+          "Deja 2 segundos antes y después de cada video",
+          "Trata de que la imagen se vea clara y estable",
+          "Graba el proceso completo, no solo el final"
+        ],
+        no: [
+          "Grabar horizontal",
+          "Mover muy rápido el celular",
+          "Hacer videos largos",
+          "Grabar desde muy lejos",
+          "Grabar siempre igual",
+          "Mandar solo videos del resultado final",
+          "No grabar el “antes”",
+          "No grabar el “después”",
+          "Tapar la cámara con los dedos",
+          "Grabar con la cámara sucia",
+          "Caminar rápido mientras grabas",
+          "Cortar los videos demasiado rápido",
+          "Acercar demasiado la cámara usando zoom"
+        ],
+        imprescindibles: [
+          "FOTO: Cómo se veía antes",
+          "FOTO: Cómo quedó al final",
+          "VIDEO: Grabación mientras trabajas",
+          "VIDEO: Caminando mostrando el área",
+          "VIDEO FINAL: Todo limpio y terminado"
+        ],
+        niveles: [
+          {
+            id: "obligatorio",
+            label: "Nivel 1: Obligatorio",
+            sub: "Lo mínimo que necesitamos siempre",
+            items: ["Video del antes", "Video del después", "Video trabajando", "Video mostrando el resultado final", "Tomas de cerca de la suciedad"]
+          },
+          {
+            id: "recomendado",
+            label: "Nivel 2: Recomendado",
+            sub: "Hace el contenido mucho mejor",
+            items: ["Videos de herramientas", "Videos preparando el área", "Tomas de cerca limpiando", "Videos caminando mostrando el espacio", "Diferentes ángulos", "Videos cortos del proceso"]
+          },
+          {
+            id: "extra",
+            label: "Nivel 3: Extra",
+            sub: "Contenido premium",
+            items: ["Explicando qué se hizo", "Mostrando cómo empezó el trabajo", "Reacción al resultado final", "Videos del día de trabajo", "Videos detrás de cámaras"]
+          }
+        ]
+      }
     },
   ],
   comoGrabar: {

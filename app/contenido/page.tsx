@@ -12,6 +12,8 @@ import {
   Clapperboard,
   Calendar,
   X,
+  AlertCircle,
+  ChevronDown,
   Sparkles,
   CheckCircle2,
   ChevronRight,
@@ -40,14 +42,12 @@ import {
   Settings,
   MoreVertical,
   Check,
-  ChevronDown,
   ChevronUp,
   Search,
   MessageSquare,
   MessageCircle,
   Share2,
   Download,
-  AlertCircle,
   WifiOff,
   CheckCircle,
   Clock3,
@@ -346,8 +346,8 @@ const ConfirmationDialog = ({
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0a192f]/80 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-white rounded-[3rem] p-8 max-w-sm w-full shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-[20001] flex items-center justify-center p-4 bg-[#0a192f]/80 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto">
+      <div className="bg-white rounded-[2rem] md:rounded-[3rem] p-8 max-w-sm w-full shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
         <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 mb-6 mx-auto">
           <AlertCircle size={32} />
         </div>
@@ -375,6 +375,7 @@ const ConfirmationDialog = ({
 
 export default function ContenidoPage() {
   useThemeColor("#F0F4F8");
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type') || 'presion';
@@ -413,10 +414,13 @@ export default function ContenidoPage() {
   const [voiceSpeed, setVoiceSpeed] = useState<number>(0.85);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [isOffline, setIsOffline] = useState<boolean>(typeof navigator !== 'undefined' ? !navigator.onLine : false);
+  const [isOffline, setIsOffline] = useState<boolean>(false);
   
   // Detector de Conexión
   useEffect(() => {
+    setMounted(true);
+    setIsOffline(typeof navigator !== 'undefined' ? !navigator.onLine : false);
+
     const handleOnline = () => { setIsOffline(false); showToast("Conexión recuperada", "success"); };
     const handleOffline = () => { setIsOffline(true); showToast("Modo Offline activado", "info"); };
     window.addEventListener('online', handleOnline);
@@ -426,6 +430,7 @@ export default function ContenidoPage() {
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
+
   
   // NUEVOS ESTADOS: Búsqueda y Organización
   const [scriptSearchQuery, setScriptSearchQuery] = useState("");
@@ -563,7 +568,7 @@ export default function ContenidoPage() {
       id: 'h1',
       title: 'Buenos Días Familia ☀️',
       mood: 'Humano y Auténtico',
-      color: '[#48c1d2]',
+      color: '#48c1d2',
       icon: Sun,
       sequence: [
         {
@@ -667,6 +672,7 @@ export default function ContenidoPage() {
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [showAudioReport, setShowAudioReport] = useState(false);
+
   const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro' | 'series'>('pinned');
   const [showFullScript, setShowFullScript] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -1078,21 +1084,30 @@ export default function ContenidoPage() {
 
   // --- BLOQUEO MAESTRO DE SCROLL (EVITA DOBLE SCROLL EN MÓVIL) ---
   useEffect(() => {
-    const isAnyModalOpen = !!(selectedScript || selectedStory || showAudioReport || selectedProduction);
+    const isAnyModalOpen = !!(selectedScript || selectedStory || showAudioReport || selectedProduction || selectedSerie || confirmDialog.isOpen);
     
     if (isAnyModalOpen) {
       document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none'; // Previene scroll táctil accidental en fondo
+      document.body.style.height = '100vh';
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.height = '100vh';
+      document.body.style.touchAction = 'none';
     } else {
       document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
       document.body.style.touchAction = '';
     }
     
     return () => {
       document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
       document.body.style.touchAction = '';
     };
-  }, [selectedScript, selectedStory, showAudioReport, selectedProduction]);
+  }, [selectedScript, selectedStory, showAudioReport, selectedProduction, selectedSerie, confirmDialog.isOpen]);
 
   const toggleGlobalStatus = async (day: string) => {
     const newDB = { ...contentDB };
@@ -1130,8 +1145,7 @@ export default function ContenidoPage() {
   };
 
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+
 
   const [isClosing, setIsClosing] = useState(false);
   const [isAnimate, setIsAnimate] = useState(false);
@@ -1166,13 +1180,13 @@ export default function ContenidoPage() {
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-all duration-500 ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-2 md:p-4 transition-all duration-500 overflow-hidden ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}>
       <div
         className={`absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity duration-500 ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}
         onClick={handleCloseScript}
       />
 
-      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[82vh] md:max-h-[90vh] shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
+      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[90vh] md:max-h-[80vh] shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
         {/* Encabezado */}
         <div className="p-5 md:p-6 border-b border-white/5 bg-black/20 flex flex-col md:flex-row justify-between md:items-center text-left gap-4">
           <div className="flex-1 flex justify-between items-start md:block">
@@ -1635,14 +1649,14 @@ export default function ContenidoPage() {
   return (
     <div className="min-h-screen bg-white pb-32">
       {/* INDICADOR OFF-LINE */}
-      {isOffline && (
+      {mounted && isOffline && (
         <div className="fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-[#142d53] text-[10px] font-black uppercase tracking-widest py-2 px-4 flex items-center justify-center gap-2 shadow-lg animate-in slide-in-from-top duration-300">
           <WifiOff size={14} />
           <span>Trabajando en Modo Offline - Datos Cargados de Caché</span>
         </div>
       )}
 
-      <div className={`max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 text-left transition-all duration-300 ${isOffline ? 'pt-14' : ''}`}>
+      <div className={`max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 text-left transition-all duration-300 ${mounted && isOffline ? 'pt-14' : ''}`}>
       {/* Texto Tutorial Contextual Premium */}
       <div className="mb-8">
         <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
@@ -2275,9 +2289,9 @@ export default function ContenidoPage() {
       
       {/* MODAL DE DETALLES DE SERIE */}
       {selectedSerie && createPortal(
-        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-center ${isClosingSerie ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[90vh] relative overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}>
-            <div className="p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100">
+        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-2 md:p-4 bg-[#0a192f]/90 text-center overflow-hidden ${isClosingSerie ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
+          <div className={`bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] md:max-h-[85vh] relative overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}>
+            <div className="p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100 shrink-0">
               <div className="text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ backgroundColor: `${selectedSerie.color}15` }}>
                   <selectedSerie.icon size={14} style={{ color: selectedSerie.color }} />
@@ -2446,9 +2460,9 @@ export default function ContenidoPage() {
       , document.body)}
 
       {selectedStory && createPortal(
-        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-center ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-white w-full max-w-lg rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[90vh] relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}>
-            <div className="p-6 md:p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100">
+        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-2 md:p-4 bg-[#0a192f]/90 text-center overflow-hidden ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
+          <div className={`bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] md:max-h-[85vh] relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}>
+            <div className="p-6 md:p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100 shrink-0">
               <div className="text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ backgroundColor: `${selectedStory.color}15` }}>
                   <selectedStory.icon size={14} style={{ color: selectedStory.color }} />
@@ -2496,7 +2510,7 @@ export default function ContenidoPage() {
               </div>
             </div>
 
-            <div className="p-8 border-t border-slate-50 bg-slate-50/50">
+            <div className="p-8 border-t border-slate-50 bg-slate-50/50 shrink-0">
               <button onClick={handleCloseStory} className="w-full py-5 bg-[#142d53] text-[#48c1d2] text-xs font-black uppercase tracking-[2px] rounded-2xl shadow-xl shadow-[#142d53]/20 transition-all active:scale-95 border-b-4 border-black">¡ENTENDIDO, A GRABAR!</button>
             </div>
           </div>
@@ -2514,9 +2528,9 @@ export default function ContenidoPage() {
 
       {/* MODAL DE REPORTE DE AUDIO (Paso Final) */}
       {showAudioReport && createPortal(
-        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#0a192f]/90 text-left ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[90vh] relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
-            <div className="p-6 md:p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20">
+        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-2 md:p-4 bg-[#0a192f]/90 text-left overflow-hidden ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
+          <div className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] md:max-h-[85vh] relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
+            <div className="p-6 md:p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20 shrink-0">
               <div>
                 <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block italic opacity-70">Módulo de Mentoría Narrativa</span>
                 <h2 className="text-2xl font-black text-white italic tracking-tighter leading-none">Tu Narración <span className="text-[#48c1d2]">del Día</span></h2>
@@ -2576,7 +2590,7 @@ export default function ContenidoPage() {
                   <Mic size={14} /> Guía de Narración (Basada en tus imágenes):
                 </h4>
                 <p className="text-[9px] font-bold text-white/40 tracking-widest mb-6 border-b border-white/5 pb-2">Tu detalle nos ayuda a crear historias que vendan tu esfuerzo y profesionalismo.</p>
-                <ul className="space-y-6">
+                <div className="space-y-3">
                   {[
                     {
                       label: "EL GANCHO VISUAL",
@@ -2604,31 +2618,32 @@ export default function ContenidoPage() {
                       tip: "Hay un video de un perrito que se acercó a curiosear mientras recogíamos todo. Ese momento me recordó por qué me gusta trabajar en estos barrios tan tranquilos."
                     }
                   ].map((item, idx) => (
-                    <li key={idx} className="flex gap-4 items-start">
-                      <span className="text-[#48c1d2] font-black text-xs mt-0.5">{idx + 1}.</span>
-                      <div className="flex-1">
-                        <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px] block mb-1 opacity-80">{item.label}</span>
-                        <p className="text-xs font-bold text-white/90 leading-relaxed italic">{item.q}</p>
-                        
-                        <button 
-                          onClick={() => setExpandedTip(expandedTip === idx ? null : idx)}
-                          className={`mt-2 text-[9px] font-black uppercase tracking-widest flex items-center gap-1 transition-all px-2 py-1 rounded-lg ${expandedTip === idx ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-[#48c1d2]/10 text-[#48c1d2] hover:bg-[#48c1d2]/20'}`}
-                        >
-                          <Sparkles size={10} /> {expandedTip === idx ? 'Ocultar ejemplo' : 'Ver ejemplo de voz'}
-                        </button>
-                        
-                        {expandedTip === idx && (
-                          <div className="mt-2 p-4 bg-[#48c1d2]/5 border border-[#48c1d2]/10 rounded-2xl animate-in slide-in-from-top-2 duration-300">
-                            <p className="text-[10px] font-bold text-[#48c1d2]/80 leading-relaxed italic">
-                              <span className="text-white opacity-40 mr-1 italic">Di algo como:</span>
+                    <div key={idx} className="bg-white/5 rounded-2xl overflow-hidden border border-white/5">
+                      <button 
+                        onClick={() => setExpandedTip(expandedTip === idx ? null : idx)}
+                        className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors text-left"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="w-6 h-6 rounded-lg bg-[#48c1d2]/20 text-[#48c1d2] flex items-center justify-center text-[10px] font-black">{idx + 1}</span>
+                          <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">{item.label}</span>
+                        </div>
+                        <ChevronDown size={14} className={`text-white/40 transition-transform ${expandedTip === idx ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {expandedTip === idx && (
+                        <div className="px-4 pb-4 animate-in fade-in slide-in-from-top-1 duration-200">
+                          <p className="text-xs font-bold text-white/70 leading-relaxed italic mb-3">{item.q}</p>
+                          <div className="p-3 bg-[#48c1d2]/10 border border-[#48c1d2]/20 rounded-xl">
+                            <p className="text-[10px] font-bold text-[#48c1d2] leading-relaxed italic">
+                              <span className="text-white/30 mr-1 italic">Ejemplo:</span>
                               {item.tip}
                             </p>
                           </div>
-                        )}
-                      </div>
-                    </li>
+                        </div>
+                      )}
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
               <div className={`flex flex-col items-center justify-center py-10 space-y-8 relative transition-all ${showHelp && reportHelpStep === 2 ? 'z-50 p-4 rounded-[3rem] bg-[#48c1d2]/5' : ''}`}>
@@ -2816,9 +2831,9 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
   };
 
   return createPortal(
-    <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-[#050c18]/90 modal-backdrop ${isClosing ? 'animate-out fade-out' : ''}`}>
-      <div style={{ backgroundColor: '#142d53' }} className={`w-[95%] max-w-[500px] rounded-[2.5rem] shadow-2xl flex flex-col border border-white/10 overflow-hidden modal-panel ${isClosing ? 'animate-out zoom-out slide-out-to-bottom-10' : ''}`}>
-        <div className="px-8 py-6 border-b border-white/10 flex items-center justify-between bg-black/20">
+    <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-2 md:p-4 bg-[#050c18]/90 modal-backdrop overflow-hidden ${isClosing ? 'animate-out fade-out' : ''}`}>
+      <div style={{ backgroundColor: '#142d53' }} className={`w-full max-w-[500px] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col border border-white/10 overflow-hidden modal-panel max-h-[90vh] md:max-h-[85vh] ${isClosing ? 'animate-out zoom-out slide-out-to-bottom-10' : ''}`}>
+        <div className="px-8 py-6 border-b border-white/10 flex items-center justify-between bg-black/20 shrink-0">
           <div className="text-left flex-1 mr-4">
             <span className="text-[8px] font-bold text-[#48c1d2] tracking-[0.2em] mb-1 block">Ficha de Producción</span>
             {isEditing ? (
