@@ -31,16 +31,16 @@ const phaseIcons: Record<string, any> = {
 };
 
 const phaseColors: Record<string, string> = {
-  antes: "bg-blue-50 text-blue-600 border-blue-100",
-  durante: "bg-[#48c1d2]/10 text-[#48c1d2] border-[#48c1d2]/20",
-  despues: "bg-emerald-50 text-emerald-600 border-emerald-100",
+  antes: "bg-[#142d53]/5 text-[#142d53] border-[#142d53]/10",
+  durante: "bg-[#48c1d2]/10 text-[#142d53] border-[#48c1d2]/20",
+  despues: "bg-[#142d53]/5 text-[#142d53] border-[#142d53]/10",
   humano: "bg-[#48c1d2]/10 text-[#142d53] border-[#48c1d2]/20",
 };
 
 const phaseMessages: Record<string, any> = {
-  antes: "El antes es lo que vende el después. Si el problema no se ve claro, la transformación perderá impacto.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
-  durante: "Múltiples ángulos = versátil. Clips cortos = dinámico. Valor agregado = diferenciador. Jenkryfer en video = humanidad.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
-  despues: "El espectador recuerda primero lo último que vio. Que sea satisfactorio.\n\n💡 Si no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
+  antes: "El problema es la razón por la que te contrataron. Si no lo grabas, el resultado final no tiene impacto.\n\nSi no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
+  durante: "Múltiples ángulos = versátil. Clips cortos = dinámico. Valor agregado = diferenciador. Jenkryfer en video = humanidad.\n\nSi no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
+  despues: "El espectador recuerda primero lo último que vio. Que sea satisfactorio.\n\nSi no sabes cómo hacer una toma, dale al botón '¿CÓMO GRABARLO?'.",
   humano: {
     id: "humano",
     titulo: "Contenido Humano",
@@ -155,8 +155,8 @@ export default function ManualPage() {
       // Clips Cortos
       if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('CLIPS CORTOS'))) {
         itemsFinales.push({
-          en: "📍 DETAILS AND SHORT CLIPS (5-10 SEC)",
-          es: "📍 DETALLES Y CLIPS CORTOS (5-10 SEG)",
+          en: "DETAILS AND SHORT CLIPS (5-10 SEC)",
+          es: "DETALLES Y CLIPS CORTOS (5-10 SEG)",
           tooltip: "Necesitas MUCHOS clips cortos para que el video no sea aburrido. Graba mínimo 8-10 de estos:\n\n• Manchas/suciedad desapareciendo\n• Contraste agua sucia vs limpia\n• Presión del agua en acción\n• Texturas (antes vs después)\n• Expresión/técnica de Sebastián\n• Herramientas en detalle\n• Obstáculos siendo resueltos\n• Transformación visible"
         });
       }
@@ -164,8 +164,8 @@ export default function ManualPage() {
       // Jenkryfer
       if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('JENKRYFER'))) {
         itemsFinales.push({
-          en: "👥 JENKRYFER / ASSISTANT",
-          es: "👥 JENKRYFER / ASISTENTE",
+          en: "JENKRYFER / ASSISTANT",
+          es: "JENKRYFER / ASISTENTE",
           tooltip: "No es solo Sebastián, es un equipo. Si Jenkryfer o alguien está ayudando, graba:\n\n• Videos de ella montando herramientas\n• Videos de ella pasando accesorios\n• Videos de ella documentando (foto/video)\n• Videos de ambos trabajando en el mismo frame\n\nEsto humaniza todo y muestra equipo."
         });
       }
@@ -173,8 +173,8 @@ export default function ManualPage() {
       // Valor Agregado
       if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('VALOR AGREGADO'))) {
         itemsFinales.push({ 
-          en: "⭐ EXTRA VALUE (DOORS, BINS, EXTRAS)", 
-          es: "⭐ VALOR AGREGADO (PUERTAS, BOTES, EXTRAS)", 
+          en: "EXTRA VALUE (DOORS, BINS, EXTRAS)", 
+          es: "VALOR AGREGADO (PUERTAS, BOTES, EXTRAS)", 
           tooltip: "¿Hay algo extra que van a hacer hoy? (Ej: Puertas, botes de basura, etc.)\n\nSI → Grabar ANTES + PROCESO + DESPUÉS del extra.\nNO → Continuar con el trabajo normal.\n\nRecuerda: Esto es lo que te diferencia de la competencia. Si no lo grabas, es como si nunca lo hiciste." 
         });
       }
@@ -184,8 +184,8 @@ export default function ManualPage() {
     if (fase.id === 'despues') {
       if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('RESULTADO FINAL REALISTA'))) {
         itemsFinales.push({
-          en: "🔍 REALISTIC FINAL RESULT",
-          es: "🔍 RESULTADO FINAL REALISTA",
+          en: "REALISTIC FINAL RESULT",
+          es: "RESULTADO FINAL REALISTA",
           tooltip: "La honestidad genera confianza. No todo tiene que ser perfecto:\n\n• 1 video recorrido final (limpio, lento)\n• Graba bien de cerca las áreas difíciles (antes vs después)\n• Muestra áreas 100% limpias\n• Muestra áreas con limpieza parcial (ej: manchas de óxido persistentes)\n   → Graba el antes/después aunque sea parcial\n• Reacción del cliente (si existe)"
         });
       }
@@ -195,8 +195,8 @@ export default function ManualPage() {
     if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('VALIDACIÓN RÁPIDA'))) {
       const isHumano = fase.id === 'humano';
       itemsFinales.push({
-        en: "✅ QUICK VALIDATION",
-        es: "✅ VALIDACIÓN RÁPIDA",
+        en: "QUICK VALIDATION",
+        es: "VALIDACIÓN RÁPIDA",
         objetivo: isHumano ? "Asegurar que el contenido sea humano y auténtico." : undefined,
         grabar: isHumano ? "Revisa tus clips grabados antes de irte." : undefined,
         narrar: isHumano ? "¿Grabé el problema? ¿El proceso? ¿Mi reacción natural?" : undefined,
@@ -321,7 +321,7 @@ export default function ManualPage() {
 
             return (
               <div key={fase.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <Card className="p-6 border-t-8 shadow-xl rounded-[2.5rem]" style={{ borderTopColor: fase.id === 'antes' ? '#3b82f6' : fase.id === 'durante' ? '#48c1d2' : fase.id === 'despues' ? '#10b981' : '#48c1d2' }}>
+                <Card className="p-6 border-t-8 shadow-xl rounded-[2.5rem]" style={{ borderTopColor: fase.id === 'durante' || fase.id === 'humano' ? '#48c1d2' : '#142d53' }}>
                   <div className="flex items-center gap-3 mb-6">
                     <div className={`p-3 rounded-xl border ${colorStyles}`}>
                       <Icon size={18} />
