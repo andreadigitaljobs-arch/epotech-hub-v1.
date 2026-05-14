@@ -17,7 +17,9 @@ import {
   UserCheck,
   Trophy,
   Smartphone,
-  Compass
+  Compass,
+  Mic,
+  Clock
 } from "lucide-react";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
