@@ -2618,29 +2618,18 @@ export default function ContenidoPage() {
                       tip: "Hay un video de un perrito que se acercó a curiosear mientras recogíamos todo. Ese momento me recordó por qué me gusta trabajar en estos barrios tan tranquilos."
                     }
                   ].map((item, idx) => (
-                    <div key={idx} className="bg-white/5 rounded-2xl overflow-hidden border border-white/5">
-                      <button 
-                        onClick={() => setExpandedTip(expandedTip === idx ? null : idx)}
-                        className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors text-left"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="w-6 h-6 rounded-lg bg-[#48c1d2]/20 text-[#48c1d2] flex items-center justify-center text-[10px] font-black">{idx + 1}</span>
-                          <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">{item.label}</span>
-                        </div>
-                        <ChevronDown size={14} className={`text-white/40 transition-transform ${expandedTip === idx ? 'rotate-180' : ''}`} />
-                      </button>
-                      
-                      {expandedTip === idx && (
-                        <div className="px-4 pb-4 animate-in fade-in slide-in-from-top-1 duration-200">
-                          <p className="text-xs font-bold text-white/70 leading-relaxed italic mb-3">{item.q}</p>
-                          <div className="p-3 bg-[#48c1d2]/10 border border-[#48c1d2]/20 rounded-xl">
-                            <p className="text-[10px] font-bold text-[#48c1d2] leading-relaxed italic">
-                              <span className="text-white/30 mr-1 italic">Ejemplo:</span>
-                              {item.tip}
-                            </p>
-                          </div>
-                        </div>
-                      )}
+                    <div key={idx} className="bg-white/5 rounded-2xl p-5 border border-white/5 space-y-3 text-left">
+                      <div className="flex items-center gap-3">
+                        <span className="w-6 h-6 rounded-lg bg-[#48c1d2]/20 text-[#48c1d2] flex items-center justify-center text-[10px] font-black">{idx + 1}</span>
+                        <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">{item.label}</span>
+                      </div>
+                      <p className="text-xs font-bold text-white/70 leading-relaxed italic">{item.q}</p>
+                      <div className="p-3 bg-[#48c1d2]/10 border border-[#48c1d2]/20 rounded-xl text-left">
+                        <p className="text-[10px] font-bold text-[#48c1d2] leading-relaxed italic">
+                          <span className="text-white/30 mr-1 italic">Ejemplo:</span>
+                          {item.tip}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>

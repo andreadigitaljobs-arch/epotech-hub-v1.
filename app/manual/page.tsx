@@ -152,7 +152,7 @@ export default function ManualPage() {
           {
             en: "⚙️ HOW TO SETUP YOUR PHONE",
             es: "⚙️ CÓMO PREPARAR EL CELULAR",
-            tooltip: "Asegúrate de que todo esté bien antes de empezar:\n\n• Calidad: Usa la máxima resolución de tu celular\n• Posición: Graba con el celular parado (vertical)\n• Luz: Trata de que el sol te dé de frente, no por detrás\n• Lente: Limpia la cámara con tu camisa antes de grabar\n• Audio: Acércate al celular si vas a hablar para que se escuche bien"
+            tooltip: "Asegúrate de que todo esté bien antes de empezar:\n\n• Calidad: Configura tu cámara en 4K a 60 fps o 1080 a 60 fps\n• Posición: Graba con el celular parado (vertical)\n• Luz: Trata de que el sol te dé de frente, no por detrás\n• Lente: Limpia la cámara con un paño limpio antes de grabar\n• Audio: Acércate al celular si vas a hablar para que se escuche bien"
           },
           ...itemsFinales
         ];
@@ -448,7 +448,7 @@ export default function ManualPage() {
                           {activeTooltip === idx && activePhase !== 'humano' && item.tooltip && (
                             <div className="mt-4 p-4 bg-[#142d53] text-white rounded-xl text-[10px] font-medium leading-relaxed animate-in zoom-in-95 duration-200 shadow-2xl relative border border-white/10 whitespace-pre-line w-full" onClick={(e) => e.stopPropagation()}>
                               <div className="absolute -top-2 left-6 w-4 h-4 bg-[#142d53] rotate-45 border-l border-t border-white/10"></div>
-                              <span className="text-[#48c1d2] font-black uppercase block mb-1">Instrucción Táctica:</span>
+                              <span className="text-[#48c1d2] font-black uppercase block mb-1">Cómo hacerlo:</span>
                               {item.tooltip}
                             </div>
                           )}
