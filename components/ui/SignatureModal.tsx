@@ -167,15 +167,15 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
   if (!mounted || !isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[10000] flex items-start md:items-center justify-center bg-[#0a192f]/80 backdrop-blur-sm p-2 md:p-4 animate-in fade-in duration-300 overflow-y-auto pt-10 md:pt-4">
-      <div className="bg-white w-full max-w-2xl rounded-[2rem] md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] md:max-h-[90vh] animate-in zoom-in-95 duration-300">
-        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#0a192f]/80 backdrop-blur-sm p-4 animate-in fade-in duration-300 overflow-y-auto">
+      <div className="bg-white w-full max-w-2xl rounded-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300 w-full my-auto">
+        <div className="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/10 flex items-center justify-center text-[#48c1d2]">
               <PenTool size={20} />
             </div>
             <div>
-              <h2 className="text-xl font-black text-[#142d53] tracking-tighter">Firma Digital Epotech</h2>
+              <h2 className="text-lg md:text-xl font-black text-[#142d53] tracking-tighter">Firma Digital Epotech</h2>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {isLocked ? "Firma Registrada y Protegida" : "Dibuja tu firma en el recuadro"}
               </p>
@@ -189,9 +189,9 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
           </button>
         </div>
 
-        <div className="p-8 flex-1 flex flex-col gap-6">
+        <div className="p-6 md:p-8 flex-1 flex flex-col gap-6 w-full">
           <div 
-            className={`relative flex-1 bg-slate-50 rounded-[2rem] border-2 border-dashed transition-all overflow-hidden ${
+            className={`relative min-h-[320px] md:min-h-[400px] w-full bg-slate-50 rounded-[2rem] border-2 border-dashed transition-all overflow-hidden flex-1 ${
               isLocked ? "border-emerald-200 bg-emerald-50/20" : "border-slate-200 hover:border-[#48c1d2]/50"
             }`}
           >
@@ -204,11 +204,11 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
               onTouchStart={startDrawing}
               onTouchMove={draw}
               onTouchEnd={stopDrawing}
-              className={`w-full h-full cursor-crosshair touch-none ${isLocked ? "cursor-default" : ""}`}
+              className={`w-full h-full cursor-crosshair touch-none absolute inset-0 ${isLocked ? "cursor-default" : ""}`}
             />
             
             {isLocked && (
-              <div className="absolute top-4 right-4 flex items-center gap-2 bg-emerald-500 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+              <div className="absolute top-4 right-4 flex items-center gap-2 bg-emerald-500 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg z-10">
                 <CheckCircle2 size={14} />
                 Firma Protegida
               </div>
@@ -216,7 +216,7 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
 
             {!hasSignature && !isLocked && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                <span className="text-2xl font-black text-slate-300 uppercase tracking-[0.5em] -rotate-12">Firma Aquí</span>
+                <span className="text-xl md:text-2xl font-black text-slate-300 uppercase tracking-[0.5em] -rotate-12">Firma Aquí</span>
               </div>
             )}
           </div>
