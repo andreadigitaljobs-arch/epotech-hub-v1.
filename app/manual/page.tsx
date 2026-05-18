@@ -488,8 +488,8 @@ export default function ManualPage() {
                     <CheckCircle2 size={18} />
                   </div>
                   <div className="text-left min-w-0">
-                    <h4 className={`text-base font-black tracking-tight leading-tight whitespace-normal ${expandedProtocol === 'reglas' ? 'text-white' : 'text-[#142d53]'}`}>Lo que genera impacto y calidad</h4>
-                    <p className={`text-[8px] font-black uppercase tracking-widest opacity-60 ${expandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-400'}`}>Principios de grabación</p>
+                    <h4 className={`text-base font-black tracking-tight leading-tight whitespace-normal ${expandedProtocol === 'reglas' ? 'text-white' : 'text-[#142d53]'}`}>Guía Rápida para el Equipo en Campo</h4>
+                    <p className={`text-[8px] font-black uppercase tracking-widest opacity-60 ${expandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-400'}`}>Lo más importante al usar tu cámara</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 shrink-0 ml-4">
@@ -509,8 +509,8 @@ export default function ManualPage() {
                       <CheckCircle2 size={16} />
                     </div>
                     <div>
-                      <h4 className="text-xs md:text-sm font-black text-[#142d53] uppercase tracking-widest">Lo que genera impacto y calidad</h4>
-                      <p className="text-[10px] md:text-[11px] font-medium text-slate-500">Sigue estos principios para que tus videos destaquen siempre</p>
+                      <h4 className="text-xs md:text-sm font-black text-[#142d53] uppercase tracking-widest">Checklist de Calidad Visual</h4>
+                      <p className="text-[10px] md:text-[11px] font-medium text-slate-500">Asegúrate de cumplir estos puntos antes de dar por terminado un video</p>
                     </div>
                   </div>
                   <ul className="grid grid-cols-2 gap-2">
