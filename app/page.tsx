@@ -335,6 +335,12 @@ export default function Home() {
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 md:pb-8">
       {/* 1. INSTRUCCIONES PREMIUM */}
       <div className="mb-4 space-y-4">
+        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+            <span className="text-[#48c1d2]">Academia Epotech:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
+          </p>
+        </div>
+
         {/* Card de Firma Digital - Acceso Rápido */}
         <div 
           onClick={() => setIsSignatureModalOpen(true)}
@@ -365,12 +371,6 @@ export default function Home() {
               <ArrowRight size={16} />
             </div>
           </div>
-        </div>
-
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[#48c1d2]">Academia Epotech:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
-          </p>
         </div>
       </div>
 
