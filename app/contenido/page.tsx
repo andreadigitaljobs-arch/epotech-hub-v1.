@@ -1180,13 +1180,13 @@ export default function ContenidoPage() {
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-2 md:p-4 transition-all duration-500 overflow-hidden ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-6 md:p-8 transition-all duration-500 overflow-hidden ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}>
       <div
         className={`absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity duration-500 ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}
         onClick={handleCloseScript}
       />
 
-      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[90vh] md:max-h-[80vh] shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
+      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
         {/* Encabezado */}
         <div className="p-5 md:p-6 border-b border-white/5 bg-black/20 flex flex-col md:flex-row justify-between md:items-center text-left gap-4">
           <div className="flex-1 flex justify-between items-start md:block">
