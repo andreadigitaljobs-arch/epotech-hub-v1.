@@ -67,61 +67,61 @@ export const manual = {
       items: [
         {
           es: "Explicando qué se va a hacer",
-          objetivo: "Dar contexto antes del trabajo.",
-          grabar: "Graba la casa o área mientras caminas lentamente.",
-          narrar: "Qué problema tiene, qué van a limpiar, qué resultado esperan.",
-          regla: "❌ NO grabes tu cara obligatoriamente.",
-          ejemplos: ["La entrada", "el concreto", "las ventanas", "el driveway", "herramientas"],
-          duracion: "15-30 segundos.",
+          objetivo: "Dar contexto general de la propiedad antes de comenzar el servicio.",
+          grabar: "Graba la casa o el área de trabajo mientras caminas lentamente para mostrar el estado actual.",
+          narrar: "Explica cuál es el problema principal que tiene la superficie y qué resultado esperan obtener tras la limpieza.",
+          regla: "No es obligatorio que salgas frente a cámara, puedes enfocar el espacio mientras hablas.",
+          ejemplos: ["La entrada principal", "Superficies de concreto", "Las ventanas", "El driveway", "Herramientas de trabajo"],
+          duracion: "15 a 30 segundos.",
           demo: "“Hoy vamos a limpiar este driveway porque tenía mucha suciedad acumulada y manchas negras.”"
         },
         {
           es: "Explicando el problema del cliente",
-          objetivo: "Hacer que el espectador diga: “mi casa también está así”.",
-          grabar: "Acércate bastante al área sucia.",
-          narrar: "Qué causó eso, por qué pasa, si puede empeorar.",
-          detalles: ["Manchas", "mugre", "moho", "tierra", "líneas negras"],
+          objetivo: "Hacer que el espectador se identifique al ver un problema común en su hogar.",
+          grabar: "Acércate lo suficiente al área sucia para que se aprecien claramente las imperfecciones.",
+          narrar: "Explica qué causó esa acumulación de suciedad y por qué es importante limpiarlo antes de que empeore.",
+          detalles: ["Manchas difíciles", "Mugre acumulada", "Moho en esquinas", "Tierra incrustada", "Líneas negras por humedad"],
           demo: "“Estas manchas negras normalmente salen por humedad y acumulación de suciedad con el tiempo.”"
         },
         {
           es: "Explicando por qué el proceso importa",
-          objetivo: "Educar sin parecer profesor.",
-          grabar: "Mientras trabajas: grabar agua, químicos, herramientas, limpieza.",
-          narrar: "Por qué hacen ese paso, por qué usan cierta herramienta, qué diferencia hace.",
-          demo: "“Usamos esta punta porque limpia profundo sin dañar el concreto.”"
+          objetivo: "Explicar el valor técnico del servicio de forma sencilla y práctica.",
+          grabar: "Graba al equipo en acción aplicando agua, productos químicos o utilizando las herramientas especializadas.",
+          narrar: "Comenta por qué realizan ese paso específico y cómo ayuda a proteger la superficie a largo plazo.",
+          demo: "“Usamos esta boquilla especial porque limpia a profundidad sin dañar la porosidad del concreto.”"
         },
         {
-          es: "Mini vlog del trabajo (tipo POV)",
-          objetivo: "Hacer sentir al espectador dentro del trabajo.",
-          grabar: "Graba: llegando, bajando herramientas, preparando máquinas, conectando agua, caminando.",
-          duracion: "Tomas cortas: 3-5 segundos.",
-          regla: "Debe sentirse real, no busques perfección.",
-          narrar: "Puedes hablar o no (narrar es documentar)."
+          es: "Mini resumen del trabajo en campo",
+          objetivo: "Hacer sentir al espectador como si estuviera acompañándote durante toda la jornada.",
+          grabar: "Haz tomas cortas llegando a la casa, preparando las mangueras, encendiendo las máquinas y trabajando.",
+          duracion: "Tomas cortas de 3 a 5 segundos cada una.",
+          regla: "Muestra la realidad del trabajo diario de forma espontánea y sin buscar tomas perfectas.",
+          narrar: "Puedes ir narrando lo que haces o simplemente capturar el sonido ambiente del trabajo."
         },
         {
-          es: "Reacción al resultado final",
-          objetivo: "Transmitir satisfacción humana.",
-          grabar: "Graba el resultado terminado.",
-          regla: "Natural, NO actuar exagerado.",
-          demo: "“Quedó brutal... mira la diferencia. Esto tomó varias horas pero valió la pena.”"
+          es: "Mostrando el resultado final",
+          objetivo: "Transmitir la satisfacción de ver un espacio completamente limpio y renovado.",
+          grabar: "Haz un recorrido lento mostrando el impecable estado final de la superficie.",
+          regla: "Habla con naturalidad, compartiendo tu genuina satisfacción por un trabajo bien hecho.",
+          demo: "“Quedó impecable... mira la diferencia. Tomó varias horas de esfuerzo pero valió totalmente la pena.”"
         },
         {
-          es: "Detrás de cámaras",
-          objetivo: "Mostrar trabajo real.",
-          grabar: "Preparando químicos, moviendo mangueras, setup, errores, cansancio, detalles reales.",
-          regla: "Esto NO necesita verse perfecto. Mientras más real, mejor."
+          es: "Detrás de cámaras del servicio",
+          objetivo: "Mostrar el esfuerzo humano y la dedicación que hay detrás de cada limpieza.",
+          grabar: "Captura momentos reales: preparando las mezclas, moviendo equipos pesados o los retos imprevistos del día.",
+          regla: "No busques que todo luzca impecable; la autenticidad y el esfuerzo real conectan mucho mejor."
         },
         {
-          es: "Storytelling del trabajo",
-          objetivo: "Convertir un trabajo normal en historia.",
-          grabar: "Mientras grabas la propiedad explica: cuánto tiempo tomó, qué era lo más difícil, qué encontraron, qué cambió.",
-          demo: "“Pensamos que esto iba a tomar dos horas y terminamos haciendo mucho más porque había demasiada suciedad acumulada.”"
+          es: "Historia completa del servicio",
+          objetivo: "Narrar cómo resolvieron una situación compleja o un reto inesperado en la propiedad.",
+          grabar: "Mientras muestras los detalles de la propiedad, cuenta cuánto tiempo tomó y cuál fue el mayor desafío.",
+          demo: "“Pensamos que esto iba a tomar un par de horas, pero requirió un tratamiento especial por la grasa incrustada.”"
         },
         {
-          es: "Lifestyle / Marca personal ligera",
-          objetivo: "Que la cuenta se sienta humana (NO influencer).",
-          grabar: "Cosas simples: manejando al trabajo, café en la mañana, cargando herramientas, sunset después del trabajo, camino a casa.",
-          regla: "NO actuar, solo documentar."
+          es: "Día a día del equipo en campo",
+          objetivo: "Mostrar el lado humano del equipo de trabajo durante la jornada.",
+          grabar: "Momentos sencillos: de camino al trabajo en la camioneta, el café matutino o recogiendo el equipo al atardecer.",
+          regla: "Actúa de forma natural, documentando tu día a día sin poses."
         }
       ],
     },

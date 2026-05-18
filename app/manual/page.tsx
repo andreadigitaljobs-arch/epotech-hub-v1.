@@ -368,57 +368,56 @@ export default function ManualPage() {
                                   <span className="md:hidden">{activeTooltip === idx ? 'CERRAR' : 'TOCA PARA VER'}</span>
                                 </div>
                               </div>
-                              
-                              {activePhase === 'humano' && !activeTooltip && (
-                                <p className="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.objetivo}</p>
-                              )}
                             </div>
                           </div>
                           
-                          {/* Tooltip Detallado (Phase Humano) */}
+                          {/* Tooltip Detallado (Phase Humano / Stories Diarias) */}
                           {activeTooltip === idx && activePhase === 'humano' && (
                             <div className="mt-6 w-full space-y-3 animate-in slide-in-from-top-2 duration-300" onClick={(e) => e.stopPropagation()}>
                               <div className="grid grid-cols-1 gap-3">
                                   {/* Objetivo */}
-                                  <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
+                                  <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm text-left">
                                     <div className="flex items-center gap-2 mb-1.5">
-                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Objetivo Táctico</span>
+                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Propósito de esta historia</span>
                                     </div>
                                     <p className="text-[12px] font-bold text-[#142d53] leading-relaxed">{item.objetivo}</p>
                                   </div>
                                   
                                   {/* Grabación */}
-                                  <div className="bg-slate-50/80 p-4 rounded-2xl border-l-4 border-[#142d53] shadow-sm">
+                                  <div className="bg-slate-50/80 p-4 rounded-2xl border-l-4 border-[#142d53] shadow-sm text-left">
                                     <div className="flex items-center gap-2 mb-2">
                                       <Smartphone size={14} className="text-[#142d53]" />
-                                      <span className="text-[8px] font-black text-[#142d53] uppercase tracking-[0.2em]">Guía de Grabación</span>
+                                      <span className="text-[8px] font-black text-[#142d53] uppercase tracking-[0.2em]">Qué grabar en video</span>
                                     </div>
                                     <p className="text-[12px] font-bold text-slate-700 leading-relaxed mb-3">{item.grabar}</p>
                                     
                                     {(item.ejemplos || item.detalles) && (
-                                      <div className="flex flex-wrap gap-1.5 pt-1">
-                                        {item.ejemplos?.map((ej: string, i: number) => (
-                                          <span key={i} className="px-2 py-1 bg-white border border-slate-200 rounded-lg text-[8px] font-black text-[#48c1d2] uppercase">{ej}</span>
-                                        ))}
-                                        {item.detalles?.map((det: string, i: number) => (
-                                          <span key={i} className="px-2 py-1 bg-white border border-red-100 rounded-lg text-[8px] font-black text-red-500 uppercase">Aviso: {det}</span>
-                                        ))}
+                                      <div className="pt-2 border-t border-slate-200 mt-2">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase mb-2">Detalles para enfocar en la toma:</p>
+                                        <div className="flex flex-wrap gap-1.5">
+                                          {item.ejemplos?.map((ej: string, i: number) => (
+                                            <span key={`ej-${i}`} className="px-2.5 py-1 bg-white border border-[#48c1d2]/40 rounded-lg text-[10px] font-bold text-[#142d53]">{ej}</span>
+                                          ))}
+                                          {item.detalles?.map((det: string, i: number) => (
+                                            <span key={`det-${i}`} className="px-2.5 py-1 bg-white border border-[#142d53]/30 rounded-lg text-[10px] font-bold text-[#142d53]">{det}</span>
+                                          ))}
+                                        </div>
                                       </div>
                                     )}
                                   </div>
 
                                   {/* Narración */}
-                                  <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm">
+                                  <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm text-left">
                                     <div className="flex items-center gap-2 mb-2">
                                       <Mic size={14} className="text-[#48c1d2]" />
-                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Guía de Narración</span>
+                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Qué decir al hablar</span>
                                     </div>
                                     <p className="text-[12px] font-bold text-[#142d53] leading-relaxed mb-4">{item.narrar}</p>
                                     
                                     {item.demo && (
-                                      <div className="bg-[#142d53]/5 p-4 rounded-xl border border-[#142d53]/10 relative group/demo transition-all hover:bg-[#142d53]/10">
-                                        <div className="absolute -top-2 left-4 bg-[#142d53] text-white px-3 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest">Ejemplo de guion</div>
-                                        <p className="text-[11px] font-medium text-[#142d53] italic leading-relaxed pt-1">"{item.demo}"</p>
+                                      <div className="bg-[#142d53]/5 p-4 rounded-xl border border-[#142d53]/10 relative group/demo transition-all hover:bg-[#142d53]/10 text-left">
+                                        <div className="absolute -top-2 left-4 bg-[#142d53] text-white px-3 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest">Ejemplo práctico</div>
+                                        <p className="text-[11px] font-medium text-[#142d53] italic leading-relaxed pt-1">{item.demo.replace(/^["“”]+|["“”]+$/g, '')}</p>
                                       </div>
                                     )}
                                   </div>
@@ -433,9 +432,9 @@ export default function ManualPage() {
                                         </div>
                                       )}
                                       {item.regla && (
-                                        <div className="bg-red-50 px-4 py-2 rounded-full border border-red-100 flex items-center gap-2">
-                                          <div className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                                          <span className="text-[9px] font-black text-red-600 uppercase tracking-wider">{item.regla}</span>
+                                        <div className="bg-[#142d53]/5 px-4 py-2.5 rounded-2xl border border-[#142d53]/10 flex items-center gap-2 text-left">
+                                          <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] shrink-0" />
+                                          <span className="text-[10px] font-bold text-[#142d53] leading-snug">{item.regla.replace('❌ ', '')}</span>
                                         </div>
                                       )}
                                     </div>
@@ -469,8 +468,8 @@ export default function ManualPage() {
                   <ShieldCheck size={24} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-[#142d53] tracking-tighter">Protocolos de Calidad Globales</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reglas maestras para todo el contenido</p>
+                  <h3 className="text-xl font-black text-[#142d53] tracking-tighter">Buenas Prácticas de Grabación</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Consejos clave para todo tu contenido</p>
                 </div>
               </div>
               <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
@@ -478,7 +477,7 @@ export default function ManualPage() {
               </p>
             </div>
 
-            {/* ACORDEÓN: REGLAS TÁCTICAS */}
+            {/* ACORDEÓN: BUENAS PRÁCTICAS */}
             <div className="space-y-2">
               <button 
                 onClick={() => setExpandedProtocol(expandedProtocol === 'reglas' ? null : 'reglas')}
@@ -489,8 +488,8 @@ export default function ManualPage() {
                     <CheckCircle2 size={18} />
                   </div>
                   <div className="text-left min-w-0">
-                    <h4 className={`text-base font-black tracking-tight leading-tight whitespace-normal ${expandedProtocol === 'reglas' ? 'text-white' : 'text-[#142d53]'}`}>Guía de estilo: Así sí / Evitar</h4>
-                    <p className={`text-[8px] font-black uppercase tracking-widest opacity-60 ${expandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-400'}`}>Protocolo visual básico</p>
+                    <h4 className={`text-base font-black tracking-tight leading-tight whitespace-normal ${expandedProtocol === 'reglas' ? 'text-white' : 'text-[#142d53]'}`}>Lo que genera impacto y calidad</h4>
+                    <p className={`text-[8px] font-black uppercase tracking-widest opacity-60 ${expandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-400'}`}>Principios de grabación</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 shrink-0 ml-4">
@@ -504,44 +503,26 @@ export default function ManualPage() {
               </button>
 
               {expandedProtocol === 'reglas' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in zoom-in-95 duration-300 mt-2">
-                  <div className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-lg space-y-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 rounded-full bg-[#48c1d2]/20 flex items-center justify-center text-[#48c1d2]">
-                        <CheckCircle2 size={12} />
-                      </div>
-                      <h4 className="text-xs font-black text-[#142d53] uppercase tracking-widest">Lo que genera impacto (Así sí)</h4>
+                <div className="bg-white p-4 md:p-6 rounded-[2rem] border border-slate-100 shadow-lg space-y-4 animate-in zoom-in-95 duration-300 mt-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#48c1d2]/20 flex items-center justify-center text-[#48c1d2] shrink-0">
+                      <CheckCircle2 size={16} />
                     </div>
-                    <ul className="grid grid-cols-1 gap-2.5">
-                      {(staticManual.fases.find(f => f.id === 'protocolo')?.secciones as any)?.si.map((item: string, i: number) => (
-                        <li key={i} className="flex items-start gap-3 bg-slate-50/50 p-3.5 rounded-2xl border border-slate-100 transition-all hover:bg-white hover:border-[#48c1d2]/30 group/item">
-                          <div className="mt-0.5 text-[#48c1d2] opacity-40 group-hover/item:opacity-100 transition-opacity">
-                            <CheckCircle2 size={12} />
-                          </div>
-                          <span className="text-[11px] font-bold text-[#142d53] leading-tight uppercase tracking-tight">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
- 
-                  <div className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-lg space-y-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-500">
-                        <XCircle size={12} />
-                      </div>
-                      <h4 className="text-xs font-black text-[#142d53] uppercase tracking-widest">Lo que daña el video (Evitar)</h4>
+                    <div>
+                      <h4 className="text-xs md:text-sm font-black text-[#142d53] uppercase tracking-widest">Lo que genera impacto y calidad</h4>
+                      <p className="text-[10px] md:text-[11px] font-medium text-slate-500">Sigue estos principios para que tus videos destaquen siempre</p>
                     </div>
-                    <ul className="grid grid-cols-1 gap-2.5">
-                      {(staticManual.fases.find(f => f.id === 'protocolo')?.secciones as any)?.no.map((item: string, i: number) => (
-                        <li key={i} className="flex items-start gap-3 bg-red-50/20 p-3.5 rounded-2xl border border-red-100/20 transition-all hover:bg-white hover:border-red-200 group/item">
-                          <div className="mt-0.5 text-red-300 group-hover/item:text-red-500 transition-colors">
-                            <Ban size={12} />
-                          </div>
-                          <span className="text-[11px] font-bold text-slate-500 leading-tight uppercase tracking-tight">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
+                  <ul className="grid grid-cols-2 gap-2">
+                    {(staticManual.fases.find(f => f.id === 'protocolo')?.secciones as any)?.si.map((item: string, i: number) => (
+                      <li key={i} className="flex items-center gap-2 bg-slate-50/80 py-2.5 px-3 rounded-xl border border-slate-100 transition-all hover:bg-white hover:border-[#48c1d2]/40 hover:shadow-sm group/item">
+                        <div className="text-[#48c1d2] opacity-60 group-hover/item:opacity-100 transition-opacity shrink-0">
+                          <CheckCircle2 size={14} />
+                        </div>
+                        <span className="text-[10px] md:text-[11px] font-bold text-[#142d53] leading-tight">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
