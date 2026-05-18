@@ -90,13 +90,13 @@ export function VideoCard({
 
       {/* Modal de Detalles (Portal) */}
       {isOpen && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[1000] flex items-start md:items-center justify-center p-2 md:p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto pt-10 md:pt-4">
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-8 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto">
           <div 
             className="absolute inset-0" 
             onClick={() => setIsOpen(false)} 
           />
           
-          <div className="relative bg-[#142d53] w-full max-w-lg rounded-[2rem] md:rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden animate-in zoom-in-95 duration-300 max-h-[95vh] md:max-h-[90vh] flex flex-col">
+          <div className="relative bg-[#142d53] w-full max-w-lg rounded-[2rem] md:rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden animate-in zoom-in-95 duration-300 max-h-[82vh] md:max-h-[80vh] my-auto flex flex-col">
             {/* Header del Modal */}
             <div className="relative h-48 bg-slate-900 overflow-hidden">
                <div className="absolute inset-0 bg-gradient-to-t from-[#142d53] to-transparent z-10" />
