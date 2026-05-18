@@ -17,6 +17,14 @@ export const referencias = {
       porqueFunciona: "Chris domina el uso de ángulos a ras de suelo para mostrar cómo el agua a presión remueve la suciedad en primer plano. Sus videos transmiten una sensación de 'limpieza profunda' extrema que genera mucha satisfacción visual. La iluminación siempre es natural y resalta el brillo final del concreto.",
     },
     {
+      id: "c6",
+      nombre: "New Looks Pressure Wash",
+      url: "https://www.instagram.com/newlookspressurewash?igsh=anh1YzQxMHFsYnNm",
+      tipo: "Instagram",
+      fuerte: "Contraste Extremo 'Antes vs Después'",
+      porqueFunciona: "Busca los trabajos más sucios y descuidados para maximizar el impacto visual. El contraste entre el moho oscuro y la superficie brillante es el motor de sus videos. Es una estrategia de 'choque visual' que funciona perfectamente para captar atención rápida.",
+    },
+    {
       id: "c3",
       nombre: "All Sides Pressure Washing",
       url: "https://www.tiktok.com/@allsidespressurewashing?_r=1&_t=ZP-95FAin07bBu",
@@ -39,14 +47,6 @@ export const referencias = {
       tipo: "TikTok",
       fuerte: "Timelapses y Eficiencia Operativa",
       porqueFunciona: "Sus videos de cámara rápida (timelapses) son muy efectivos para mostrar el volumen de trabajo en pocos segundos. Demuestra rapidez y orden. Intercala estos timelapses con clips muy cortos de detalles satisfactorios, manteniendo un ritmo de edición muy alto.",
-    },
-    {
-      id: "c6",
-      nombre: "New Looks Pressure Wash",
-      url: "https://www.instagram.com/newlookspressurewash?igsh=anh1YzQxMHFsYnNm",
-      tipo: "Instagram",
-      fuerte: "Contraste Extremo 'Antes vs Después'",
-      porqueFunciona: "Busca los trabajos más sucios y descuidados para maximizar el impacto visual. El contraste entre el moho oscuro y la superficie brillante es el motor de sus videos. Es una estrategia de 'choque visual' que funciona perfectamente para captar atención rápida.",
     }
   ],
   videos: [

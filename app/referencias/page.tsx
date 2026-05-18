@@ -59,10 +59,12 @@ export default function ReferenciasPage() {
     .filter((v: any) => platformFilter === 'all' ? true : v.platform === platformFilter)
     .sort((a: any, b: any) => a.platform.localeCompare(b.platform));
 
-  const filteredAccounts = data.cuentas.filter((c: any) => {
-    const p = c.tipo.toLowerCase();
-    return platformFilter === 'all' ? true : p.includes(platformFilter);
-  });
+  const filteredAccounts = data.cuentas
+    .filter((c: any) => {
+      const p = c.tipo.toLowerCase();
+      return platformFilter === 'all' ? true : p.includes(platformFilter);
+    })
+    .sort((a: any, b: any) => a.tipo.localeCompare(b.tipo));
 
   const viralVideos = filteredVideos.filter((v: any) => v.categoria === 'VIRAL');
   const autoridadVideos = filteredVideos.filter((v: any) => v.categoria === 'AUTORIDAD');
