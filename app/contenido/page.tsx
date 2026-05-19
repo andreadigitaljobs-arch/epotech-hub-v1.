@@ -569,7 +569,7 @@ export default function ContenidoPage() {
       setActiveMision(null);
       localStorage.removeItem('epotech_active_mision');
       // Clear URL search params without page reload
-      window.history.replaceState(null, '', window.location.pathname);
+      router.replace(window.location.pathname, { scroll: false });
     }
   };
 
@@ -711,10 +711,13 @@ export default function ContenidoPage() {
 
   // Auto-mostrar selector de misiones si no hay misión activa al montar
   useEffect(() => {
-    if (mounted && !activeMision) {
-      setShowMissionModal(true);
+    if (mounted && !activeMision && activeTab !== 'historial') {
+      const savedTab = localStorage.getItem('epotech_production_tab');
+      if (savedTab !== 'historial') {
+        setShowMissionModal(true);
+      }
     }
-  }, [mounted, activeMision]);
+  }, [mounted, activeMision, activeTab]);
 
   
   // NUEVOS ESTADOS: Búsqueda y Organización
@@ -818,8 +821,12 @@ export default function ContenidoPage() {
         }
       }
     } else {
-      // Siempre empezar sin misión activa para mostrar el selector al usuario
-      setActiveMision(null);
+      // Restaurar la mision activa guardada si existe, de lo contrario empezar sin ella
+      if (savedMision) {
+        setActiveMision(savedMision);
+      } else {
+        setActiveMision(null);
+      }
     }
 
     if (!tabParam) {
@@ -840,9 +847,9 @@ export default function ContenidoPage() {
     localStorage.setItem('epotech_production_tab', tabId);
     
     // Actualizar URL sin recargar para mantener consistencia
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
     params.set('tab', tabId);
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+    router.replace(`?${params.toString()}`, { scroll: false });
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -852,9 +859,9 @@ export default function ContenidoPage() {
     setSelectedWeek("");
     localStorage.setItem('epotech_guion_tab', tabId);
     
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
     params.set('sub', tabId);
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+    router.replace(`?${params.toString()}`, { scroll: false });
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
