@@ -2113,7 +2113,7 @@ export default function ContenidoPage() {
           <div className="relative w-full bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_rgba(20,45,83,0.12)] overflow-hidden flex flex-col">
             
             {/* Cabecera */}
-            <div className="relative p-6 md:p-8 flex justify-between items-center bg-gradient-to-br from-[#142d53] to-[#0a192f] border-b border-[#48c1d2]/20 overflow-hidden">
+            <div className="relative p-6 md:p-8 flex justify-between items-end bg-gradient-to-br from-[#142d53] to-[#0a192f] border-b border-[#48c1d2]/20 overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#48c1d2]/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
               
               <div className="relative z-10 text-left flex-1">
@@ -2128,13 +2128,13 @@ export default function ContenidoPage() {
                   </>
                 ) : (
                   <>
-                    <div className="flex flex-wrap items-center gap-2 mb-4">
-                      <span className="text-[10px] sm:text-xs font-black text-[#142d53] bg-[#48c1d2] px-3.5 py-1.5 rounded-full uppercase tracking-wider inline-flex shadow-[0_0_15px_rgba(72,193,210,0.4)]">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="whitespace-nowrap text-[9px] font-black text-[#142d53] bg-[#48c1d2] px-3 py-1.5 rounded-full uppercase tracking-wider inline-flex items-center gap-1 shrink-0 shadow-[0_0_15px_rgba(72,193,210,0.4)]">
                         📋 Panel de Actividades
                       </span>
-                      <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full shadow-inner">
+                      <div className="whitespace-nowrap shrink-0 flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full shadow-inner">
                         <span className="text-xs">🔥</span>
-                        <span className="text-[10px] font-bold text-white uppercase tracking-wider">Racha: {streakDays} {streakDays === 1 ? 'Día' : 'Días'}</span>
+                        <span className="text-[9px] font-bold text-white uppercase tracking-wider">Racha: {streakDays} {streakDays === 1 ? 'Día' : 'Días'}</span>
                       </div>
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tighter leading-tight mt-1">
