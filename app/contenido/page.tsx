@@ -2109,7 +2109,7 @@ export default function ContenidoPage() {
 
 
       {mounted && showMissionModal && (
-        <div className="max-w-2xl mx-auto px-3 md:px-6 py-6 pb-4 animate-in fade-in duration-300">
+        <div className="max-w-2xl mx-auto px-3 md:px-6 py-6 pb-4 animate-in fade-in duration-300 content-transition">
           <div className="relative w-full bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_rgba(20,45,83,0.12)] overflow-hidden flex flex-col">
             
             {/* Cabecera */}
@@ -2450,7 +2450,7 @@ export default function ContenidoPage() {
           if (!mision) return null;
           const MisionIcon = mision.icon;
           return (
-            <div className="mx-1 sm:mx-0 mb-10 relative bg-gradient-to-br from-[#142d53] to-[#0a192f] rounded-[2rem] border border-white/8 shadow-2xl shadow-[#142d53]/30 overflow-hidden animate-in slide-in-from-top-6 duration-500">
+            <div className="mx-1 sm:mx-0 mb-10 relative bg-gradient-to-br from-[#142d53] to-[#0a192f] rounded-[2rem] border border-white/8 shadow-2xl shadow-[#142d53]/30 overflow-hidden animate-in slide-in-from-bottom-4 duration-350">
               {/* Glow decorativo */}
               <div className="absolute top-0 right-0 w-72 h-72 bg-[#48c1d2]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#48c1d2]/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
@@ -2498,7 +2498,7 @@ export default function ContenidoPage() {
               </div>
             </div>
 
-            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="mb-6 animate-in fade-in slide-in-from-bottom-3 duration-400 content-transition flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <h1 className="text-2xl md:text-5xl font-black text-[#142d53] leading-[1.1] tracking-tighter">
                   Estudio de <span className="text-[#48c1d2]">Producción</span>
@@ -2628,7 +2628,7 @@ export default function ContenidoPage() {
 
 
 
-      <div className="min-h-[400px]">
+      <div className="min-h-[400px] content-transition" key={activeTab}>
         {activeTab === 'guiones' && (
           <div className="space-y-4">
             {/* Navegación del Estudio de Producción Compacta pero Espaciada */}
@@ -2721,7 +2721,7 @@ export default function ContenidoPage() {
                   </div>
                 )}
 
-                <div className="grid gap-4">
+                <div className="grid gap-4 content-transition" key={guionTab}>
                   {guionTab === 'reels' ? (
                     <>
                       <div className="p-8 bg-gradient-to-br from-[#142d53] to-[#1e3a8a] rounded-[2.5rem] border border-white/10 shadow-xl relative overflow-hidden group mb-4 text-left">
@@ -3956,7 +3956,7 @@ export default function ContenidoPage() {
         </div>
       )}
       {mounted && onboardingSuccessModal.isOpen && createPortal(
-        <div className="fixed inset-0 z-[22000] flex items-center justify-center p-4 md:p-6 bg-[#0a192f]/90 backdrop-blur-md overflow-y-auto animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[22000] flex items-center justify-center p-4 md:p-6 bg-[#0a192f]/90 backdrop-blur-md overflow-y-auto animate-in fade-in duration-300 content-transition">
           <div className="absolute inset-0" onClick={() => setOnboardingSuccessModal(prev => ({ ...prev, isOpen: false }))} />
           
           <div className="relative z-10 bg-[#0a192f]/95 w-full max-w-sm md:max-w-md rounded-[2.5rem] md:rounded-[3rem] border border-[#48c1d2]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] p-6 md:p-10 text-center flex flex-col items-center gap-4 md:gap-6 overflow-hidden my-auto animate-in zoom-in-95 duration-300">

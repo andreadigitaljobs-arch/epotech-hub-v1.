@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -97,7 +97,7 @@ export default function AvancesPage() {
       </div>
 
       {/* Secciones Dinámicas */}
-      <div className="animate-in fade-in slide-in-from-bottom-2 duration-400">
+      <div key={activeTab} className="content-transition">
         
         {/* 1. REPORTES DE PROYECTO (Andrea documenta) */}
         {activeTab === 'reportes' && (

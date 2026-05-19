@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -191,16 +191,16 @@ a:active, button:active, [role="button"]:active {
 }
 
 @keyframes modal-panel-in {
-  from { opacity: 0; transform: scale(0.9) translateY(40px); }
+  from { opacity: 0; transform: scale(0.95) translateY(24px); }
   to   { opacity: 1; transform: scale(1)   translateY(0); }
 }
 
 .modal-backdrop { 
-  animation: modal-backdrop-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; 
+  animation: modal-backdrop-in 0.35s ease-out both; 
 }
 
 .modal-panel { 
-  animation: modal-panel-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both; 
+  animation: modal-panel-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; 
 }
 
 /* Salida Cinemática */
@@ -211,15 +211,15 @@ a:active, button:active, [role="button"]:active {
 
 @keyframes modal-panel-out {
   from { opacity: 1; transform: scale(1) translateY(0); }
-  to   { opacity: 0; transform: scale(0.9) translateY(40px); }
+  to   { opacity: 0; transform: scale(0.97) translateY(16px); }
 }
 
 .modal-backdrop-out {
-  animation: modal-backdrop-out 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: modal-backdrop-out 0.3s ease-in forwards;
 }
 
 .modal-panel-out {
-  animation: modal-panel-out 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: modal-panel-out 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 /* ──────────────────────────────────────────
@@ -257,3 +257,58 @@ body.modal-open main {
   padding-top: 0 !important;
 }
 
+
+
+/* ================================================
+   SMOOTH TAB & CONTENT TRANSITIONS
+   ================================================ */
+
+/* Fade suave para cambios de contenido dentro de una página */
+@keyframes content-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.content-transition {
+  animation: content-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Transición global para todos los links/botones de navegación */
+a, button {
+  transition: color 0.18s ease, background-color 0.18s ease,
+              border-color 0.18s ease, box-shadow 0.18s ease,
+              transform 0.15s ease, opacity 0.18s ease;
+}
+
+/* Entrada suave para tarjetas / cards */
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card-animate {
+  animation: card-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Stagger para listas de tarjetas */
+.card-animate:nth-child(1) { animation-delay: 0.03s; }
+.card-animate:nth-child(2) { animation-delay: 0.08s; }
+.card-animate:nth-child(3) { animation-delay: 0.13s; }
+.card-animate:nth-child(4) { animation-delay: 0.18s; }
+.card-animate:nth-child(5) { animation-delay: 0.22s; }
+.card-animate:nth-child(6) { animation-delay: 0.26s; }
+
+/* Slide suave para paneles / drawers */
+@keyframes slide-up-soft {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up {
+  animation: slide-up-soft 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Transición de color suave para fondos */
+.bg-transition {
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}

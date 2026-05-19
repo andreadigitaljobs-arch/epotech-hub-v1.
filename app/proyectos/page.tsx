@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
@@ -405,8 +405,9 @@ export default function ProyectosPage() {
           </button>
         </div>
 
+      <div key={activeSubTab} className="content-transition">
         {activeSubTab === 'proyectos' && (
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="space-y-4">
           {SERVICES.filter(s => !s.hidden).map((svc) => {
             const svcTasks = tasks.filter((t) => t.service_id === svc.id);
             const progress = calcProgress(svcTasks);
@@ -653,7 +654,7 @@ export default function ProyectosPage() {
         )}
 
         {activeSubTab === 'mensajes' && (
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="space-y-4">
             {/* Filtros de Mensajes */}
             <div className="grid grid-cols-3 gap-1.5 pb-2 px-1">
               {[
@@ -721,7 +722,7 @@ export default function ProyectosPage() {
         )}
 
         {activeSubTab === 'pendientes' && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="space-y-6">
             {/* Header explicativo */}
             <div className="bg-[#48c1d2]/5 border border-[#48c1d2]/20 p-6 rounded-[2.5rem] relative overflow-hidden">
                <div className="absolute top-0 right-0 p-6 opacity-10">
@@ -846,6 +847,7 @@ export default function ProyectosPage() {
             </div>
           </div>
         )}
+      </div>
   </div>
 </div>
 );
