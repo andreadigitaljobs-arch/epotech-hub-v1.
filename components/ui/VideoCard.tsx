@@ -34,18 +34,33 @@ export function VideoCard({
   porqueFunciona,
 }: VideoCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [isClosing, setIsClosing] = useState(false);
   const isIg = platform === "instagram";
   const isTiktok = platform === "tiktok";
 
-  // Bloqueo de Scroll
   useEffect(() => {
     if (isOpen) {
+      setShouldRender(true);
+      setIsClosing(false);
+    } else {
+      setIsClosing(true);
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  // Bloqueo de Scroll
+  useEffect(() => {
+    if (shouldRender && !isClosing) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => { document.body.style.overflow = 'unset'; };
-  }, [isOpen]);
+  }, [shouldRender, isClosing]);
 
   return (
     <>
@@ -89,14 +104,14 @@ export function VideoCard({
       </button>
 
       {/* Modal de Detalles (Portal) */}
-      {isOpen && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-8 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto">
+      {shouldRender && typeof document !== 'undefined' && createPortal(
+        <div className={`fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-8 bg-slate-955/90 backdrop-blur-md overflow-y-auto transition-all duration-300 ${isClosing ? 'opacity-0' : 'opacity-100 animate-in fade-in'}`}>
           <div 
-            className="absolute inset-0" 
+            className="absolute inset-0 bg-transparent" 
             onClick={() => setIsOpen(false)} 
           />
           
-          <div className="relative bg-[#142d53] w-full max-w-lg rounded-[2rem] md:rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden animate-in zoom-in-95 duration-300 max-h-[82vh] md:max-h-[80vh] my-auto flex flex-col">
+          <div className={`relative bg-[#142d53] w-full max-w-lg rounded-[2rem] md:rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden max-h-[82vh] md:max-h-[80vh] my-auto flex flex-col transition-all duration-300 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : 'scale-100 opacity-100 translate-y-0 animate-in zoom-in-95'}`}>
             {/* Header del Modal */}
             <div className="relative h-48 bg-slate-900 overflow-hidden">
                <div className="absolute inset-0 bg-gradient-to-t from-[#142d53] to-transparent z-10" />

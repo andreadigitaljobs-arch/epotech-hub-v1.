@@ -343,11 +343,27 @@ const ConfirmationDialog = ({
   onConfirm: () => void, 
   onCancel: () => void 
 }) => {
-  if (!isOpen) return null;
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      setIsClosing(false);
+    } else {
+      setIsClosing(true);
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  if (!shouldRender) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[20001] flex items-center justify-center p-4 bg-[#0a192f]/80 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto">
-      <div className="bg-white rounded-[2rem] md:rounded-[3rem] p-8 max-w-sm w-full shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+    <div className={`fixed inset-0 z-[20001] flex items-center justify-center p-4 bg-[#0a192f]/80 backdrop-blur-md overflow-y-auto transition-all duration-300 ${isClosing ? 'opacity-0' : 'opacity-100 animate-in fade-in'}`}>
+      <div className={`bg-white rounded-[2rem] md:rounded-[3rem] p-8 max-w-sm w-full shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto transition-all duration-300 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : 'scale-100 opacity-100 translate-y-0 animate-in zoom-in-95'}`}>
         <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 mb-6 mx-auto">
           <AlertCircle size={32} />
         </div>
@@ -2289,8 +2305,20 @@ export default function ContenidoPage() {
       
       {/* MODAL DE DETALLES DE SERIE */}
       {selectedSerie && createPortal(
-        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-center overflow-hidden ${isClosingSerie ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}>
+        <div 
+          onClick={() => {
+            setIsClosingSerie(true);
+            setTimeout(() => {
+              setSelectedSerie(null);
+              setIsClosingSerie(false);
+            }, 300);
+          }}
+          className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-center overflow-hidden ${isClosingSerie ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+        >
+          <div 
+            onClick={e => e.stopPropagation()}
+            className={`bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}
+          >
             <div className="p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100 shrink-0">
               <div className="text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ backgroundColor: `${selectedSerie.color}15` }}>
@@ -2460,8 +2488,14 @@ export default function ContenidoPage() {
       , document.body)}
 
       {selectedStory && createPortal(
-        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-center overflow-hidden ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}>
+        <div 
+          onClick={handleCloseStory}
+          className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-center overflow-hidden ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+        >
+          <div 
+            onClick={e => e.stopPropagation()}
+            className={`bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}
+          >
             <div className="p-6 md:p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100 shrink-0">
               <div className="text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ backgroundColor: `${selectedStory.color}15` }}>
@@ -2526,10 +2560,14 @@ export default function ContenidoPage() {
       )}
       <Toast isVisible={toast.isVisible} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, isVisible: false })} />
 
-      {/* MODAL DE REPORTE DE AUDIO (Paso Final) */}
       {showAudioReport && createPortal(
-        <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-left overflow-hidden ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}>
-          <div className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
+        <div 
+          onClick={handleCloseAudioReport}
+          className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-left overflow-hidden ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+        >
+          <div 
+            onClick={e => e.stopPropagation()}
+            className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
             <div className="p-6 md:p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20 shrink-0">
               <div>
                 <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block italic opacity-70">Módulo de Mentoría Narrativa</span>
@@ -2820,8 +2858,15 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
   };
 
   return createPortal(
-    <div className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#050c18]/90 modal-backdrop overflow-hidden ${isClosing ? 'animate-out fade-out' : ''}`}>
-      <div style={{ backgroundColor: '#142d53' }} className={`w-full max-w-[500px] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col border border-white/10 overflow-hidden modal-panel max-h-[82vh] md:max-h-[80vh] my-auto ${isClosing ? 'animate-out zoom-out slide-out-to-bottom-10' : ''}`}>
+    <div 
+      onClick={handleClose}
+      className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#050c18]/90 overflow-hidden ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+    >
+      <div 
+        onClick={e => e.stopPropagation()}
+        style={{ backgroundColor: '#142d53' }} 
+        className={`w-full max-w-[500px] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col border border-white/10 overflow-hidden max-h-[82vh] md:max-h-[80vh] my-auto ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}
+      >
         <div className="px-8 py-6 border-b border-white/10 flex items-center justify-between bg-black/20 shrink-0">
           <div className="text-left flex-1 mr-4">
             <span className="text-[8px] font-bold text-[#48c1d2] tracking-[0.2em] mb-1 block">Ficha de Producción</span>

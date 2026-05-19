@@ -18,6 +18,14 @@ export function WeeklyHistoryModal({ onClose }: { onClose: () => void }) {
   const [mounted, setMounted] = useState(false);
   const [history, setHistory] = useState<WeekSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 450); // Match globals.css transition durations
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -43,7 +51,7 @@ export function WeeklyHistoryModal({ onClose }: { onClose: () => void }) {
 
   const modal = (
     <div
-      className="modal-backdrop"
+      className={isClosing ? "modal-backdrop-out" : "modal-backdrop"}
       style={{
         position: "fixed",
         inset: 0,
@@ -57,10 +65,10 @@ export function WeeklyHistoryModal({ onClose }: { onClose: () => void }) {
         WebkitBackdropFilter: "blur(12px)",
         overflowY: "auto"
       }}
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
-        className="modal-panel"
+        className={isClosing ? "modal-panel-out" : "modal-panel"}
         style={{
           width: "100%",
           maxWidth: "450px",
@@ -85,7 +93,7 @@ export function WeeklyHistoryModal({ onClose }: { onClose: () => void }) {
             </h2>
             <p className="text-xs text-[var(--text-muted)] font-medium">Progreso acumulado por semana</p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white rounded-full transition-colors">
+          <button onClick={handleClose} className="p-2 hover:bg-white rounded-full transition-colors">
             <X size={24} className="text-[var(--text-muted)]" />
           </button>
         </div>

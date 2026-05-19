@@ -18,6 +18,8 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
   const [hasSignature, setHasSignature] = useState(false);
   const [isLocked, setIsLocked] = useState(!!savedSignature);
   const [mounted, setMounted] = useState(false);
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -29,18 +31,31 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
     }
   }, [savedSignature]);
 
-  // Bloqueo de Scroll
   useEffect(() => {
     if (isOpen) {
+      setShouldRender(true);
+      setIsClosing(false);
+    } else {
+      setIsClosing(true);
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  // Bloqueo de Scroll
+  useEffect(() => {
+    if (shouldRender && !isClosing) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => { document.body.style.overflow = 'unset'; };
-  }, [isOpen]);
+  }, [shouldRender, isClosing]);
 
   useEffect(() => {
-    if (isOpen && canvasRef.current && !isLocked) {
+    if (shouldRender && canvasRef.current && !isLocked) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       if (ctx) {
@@ -70,11 +85,11 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
       window.addEventListener("resize", resize);
       return () => window.removeEventListener("resize", resize);
     }
-  }, [isOpen, isLocked]);
+  }, [shouldRender, isLocked]);
 
   // If already locked, draw the saved signature on open
   useEffect(() => {
-    if (isOpen && isLocked && savedSignature && canvasRef.current) {
+    if (shouldRender && isLocked && savedSignature && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       if (ctx) {
@@ -86,7 +101,7 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
         img.src = savedSignature;
       }
     }
-  }, [isOpen, isLocked, savedSignature]);
+  }, [shouldRender, isLocked, savedSignature]);
 
   const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
     if (isLocked) return;
@@ -164,11 +179,11 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
     }
   };
 
-  if (!mounted || !isOpen) return null;
+  if (!mounted || !shouldRender) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#0a192f]/80 backdrop-blur-sm p-6 md:p-8 animate-in fade-in duration-300 overflow-y-auto">
-      <div className="bg-white w-full max-w-2xl rounded-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[82vh] md:max-h-[80vh] animate-in zoom-in-95 duration-300 w-full my-auto">
+    <div className={`fixed inset-0 z-[10000] flex items-center justify-center bg-[#0a192f]/80 backdrop-blur-sm p-6 md:p-8 overflow-y-auto transition-all duration-300 ${isClosing ? 'opacity-0' : 'opacity-100 animate-in fade-in'}`}>
+      <div className={`bg-white w-full max-w-2xl rounded-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[82vh] md:max-h-[80vh] w-full my-auto transition-all duration-300 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : 'scale-100 opacity-100 translate-y-0 animate-in zoom-in-95'}`}>
         <div className="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/10 flex items-center justify-center text-[#48c1d2]">
