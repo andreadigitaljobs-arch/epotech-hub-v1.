@@ -31,14 +31,6 @@ const TUTORIAL_CARDS = [
     tag: "Contenido"
   },
   {
-    title: "¿Cómo grabar como un pro?",
-    description: "Aprende a capturar los mejores ángulos de tus trabajos para Reels de alto impacto.",
-    icon: Video,
-    path: "/manual",
-    color: "blue",
-    tag: "Producción"
-  },
-  {
     title: "Motor de Inspiración",
     description: "Mira los videos y tendencias que usamos como referencia para tus Reels.",
     icon: PlaySquare,

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { HelpCircle } from "lucide-react";
@@ -10,6 +10,11 @@ import { NavigationProgress } from "./NavigationProgress";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
+  // Force scroll to top on every route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-[var(--bg)] md:flex-row pt-[env(safe-area-inset-top)]">

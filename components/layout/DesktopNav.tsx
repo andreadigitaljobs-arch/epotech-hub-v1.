@@ -49,6 +49,7 @@ export function DesktopNav() {
                   <Link
                     key={item.path}
                     href={item.path}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     className={`flex items-center gap-4 rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 group/item relative ${
                       isActive
                         ? "bg-white text-[#142d53] shadow-[0_10px_25px_rgba(72,193,210,0.2)] scale-[1.02]"

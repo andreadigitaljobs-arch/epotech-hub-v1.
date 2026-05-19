@@ -48,6 +48,7 @@ export function BottomNav() {
             <Link
               key={tab.path}
               href={tab.path}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="relative flex-1 flex flex-col items-center justify-center h-12 transition-all duration-300 active:scale-90"
             >
               <div className={`transition-all duration-500 z-10 flex items-center justify-center ${isActive ? "text-white scale-110" : "text-slate-500"}`}>

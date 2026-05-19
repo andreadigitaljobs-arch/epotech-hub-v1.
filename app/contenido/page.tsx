@@ -393,12 +393,154 @@ const ConfirmationDialog = ({
   );
 };
 
+const MISIONES = [
+  {
+    id: 'checklist',
+    title: "📷 ¿Qué grabar cuando voy a hacer un trabajo?",
+    desc: "Instrucciones paso a paso sobre qué videos capturar antes, durante y después de un trabajo.",
+    icon: ClipboardCheck,
+    tag: "Checklist",
+    tab: 'guiones',
+    sub: 'checklist',
+    featured: true,
+    colorClasses: { bg: 'bg-sky-500', bgLight: 'bg-sky-500/10', text: 'text-sky-600', border: 'border-sky-500/30', hoverBorder: 'group-hover:border-sky-500/40' }
+  },
+  {
+    id: 'historias',
+    title: "🚗 Guía de Videos para Historias",
+    desc: "Ideas rápidas y fáciles para grabar contenido informal en tu día a día (rutas, equipo, pausas).",
+    icon: Users,
+    tag: "Historias",
+    tab: 'guiones',
+    sub: 'historias',
+    colorClasses: { bg: 'bg-orange-500', bgLight: 'bg-orange-500/10', text: 'text-orange-600', border: 'border-orange-500/30', hoverBorder: 'group-hover:border-orange-500/40' }
+  },
+  {
+    id: 'vozoff',
+    title: "🎙️ Grabar Voz en Off",
+    desc: "Estudio interactivo para grabar tu voz sobre los guiones que el equipo ya ha preparado.",
+    icon: Mic,
+    tag: "Voz en Off",
+    tab: 'guiones',
+    sub: 'reels',
+    colorClasses: { bg: 'bg-purple-500', bgLight: 'bg-purple-500/10', text: 'text-purple-600', border: 'border-purple-500/30', hoverBorder: 'group-hover:border-purple-500/40' }
+  },
+  {
+    id: 'pro',
+    title: "🎥 Grabación Hablando a Cámara",
+    desc: "Guías avanzadas para grabarte a ti mismo explicando procesos o mostrando resultados finales.",
+    icon: Video,
+    tag: "A Cámara",
+    tab: 'guiones',
+    sub: 'presentacion',
+    colorClasses: { bg: 'bg-emerald-500', bgLight: 'bg-emerald-500/10', text: 'text-emerald-600', border: 'border-emerald-500/30', hoverBorder: 'group-hover:border-emerald-500/40' }
+  },
+  {
+    id: 'narracion',
+    title: "🗣️ Reportar Día de Trabajo",
+    desc: "Envía un audio corto describiendo tus tareas de hoy para que podamos crear nuevos guiones.",
+    icon: MessageSquare,
+    tag: "Reporte",
+    tab: 'guiones',
+    sub: 'checklist',
+    colorClasses: { bg: 'bg-blue-600', bgLight: 'bg-blue-600/10', text: 'text-blue-600', border: 'border-blue-600/30', hoverBorder: 'group-hover:border-blue-600/40' }
+  },
+  {
+    id: 'historial',
+    title: "📂 Historial de Contenido",
+    desc: "Accede al registro completo y archivo de todos tus audios, guiones aprobados e ideas del pasado.",
+    icon: History,
+    tag: "Historial",
+    tab: 'historial',
+    sub: 'reels',
+    colorClasses: { bg: 'bg-slate-600', bgLight: 'bg-slate-600/10', text: 'text-slate-600', border: 'border-slate-600/30', hoverBorder: 'group-hover:border-slate-600/40' }
+  }
+];
+
 export default function ContenidoPage() {
   useThemeColor("#F0F4F8");
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type') || 'presion';
+
+  const [activeMision, setActiveMision] = useState<string | null>(null);
+  const [showMissionModal, setShowMissionModal] = useState<boolean>(false);
+
+  // Estados de Entrenamiento (Onboarding)
+  const [onboardingDone, setOnboardingDone] = useState<boolean>(false);
+  const [onboardingProgress, setOnboardingProgress] = useState<{ voiceDone: boolean, reportDone: boolean }>({ voiceDone: false, reportDone: false });
+  const [isOnboardingTour, setIsOnboardingTour] = useState<boolean>(false);
+  const [tourStep, setTourStep] = useState<number>(0); // 1 = Voz en off, 2 = Reporte
+  const [tourSubStep, setTourSubStep] = useState<number>(0);
+  const [onboardingSuccessModal, setOnboardingSuccessModal] = useState<{ isOpen: boolean, type: 'voice' | 'report' }>({ isOpen: false, type: 'voice' });
+
+  // Cargar progreso del Onboarding al montar
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isDone = localStorage.getItem('epotech_onboarding_done') === 'true';
+      setOnboardingDone(isDone);
+      
+      const savedProgress = localStorage.getItem('epotech_onboarding_progress');
+      if (savedProgress) {
+        try {
+          setOnboardingProgress(JSON.parse(savedProgress));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
+
+
+  const updateOnboardingProgress = (key: 'voiceDone' | 'reportDone', val: boolean) => {
+    setOnboardingProgress(prev => {
+      const newProg = { ...prev, [key]: val };
+      localStorage.setItem('epotech_onboarding_progress', JSON.stringify(newProg));
+      
+      if (newProg.voiceDone && newProg.reportDone) {
+        setOnboardingDone(true);
+        localStorage.setItem('epotech_onboarding_done', 'true');
+        setIsOnboardingTour(false);
+        setTourStep(0);
+        setTourSubStep(0);
+        showToast("🎉 ¡Entrenamiento completado! Tu Hub de Contenido está 100% activo.", "success");
+      }
+      return newProg;
+    });
+  };
+
+  const handleSelectMision = (misionId: string | null) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    if (misionId === 'narracion') {
+      setActiveMision('checklist');
+      localStorage.setItem('epotech_active_mision', 'checklist');
+      setActiveTab('guiones');
+      localStorage.setItem('epotech_production_tab', 'guiones');
+      setGuionTab('checklist');
+      localStorage.setItem('epotech_guion_tab', 'checklist');
+      setShowAudioReport(true);
+      setReportHelpStep(1);
+    } else if (misionId) {
+      setActiveMision(misionId);
+      localStorage.setItem('epotech_active_mision', misionId);
+      const mision = MISIONES.find(m => m.id === misionId);
+      if (mision) {
+        setActiveTab(mision.tab);
+        localStorage.setItem('epotech_production_tab', mision.tab);
+        if (mision.tab === 'guiones') {
+          setGuionTab(mision.sub as any);
+          localStorage.setItem('epotech_guion_tab', mision.sub);
+        }
+      }
+    } else {
+      setActiveMision(null);
+      localStorage.removeItem('epotech_active_mision');
+      // Clear URL search params without page reload
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  };
 
   const [activeTab, setActiveTab] = useState('guiones');
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -536,6 +678,13 @@ export default function ContenidoPage() {
     };
   }, []);
 
+  // Auto-mostrar selector de misiones si no hay misión activa al montar
+  useEffect(() => {
+    if (mounted && !activeMision) {
+      setShowMissionModal(true);
+    }
+  }, [mounted, activeMision]);
+
   
   // NUEVOS ESTADOS: Búsqueda y Organización
   const [scriptSearchQuery, setScriptSearchQuery] = useState("");
@@ -620,16 +769,36 @@ export default function ContenidoPage() {
     const tabParam = searchParams.get('tab');
     const subTabParam = searchParams.get('sub');
     
+    // Check if there is an active mission in localStorage
+    const savedMision = localStorage.getItem('epotech_active_mision');
+    const isOnboardingComplete = localStorage.getItem('epotech_onboarding_done') === 'true';
+    
     if (tabParam) {
       setActiveTab(tabParam);
+      if (tabParam === 'historial') {
+        setActiveMision('historial');
+        localStorage.setItem('epotech_active_mision', 'historial');
+      } else if (tabParam === 'guiones' && subTabParam) {
+        setGuionTab(subTabParam as any);
+        const matched = MISIONES.find(m => m.tab === tabParam && m.sub === subTabParam);
+        if (matched) {
+          setActiveMision(matched.id);
+          localStorage.setItem('epotech_active_mision', matched.id);
+        }
+      }
     } else {
+      // Siempre empezar sin misión activa para mostrar el selector al usuario
+      setActiveMision(null);
+    }
+
+    if (!tabParam) {
       const savedTab = localStorage.getItem('epotech_production_tab');
       if (savedTab) setActiveTab(savedTab);
     }
 
     if (subTabParam) {
       setGuionTab(subTabParam as any);
-    } else {
+    } else if (!tabParam) {
       const savedSubTab = localStorage.getItem('epotech_guion_tab');
       if (savedSubTab) setGuionTab(savedSubTab as any);
     }
@@ -643,6 +812,8 @@ export default function ContenidoPage() {
     const params = new URLSearchParams(window.location.search);
     params.set('tab', tabId);
     window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleGuionTabChange = (tabId: 'reels' | 'historias' | 'checklist' | 'presentacion') => {
@@ -653,6 +824,8 @@ export default function ContenidoPage() {
     const params = new URLSearchParams(window.location.search);
     params.set('sub', tabId);
     window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCloseStory = () => {
@@ -752,21 +925,6 @@ export default function ContenidoPage() {
           tips: 'Usa un tono muy natural, como si hablaras con un amigo.'
         }
       ]
-    },
-    {
-      id: 'h5',
-      title: '¿Sin Tiempo? Mándalo 📲',
-      mood: 'Instrucción Importante',
-      color: '#8b5cf6',
-      icon: MessageCircle,
-      sequence: [
-        {
-          title: 'Paso Único: Mándanos el Material',
-          desc: 'No te compliques subiendo historias si estás muy ocupado.',
-          script: 'Si grabas algo cool o tomas una foto, ¡no te detengas a editarla! Simplemente mándanosla por WhatsApp o Telegram.',
-          tips: 'Nosotros nos encargamos de subirlo y ponerlo bonito por ti.'
-        }
-      ]
     }
   ];
 
@@ -797,10 +955,25 @@ export default function ContenidoPage() {
   const [isRecordingVoiceover, setIsRecordingVoiceover] = useState(false);
   const voiceoverRecorder = useRef<MediaRecorder | null>(null);
   const voiceoverChunks = useRef<Blob[]>([]);
+  const stopRecordingResolver = useRef<((value: any) => void) | null>(null);
   const [mergedVoiceoverUrl, setMergedVoiceoverUrl] = useState<string | null>(null);
   const [activeVoiceoverAudio, setActiveVoiceoverAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlayingVoiceover, setIsPlayingVoiceover] = useState(false);
+  const [initialHistorialSubTab, setInitialHistorialSubTab] = useState<'stats' | 'audios'>('stats');
 
+  // Sincronizar reactivamente el sub-paso de guía basado en si la toma del paso actual ya fue grabada
+  useEffect(() => {
+    if (isOnboardingTour && tourStep === 1) {
+      const hasFragment = voiceoverFragments.some(f => f.stepIdx === currentStepIdx);
+      if (hasFragment) {
+        setTourSubStep(3);
+      } else {
+        if (!isRecordingVoiceover) {
+          setTourSubStep(1);
+        }
+      }
+    }
+  }, [currentStepIdx, voiceoverFragments, isOnboardingTour, tourStep, isRecordingVoiceover]);
 
 
 
@@ -820,6 +993,9 @@ export default function ContenidoPage() {
   };
 
   const startVoiceoverRecording = async (targetIdx: number = currentStepIdx) => {
+    if (isOnboardingTour && tourStep === 1 && tourSubStep === 1) {
+      setTourSubStep(2);
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
@@ -832,7 +1008,12 @@ export default function ContenidoPage() {
         const url = URL.createObjectURL(audioBlob);
         setVoiceoverFragments(prev => {
           const filtered = prev.filter(f => f.stepIdx !== targetIdx);
-          return [...filtered, { blob: audioBlob, stepIdx: targetIdx, url }];
+          const updated = [...filtered, { blob: audioBlob, stepIdx: targetIdx, url }];
+          if (stopRecordingResolver.current) {
+            stopRecordingResolver.current(updated);
+            stopRecordingResolver.current = null;
+          }
+          return updated;
         });
         stream.getTracks().forEach(track => track.stop());
       };
@@ -850,6 +1031,9 @@ export default function ContenidoPage() {
       voiceoverRecorder.current.stop();
     }
     setIsRecordingVoiceover(false);
+    if (isOnboardingTour && tourStep === 1 && tourSubStep === 2) {
+      setTourSubStep(3);
+    }
   };
 
   const deleteVoiceoverFragment = (targetIdx: number) => {
@@ -891,22 +1075,45 @@ export default function ContenidoPage() {
     }
   }, [voiceoverFragments, selectedScript]);
 
-  const mergeVoiceoverFragments = async (isRetry = false) => {
-    if (isRecordingVoiceover) {
-      stopVoiceoverRecording();
-      if (!isRetry) showToast("Procesando última toma...", "info");
-      // Esperar a que el onstop dispare y guarde el estado antes de unir
-      setTimeout(() => mergeVoiceoverFragments(true), 800);
-      return;
-    }
+  const mergeVoiceoverFragments = async () => {
+    let currentFragments = voiceoverFragments;
 
-    // Trick to get the absolute freshest state from React's fiber before going async
-    const currentFragments = await new Promise<any[]>((resolve) => {
-      setVoiceoverFragments(prev => {
-        resolve(prev);
-        return prev;
+    // Verificar en tiempo real si el grabador del navegador está activo
+    if (voiceoverRecorder.current && voiceoverRecorder.current.state === "recording") {
+      showToast("Procesando última toma...", "info");
+      
+      // Detener grabación y esperar a que el callback 'onstop' resuelva con los fragmentos actualizados
+      currentFragments = await new Promise<any[]>((resolve) => {
+        let resolved = false;
+        
+        // Timeout de seguridad para evitar que la promesa quede colgada si ocurre un error inesperado
+        const safetyTimeout = setTimeout(() => {
+          if (!resolved) {
+            resolved = true;
+            stopRecordingResolver.current = null;
+            resolve(voiceoverFragments);
+          }
+        }, 3000);
+
+        stopRecordingResolver.current = (updatedList) => {
+          if (!resolved) {
+            resolved = true;
+            clearTimeout(safetyTimeout);
+            resolve(updatedList);
+          }
+        };
+
+        stopVoiceoverRecording();
       });
-    });
+    } else {
+      // Truco para obtener los fragmentos más frescos de React si ya no estaba grabando
+      currentFragments = await new Promise<any[]>((resolve) => {
+        setVoiceoverFragments(prev => {
+          resolve(prev);
+          return prev;
+        });
+      });
+    }
 
     if (currentFragments.length === 0) {
       showToast("No has grabado ninguna toma aún", "info");
@@ -957,7 +1164,7 @@ export default function ContenidoPage() {
 
   // Auto-Scroll Inteligente para la Guía
   useEffect(() => {
-    if (showHelp) {
+    if (showHelp || isOnboardingTour) {
       setTimeout(() => {
         const bubbles = document.querySelectorAll('.guide-bubble-active');
         // Usamos la última burbuja en el DOM para priorizar los Modales/Portals que se renderizan al final
@@ -967,10 +1174,22 @@ export default function ContenidoPage() {
         }
       }, 300);
     }
-  }, [showHelp, dashHelpStep, teleHelpStep, reportHelpStep]);
+  }, [showHelp, isOnboardingTour, dashHelpStep, teleHelpStep, reportHelpStep]);
 
   const handleCloseAudioReport = () => {
     setIsClosingAudioReport(true);
+    
+    // REGRESA SIEMPRE AL MODAL PRINCIPAL DE MISIONES AL CERRAR ESTO, DE INMEDIATO
+    setShowMissionModal(true);
+    setActiveMision(null);
+    localStorage.removeItem('epotech_active_mision');
+
+    if (isOnboardingTour) {
+      setIsOnboardingTour(false);
+      setTourStep(0);
+      setTourSubStep(0);
+    }
+
     setTimeout(() => {
       setShowAudioReport(false);
       setIsClosingAudioReport(false);
@@ -1084,11 +1303,18 @@ export default function ContenidoPage() {
       if (insertError) throw insertError;
 
       showToast("¡Audio enviado al equipo con éxito!", "success");
-      handleCloseAudioReport();
       setRecordedAudio(null);
       setAudioBlob(null);
       setRecordTime(0);
       deleteDraftAudio(); // Borrar de emergencia tras envío exitoso
+
+      // Si está en el simulacro de bienvenida, finaliza el onboarding para reporte
+      if (isOnboardingTour && tourStep === 2) {
+        updateOnboardingProgress('reportDone', true);
+        setOnboardingSuccessModal({ isOpen: true, type: 'report' });
+      } else {
+        handleCloseAudioReport();
+      }
     } catch (err) {
       console.error(err);
       showToast("Error al enviar el reporte", "error");
@@ -1131,6 +1357,14 @@ export default function ContenidoPage() {
       setVoiceoverFragments([]);
       setMergedVoiceoverUrl(null);
       deleteVoiceoverDraft(selectedScript.id);
+
+      // Si está en el simulacro de bienvenida, finaliza el onboarding
+      if (isOnboardingTour && tourStep === 1) {
+        updateOnboardingProgress('voiceDone', true);
+        setOnboardingSuccessModal({ isOpen: true, type: 'voice' });
+      } else {
+        setSelectedScript(null);
+      }
     } catch (err) {
       console.error(err);
       showToast('Error al enviar la locución', 'error');
@@ -1189,20 +1423,17 @@ export default function ContenidoPage() {
 
   // --- BLOQUEO MAESTRO DE SCROLL (EVITA DOBLE SCROLL EN MÓVIL) ---
   useEffect(() => {
-    const isAnyModalOpen = !!(selectedScript || selectedStory || showAudioReport || selectedProduction || selectedSerie || confirmDialog.isOpen);
+    const isAnyModalOpen = !!(selectedScript || selectedStory || showAudioReport || selectedProduction || selectedSerie || confirmDialog.isOpen || onboardingSuccessModal.isOpen);
     
     if (isAnyModalOpen) {
       document.body.style.overflow = 'hidden';
-      document.body.style.height = '100vh';
-      document.documentElement.style.overflow = 'hidden';
-      document.documentElement.style.height = '100vh';
-      document.body.style.touchAction = 'none';
+      document.body.classList.add('modal-open');
     } else {
       document.body.style.overflow = '';
       document.body.style.height = '';
       document.documentElement.style.overflow = '';
       document.documentElement.style.height = '';
-      document.body.style.touchAction = '';
+      document.body.classList.remove('modal-open');
     }
     
     return () => {
@@ -1210,9 +1441,9 @@ export default function ContenidoPage() {
       document.body.style.height = '';
       document.documentElement.style.overflow = '';
       document.documentElement.style.height = '';
-      document.body.style.touchAction = '';
+      document.body.classList.remove('modal-open');
     };
-  }, [selectedScript, selectedStory, showAudioReport, selectedProduction, selectedSerie, confirmDialog.isOpen]);
+  }, [selectedScript, selectedStory, showAudioReport, selectedProduction, selectedSerie, confirmDialog.isOpen, onboardingSuccessModal.isOpen]);
 
   const toggleGlobalStatus = async (day: string) => {
     const newDB = { ...contentDB };
@@ -1281,54 +1512,53 @@ export default function ContenidoPage() {
       setVoiceoverFragments([]);
       setMergedVoiceoverUrl(null);
       // No borramos el draft de la DB aquí por si quiere seguir después
+      
+      // SI ESTÁ EN EL TOUR, ABORTA ESTE PASO PERO REGRESA AL MODAL DE MISIONES
+      if (isOnboardingTour) {
+        setIsOnboardingTour(false);
+        setTourStep(0);
+        setTourSubStep(0);
+        setShowMissionModal(true);
+        setActiveMision(null);
+        localStorage.removeItem('epotech_active_mision');
+      }
     }, 500);
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-6 md:p-8 overflow-hidden">
-      <div
-        className={`absolute inset-0 bg-black/90 backdrop-blur-md ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'}`}
-        onClick={handleCloseScript}
-      />
-
-      <div className={`relative z-10 w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}>
-        {/* Encabezado */}
-        <div className="p-5 md:p-6 border-b border-white/5 bg-black/20 flex flex-col md:flex-row justify-between md:items-center text-left gap-4">
-          <div className="flex-1 flex justify-between items-start md:block">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px]">{selectedScript.category}</span>
-                {selectedScript.isPinned && <span className="bg-[#48c1d2]/20 text-[#48c1d2] text-[7px] font-black px-2 py-0.5 rounded-full uppercase border border-[#48c1d2]/30">📌 Video para Fijar</span>}
-              </div>
-              <h2 className="text-xl font-black text-white leading-tight pr-4">{selectedScript.title}</h2>
-            </div>
-            {/* Botón X en móvil */}
-            <button onClick={handleCloseScript} className="md:hidden w-8 h-8 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-white/20 hover:text-white transition-colors border border-white/5">
+    <div className="fixed inset-0 z-[9999] flex items-start justify-center p-4 overflow-y-auto bg-black/90"
+      onClick={(e) => { if (e.target === e.currentTarget) handleCloseScript(); }}
+    >
+      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col my-auto shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}>
+        {/* Encabezado 2 filas */}
+        <div className="border-b border-white/5 bg-black/20">
+          {/* Fila 1: X + Título + Ícono libro */}
+          <div className="px-4 pt-4 pb-2 flex items-center gap-3">
+            <button onClick={handleCloseScript} className="w-9 h-9 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white transition-colors border border-white/5 active:scale-95">
               <X size={16} />
             </button>
-          </div>
-          <div className="flex items-center gap-2 justify-between md:justify-end">
-            <div className="flex items-center bg-white/5 rounded-xl border border-white/5 p-1">
-              <span className="text-[7px] text-white/40 uppercase font-black px-1 mr-1">Voz:</span>
-              <button onClick={() => setVoiceSpeed(0.5)} className={`text-[9px] font-bold px-2 py-1 rounded-md transition-colors ${voiceSpeed === 0.5 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/60 hover:text-white'}`}>0.5x</button>
-              <button onClick={() => setVoiceSpeed(0.85)} className={`text-[9px] font-bold px-2 py-1 rounded-md transition-colors ${voiceSpeed === 0.85 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/60 hover:text-white'}`}>0.8x</button>
-              <button onClick={() => setVoiceSpeed(1)} className={`text-[9px] font-bold px-2 py-1 rounded-md transition-colors ${voiceSpeed === 1 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/60 hover:text-white'}`}>1x</button>
+            <div className="flex-1 min-w-0">
+              <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px] block leading-none mb-0.5">{selectedScript.category}</span>
+              <p className="text-sm font-black text-white leading-tight truncate">{selectedScript.title}</p>
             </div>
             <button
               onClick={() => setShowFullScript(!showFullScript)}
-              className={`flex-1 md:flex-none h-9 px-3 rounded-xl flex items-center justify-center gap-2 transition-all whitespace-nowrap ${showFullScript ? "bg-white/5 text-white/40 border border-white/5" : "bg-[#48c1d2] text-[#0a192f] shadow-lg"}`}
+              className={`shrink-0 h-10 px-3 rounded-2xl flex items-center justify-center gap-1.5 transition-all active:scale-95 ${showFullScript ? "bg-white/5 text-white/40 border border-white/5" : "bg-[#48c1d2] text-[#0a192f] shadow-lg"}`}
             >
-              {showFullScript ? <Zap size={14} /> : <BookOpen size={14} />}
-              <span className="text-[8px] font-black uppercase tracking-tighter">
-                {showFullScript 
-                  ? (selectedScript.isProductionMode ? "GRABAR ESCENAS" : "GRABAR PARTES") 
-                  : "GUION COMPLETO"
-                }
+              {showFullScript ? <Zap size={15} /> : <BookOpen size={15} />}
+              <span className="text-[9px] font-black uppercase tracking-tight">
+                {showFullScript ? "Grabar" : "Ver Guion"}
               </span>
             </button>
-            <button onClick={handleCloseScript} className="hidden md:flex w-10 h-10 rounded-full bg-white/5 items-center justify-center text-white/20 hover:text-white transition-colors border border-white/5">
-              <X size={20} />
-            </button>
+          </div>
+          {/* Fila 2: Velocidad */}
+          <div className="px-4 pb-4 flex items-center gap-2">
+            <span className="text-[8px] text-white/30 uppercase font-black tracking-widest">Velocidad:</span>
+            <div className="flex items-center bg-white/5 rounded-xl border border-white/5 p-1 gap-1">
+              <button onClick={() => setVoiceSpeed(0.5)} className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 0.5 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>0.5x</button>
+              <button onClick={() => setVoiceSpeed(0.85)} className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 0.85 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>0.8x</button>
+              <button onClick={() => setVoiceSpeed(1)} className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 1 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>1x</button>
+            </div>
           </div>
         </div>
 
@@ -1350,7 +1580,7 @@ export default function ContenidoPage() {
                     </div>
                     <ScriptText 
                       text={selectedScript.fullDialogue}
-                      className="text-xl font-medium text-white/90 leading-relaxed italic relative z-10"
+                      className="text-xl font-medium text-white/90 leading-relaxed  relative z-10"
                     />
                   </div>
                 </div>
@@ -1395,7 +1625,7 @@ export default function ContenidoPage() {
                     >
                       {selectedScript.scenes?.[currentStepIdx] && (
                         <>
-                          <h3 className="text-2xl font-black text-white italic tracking-tighter text-center uppercase">
+                          <h3 className="text-2xl font-black text-white  tracking-tighter text-center">
                             {selectedScript?.scenes?.[currentStepIdx]?.title}
                           </h3>
 
@@ -1411,26 +1641,26 @@ export default function ContenidoPage() {
                               {selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay && (
                                 <div className="space-y-2">
                                   <div className="flex justify-between items-start mb-2 relative z-20">
-                                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block italic mt-1">Qué decir:</span>
+                                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block  mt-1">Qué decir:</span>
                                     <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay || ""); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isSpeaking ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500 hover:text-white' : 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 hover:bg-[#48c1d2] hover:text-[#0a192f]'}`} title={isSpeaking ? "Detener pronunciación" : "Escuchar pronunciación"}>
                                       {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
                                     </button>
                                   </div>
                                   <ScriptText 
                                     text={selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay || ""}
-                                    className="text-xl font-black text-white leading-tight italic"
+                                    className="text-xl font-black text-white leading-tight "
                                   />
                                 </div>
                               )}
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Cómo moverse:</span>
+                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 ">Cómo moverse:</span>
                                   <p className="text-[11px] font-bold text-white/80 leading-snug">
                                     {selectedScript?.scenes?.[currentStepIdx]?.talent?.howToMove}
                                   </p>
                                 </div>
                                 <div>
-                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Gesto/Actitud:</span>
+                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 ">Gesto/Actitud:</span>
                                   <p className="text-[11px] font-bold text-white/80 leading-snug">
                                     {selectedScript.scenes[currentStepIdx].talent.gesture}
                                   </p>
@@ -1460,13 +1690,13 @@ export default function ContenidoPage() {
                             <div className="p-6 space-y-6">
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Dónde ponerse:</span>
+                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 ">Dónde ponerse:</span>
                                   <p className="text-[11px] font-bold text-white/80 leading-snug">
                                     {selectedScript.scenes[currentStepIdx].camera.whereToStand}
                                   </p>
                                 </div>
                                 <div>
-                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Ángulo:</span>
+                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 ">Ángulo:</span>
                                   <p className="text-[11px] font-bold text-white/80 leading-snug">
                                     {selectedScript.scenes[currentStepIdx].camera.angle}
                                   </p>
@@ -1474,13 +1704,13 @@ export default function ContenidoPage() {
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 italic">Movimiento:</span>
+                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 ">Movimiento:</span>
                                   <p className="text-[11px] font-bold text-white/80 leading-snug">
                                     {selectedScript.scenes[currentStepIdx].camera.movement}
                                   </p>
                                 </div>
                                 <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                                  <span className="text-[8px] font-black text-red-500 uppercase tracking-widest block mb-1 italic">Evitar:</span>
+                                  <span className="text-[8px] font-black text-red-500 uppercase tracking-widest block mb-1 ">Evitar:</span>
                                   <p className="text-[11px] font-bold text-red-400 leading-snug">
                                     {selectedScript.scenes[currentStepIdx].camera.avoid}
                                   </p>
@@ -1522,7 +1752,7 @@ export default function ContenidoPage() {
                         </div>
                         <ScriptText 
                           text={s.script}
-                          className="text-lg font-medium text-white/90 leading-relaxed italic"
+                          className="text-lg font-medium text-white/90 leading-relaxed "
                         />
                         <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
                           <h5 className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-2"><Video size={10} /> Referencia Visual</h5>
@@ -1531,6 +1761,19 @@ export default function ContenidoPage() {
                       </div>
                     ))}
                   </div>
+                  {isOnboardingTour && tourStep === 1 && (
+                    <div className="mt-8 p-5 bg-[#0a192f] border border-white/10 rounded-[2rem] shadow-xl flex items-start gap-3 max-w-md mx-auto relative z-50 text-left text-white animate-bounce">
+                      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 font-black text-sm">💡</div>
+                      <div className="flex-1">
+                        <span className="text-[9px] font-black text-[#48c1d2] bg-white/5 border border-white/10 px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+                          GUION COMPLETO
+                        </span>
+                        <p className="text-[11px] font-bold text-slate-300 leading-snug">
+                          Aquí puedes ver todo el texto del guion corrido para practicar o leerlo completo. Cuando estés listo para comenzar el simulacro de grabación por partes, presiona el botón azul "GRABAR" arriba a la derecha (o "GRABAR POR PARTES" abajo).
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : mergedVoiceoverUrl ? (
                 <div className="flex flex-col items-center justify-center flex-1 space-y-6 animate-in zoom-in duration-500">
@@ -1551,12 +1794,44 @@ export default function ContenidoPage() {
                     <CustomAudioPlayer title={locucionTitle || selectedScript.title} src={mergedVoiceoverUrl} />
                   </div>
                   <div className="flex flex-col w-full max-w-xs gap-3 mt-4">
-                    <button onClick={handleSendLocucion} disabled={isUploadingLocucion} className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${isUploadingLocucion ? 'bg-white/10 text-white/30' : 'bg-[#48c1d2] text-[#0a192f] hover:scale-105 shadow-xl shadow-[#48c1d2]/20'}`}>
-                      {isUploadingLocucion ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Enviando...</> : <><Share2 size={16} /> Enviar al Equipo</>}
+                    <button 
+                      onClick={handleSendLocucion} 
+                      disabled={isUploadingLocucion} 
+                      className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
+                        isUploadingLocucion 
+                          ? 'bg-white/10 text-white/30' 
+                          : 'bg-[#48c1d2] text-[#0a192f] hover:scale-105 shadow-xl shadow-[#48c1d2]/20'
+                      }`}
+                    >
+                      {isUploadingLocucion ? (
+                        <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Enviando...</>
+                      ) : (
+                        <><Share2 size={16} /> Enviar al Equipo</>
+                      )}
                     </button>
-                    <a href={mergedVoiceoverUrl} download={`Locucion_${selectedScript.id}.wav`} className="w-full py-4 bg-white/5 text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"><Download size={16} /> Descargar Audio Final</a>
-                    <button onClick={() => setMergedVoiceoverUrl(null)} className="w-full py-4 bg-white/5 text-white/50 hover:text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">Revisar Tomas</button>
+                    <a href={mergedVoiceoverUrl} download={`Locucion_${selectedScript.id}.wav`} className="w-full py-4 bg-white/5 text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10">
+                      <Download size={16} /> Descargar Audio Final
+                    </a>
+                    {!isOnboardingTour && (
+                      <button onClick={() => setMergedVoiceoverUrl(null)} className="w-full py-4 bg-white/5 text-white/50 hover:text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
+                        Revisar Tomas
+                      </button>
+                    )}
                   </div>
+
+                  {isOnboardingTour && tourStep === 1 && (
+                    <div className="mt-6 p-5 bg-[#0a192f] border border-white/10 rounded-[2rem] shadow-xl flex items-start gap-3 w-full relative z-50 text-left text-white animate-bounce">
+                      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 font-black text-sm">💡</div>
+                      <div className="flex-1">
+                        <span className="text-[9px] font-black text-[#48c1d2] bg-white/5 border border-white/10 px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+                          PASO FINAL: ENVIAR AUDIO
+                        </span>
+                        <p className="text-[11px] font-bold text-slate-300 leading-snug">
+                          Una vez que ya está todo listo, dale clic al botón de Play en el reproductor de arriba para escuchar tu locución completa, y pausa para detenerla. Cuando termines de revisarla, presiona el botón azul "ENVIAR AL EQUIPO" para registrar tu audio de prueba en nuestra base de datos y completar este simulacro.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>
@@ -1579,7 +1854,7 @@ export default function ContenidoPage() {
                       </h4>
                       <ScriptText 
                         text={selectedScript.steps[currentStepIdx].script}
-                        className="text-2xl font-black text-[#0a192f] leading-[1.1] tracking-tight italic"
+                        className="text-2xl font-black text-[#0a192f] leading-[1.1] tracking-tight "
                         wordClassName="text-[#142d53] border-b border-[#142d53]/40 hover:bg-[#142d53]/10"
                       />
                       <div className="mt-8 flex flex-col items-center">
@@ -1601,6 +1876,46 @@ export default function ContenidoPage() {
                           <button onClick={() => startVoiceoverRecording(currentStepIdx)} className="w-16 h-16 rounded-full bg-[#142d53] shadow-[0_0_20px_rgba(20,45,83,0.3)] flex items-center justify-center text-[#48c1d2] hover:scale-105 active:scale-95 transition-all border-2 border-[#142d53]"><Mic size={28} /></button>
                         )}
                       </div>
+
+                      {/* Globo de ayuda interactiva para el Simulacro 1 */}
+                      {isOnboardingTour && tourStep === 1 && (
+                        <div className="mt-8 p-5 bg-[#0a192f] border border-white/10 rounded-[2rem] animate-bounce shadow-xl flex items-start gap-3 max-w-md mx-auto relative z-50 text-left text-white">
+                          <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 font-black text-sm">💡</div>
+                          <div className="flex-1">
+                            <span className="text-[9px] font-black text-[#48c1d2] bg-white/5 border border-white/10 px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+                              PASO A PASO DEL SIMULACRO
+                            </span>
+                            <p className="text-[11px] font-bold text-slate-300 leading-snug">
+                              {/* Paso 1 (Primera Frase) */}
+                              {currentStepIdx === 0 && (
+                                <>
+                                  {tourSubStep === 1 && "1. Haz clic en el icono del micrófono negro y azul arriba para comenzar a grabar tu primera frase. (O pulsa 'VER GUION' arriba a la derecha si deseas leer todo el texto completo primero, y luego 'GRABAR' para volver a este modo por partes)."}
+                                  {tourSubStep === 2 && "2. Lee la frase en voz alta con tono firme. ¡No te preocupes por detenerla manualmente! Al pulsar 'Siguiente Toma' se guardará sola. (Si te equivocas o quieres escucharla antes, pulsa el micrófono rojo para detener la grabación y verás las opciones de Escuchar, Rehacer o Eliminar)."}
+                                  {tourSubStep === 3 && "3. ¡Excelente! Tu toma está guardada. Puedes usar los botones de arriba para 'Escuchar' tu voz, 'Rehacer' para grabarla de nuevo o 'Eliminar' para borrarla. Si todo está bien, pulsa 'Siguiente Toma' abajo para continuar."}
+                                </>
+                              )}
+
+                              {/* Pasos Intermedios */}
+                              {currentStepIdx > 0 && currentStepIdx < selectedScript.steps.length - 1 && (
+                                <>
+                                  {tourSubStep === 1 && "1. ¡La grabación se inició automáticamente! Lee la frase con energía. Al terminar, pulsa 'Siguiente Toma' para avanzar. (Si quieres escuchar tu voz o corregir, pulsa el micrófono rojo para detener la grabación y ver las opciones de Escuchar, Rehacer o Eliminar)."}
+                                  {tourSubStep === 2 && "2. Lee la frase con energía. Al terminar, simplemente pulsa 'Siguiente Toma' para guardar y avanzar. (Si quieres escuchar tu voz o corregir, pulsa el micrófono rojo para detener la grabación y ver las opciones de Escuchar, Rehacer o Eliminar)."}
+                                  {tourSubStep === 3 && "3. ¡Toma registrada! Puedes 'Escuchar', 'Rehacer' o 'Eliminar' usando los botones de arriba, o presionar el botón azul 'Siguiente Toma' abajo para avanzar."}
+                                </>
+                              )}
+
+                              {/* Último Paso (Frase Final) */}
+                              {currentStepIdx === selectedScript.steps.length - 1 && (
+                                <>
+                                  {tourSubStep === 1 && "1. ¡Última frase! La grabación ya se inició automáticamente. Léela con fuerza. Al terminar, pulsa directamente 'UNIR Y DESCARGAR'. (Si quieres revisar la toma, pulsa el micrófono rojo para ver las opciones de Escuchar, Rehacer o Eliminar)."}
+                                  {tourSubStep === 2 && "2. Lee la frase final con fuerza. Al terminar, presiona directamente el botón azul 'UNIR Y DESCARGAR' para compilar todo. (Si quieres revisarla, pulsa el micrófono rojo para ver las opciones de Escuchar, Rehacer o Eliminar)."}
+                                  {tourSubStep === 3 && "3. ¡Perfecto! Todas tus tomas están guardadas. Puedes 'Escuchar', 'Rehacer' o 'Eliminar' esta toma arriba, o presionar el botón azul 'UNIR Y DESCARGAR' abajo para finalizar el simulacro."}
+                                </>
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </>
@@ -1687,7 +2002,6 @@ export default function ContenidoPage() {
                 ) : (
                   <button 
                     onClick={() => {
-                      if (isRecordingVoiceover) stopVoiceoverRecording();
                       mergeVoiceoverFragments();
                     }} 
                     className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8] flex items-center justify-center gap-2"
@@ -1718,7 +2032,7 @@ export default function ContenidoPage() {
                         <Sparkles size={40} className="text-[#48c1d2] animate-bounce" />
                       </div>
                       <div>
-                        <h3 className="text-xl uppercase italic tracking-tighter mb-1 leading-none">PASO 10: ¡ERES UN PRO!</h3>
+                        <h3 className="text-xl uppercase  tracking-tighter mb-1 leading-none">PASO 10: ¡ERES UN PRO!</h3>
                         <div className="h-1 w-12 bg-[#142d53]/20 mx-auto rounded-full" />
                       </div>
                       <p className="leading-tight font-bold text-sm">Ya sabes cómo crear contenido de élite para Epotech.</p>
@@ -1752,202 +2066,542 @@ export default function ContenidoPage() {
   ) : null;
 
   return (
-    <div className="min-h-screen bg-white pb-32">
+    <div className="min-h-screen bg-white pb-4">
       {/* INDICADOR OFF-LINE */}
       {mounted && isOffline && (
-        <div className="fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-[#142d53] text-[10px] font-black uppercase tracking-widest py-2 px-4 flex items-center justify-center gap-2 shadow-lg animate-in slide-in-from-top duration-300">
+        <div className="fixed top-0 left-0 right-0 z-[100] bg-red-500 text-white text-[10px] font-black uppercase tracking-widest py-2 px-4 flex items-center justify-center gap-2 shadow-lg animate-in slide-in-from-top duration-300">
           <WifiOff size={14} />
           <span>Trabajando en Modo Offline - Datos Cargados de Caché</span>
         </div>
       )}
 
-      <div className={`max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 text-left transition-all duration-300 ${mounted && isOffline ? 'pt-14' : ''}`}>
-      {/* Texto Tutorial Contextual Premium */}
-      <div className="mb-8">
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[#48c1d2]">Estudio de Producción:</span> Aquí es donde ocurre la magia. Envíanos tu reporte de audio al final del día y nosotros generaremos tus guiones estratégicos. También podrás grabar tu voz en off aquí mismo.
-          </p>
-        </div>
-      </div>
 
-      <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 flex justify-between items-start gap-4">
-        <div>
-          <h1 className="text-2xl md:text-5xl font-black text-[#142d53] leading-[1.1] tracking-tighter">
-            Estudio de <span className="text-[#48c1d2]">Producción</span>
-          </h1>
-        </div>
 
-      </div>
-
-      {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}
-      <div className={`mb-8 animate-in fade-in slide-in-from-top-6 duration-1000 delay-200 relative`}>
-        {showHelp && dashHelpStep === 1 && (
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
-            <div className="flex flex-col gap-2">
-              <span>PASO 1: ¡Aquí empieza todo! Antes de los guiones, necesitamos tu narración. Cuéntanos la historia de lo que grabaste hoy.</span>
-              <div className="flex gap-2 justify-end">
-                <button
-                  onClick={(e) => { e.stopPropagation(); setShowAudioReport(true); setReportHelpStep(1); }}
-                  className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
-                >
-                  VER CÓMO SE HACE
-                </button>
+      {mounted && showMissionModal && (
+        <div className="max-w-2xl mx-auto px-3 md:px-6 py-6 pb-4 animate-in fade-in duration-300">
+          <div className="relative w-full bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_rgba(20,45,83,0.12)] overflow-hidden flex flex-col">
+            
+            {/* Cabecera */}
+            <div className="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50 to-transparent">
+              <div className="text-left relative bg-gradient-to-br from-[#142d53] to-[#0a192f] p-6 sm:p-8 rounded-[2rem] shadow-xl overflow-hidden text-white border border-[#48c1d2]/10">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#48c1d2]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                <div className="relative z-10">
+                  {!onboardingDone ? (
+                    <>
+                      <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 border border-[#48c1d2]/20 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
+                        🥇 Entrenamiento Obligatorio
+                      </span>
+                      <h2 className="text-[17px] sm:text-2xl md:text-3xl font-black text-white tracking-tighter leading-none whitespace-nowrap overflow-hidden text-ellipsis">
+                        ¡Bienvenido, <span className="text-[#48c1d2]">Sebastián!</span>
+                      </h2>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex flex-wrap items-center gap-2 mb-4">
+                        <span className="text-[9px] font-black text-[#142d53] bg-[#48c1d2] px-3 py-1.5 rounded-full uppercase tracking-wider inline-block shadow-[0_0_15px_rgba(72,193,210,0.4)]">
+                          📋 Panel de Actividades
+                        </span>
+                        <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full shadow-inner">
+                          <span className="text-[11px]">🔥</span>
+                          <span className="text-[9px] font-bold text-white uppercase tracking-wider">Racha: 3 Días</span>
+                        </div>
+                      </div>
+                      <h2 className="text-[17px] sm:text-2xl md:text-3xl font-black text-white tracking-tighter leading-none whitespace-nowrap overflow-hidden text-ellipsis">
+                        ¿Qué vas a hacer hoy, <span className="text-[#48c1d2]">Sebastián?</span>
+                      </h2>
+                    </>
+                  )}
+                </div>
               </div>
+              {onboardingDone && activeMision && (
+                <button 
+                  onClick={() => setShowMissionModal(false)}
+                  className="w-10 h-10 rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-500 flex items-center justify-center text-slate-400 transition-all border border-slate-200/50"
+                >
+                  <X size={20} />
+                </button>
+              )}
             </div>
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
-          </div>
-        )}
-        <button
-          onClick={() => setShowAudioReport(true)}
-          className={`w-full bg-[#142d53] hover:bg-[#0a192f] text-white p-4 rounded-[2rem] flex items-center justify-between group transition-all shadow-xl shadow-slate-200/50 active:scale-95 border-b-4 border-slate-950 relative overflow-hidden ${showHelp && dashHelpStep === 1 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40 scale-[1.02]' : ''}`}
-        >
-          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-150 transition-transform">
-            <Mic size={60} className="text-white" />
-          </div>
-          <div className="flex items-center gap-4 relative z-10">
-            <div className="w-12 h-12 bg-[#48c1d2]/20 rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-transform shadow-lg backdrop-blur-md border border-[#48c1d2]/30">
-              <Mic className="text-[#48c1d2]" size={24} />
-            </div>
-            <div className="text-left">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.2em] leading-none mb-1 text-white italic">TU NARRACIÓN DEL DÍA</h3>
-              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-[0.1em]">MIRA TU DRIVE Y CUÉNTANOS LA HISTORIA</p>
-            </div>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center relative z-10 border border-white/10 group-hover:bg-white/10 transition-all">
-            <ChevronRight size={20} className="text-[#48c1d2]" />
-          </div>
 
-          {recordedAudio && (
-            <div className="absolute top-2 right-2 flex items-center gap-1 bg-[#48c1d2] text-[#142d53] px-2 py-0.5 rounded-full text-[6px] font-black animate-pulse border border-[#142d53]/20 shadow-lg z-20">
-              <div className="w-1 h-1 bg-[#142d53] rounded-full"></div>
-              BORRADOR PENDIENTE
-            </div>
-          )}
-        </button>
-        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-[0.15em] mt-3 opacity-60">* Úsalo al terminar tu día para transformar tus videos crudos en historias reales.</p>
-      </div>
+            {/* Contenido Modal */}
+            <div className="p-5 md:p-8 space-y-5">
+              {!onboardingDone ? (
+                /* Contenido Onboarding */
+                <div className="space-y-6 text-left">
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wide leading-relaxed">
+                    Para activar la recepción de tus guiones diarios de élite, completa estos dos simulacros rápidos e interactivos de las herramientas clave del Hub.
+                  </p>
+                  
+                  {/* Barra de progreso */}
+                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/60">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">PROGRESO REQUERIDO</span>
+                      <span className="text-[9px] font-black text-[#48c1d2]">
+                        { (onboardingProgress.voiceDone ? 1 : 0) + (onboardingProgress.reportDone ? 1 : 0) } / 2 COMPLETADO
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-[#48c1d2] transition-all duration-500"
+                        style={{ width: `${((onboardingProgress.voiceDone ? 50 : 0) + (onboardingProgress.reportDone ? 50 : 0))}%` }}
+                      />
+                    </div>
+                  </div>
 
-      <div className="flex bg-slate-50 p-1 rounded-2xl mb-6 border border-slate-100">
-        {[
-          { id: 'guiones', name: 'Guiones', icon: Clapperboard, step: 1, help: 'Toca aquí para empezar tu día de grabación.' },
-          { id: 'historial', name: 'Historial', icon: History }
-        ].map((tab) => (
-          <div key={tab.id} className="flex-1 relative">
-            <button
-              onClick={() => { handleTabChange(tab.id); if (tab.step === 1) setDashHelpStep(1); }}
-              className={`w-full py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeTab === tab.id ? 'bg-[#142d53] text-[#48c1d2]' : 'text-slate-400'} ${showHelp && tab.step === 1 && dashHelpStep === 1 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40' : ''}`}
-            >
-              <tab.icon size={12} /> {tab.name}
-            </button>
-            {/* PASO 4: EXPLICACIÓN DE GUIONES DESPUÉS DEL REPORTE */}
-            {showHelp && tab.id === 'guiones' && dashHelpStep === 4 && (
-              <div className="absolute -top-44 left-0 right-0 mx-auto bg-[#142d53] text-[#48c1d2] p-6 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-50 border-2 border-[#48c1d2]/30 animate-in zoom-in duration-300 guide-bubble-active">
-                <div className="flex flex-col gap-2 text-center">
-                  <span className="text-white uppercase tracking-wider text-[11px]">¡Excelente!</span>
-                  <p className="leading-tight opacity-90">Con tu reporte generamos tus guiones profesionales.</p>
-                  <div className="flex gap-2 justify-center mt-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
+                  {/* Simulacros Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Simulacro 1 */}
+                    <div 
+                      onClick={() => {
+                        setIsOnboardingTour(true);
+                        setTourStep(1);
+                        setTourSubStep(1);
+                        
+                        // Cargar el guion de ejemplo
+                        const scriptDeEjemplo = guiones[0] || {
+                          id: 'sample-1',
+                          title: 'Guion de Prueba',
+                          steps: [
+                            { es: 'Esta es tu primera toma de prueba en el Epotech Hub.', en: 'This is your first test take in the Epotech Hub.' },
+                            { es: 'Leo en voz alta y firme para grabar la voz en off.', en: 'I read out loud and firm to record the voice-over.' }
+                          ]
+                        };
+                        setSelectedScript(scriptDeEjemplo);
+                        setGuionTab('reels');
+                        setActiveMision('vozoff');
+                        setActiveTab('guiones');
+                        setShowMissionModal(false); // Cerrar para hacer la grabación
+
+                        if (onboardingProgress.voiceDone) {
+                          setOnboardingProgress(prev => {
+                            const newProg = { ...prev, voiceDone: false };
+                            localStorage.setItem('epotech_onboarding_progress', JSON.stringify(newProg));
+                            return newProg;
+                          });
+                          showToast("Simulacro 1 restablecido para repetir. 🎙️", "info");
+                        }
+                      }}
+                      className={`p-6 rounded-[2rem] border-2 transition-all cursor-pointer group flex flex-col justify-between hover:shadow-lg active:scale-95 duration-200 ${
+                        onboardingProgress.voiceDone 
+                          ? 'border-emerald-500/20 bg-emerald-50/10' 
+                          : 'border-slate-100 bg-slate-50/50 hover:border-[#48c1d2]/40'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex justify-between items-center mb-3">
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${onboardingProgress.voiceDone ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500'}`}>
+                            {onboardingProgress.voiceDone ? <CheckCircle2 size={20} /> : <Mic size={20} />}
+                          </div>
+                          <span className={`text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${onboardingProgress.voiceDone ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+                            {onboardingProgress.voiceDone ? "Hecho" : "Pendiente"}
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-black text-[#142d53]  leading-tight mb-1">1. Grabar Guion de Prueba</h4>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider leading-snug">Aprende a usar el grabador interactivo de Voz en Off.</p>
+                      </div>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-[#48c1d2] mt-4 block">Hacer Simulacro 🎙️ →</span>
+                    </div>
+
+                    {/* Simulacro 2 */}
+                    <div 
+                      onClick={() => {
+                        setIsOnboardingTour(true);
+                        setTourStep(2);
+                        setTourSubStep(1);
+                        setActiveMision('checklist');
+                        localStorage.setItem('epotech_active_mision', 'checklist');
+                        setActiveTab('guiones');
+                        localStorage.setItem('epotech_production_tab', 'guiones');
+                        setGuionTab('checklist');
+                        localStorage.setItem('epotech_guion_tab', 'checklist');
                         setShowAudioReport(true);
-                        setReportHelpStep(2);
-                        setDashHelpStep(0); // Ocultar globo de dash mientras el modal está abierto
+                        setReportHelpStep(1);
+                        setShowMissionModal(false); // Cerrar para el modal de reportes
+
+                        if (onboardingProgress.reportDone) {
+                          setOnboardingProgress(prev => {
+                            const newProg = { ...prev, reportDone: false };
+                            localStorage.setItem('epotech_onboarding_progress', JSON.stringify(newProg));
+                            return newProg;
+                          });
+                          showToast("Simulacro 2 restablecido para repetir. 🗣️", "info");
+                        }
                       }}
-                      className="bg-white/5 text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-white/10 transition-all text-[8px] border border-[#48c1d2]/20"
+                      className={`p-6 rounded-[2rem] border-2 transition-all cursor-pointer group flex flex-col justify-between hover:shadow-lg active:scale-95 duration-200 ${
+                        onboardingProgress.reportDone 
+                          ? 'border-emerald-500/20 bg-emerald-50/10' 
+                          : 'border-slate-100 bg-slate-50/50 hover:border-[#48c1d2]/40'
+                      }`}
                     >
-                      VOLVER
-                    </button>
+                      <div>
+                        <div className="flex justify-between items-center mb-3">
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${onboardingProgress.reportDone ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500'}`}>
+                            {onboardingProgress.reportDone ? <CheckCircle2 size={20} /> : <MessageSquare size={20} />}
+                          </div>
+                          <span className={`text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${onboardingProgress.reportDone ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+                            {onboardingProgress.reportDone ? "Hecho" : "Pendiente"}
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-black text-[#142d53]  leading-tight mb-1">2. Reportar un Trabajo</h4>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider leading-snug">Simula responder las 5 preguntas clave del día en audio.</p>
+                      </div>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-[#48c1d2] mt-4 block">Hacer Simulacro 🗣️ →</span>
+                    </div>
+                  </div>
+
+                  {/* Reset Onboarding Button inside Onboarding stage */}
+                  <div className="pt-4 border-t border-slate-100 flex justify-center">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleTabChange('guiones');
-                        setDashHelpStep(5);
+                      onClick={() => {
+                        localStorage.removeItem('epotech_onboarding_done');
+                        localStorage.removeItem('epotech_onboarding_progress');
+                        setOnboardingDone(false);
+                        setOnboardingProgress({ voiceDone: false, reportDone: false });
+                        setIsOnboardingTour(false);
+                        setTourStep(0);
+                        setTourSubStep(0);
+                        setSelectedScript(null);
+                        setMergedVoiceoverUrl(null);
+                        setActiveMision(null);
+                        showToast("¡Progreso de entrenamiento restablecido! 🔄", "info");
                       }}
-                      className="bg-[#48c1d2] text-[#142d53] px-4 py-2 rounded-xl hover:scale-105 transition-all text-[9px] font-black shadow-lg"
+                      className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center gap-1.5 shadow-sm border border-slate-200"
                     >
-                      VER MIS GUIONES
+                      🔄 Reiniciar Progreso de Simulacros
                     </button>
                   </div>
                 </div>
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#142d53] rotate-45 border-r-2 border-b-2 border-[#48c1d2]/30"></div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+              ) : (
+                /* Contenido Selector Real de Misiones */
+                <div className="space-y-6 text-left">
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wide leading-relaxed">
+                    Selecciona una tarea para comenzar. La interfaz se adaptará para mostrarte únicamente las herramientas que necesitas.
+                  </p>
+                  
+                  {/* Grid de Botones Directos */}
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    {MISIONES.map((mision) => {
+                      const Icon = mision.icon;
+                      const isActive = activeMision === mision.id;
+                      const colors = mision.colorClasses;
+                      
+                      // Calcular pendientes reales (Dynamic Badge)
+                      let dynamicBadge = undefined;
+                      if (mision.id === 'vozoff' && guiones) {
+                        const count = guiones.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO').length;
+                        if (count > 0) dynamicBadge = `${count} Pendiente${count !== 1 ? 's' : ''}`;
+                      } else if (mision.id === 'pro' && guionesPresentacion) {
+                        const count = guionesPresentacion.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO').length;
+                        if (count > 0) dynamicBadge = `${count} Pendiente${count !== 1 ? 's' : ''}`;
+                      }
 
-      {/* Texto Tutorial Contextual */}
-      <div className="mb-8">
-        {activeTab === 'guiones' && (
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[#48c1d2]">Mis Guiones:</span> Aquí tienes el contenido listo para grabar basado en tus trabajos más recientes.
-          </p>
+                      return (
+                        <div
+                          key={mision.id}
+                          onClick={() => {
+                            handleSelectMision(mision.id);
+                            setShowMissionModal(false);
+                          }}
+                          className={`relative p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border transition-all cursor-pointer group flex flex-col justify-between hover:shadow-xl active:scale-[0.98] duration-300 overflow-hidden ${
+                            mision.featured ? 'col-span-2' : 'col-span-1'
+                          } ${
+                            isActive 
+                              ? `border-[#48c1d2] bg-[#48c1d2]/5 shadow-md shadow-[#48c1d2]/10` 
+                              : `border-slate-200/60 bg-white ${colors.hoverBorder}`
+                          }`}
+                        >
+                          {/* Gradient Hover Effect */}
+                          <div className={`absolute inset-0 bg-gradient-to-br from-white to-slate-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}></div>
+                          
+                          <div className="relative z-10 flex-1 flex flex-col">
+                            <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mb-4 gap-3">
+                              <div className={`w-10 h-10 rounded-[14px] flex items-center justify-center shrink-0 transition-colors duration-300 shadow-sm ${isActive ? 'bg-[#48c1d2] text-white' : `${colors.bgLight} ${colors.text} group-hover:${colors.bg} group-hover:text-white`}`}>
+                                <Icon size={20} className="sm:w-5 sm:h-5" />
+                              </div>
+                              <div className="flex flex-wrap gap-2 items-center">
+                                {dynamicBadge && (
+                                  <span className="text-[7px] sm:text-[8px] font-black uppercase tracking-widest bg-red-100 text-red-600 px-2 sm:px-2.5 py-1 rounded-full shadow-sm animate-pulse border border-red-200">
+                                    {dynamicBadge}
+                                  </span>
+                                )}
+                                <span className={`text-[7px] sm:text-[8px] font-black uppercase tracking-widest px-2 sm:px-2.5 py-1 rounded-full transition-all text-center border ${isActive ? 'bg-[#48c1d2] text-white border-[#48c1d2]' : `bg-slate-50 text-slate-500 border-slate-200 group-hover:${colors.border} group-hover:${colors.text}`}`}>
+                                  {mision.tag}
+                                </span>
+                              </div>
+                            </div>
+                            <h4 className="text-[13px] sm:text-[15px] font-black text-[#142d53] leading-tight mb-2 tracking-tight">{mision.title}</h4>
+                            <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-relaxed">{mision.desc}</p>
+                          </div>
+                          
+                          <div className="relative z-10 mt-5 flex justify-end">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-[#48c1d2] text-white shadow-md' : 'bg-slate-100 text-slate-400 group-hover:bg-[#142d53] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg'}`}>
+                              <ArrowRight size={14} className={isActive ? '' : '-translate-x-0.5 group-hover:translate-x-0 transition-transform'} />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Reset Onboarding Button */}
+                  <div className="pt-4 border-t border-slate-100 flex justify-center">
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem('epotech_onboarding_done');
+                        localStorage.removeItem('epotech_onboarding_progress');
+                        setOnboardingDone(false);
+                        setOnboardingProgress({ voiceDone: false, reportDone: false });
+                        setIsOnboardingTour(false);
+                        setTourStep(0);
+                        setTourSubStep(0);
+                        setSelectedScript(null);
+                        setMergedVoiceoverUrl(null);
+                        setActiveMision(null);
+                        showToast("¡Entrenamiento restablecido! 🔄", "info");
+                      }}
+                      className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center gap-1.5 shadow-sm border border-slate-200"
+                    >
+                      🔄 Reiniciar Entrenamiento de Bienvenida
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Pie de Página */}
+            <div className="p-6 md:p-8 bg-slate-50 border-t border-slate-100 text-center shrink-0">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+                El Hub Epotech configura tu entorno de producción de forma autónoma.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {mounted && activeMision && (
+        <div className={`max-w-5xl mx-auto px-4 md:px-8 ${activeMision ? 'pt-8 md:pt-12' : 'py-6'} pb-8 text-left transition-all duration-300 ${mounted && isOffline ? 'pt-14' : ''}`}>
+        
+        {/* Mission Control Bar */}
+        {activeMision && (() => {
+          const mision = MISIONES.find(m => m.id === activeMision);
+          if (!mision) return null;
+          const MisionIcon = mision.icon;
+          return (
+            <div className="mx-1 sm:mx-0 mb-10 p-5 md:p-6 bg-[#142d53] rounded-[2.5rem] border border-white/10 shadow-2xl shadow-[#142d53]/15 flex flex-col sm:flex-row items-center justify-between gap-4 animate-in slide-in-from-top-6 duration-500">
+              <div className="flex items-center gap-4 text-left">
+                <div className="w-12 h-12 bg-[#48c1d2]/20 rounded-2xl flex items-center justify-center shadow-lg border border-[#48c1d2]/30">
+                  <MisionIcon className="text-[#48c1d2]" size={22} />
+                </div>
+                <div>
+                  <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-1 block">{mision.tag}</span>
+                  <h2 className="text-lg md:text-xl font-black text-white  tracking-tighter leading-none">
+                    {mision.title.split(':').pop()?.trim() || mision.title}
+                  </h2>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  handleSelectMision(null);
+                  setShowMissionModal(true);
+                }}
+                className="px-5 py-3 bg-white/5 hover:bg-white/10 text-white hover:text-[#48c1d2] rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 active:scale-95 flex items-center gap-2 shrink-0 shadow-lg"
+              >
+                ↺ Cambiar de Actividad
+              </button>
+            </div>
+          );
+        })()}
+
+        {!activeMision && (
+          <>
+            {/* Texto Tutorial Contextual Premium */}
+            <div className="mb-8">
+              <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+                  <span className="text-[#48c1d2]">Estudio de Producción:</span> Aquí es donde ocurre la magia. Envíanos tu reporte de audio al final del día y nosotros generaremos tus guiones estratégicos. También podrás grabar tu voz en off aquí mismo.
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h1 className="text-2xl md:text-5xl font-black text-[#142d53] leading-[1.1] tracking-tighter">
+                  Estudio de <span className="text-[#48c1d2]">Producción</span>
+                </h1>
+              </div>
+              {onboardingDone && (
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('epotech_onboarding_done');
+                    localStorage.removeItem('epotech_onboarding_progress');
+                    setOnboardingDone(false);
+                    setOnboardingProgress({ voiceDone: false, reportDone: false });
+                    setIsOnboardingTour(false);
+                    setTourStep(0);
+                    setTourSubStep(0);
+                    setSelectedScript(null);
+                    setMergedVoiceoverUrl(null);
+                    setActiveMision(null);
+                    setShowMissionModal(true);
+                    showToast("¡Entrenamiento de Bienvenida restablecido! 🔄", "info");
+                  }}
+                  className="px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-[#142d53] rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
+                >
+                  🔄 Reiniciar Entrenamiento
+                </button>
+              )}
+            </div>
+
+            {/* REPORTE DE AUDIO - ACCESO DIRECTO DE ELITE */}
+            <div className={`mb-8 animate-in fade-in slide-in-from-top-6 duration-1000 delay-200 relative`}>
+              {showHelp && dashHelpStep === 1 && (
+                <div className="absolute -top-32 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
+                  <div className="flex flex-col gap-2">
+                    <span>PASO 1: ¡Aquí empieza todo! Antes de los guiones, necesitamos tu narración. Cuéntanos la historia de lo que grabaste hoy.</span>
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setShowAudioReport(true); setReportHelpStep(1); }}
+                        className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
+                      >
+                        VER CÓMO SE HACE
+                      </button>
+                    </div>
+                  </div>
+                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#48c1d2] rotate-45 border-r-2 border-b-2 border-white/20"></div>
+                </div>
+              )}
+              <button
+                onClick={() => setShowAudioReport(true)}
+                className={`w-full bg-[#142d53] hover:bg-[#0a192f] text-white p-4 rounded-[2rem] flex items-center justify-between group transition-all shadow-xl shadow-slate-200/50 active:scale-95 border-b-4 border-slate-950 relative overflow-hidden ${showHelp && dashHelpStep === 1 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40 scale-[1.02]' : ''}`}
+              >
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-150 transition-transform">
+                  <Mic size={60} className="text-white" />
+                </div>
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="w-12 h-12 bg-[#48c1d2]/20 rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-transform shadow-lg backdrop-blur-md border border-[#48c1d2]/30">
+                    <Mic className="text-[#48c1d2]" size={24} />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-[11px] font-black uppercase tracking-[0.2em] leading-none mb-1 text-white ">TU NARRACIÓN DEL DÍA</h3>
+                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-[0.1em]">MIRA TU DRIVE Y CUÉNTANOS LA HISTORIA</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center relative z-10 border border-white/10 group-hover:bg-white/10 transition-all">
+                  <ChevronRight size={20} className="text-[#48c1d2]" />
+                </div>
+
+                {recordedAudio && (
+                  <div className="absolute top-2 right-2 flex items-center gap-1 bg-[#48c1d2] text-[#142d53] px-2 py-0.5 rounded-full text-[6px] font-black animate-pulse border border-[#142d53]/20 shadow-lg z-20">
+                    <div className="w-1 h-1 bg-[#142d53] rounded-full"></div>
+                    BORRADOR PENDIENTE
+                  </div>
+                )}
+              </button>
+              <p className="text-[8px] text-slate-400 font-bold uppercase tracking-[0.15em] mt-3 opacity-60">* Úsalo al terminar tu día para transformar tus videos crudos en historias reales.</p>
+            </div>
+
+            <div className="flex bg-slate-50 p-1 rounded-2xl mb-6 border border-slate-100">
+              {[
+                { id: 'guiones', name: 'Guiones', icon: Clapperboard, step: 1, help: 'Toca aquí para empezar tu día de grabación.' },
+                { id: 'historial', name: 'Historial', icon: History }
+              ].map((tab) => (
+                <div key={tab.id} className="flex-1 relative">
+                  <button
+                    onClick={() => { handleTabChange(tab.id); if (tab.step === 1) setDashHelpStep(1); }}
+                    className={`w-full py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeTab === tab.id ? 'bg-[#142d53] text-[#48c1d2]' : 'text-slate-400'} ${showHelp && tab.step === 1 && dashHelpStep === 1 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40' : ''}`}
+                  >
+                    <tab.icon size={12} /> {tab.name}
+                  </button>
+                  {/* PASO 4: EXPLICACIÓN DE GUIONES DESPUÉS DEL REPORTE */}
+                  {showHelp && tab.id === 'guiones' && dashHelpStep === 4 && (
+                    <div className="absolute -top-44 left-0 right-0 mx-auto bg-[#142d53] text-[#48c1d2] p-6 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 max-w-[calc(100vw-40px)] z-50 border-2 border-[#48c1d2]/30 animate-in zoom-in duration-300 guide-bubble-active">
+                      <div className="flex flex-col gap-2 text-center">
+                        <span className="text-white uppercase tracking-wider text-[11px]">¡Excelente!</span>
+                        <p className="leading-tight opacity-90">Con tu reporte generamos tus guiones profesionales.</p>
+                        <div className="flex gap-2 justify-center mt-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowAudioReport(true);
+                              setReportHelpStep(2);
+                              setDashHelpStep(0);
+                            }}
+                            className="bg-white/5 text-[#48c1d2] px-3 py-1.5 rounded-xl hover:bg-white/10 transition-all text-[8px] border border-[#48c1d2]/20"
+                          >
+                            VOLVER
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTabChange('guiones');
+                              setDashHelpStep(5);
+                            }}
+                            className="bg-[#48c1d2] text-[#142d53] px-4 py-2 rounded-xl hover:scale-105 transition-all text-[9px] font-black shadow-lg"
+                          >
+                            VER MIS GUIONES
+                          </button>
+                        </div>
+                      </div>
+                      <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#142d53] rotate-45 border-r-2 border-b-2 border-[#48c1d2]/30"></div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
         )}
-        {activeTab === 'calendario' && (
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-            <span className="text-[#48c1d2]">Cronograma de Publicación:</span> Mira qué toca publicar hoy. La constancia es la clave para crecer en Utah.
-          </p>
-        )}
-        {activeTab === 'historial' && (
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-relaxed">
-            <span className="text-[#48c1d2]">Historial de Publicaciones:</span> Revisa tus videos pasados y entiende qué está trayendo clientes reales a Epotech.
-          </p>
-        )}
-      </div>
+
+
 
       <div className="min-h-[400px]">
         {activeTab === 'guiones' && (
           <div className="space-y-4">
             {/* Navegación del Estudio de Producción Compacta pero Espaciada */}
             {/* Navegación del Estudio de Producción - Ahora Simplificada */}
-            <div className="grid grid-cols-2 md:grid-cols-4 bg-[#0a192f]/5 p-1.5 rounded-[2rem] mb-6 gap-2 border border-slate-200/60">
-              <button
-                onClick={() => handleGuionTabChange('reels')}
-                className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'reels'
-                    ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
-                    : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
-                  }`}
-              >
-                <Mic size={15} /> Voz en Off
-              </button>
-              <button
-                onClick={() => handleGuionTabChange('historias')}
-                className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'historias'
-                    ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
-                    : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
-                  }`}
-              >
-                <Sparkles size={15} /> Historias de Conexión
-              </button>
-              <button
-                onClick={() => handleGuionTabChange('checklist')}
-                className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'checklist'
-                    ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
-                    : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
-                  }`}
-              >
-                <CheckCircle2 size={15} /> Checklist de Obra
-              </button>
-              <button
-                onClick={() => handleGuionTabChange('presentacion')}
-                className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'presentacion'
-                    ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
-                    : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
-                  }`}
-              >
-                <Clapperboard size={15} /> Grabación Pro
-              </button>
-            </div>
+            {!activeMision && (
+              <div className="grid grid-cols-2 md:grid-cols-4 bg-[#0a192f]/5 p-1.5 rounded-[2rem] mb-6 gap-2 border border-slate-200/60">
+                <button
+                  onClick={() => handleGuionTabChange('reels')}
+                  className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'reels'
+                      ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
+                      : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                    }`}
+                >
+                  <Mic size={15} /> Voz en Off
+                </button>
+                <button
+                  onClick={() => handleGuionTabChange('historias')}
+                  className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'historias'
+                      ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
+                      : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                    }`}
+                >
+                  <Sparkles size={15} /> Historias de Conexión
+                </button>
+                <button
+                  onClick={() => handleGuionTabChange('checklist')}
+                  className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'checklist'
+                      ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
+                      : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                    }`}
+                >
+                  <CheckCircle2 size={15} /> Checklist de Obra
+                </button>
+                <button
+                  onClick={() => handleGuionTabChange('presentacion')}
+                  className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'presentacion'
+                      ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
+                      : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                    }`}
+                >
+                  <Clapperboard size={15} /> Grabación Pro
+                </button>
+              </div>
+            )}
 
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 text-left">
               <div className="bg-[#142d53]/5 p-6 rounded-[2.5rem] border border-[#142d53]/10">
-                <h3 className="text-lg font-black text-[#142d53] mb-2 tracking-tight">
-                  {guionTab === 'reels' && 'Estudio de Voz en Off'}
-                  {guionTab === 'historias' && 'Laboratorio de Historias'}
-                  {guionTab === 'checklist' && 'Checklist de Grabación en Campo'}
-                  {guionTab === 'presentacion' && 'Producción Profesional (Cámara)'}
-                </h3>
+
                 
                 {/* Tarjeta de Instrucciones Dinámica */}
                 {guionTab !== 'historias' && guionTab !== 'checklist' && (
@@ -1958,7 +2612,7 @@ export default function ContenidoPage() {
                     {guionTab === 'reels' && <Mic size={16} />}
                     {guionTab === 'presentacion' && <Clapperboard size={16} />}
                   </div>
-                  <p className="text-[11px] font-bold text-slate-600 leading-relaxed italic">
+                  <p className="text-[11px] font-bold text-slate-600 leading-relaxed ">
                     {guionTab === 'reels' && 'Graba tu voz palabra por palabra siguiendo el guion. Este audio servirá como la narración profesional (voice-over) para tus videos.'}
                     {guionTab === 'presentacion' && (
                       enCamaraSubTab === 'series' 
@@ -2001,9 +2655,9 @@ export default function ContenidoPage() {
                         </div>
                         <div className="relative z-10">
                           <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-3 block">Próximamente: Tu Guion Personalizado</span>
-                          <h4 className="text-xl font-black text-white italic tracking-tighter mb-3">Laboratorio de Inteligencia <span className="text-[#48c1d2]">Epotech</span></h4>
+                          <h4 className="text-xl font-black text-white  tracking-tighter mb-3">Laboratorio de Inteligencia <span className="text-[#48c1d2]">Epotech</span></h4>
                           <p className="text-[11px] font-medium text-slate-300 leading-relaxed max-w-[85%]">
-                            "Usa el <span className="text-[#48c1d2] font-black italic">Reporte de Audio</span> al final de tu jornada. Nuestro equipo procesará tus notas y generará aquí mismo un guion estratégico basado en tus obras reales de hoy."
+                            "Usa el <span className="text-[#48c1d2] font-black ">Reporte de Audio</span> al final de tu jornada. Nuestro equipo procesará tus notas y generará aquí mismo un guion estratégico basado en tus obras reales de hoy."
                           </p>
                           <div className="mt-6 flex items-center gap-3">
                             <div className="w-2 h-2 rounded-full bg-[#48c1d2] animate-pulse"></div>
@@ -2033,6 +2687,7 @@ export default function ContenidoPage() {
                       {/* Sistema de Pestañas de Tiempo (Pills) */}
                       {(() => {
                         const filtered = guiones.filter(s => {
+                          if (s.category.toUpperCase() === 'PLANTILLA DE ENTRENAMIENTO') return false;
                           if (!scriptSearchQuery) return true;
                           const query = normalizeText(scriptSearchQuery);
                           return normalizeText(s.title).includes(query) || 
@@ -2084,7 +2739,7 @@ export default function ContenidoPage() {
                                     <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
                                     <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
                                     {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
-                                      <p className="text-[9px] font-bold text-slate-400 mt-1 italic italic">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
+                                      <p className="text-[9px] font-bold text-slate-400 mt-1  ">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
                                     )}
                                   </div>
                                   <ChevronRight size={16} className="text-slate-200 group-hover:text-[#48c1d2] transition-all" />
@@ -2109,7 +2764,7 @@ export default function ContenidoPage() {
                             <h5 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest mb-2 flex items-center gap-2">
                               <ShieldCheck size={12} /> Estrategia de Marca (Video Fijado)
                             </h5>
-                            <p className="text-[11px] font-bold text-slate-900/70 leading-relaxed italic">
+                            <p className="text-[11px] font-bold text-slate-900/70 leading-relaxed ">
                               "Estos 3 videos son los pilares de tu perfil. Al fijarlos (Pin), aseguras que cualquier persona nueva entienda de inmediato quién eres y cómo contratarte."
                             </p>
                           </div>
@@ -2286,8 +2941,8 @@ export default function ContenidoPage() {
                                 </div>
                                 <div className="text-left flex-1">
                                   <span className="text-[8px] font-black uppercase tracking-[2px] mb-1 block" style={{ color: serie.color }}>Serie Recomendada</span>
-                                  <h4 className="text-lg font-black text-[#142d53] leading-tight mb-2 italic">{serie.title}</h4>
-                                  <p className="text-xs font-bold text-slate-500 leading-relaxed italic mb-4">"{serie.description}"</p>
+                                  <h4 className="text-lg font-black text-[#142d53] leading-tight mb-2 ">{serie.title}</h4>
+                                  <p className="text-xs font-bold text-slate-500 leading-relaxed  mb-4">"{serie.description}"</p>
                                   <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-full w-fit">
                                     <Sparkles size={10} className="text-[#48c1d2]" />
                                     <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{serie.benefit}</span>
@@ -2303,8 +2958,8 @@ export default function ContenidoPage() {
                             <div className="w-20 h-20 bg-white rounded-[2rem] shadow-sm flex items-center justify-center text-slate-300 mb-6 border border-slate-100">
                               <Sparkles size={40} className="animate-pulse" />
                             </div>
-                            <h5 className="text-xl font-black text-[#142d53] italic mb-2 tracking-tighter">Laboratorio de Contenido Pro</h5>
-                            <p className="text-sm font-bold text-slate-400 max-w-[280px] leading-relaxed italic">
+                            <h5 className="text-xl font-black text-[#142d53]  mb-2 tracking-tighter">Laboratorio de Contenido Pro</h5>
+                            <p className="text-sm font-bold text-slate-400 max-w-[280px] leading-relaxed ">
                               "Próximamente se estarán colocando guiones estratégicos por aquí."
                             </p>
                             <div className="mt-8 flex items-center gap-2">
@@ -2318,41 +2973,16 @@ export default function ContenidoPage() {
                     </div>
                   ) : guionTab === 'checklist' ? (
                     <div className="grid grid-cols-1 gap-6 text-left">
-                      {/* INTEGRACIÓN DEL MANUAL / CHECKLIST DE GRABACIÓN EN CAMPO */}
-                      <div>
-                        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-                            <span className="text-[#48c1d2]">Guía completa de grabación:</span> Esta sección te muestra exactamente qué necesitamos que grabes o fotografíes en cada momento del día. Navega por las pestañas para conocer lo que debes capturar en el "Antes", "Durante" y "Después" del trabajo, además de ideas para tus historias de conexión. <span className="text-[#142d53] bg-[#48c1d2]/20 px-1 rounded">(Toca los elementos con "¿CÓMO GRABARLO?" para ver consejos técnicos)</span>
-                          </p>
-                        </div>
-                      </div>
+
 
                       <div className="space-y-6">
-                        {/* Regla de Oro Compacta */}
-                        <div className="group bg-gradient-to-br from-[#142d53] to-[#1e3a8a] rounded-[2.5rem] p-8 relative overflow-hidden shadow-2xl border border-white/10">
-                          <div className="absolute -right-6 -bottom-6 opacity-[0.1] group-hover:opacity-20 transition-all duration-700 group-hover:scale-110">
-                            <Zap size={140} className="text-[#48c1d2]" />
-                          </div>
-                          <div className="relative z-10">
-                            <div className="flex items-center gap-2 mb-3">
-                              <div className="w-6 h-6 rounded-lg bg-[#48c1d2] flex items-center justify-center text-[#142d53]">
-                                <Star size={12} fill="currentColor" />
-                              </div>
-                              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Lo más importante</h3>
-                            </div>
-                            <p className="text-xl md:text-2xl font-black italic leading-tight text-white tracking-tight">
-                              "{checklistData.regla_oro}"
-                            </p>
-                            <div className="mt-4 flex items-center gap-2">
-                              <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] animate-pulse" />
-                              <span className="text-[8px] font-black uppercase tracking-widest text-white/40">Calidad Epotech</span>
-                            </div>
-                          </div>
-                        </div>
+                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
+                          Navega por cada etapa y graba lo que corresponde en ese momento del trabajo.
+                        </p>
 
                         {/* Selector de Fase Compacto */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                          {checklistData.fases.map((fase: any) => {
+                          {checklistData.fases.filter((fase: any) => fase.id !== 'protocolo').map((fase: any) => {
                             const phaseIcons: Record<string, any> = {
                               antes: Camera,
                               durante: Settings,
@@ -2387,7 +3017,7 @@ export default function ContenidoPage() {
 
                         {/* Contenido de Fase */}
                         <div className="min-h-[300px]">
-                          {checklistData.fases.map((fase: any) => {
+                          {checklistData.fases.filter((fase: any) => fase.id !== 'protocolo').map((fase: any) => {
                             if (checklistActivePhase !== fase.id) return null;
                             const phaseIcons: Record<string, any> = {
                               antes: Camera,
@@ -2413,40 +3043,6 @@ export default function ContenidoPage() {
                             return (
                               <div key={fase.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <Card className="p-6 border-t-8 shadow-xl rounded-[2.5rem]" style={{ borderTopColor: fase.id === 'durante' || fase.id === 'humano' ? '#48c1d2' : '#142d53' }}>
-                                  <div className="flex items-center gap-3 mb-6">
-                                    <div className={`p-3 rounded-xl border ${colorStyles}`}>
-                                      <Icon size={18} />
-                                    </div>
-                                    <div>
-                                      <h3 className="text-xl font-black text-[#142d53] tracking-tighter">{fase.titulo}</h3>
-                                      <p className="text-[10px] font-bold text-slate-400 tracking-widest mt-0.5">Checklist de grabación</p>
-                                    </div>
-                                  </div>
-
-                                  <div className={`mb-8 p-6 rounded-3xl border border-slate-100 bg-slate-50/50 transition-all`}>
-                                    {checklistActivePhase === 'humano' ? (
-                                      <div className="space-y-6">
-                                        <p className={`text-xs font-black uppercase tracking-tight leading-relaxed text-[#142d53] mb-4`}>
-                                          <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 bg-[#142d53]`}>
-                                            Qué hacer aquí:
-                                          </span>
-                                          Aquí tienes ideas y reglas básicas para crear historias que generen confianza. No se trata de vender, sino de mostrar quién está detrás del trabajo y cómo es el día a día.
-                                        </p>
-                                        <div className="text-center pt-4">
-                                          <p className="text-[11px] font-black text-[#142d53] uppercase tracking-widest italic opacity-80 text-center">
-                                            "No necesitas actuar. Solo cuenta lo que estás haciendo como si se lo explicaras a un amigo."
-                                          </p>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      <p className={`text-xs font-black uppercase tracking-tight leading-relaxed text-[#142d53]`}>
-                                        <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 bg-[#142d53]`}>
-                                          Qué hacer aquí:
-                                        </span>
-                                        {phaseMessages[checklistActivePhase]}
-                                      </p>
-                                    )}
-                                  </div>
 
                                   {/* 📋 LISTADO DE ITEMS (Fases normales) */}
                                   {checklistActivePhase !== 'protocolo' && (
@@ -2525,7 +3121,7 @@ export default function ContenidoPage() {
                                                     {item.demo && (
                                                       <div className="bg-[#142d53]/5 p-4 rounded-xl border border-[#142d53]/10 relative group/demo transition-all hover:bg-[#142d53]/10 text-left">
                                                         <div className="absolute -top-2 left-4 bg-[#142d53] text-white px-3 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest">Ejemplo práctico</div>
-                                                        <p className="text-[11px] font-medium text-[#142d53] italic leading-relaxed pt-1">{item.demo.replace(/^["“”]+|["“”]+$/g, '')}</p>
+                                                        <p className="text-[11px] font-medium text-[#142d53]  leading-relaxed pt-1">{item.demo.replace(/^["“”]+|["“”]+$/g, '')}</p>
                                                       </div>
                                                     )}
                                                   </div>
@@ -2663,7 +3259,7 @@ export default function ContenidoPage() {
                             </div>
                             <div>
                               <h5 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-0.5">Asistente de Contenido Epotech</h5>
-                              <h4 className="text-xl font-black text-white italic tracking-tighter">Guía Estratégica para Historias</h4>
+                              <h4 className="text-xl font-black text-white  tracking-tighter">Guía Estratégica para Historias</h4>
                             </div>
                           </div>
 
@@ -2672,7 +3268,7 @@ export default function ContenidoPage() {
                               <div className="flex items-center gap-2 mb-2">
                                 <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-widest block">💡 Autenticidad</span>
                               </div>
-                              <p className="text-[11px] font-bold text-slate-200 leading-relaxed italic">
+                              <p className="text-[11px] font-bold text-slate-200 leading-relaxed ">
                                 "Cualquier detalle de tu día sirve para conectar. Si estás muy ocupado para subir historias, mándanos fotos o vídeos crudos y nosotros los editamos por ti."
                               </p>
                             </div>
@@ -2681,7 +3277,7 @@ export default function ContenidoPage() {
                               <div className="flex items-center gap-2 mb-2">
                                 <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-widest block">🤖 Doblaje con IA</span>
                               </div>
-                              <p className="text-[11px] font-bold text-white leading-relaxed italic">
+                              <p className="text-[11px] font-bold text-white leading-relaxed ">
                                 "Sebastián, habla tranquilamente en <span className="text-[#48c1d2] font-black underline decoration-2 underline-offset-2">español</span>. Nuestra Inteligencia Artificial traducirá tu voz al <span className="text-[#48c1d2] font-black underline decoration-2 underline-offset-2">inglés</span> manteniendo, en lo posible, tu esencia."
                               </p>
                             </div>
@@ -2727,6 +3323,7 @@ export default function ContenidoPage() {
             showToast={showToast} 
             activeTab={activeTab} 
             requestConfirm={requestConfirm}
+            initialSubTab={initialHistorialSubTab}
           />
         )}
       </div>
@@ -2771,7 +3368,7 @@ export default function ContenidoPage() {
                 </div>
                 <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 relative">
                   <div className="absolute -left-2 top-6 w-1 h-12 rounded-full" style={{ backgroundColor: selectedSerie.color }} />
-                  <p className="text-sm font-bold text-[#142d53] leading-relaxed italic">
+                  <p className="text-sm font-bold text-[#142d53] leading-relaxed ">
                     {selectedSerie.id === 'ser1' && "En este formato no es necesario que te grabes hablando todo el tiempo. Buscamos un estilo 'Vlog' natural."}
                     {selectedSerie.id === 'ser2' && "Esta serie es 'oro puro' para viralizar: ayudas a la comunidad y muestras tu trabajo al mismo tiempo."}
                     {selectedSerie.id === 'ser3' && "El objetivo aquí es crear una conexión real con tu audiencia compartiendo tus metas de negocio."}
@@ -2947,9 +3544,9 @@ export default function ContenidoPage() {
                   </div>
 
                   <div className="space-y-3 pl-11">
-                    <div className="p-5 bg-slate-50 rounded-3xl border border-slate-100 italic text-[#142d53] font-medium text-sm leading-relaxed relative text-left">
+                    <div className="p-5 bg-slate-50 rounded-3xl border border-slate-100  text-[#142d53] font-medium text-sm leading-relaxed relative text-left">
                       <div className="absolute -left-2 top-4 w-1 h-8 rounded-full" style={{ backgroundColor: selectedStory.color }} />
-                      <span className="text-[8px] font-bold text-slate-400 uppercase block mb-2 tracking-widest italic">Guion Sugerido:</span>
+                      <span className="text-[8px] font-bold text-slate-400 uppercase block mb-2 tracking-widest ">Guion Sugerido:</span>
                       "{step.script}"
                     </div>
 
@@ -2960,7 +3557,7 @@ export default function ContenidoPage() {
                       </div>
                       <div className="p-4 bg-[#48c1d2]/5 rounded-2xl border border-[#48c1d2]/10">
                         <span className="text-[9px] font-black text-[#48c1d2] uppercase block mb-1 tracking-widest">Pro Tip:</span>
-                        <p className="text-sm font-bold text-slate-500 italic leading-snug">{step.tips}</p>
+                        <p className="text-sm font-bold text-slate-500  leading-snug">{step.tips}</p>
                       </div>
                     </div>
                   </div>
@@ -2972,7 +3569,7 @@ export default function ContenidoPage() {
                   <selectedStory.icon size={80} className="text-white" />
                 </div>
                 <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.3em] mb-2 relative z-10">Misión de Marca</p>
-                <p className="text-base font-medium text-white italic relative z-10 leading-tight">"Haz que la gente confíe en el hombre detrás de la máquina."</p>
+                <p className="text-base font-medium text-white  relative z-10 leading-tight">"Haz que la gente confíe en el hombre detrás de la máquina."</p>
               </div>
             </div>
 
@@ -2993,35 +3590,39 @@ export default function ContenidoPage() {
       <Toast isVisible={toast.isVisible} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, isVisible: false })} />
 
       {showAudioReport && createPortal(
-        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 overflow-hidden">
+        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-3 md:p-6 overflow-hidden">
           <div 
             onClick={handleCloseAudioReport}
             className={`absolute inset-0 bg-[#0a192f]/90 ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}
           />
           <div 
             onClick={e => e.stopPropagation()}
-            className={`relative z-10 bg-[#0a192f]/95 w-full max-w-lg rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
+            className={`relative z-10 bg-[#0a192f]/95 w-full max-w-xl md:max-w-2xl rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[92vh] md:max-h-[90vh] my-auto overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
             <div className="p-6 md:p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20 shrink-0">
               <div>
-                <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block italic opacity-70">Módulo de Mentoría Narrativa</span>
-                <h2 className="text-2xl font-black text-white italic tracking-tighter leading-none">Tu Narración <span className="text-[#48c1d2]">del Día</span></h2>
+                <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block  opacity-70">Módulo de Mentoría Narrativa</span>
+                <h2 className="text-2xl font-black text-white  tracking-tighter leading-none">Tu Narración <span className="text-[#48c1d2]">del Día</span></h2>
               </div>
               <button onClick={handleCloseAudioReport} className="w-12 h-12 rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-500 flex items-center justify-center text-white/20 border border-white/10 transition-all"><X size={24} /></button>
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar p-5 md:p-8 pt-4 space-y-6 md:space-y-10">
-              <div className={`bg-white/5 p-8 rounded-[2.5rem] border border-white/10 text-left relative transition-all shadow-inner ${showHelp && reportHelpStep === 1 ? "z-50 bg-[#48c1d2]/10 border-[#48c1d2]/30 mt-32" : ""}`}>
+              <div className={`bg-white/5 p-8 rounded-[2.5rem] border border-white/10 text-left relative transition-all shadow-inner ${(showHelp || (isOnboardingTour && tourStep === 2)) && reportHelpStep === 1 ? "z-50 bg-[#48c1d2]/10 border-[#48c1d2]/30 mt-32" : ""}`}>
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-[#48c1d2]/20 to-transparent rounded-[2.5rem] blur opacity-30 pointer-events-none" />
-                {showHelp && reportHelpStep === 1 && (
+                {(showHelp || (isOnboardingTour && tourStep === 2)) && reportHelpStep === 1 && (
                   <div className="absolute -top-36 left-1/2 -translate-x-1/2 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 z-50 border-2 border-white/20 animate-in zoom-in duration-300 guide-bubble-active">
                     <div className="flex flex-col gap-2">
-                      <span>PASO 2: Abre tu Drive, mira tus capturas de hoy y cuéntanos la historia detrás de cada imagen.</span>
+                      <span><strong>PASO 1:</strong> Abre tu Drive, mira tus capturas de hoy y prepárate para contarnos la historia detrás de cada imagen.</span>
                       <div className="flex gap-2 justify-end">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setShowAudioReport(false);
-                            setDashHelpStep(1);
+                            if (isOnboardingTour && tourStep === 2) {
+                              setShowMissionModal(true);
+                            } else {
+                              setDashHelpStep(1);
+                            }
                           }}
                           className="bg-[#142d53]/10 text-[#142d53] px-3 py-1.5 rounded-xl hover:bg-[#142d53]/20 transition-all text-[8px] border border-[#142d53]/20"
                         >
@@ -3049,15 +3650,15 @@ export default function ContenidoPage() {
                       <span className="text-xl font-black">🛑</span>
                     </div>
                     <div className="text-left">
-                      <h3 className="text-lg font-black text-white italic tracking-tighter mb-1 uppercase">¡STOP! Primero lo primero...</h3>
-                      <p className="text-xs font-bold text-red-200/80 leading-relaxed italic">
+                      <h3 className="text-lg font-black text-white  tracking-tighter mb-1">¡STOP! Primero lo primero...</h3>
+                      <p className="text-xs font-bold text-red-200/80 leading-relaxed ">
                         Antes de grabar este audio, asegúrate de haber subido tus fotos y videos al Drive. <span className="text-white underline decoration-2 underline-offset-2">Abre la carpeta, mírala</span> y cuéntanos la historia de lo que ves hoy.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <h4 className="text-[10px] font-black text-[#48c1d2] tracking-widest mb-2 flex items-center gap-2 italic">
+                <h4 className="text-[10px] font-black text-[#48c1d2] tracking-widest mb-2 flex items-center gap-2 ">
                   <Mic size={14} /> Guía de Narración (Basada en tus imágenes):
                 </h4>
                 <p className="text-[9px] font-bold text-white/40 tracking-widest mb-6 border-b border-white/5 pb-2">Tu detalle nos ayuda a crear historias que vendan tu esfuerzo y profesionalismo.</p>
@@ -3094,10 +3695,10 @@ export default function ContenidoPage() {
                         <span className="w-6 h-6 rounded-lg bg-[#48c1d2]/20 text-[#48c1d2] flex items-center justify-center text-[10px] font-black">{idx + 1}</span>
                         <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">{item.label}</span>
                       </div>
-                      <p className="text-xs font-bold text-white/70 leading-relaxed italic">{item.q}</p>
+                      <p className="text-xs font-bold text-white/70 leading-relaxed ">{item.q}</p>
                       <div className="p-3 bg-[#48c1d2]/10 border border-[#48c1d2]/20 rounded-xl text-left">
-                        <p className="text-[10px] font-bold text-[#48c1d2] leading-relaxed italic">
-                          <span className="text-white/30 mr-1 italic">Ejemplo:</span>
+                        <p className="text-[10px] font-bold text-[#48c1d2] leading-relaxed ">
+                          <span className="text-white/30 mr-1 ">Ejemplo:</span>
                           {item.tip}
                         </p>
                       </div>
@@ -3106,12 +3707,12 @@ export default function ContenidoPage() {
                 </div>
               </div>
 
-              <div className={`flex flex-col items-center justify-center py-10 space-y-8 relative transition-all ${showHelp && reportHelpStep === 2 ? 'z-50 p-4 rounded-[3rem] bg-[#48c1d2]/5' : ''}`}>
-                {showHelp && reportHelpStep === 2 && <div className="absolute inset-0 rounded-[3rem] ring-4 ring-[#48c1d2] animate-pulse pointer-events-none" />}
-                {showHelp && reportHelpStep === 2 && (
+              <div className={`flex flex-col items-center justify-center py-10 space-y-8 relative transition-all ${(showHelp || (isOnboardingTour && tourStep === 2)) && reportHelpStep === 2 ? 'z-50 p-4 rounded-[3rem] bg-[#48c1d2]/5' : ''}`}>
+                {(showHelp || (isOnboardingTour && tourStep === 2)) && reportHelpStep === 2 && <div className="absolute inset-0 rounded-[3rem] ring-4 ring-[#48c1d2] animate-pulse pointer-events-none" />}
+                {(showHelp || (isOnboardingTour && tourStep === 2)) && reportHelpStep === 2 && (
                   <div className="absolute -top-40 right-0 bg-[#48c1d2] text-[#142d53] p-5 rounded-[2.5rem] text-[10px] font-black shadow-2xl w-64 z-50 border-2 border-[#142d53]/20 animate-in zoom-in duration-300 guide-bubble-active">
                     <div className="flex flex-col gap-2">
-                      <span>PASO 3: Graba tu nota aquí. Puedes pausar si hay ruido o borrar si te equivocas. ¡Foco en el valor!</span>
+                      <span><strong>PASO 2:</strong> Graba tu nota aquí. Puedes pausar si hay ruido o borrar si te equivocas. ¡Foco en el valor!</span>
                       <div className="flex gap-2 justify-end">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReportHelpStep(1); }}
@@ -3122,13 +3723,17 @@ export default function ContenidoPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            setShowAudioReport(false);
-                            setDashHelpStep(4);
-                            handleTabChange('guiones');
+                            if (isOnboardingTour && tourStep === 2) {
+                              setReportHelpStep(3);
+                            } else {
+                              setShowAudioReport(false);
+                              setDashHelpStep(4);
+                              handleTabChange('guiones');
+                            }
                           }}
                           className="bg-[#142d53] text-[#48c1d2] px-3 py-1.5 rounded-xl hover:scale-105 transition-all text-[8px] font-black shadow-lg"
                         >
-                          SIGUIENTE
+                          {isOnboardingTour && tourStep === 2 ? 'ENTENDIDO, A GRABAR' : 'SIGUIENTE'}
                         </button>
                       </div>
                     </div>
@@ -3244,7 +3849,17 @@ export default function ContenidoPage() {
               </div>
             </div>
 
-            <div className="p-8 border-t border-white/5 bg-black/20">
+            <div className="p-6 md:p-8 border-t border-white/5 bg-black/20 flex flex-col gap-4">
+              {isOnboardingTour && tourStep === 2 && recordedAudio && (
+                <div className="bg-[#48c1d2] text-[#142d53] p-5 rounded-3xl text-[10px] font-black shadow-lg border border-white/20 animate-in fade-in slide-in-from-bottom-4 text-left">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[11px] uppercase tracking-wider font-black">¡Toma Grabada con éxito! 🗣️</span>
+                    <p className="leading-snug opacity-90 text-[10px]">
+                      Puedes escuchar tu grabación arriba. Si estás conforme, haz clic en <strong>"ENVIAR AUDIO AL EQUIPO"</strong> abajo para finalizar el entrenamiento.
+                    </p>
+                  </div>
+                </div>
+              )}
               <button
                 disabled={isRecording || isUploading || !recordedAudio}
                 onClick={handleSendReport}
@@ -3263,6 +3878,75 @@ export default function ContenidoPage() {
           </div>
         </div>, document.body
       )}
+        </div>
+      )}
+      {mounted && onboardingSuccessModal.isOpen && createPortal(
+        <div className="fixed inset-0 z-[22000] flex items-center justify-center p-4 md:p-6 bg-[#0a192f]/90 backdrop-blur-md overflow-y-auto animate-in fade-in duration-300">
+          <div className="absolute inset-0" onClick={() => setOnboardingSuccessModal(prev => ({ ...prev, isOpen: false }))} />
+          
+          <div className="relative z-10 bg-[#0a192f]/95 w-full max-w-sm md:max-w-md rounded-[2.5rem] md:rounded-[3rem] border border-[#48c1d2]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] p-6 md:p-10 text-center flex flex-col items-center gap-4 md:gap-6 overflow-hidden my-auto animate-in zoom-in-95 duration-300">
+            {/* Background glowing decoration */}
+            <div className="absolute -top-12 -left-12 w-32 h-32 bg-[#48c1d2]/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-[#48c1d2]/10 rounded-full blur-2xl pointer-events-none" />
+            
+            {/* Success icon badge */}
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-[1.5rem] md:rounded-[2rem] bg-gradient-to-br from-[#48c1d2]/20 to-teal-500/20 border border-[#48c1d2]/40 flex items-center justify-center text-3xl md:text-4xl shadow-lg relative group shrink-0">
+              <div className="absolute inset-0 bg-[#48c1d2]/20 rounded-[2rem] blur-xl opacity-50 animate-pulse pointer-events-none" />
+              {onboardingSuccessModal.type === 'voice' ? '🎙️' : '🗣️'}
+            </div>
+
+            <div className="space-y-3 text-center">
+              <h3 className="text-xl md:text-2xl font-black text-white  tracking-tighter uppercase leading-none">
+                ¡Audio Enviado <span className="text-[#48c1d2]">con éxito!</span>
+              </h3>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+                tu audio ya está en nuestra base de datos 🚀
+              </p>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 p-5 md:p-6 rounded-[2rem] md:rounded-[2.5rem] text-left relative overflow-hidden">
+              <p className="text-xs font-bold text-white/80 leading-relaxed ">
+                {onboardingSuccessModal.type === 'voice' ? (
+                  <>
+                    Tu locución de voz en off para el guión de prueba ha sido subida correctamente. Recuerda que todos tus audios enviados se guardarán de forma permanente en tu <strong>Historial de Audios</strong> (disponible en la pestaña de Historial del menú izquierdo) para que puedas reproducirlos o descargarlos cuando gustes.
+                  </>
+                ) : (
+                  <>
+                    Tu reporte simulado respondiendo las 5 preguntas del día ha sido registrado con éxito. Todos tus reportes diarios de trabajo se archivan de manera automática en tu <strong>Historial de Audios</strong> para tu control, seguimiento y revisión por parte del equipo técnico.
+                  </>
+                )}
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                setOnboardingSuccessModal(prev => ({ ...prev, isOpen: false }));
+                if (onboardingSuccessModal.type === 'voice') {
+                  setSelectedScript(null);
+                  setActiveMision(null);
+                  setIsOnboardingTour(false);
+                  setTourStep(0);
+                  setTourSubStep(0);
+                  handleTabChange('guiones');
+                } else if (onboardingSuccessModal.type === 'report') {
+                  setShowAudioReport(false);
+                  setActiveMision(null);
+                  setIsOnboardingTour(false);
+                  setTourStep(0);
+                  setTourSubStep(0);
+                  handleTabChange('guiones');
+                }
+                setShowMissionModal(true);
+              }}
+              style={{ paddingTop: '20px', paddingBottom: '20px' }}
+              className="w-full rounded-full text-xs font-black uppercase tracking-[3px] bg-[#48c1d2] text-[#142d53] shadow-xl shadow-[#48c1d2]/20 hover:scale-[1.02] active:scale-98 transition-all"
+            >
+              Entendido / Continuar
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
       <ConfirmationDialog 
         isOpen={confirmDialog.isOpen}
         title={confirmDialog.title}
@@ -3271,7 +3955,6 @@ export default function ContenidoPage() {
         onConfirm={confirmDialog.onConfirm}
         onCancel={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
       />
-    </div>
     </div>
   );
 }
@@ -3305,9 +3988,9 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
           <div className="text-left flex-1 mr-4">
             <span className="text-[8px] font-bold text-[#48c1d2] tracking-[0.2em] mb-1 block">Ficha de Producción</span>
             {isEditing ? (
-              <input className="bg-white/5 border border-[#48c1d2]/30 text-white font-bold italic w-full p-2 rounded-xl text-lg outline-none" value={editedPost.title} onChange={(e) => setEditedPost({ ...editedPost, title: e.target.value })} />
+              <input className="bg-white/5 border border-[#48c1d2]/30 text-white font-bold  w-full p-2 rounded-xl text-lg outline-none" value={editedPost.title} onChange={(e) => setEditedPost({ ...editedPost, title: e.target.value })} />
             ) : (
-              <h2 className="text-xl font-bold text-white italic leading-none">{post.title}</h2>
+              <h2 className="text-xl font-bold text-white  leading-none">{post.title}</h2>
             )}
           </div>
           <div className="flex gap-2">
@@ -3333,9 +4016,9 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
             <h4 className="text-[9px] font-bold text-[#48c1d2] tracking-[0.2em] mb-3">Idea Central</h4>
             <div className="p-5 bg-black/40 rounded-3xl border border-white/5">
               {isEditing ? (
-                <textarea className="bg-transparent text-sm font-medium text-white italic w-full min-h-[80px] outline-none" value={editedPost.desc} onChange={(e) => setEditedPost({ ...editedPost, desc: e.target.value })} />
+                <textarea className="bg-transparent text-sm font-medium text-white  w-full min-h-[80px] outline-none" value={editedPost.desc} onChange={(e) => setEditedPost({ ...editedPost, desc: e.target.value })} />
               ) : (
-                <p className="text-sm font-medium text-white/90 italic">"{post.desc}"</p>
+                <p className="text-sm font-medium text-white/90 ">"{post.desc}"</p>
               )}
             </div>
           </section>
@@ -3344,9 +4027,9 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
               <h4 className="text-[9px] font-bold text-[#48c1d2] tracking-[0.2em] mb-3">Texto que Vende</h4>
               <div className="p-5 bg-white/5 rounded-3xl border border-white/5">
                 {isEditing ? (
-                  <textarea className="bg-transparent text-xs font-medium text-white/70 italic w-full min-h-[80px] outline-none" value={editedPost.copy} onChange={(e) => setEditedPost({ ...editedPost, copy: e.target.value })} />
+                  <textarea className="bg-transparent text-xs font-medium text-white/70  w-full min-h-[80px] outline-none" value={editedPost.copy} onChange={(e) => setEditedPost({ ...editedPost, copy: e.target.value })} />
                 ) : (
-                  <p className="text-xs font-medium text-white/70 italic">{post.copy}</p>
+                  <p className="text-xs font-medium text-white/70 ">{post.copy}</p>
                 )}
               </div>
             </div>
@@ -3412,7 +4095,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
               <ChevronRight size={16} />
             </button>
           </div>
-          <span className="text-[10px] font-bold text-slate-300 italic">Epotech Hub</span>
+          <span className="text-[10px] font-bold text-slate-300 ">Epotech Hub</span>
         </div>
         <div className="grid grid-cols-7 gap-y-3 gap-x-1">
           {monthDays.map((d, i) => (
@@ -3430,7 +4113,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
             <div className="h-12 w-12 rounded-2xl bg-[#142d53] flex items-center justify-center text-[#48c1d2] shadow-lg shadow-[#142d53]/20"><Calendar size={20} /></div>
             <div>
               <h4 className="text-[9px] font-bold text-slate-400 tracking-widest mb-1">Estrategia Enfocada</h4>
-              <p className="text-xl font-bold text-[#142d53] italic tracking-tighter">Día {selectedDate} de {capitalizedMonth}</p>
+              <p className="text-xl font-bold text-[#142d53]  tracking-tighter">Día {selectedDate} de {capitalizedMonth}</p>
             </div>
           </div>
           {contentDB[selectedDate] && <div className={`px-4 py-2 rounded-2xl text-[8px] font-bold ${contentDB[selectedDate].status === 'Publicado' ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-slate-100 text-slate-400'}`}>{contentDB[selectedDate].status}</div>}
@@ -3439,29 +4122,29 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
         {contentDB[selectedDate] ? (
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100"><span className="text-[7px] font-bold text-slate-400 block mb-1">Objetivo</span><p className="text-xs font-bold text-[#142d53] italic">{contentDB[selectedDate].objetivo}</p></div>
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100"><span className="text-[7px] font-bold text-slate-400 block mb-1">Tipo</span><p className="text-xs font-bold text-[#142d53] italic">{contentDB[selectedDate].type}</p></div>
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100"><span className="text-[7px] font-bold text-slate-400 block mb-1">Objetivo</span><p className="text-xs font-bold text-[#142d53] ">{contentDB[selectedDate].objetivo}</p></div>
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100"><span className="text-[7px] font-bold text-slate-400 block mb-1">Tipo</span><p className="text-xs font-bold text-[#142d53] ">{contentDB[selectedDate].type}</p></div>
             </div>
             <div className="space-y-3">
               <h5 className="text-[9px] font-bold text-[#142d53] tracking-widest ml-1">Concepto Central</h5>
-              <div className="p-6 bg-[#142d53] rounded-[2.5rem]"><p className="text-sm font-medium text-white italic leading-relaxed">"{contentDB[selectedDate].desc}"</p></div>
+              <div className="p-6 bg-[#142d53] rounded-[2.5rem]"><p className="text-sm font-medium text-white  leading-relaxed">"{contentDB[selectedDate].desc}"</p></div>
             </div>
             <div className="space-y-3">
               <h5 className="text-[9px] font-bold text-slate-400 tracking-widest ml-1">Texto que Vende</h5>
               <div className="p-6 bg-slate-50 rounded-[2.5rem] border border-slate-100">
-                <p className="text-xs font-medium text-slate-600 italic leading-snug mb-4">{contentDB[selectedDate].copy}</p>
+                <p className="text-xs font-medium text-slate-600  leading-snug mb-4">{contentDB[selectedDate].copy}</p>
                 <p className="text-[10px] font-mono text-[#48c1d2] font-bold bg-[#142d53] p-3 rounded-xl inline-block">{contentDB[selectedDate].hashtags}</p>
               </div>
             </div>
             <button onClick={() => onSelect(selectedDate)} className="w-full py-4 bg-[#142d53] text-[#48c1d2] text-[10px] font-bold tracking-[0.2em] rounded-2xl shadow-xl">Editar Estrategia</button>
           </div>
-        ) : <div className="py-20 flex flex-col items-center justify-center text-slate-300 bg-slate-50 rounded-[2.5rem] border border-dashed border-slate-200"><Calendar size={40} className="opacity-20 mb-4" /><p className="text-[10px] font-bold tracking-widest italic opacity-40">Día sin producción</p></div>}
+        ) : <div className="py-20 flex flex-col items-center justify-center text-slate-300 bg-slate-50 rounded-[2.5rem] border border-dashed border-slate-200"><Calendar size={40} className="opacity-20 mb-4" /><p className="text-[10px] font-bold tracking-widest  opacity-40">Día sin producción</p></div>}
       </div>
 
       <div className="space-y-6 text-left">
         <div className="flex items-center gap-3 px-2">
           <div className="w-8 h-8 rounded-full bg-[#48c1d2] flex items-center justify-center text-[#142d53] shadow-lg shadow-[#48c1d2]/20"><Sparkles size={16} /></div>
-          <h3 className="text-xl font-bold text-[#142d53] italic">Próximos contenidos</h3>
+          <h3 className="text-xl font-bold text-[#142d53] ">Próximos contenidos</h3>
         </div>
         <div className="grid grid-cols-2 gap-4 items-start">
           {productionKeys.map((key) => {
@@ -3472,16 +4155,16 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
                 <div className="relative z-10 text-left space-y-3 flex flex-col h-full">
                   <div className="flex justify-between items-start">
                     <div className="flex flex-col gap-1">
-                      <span className="text-[7px] font-bold px-2 py-0.5 bg-[#48c1d2] text-[#142d53] rounded-full w-fit italic">Día {key}</span>
+                      <span className="text-[7px] font-bold px-2 py-0.5 bg-[#48c1d2] text-[#142d53] rounded-full w-fit ">Día {key}</span>
                       <span className="text-[6px] font-bold text-[#48c1d2]/60 tracking-widest">{post.type}</span>
                     </div>
                     <div onClick={(e) => { e.stopPropagation(); toggleExpand(key); }} className="cursor-pointer w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#48c1d2] border border-white/5">{isExpanded ? <X size={14} /> : <Sparkles size={14} />}</div>
                   </div>
-                  <h4 className="text-sm font-bold text-white italic leading-tight tracking-tighter line-clamp-2">{post.title}</h4>
+                  <h4 className="text-sm font-bold text-white  leading-tight tracking-tighter line-clamp-2">{post.title}</h4>
                   {isExpanded ? (
                     <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <div className="space-y-1.5"><h5 className="text-[7px] font-bold text-[#48c1d2] tracking-widest opacity-60">Concepto</h5><div className="p-3 bg-black/40 rounded-2xl border border-white/5"><p className="text-[10px] font-medium text-white italic leading-tight">"{post.desc}"</p></div></div>
-                      <div className="space-y-1.5"><h5 className="text-[7px] font-bold text-[#48c1d2] tracking-widest opacity-60">Texto Viral</h5><div className="p-3 bg-white/5 rounded-2xl border border-white/10"><p className="text-[10px] font-medium text-white/70 italic leading-snug mb-2">{post.copy}</p><p className="text-[9px] font-mono text-[#48c1d2] font-bold truncate">{post.hashtags}</p></div></div>
+                      <div className="space-y-1.5"><h5 className="text-[7px] font-bold text-[#48c1d2] tracking-widest opacity-60">Concepto</h5><div className="p-3 bg-black/40 rounded-2xl border border-white/5"><p className="text-[10px] font-medium text-white  leading-tight">"{post.desc}"</p></div></div>
+                      <div className="space-y-1.5"><h5 className="text-[7px] font-bold text-[#48c1d2] tracking-widest opacity-60">Texto Viral</h5><div className="p-3 bg-white/5 rounded-2xl border border-white/10"><p className="text-[10px] font-medium text-white/70  leading-snug mb-2">{post.copy}</p><p className="text-[9px] font-mono text-[#48c1d2] font-bold truncate">{post.hashtags}</p></div></div>
                       <div className="pt-2 flex flex-col gap-2">
                         <button onClick={() => onSelect(key)} className="w-full py-3 bg-white text-[#142d53] text-[9px] font-bold tracking-widest rounded-xl shadow-lg">Editar</button>
                         <button onClick={() => toggleStatus(key)} className={`w-full py-3 rounded-xl text-[8px] font-bold tracking-widest transition-all ${post.status === 'Publicado' ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-white/10 text-white'}`}>{post.status}</button>
@@ -3502,7 +4185,7 @@ function CreacionSection({ contentDB, toggleStatus, onSelect }: { contentDB: any
     </div>
   );
 }
-function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestConfirm }: { contentDB: any, onSelect: (key: string) => void, showToast: (msg: string, type?: ToastType) => void, activeTab: string, requestConfirm: (title: string, msg: string, onC: () => void, text?: string) => void }) {
+function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestConfirm, initialSubTab = 'stats' }: { contentDB: any, onSelect: (key: string) => void, showToast: (msg: string, type?: ToastType) => void, activeTab: string, requestConfirm: (title: string, msg: string, onC: () => void, text?: string) => void, initialSubTab?: 'stats' | 'audios' }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -3519,7 +4202,11 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
   const [selectedAnalyticsWeek, setSelectedAnalyticsWeek] = useState(5);
   const [uploading, setUploading] = useState(false);
   const [isEditingAnalytics, setIsEditingAnalytics] = useState(false);
-  const [historialSubTab, setHistorialSubTab] = useState<'stats' | 'audios'>('stats');
+  const [historialSubTab, setHistorialSubTab] = useState<'stats' | 'audios'>(initialSubTab);
+
+  useEffect(() => {
+    setHistorialSubTab(initialSubTab);
+  }, [initialSubTab]);
 
   // Sincronizar URL cuando cambian las vistas
   const updateUrl = (newView: string, m?: string, w?: string | number) => {
@@ -4011,7 +4698,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
           <div className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="space-y-1">
-                <h3 className="text-3xl font-black text-[#142d53] tracking-tighter uppercase">LABORATORIO DE ÉXITO</h3>
+                <h3 className="text-3xl font-black text-[#142d53] tracking-tighter">LABORATORIO DE ÉXITO</h3>
                 <p className="text-[11px] font-bold text-slate-400 tracking-widest uppercase">
                   {selectedAnalyticsMonth === 'Abril' ? 'rango: 30 mar - 29 abr' : 'reporte estratégico mensual'}
                 </p>
@@ -4139,7 +4826,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                           <span>{line.replace(/^•\s*/, '')}</span>
                         </p>
                       )) : (
-                        <p className="text-sm font-bold text-white/40 italic">pendiente de análisis estratégico...</p>
+                        <p className="text-sm font-bold text-white/40 ">pendiente de análisis estratégico...</p>
                       )}
                     </div>
                   </div>
@@ -4168,7 +4855,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                 <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{audioReports.length} nota{audioReports.length !== 1 ? 's' : ''}</span>
               </div>
               <p className="text-[10px] font-bold text-slate-500 leading-relaxed px-1">
-                En esta sección vas a poder encontrar el historial de todas las notas en donde tú nos has enviado las respuestas a las 6 preguntas después de finalizar un trabajo.
+                En esta sección vas a poder encontrar el historial de todas las notas en donde tú nos has enviado las respuestas a las preguntas clave después de finalizar un trabajo.
               </p>
 
               {audioReports.length === 0 ? (
@@ -4182,7 +4869,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                     const statusStyles = 
                       status === 'completado' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
                       status === 'en_proceso' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
-                      'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                      'bg-slate-500/20 text-slate-400 border-slate-500/30';
                     const statusLabel = 
                       status === 'completado' ? 'GUIONES LISTOS' :
                       status === 'en_proceso' ? 'PROCESANDO' :
@@ -4285,7 +4972,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                     const statusStyles = 
                       status === 'publicado' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
                       status === 'editando' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
-                      'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                      'bg-slate-500/20 text-slate-400 border-slate-500/30';
                     const statusLabel = 
                       status === 'publicado' ? 'VIDEO PUBLICADO' :
                       status === 'editando' ? 'EN EDICIÓN' :
@@ -4330,7 +5017,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                             </div>
                           ) : (
                             <div className="flex items-center gap-2 group/title">
-                              <p className="text-sm font-black text-white uppercase italic truncate leading-tight">{loc.script_title}</p>
+                              <p className="text-sm font-black text-white uppercase  truncate leading-tight">{loc.script_title}</p>
                               <button 
                                 onClick={() => { setEditingItemId(loc.id); setEditingTitle(loc.script_title || ''); }}
                                 className="p-1.5 bg-white/5 text-[#48c1d2] rounded-lg hover:bg-[#48c1d2]/20 transition-all ml-1"
