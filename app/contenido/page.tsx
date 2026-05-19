@@ -2145,12 +2145,12 @@ export default function ContenidoPage() {
               </div>
 
               {/* Avatar de Sebastián */}
-              <div className="relative z-10 shrink-0 ml-4">
+              <div className="relative z-10 shrink-0 ml-4 mr-1">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_20px_rgba(72,193,210,0.25)] overflow-hidden">
                   <img
                     src="/sebastian.jpg"
                     alt="Sebastián"
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-cover object-[center_15%]"
                   />
                 </div>
                 {/* Punto verde de "activo" */}
