@@ -2128,7 +2128,7 @@ export default function ContenidoPage() {
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-4">
                       <span className="whitespace-nowrap text-[9px] font-black text-[#142d53] bg-[#48c1d2] px-3 py-1.5 rounded-full uppercase tracking-wider inline-flex items-center gap-1 shrink-0 shadow-[0_0_15px_rgba(72,193,210,0.4)]">
                         📋 Panel de Actividades
                       </span>
@@ -2145,7 +2145,7 @@ export default function ContenidoPage() {
               </div>
 
               {/* Avatar de Sebastián */}
-              <div className="relative z-10 shrink-0 ml-4 mr-1">
+              <div className="relative z-10 shrink-0 ml-4 mr-4 md:mr-2">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_20px_rgba(72,193,210,0.25)] overflow-hidden">
                   <img
                     src="/sebastian.jpg"
@@ -2160,9 +2160,9 @@ export default function ContenidoPage() {
               {onboardingDone && activeMision && (
                 <button 
                   onClick={() => setShowMissionModal(false)}
-                  className="relative z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-red-500/20 hover:text-red-400 flex items-center justify-center text-white/70 transition-all border border-white/10 ml-2"
+                  className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/10 hover:bg-red-500/20 hover:text-red-400 flex items-center justify-center text-white/70 transition-all border border-white/10 shadow-lg"
                 >
-                  <X size={20} />
+                  <X size={16} />
                 </button>
               )}
             </div>
