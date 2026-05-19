@@ -2113,10 +2113,10 @@ export default function ContenidoPage() {
           <div className="relative w-full bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_rgba(20,45,83,0.12)] overflow-hidden flex flex-col">
             
             {/* Cabecera */}
-            <div className="relative p-6 md:p-8 flex justify-between items-start bg-gradient-to-br from-[#142d53] to-[#0a192f] border-b border-[#48c1d2]/20 overflow-hidden">
+            <div className="relative p-6 md:p-8 flex justify-between items-center bg-gradient-to-br from-[#142d53] to-[#0a192f] border-b border-[#48c1d2]/20 overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#48c1d2]/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
               
-              <div className="relative z-10 text-left">
+              <div className="relative z-10 text-left flex-1">
                 {!onboardingDone ? (
                   <>
                     <span className="text-[10px] sm:text-xs font-black text-[#48c1d2] bg-[#48c1d2]/10 border border-[#48c1d2]/20 px-3.5 py-1.5 rounded-full uppercase tracking-wider mb-3 flex items-center w-fit shadow-sm">
@@ -2143,11 +2143,24 @@ export default function ContenidoPage() {
                   </>
                 )}
               </div>
-              
+
+              {/* Avatar de Sebastián */}
+              <div className="relative z-10 shrink-0 ml-4">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_20px_rgba(72,193,210,0.25)] overflow-hidden">
+                  <img
+                    src="/sebastian.jpg"
+                    alt="Sebastián"
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+                {/* Punto verde de "activo" */}
+                <div className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-[#142d53] shadow-sm" />
+              </div>
+
               {onboardingDone && activeMision && (
                 <button 
                   onClick={() => setShowMissionModal(false)}
-                  className="relative z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-red-500/20 hover:text-red-400 flex items-center justify-center text-white/70 transition-all border border-white/10"
+                  className="relative z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-red-500/20 hover:text-red-400 flex items-center justify-center text-white/70 transition-all border border-white/10 ml-2"
                 >
                   <X size={20} />
                 </button>
