@@ -1557,10 +1557,10 @@ export default function ContenidoPage() {
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center p-4 overflow-y-auto bg-black/90"
+    <div className="fixed inset-0 z-[9999] flex items-start justify-center px-4 py-16 overflow-y-auto bg-black/90"
       onClick={(e) => { if (e.target === e.currentTarget) handleCloseScript(); }}
     >
-      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col my-auto shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}>
+      <div className={`relative w-full max-w-lg max-h-[calc(100vh-8rem)] bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col my-auto shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}>
         {/* Encabezado 2 filas */}
         <div className="border-b border-white/5 bg-black/20">
           {/* Fila 1: X + Título + Ícono libro */}
@@ -3388,7 +3388,7 @@ export default function ContenidoPage() {
       
       {/* MODAL DE DETALLES DE SERIE */}
       {selectedSerie && createPortal(
-        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 overflow-hidden">
+        <div className="fixed inset-0 z-[20000] flex items-center justify-center px-4 py-12 md:px-8 md:py-14 overflow-hidden">
           <div 
             onClick={() => {
               setIsClosingSerie(true);
@@ -3572,7 +3572,7 @@ export default function ContenidoPage() {
       , document.body)}
 
       {selectedStory && createPortal(
-        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 overflow-hidden">
+        <div className="fixed inset-0 z-[20000] flex items-center justify-center px-4 py-12 md:px-8 md:py-14 overflow-hidden">
           <div 
             onClick={handleCloseStory}
             className={`absolute inset-0 bg-[#0a192f]/90 ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}
@@ -3646,14 +3646,14 @@ export default function ContenidoPage() {
       <Toast isVisible={toast.isVisible} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, isVisible: false })} />
 
       {showAudioReport && createPortal(
-        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-3 md:p-6 overflow-hidden">
+        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-4 md:p-8 overflow-hidden">
           <div 
             onClick={handleCloseAudioReport}
             className={`absolute inset-0 bg-[#0a192f]/90 ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}
           />
           <div 
             onClick={e => e.stopPropagation()}
-            className={`relative z-10 bg-[#0a192f]/95 w-full max-w-xl md:max-w-2xl rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[92vh] md:max-h-[90vh] my-auto overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
+            className={`relative z-10 bg-[#0a192f]/95 w-full max-w-xl md:max-w-2xl max-h-[calc(100vh-8rem)] rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[92vh] md:max-h-[90vh] my-auto overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
             <div className="p-6 md:p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20 shrink-0">
               <div>
                 <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block  opacity-70">Módulo de Mentoría Narrativa</span>
@@ -4030,7 +4030,7 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 overflow-hidden">
+    <div className="fixed inset-0 z-[20000] flex items-center justify-center px-4 py-12 md:px-8 md:py-14 overflow-hidden">
       <div 
         onClick={handleClose}
         className={`absolute inset-0 bg-[#050c18]/90 ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'}`}
