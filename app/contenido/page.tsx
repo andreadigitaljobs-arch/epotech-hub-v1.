@@ -1285,13 +1285,13 @@ export default function ContenidoPage() {
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-6 md:p-8 transition-all duration-500 overflow-hidden ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-6 md:p-8 overflow-hidden">
       <div
-        className={`absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity duration-500 ${isAnimate && !isClosing ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-black/90 backdrop-blur-md ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'}`}
         onClick={handleCloseScript}
       />
 
-      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto shadow-2xl transition-all duration-500 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : isAnimate ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-20'}`}>
+      <div className={`relative z-10 w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}>
         {/* Encabezado */}
         <div className="p-5 md:p-6 border-b border-white/5 bg-black/20 flex flex-col md:flex-row justify-between md:items-center text-left gap-4">
           <div className="flex-1 flex justify-between items-start md:block">
@@ -1828,7 +1828,7 @@ export default function ContenidoPage() {
         <p className="text-[8px] text-slate-400 font-bold uppercase tracking-[0.15em] mt-3 opacity-60">* Úsalo al terminar tu día para transformar tus videos crudos en historias reales.</p>
       </div>
 
-      <div className="flex bg-slate-50 p-1 rounded-2xl mb-6 shadow-sm border border-slate-100">
+      <div className="flex bg-slate-50 p-1 rounded-2xl mb-6 border border-slate-100">
         {[
           { id: 'guiones', name: 'Guiones', icon: Clapperboard, step: 1, help: 'Toca aquí para empezar tu día de grabación.' },
           { id: 'historial', name: 'Historial', icon: History }
@@ -1836,7 +1836,7 @@ export default function ContenidoPage() {
           <div key={tab.id} className="flex-1 relative">
             <button
               onClick={() => { handleTabChange(tab.id); if (tab.step === 1) setDashHelpStep(1); }}
-              className={`w-full py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeTab === tab.id ? 'bg-[#142d53] text-[#48c1d2] shadow-md' : 'text-slate-400'} ${showHelp && tab.step === 1 && dashHelpStep === 1 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40' : ''}`}
+              className={`w-full py-3 px-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${activeTab === tab.id ? 'bg-[#142d53] text-[#48c1d2]' : 'text-slate-400'} ${showHelp && tab.step === 1 && dashHelpStep === 1 ? 'ring-4 ring-[#48c1d2] animate-pulse z-40' : ''}`}
             >
               <tab.icon size={12} /> {tab.name}
             </button>
@@ -1901,11 +1901,11 @@ export default function ContenidoPage() {
           <div className="space-y-4">
             {/* Navegación del Estudio de Producción Compacta pero Espaciada */}
             {/* Navegación del Estudio de Producción - Ahora Simplificada */}
-            <div className="flex overflow-x-auto no-scrollbar bg-[#0a192f]/5 p-1.5 rounded-2xl mb-6 gap-1.5 border border-slate-200/60 shadow-inner">
+            <div className="grid grid-cols-2 md:grid-cols-4 bg-[#0a192f]/5 p-1.5 rounded-[2rem] mb-6 gap-2 border border-slate-200/60">
               <button
                 onClick={() => handleGuionTabChange('reels')}
-                className={`flex-1 py-3 px-2 sm:px-3 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'reels'
-                    ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
+                className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'reels'
+                    ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
@@ -1913,8 +1913,8 @@ export default function ContenidoPage() {
               </button>
               <button
                 onClick={() => handleGuionTabChange('historias')}
-                className={`flex-1 py-3 px-2 sm:px-3 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'historias'
-                    ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
+                className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'historias'
+                    ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
@@ -1922,8 +1922,8 @@ export default function ContenidoPage() {
               </button>
               <button
                 onClick={() => handleGuionTabChange('checklist')}
-                className={`flex-1 py-3 px-2 sm:px-3 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'checklist'
-                    ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
+                className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'checklist'
+                    ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
@@ -1931,8 +1931,8 @@ export default function ContenidoPage() {
               </button>
               <button
                 onClick={() => handleGuionTabChange('presentacion')}
-                className={`flex-1 py-3 px-2 sm:px-3 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'presentacion'
-                    ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
+                className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'presentacion'
+                    ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
@@ -2735,19 +2735,20 @@ export default function ContenidoPage() {
       
       {/* MODAL DE DETALLES DE SERIE */}
       {selectedSerie && createPortal(
-        <div 
-          onClick={() => {
-            setIsClosingSerie(true);
-            setTimeout(() => {
-              setSelectedSerie(null);
-              setIsClosingSerie(false);
-            }, 300);
-          }}
-          className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-center overflow-hidden ${isClosingSerie ? 'modal-backdrop-out' : 'modal-backdrop'}`}
-        >
+        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 overflow-hidden">
+          <div 
+            onClick={() => {
+              setIsClosingSerie(true);
+              setTimeout(() => {
+                setSelectedSerie(null);
+                setIsClosingSerie(false);
+              }, 300);
+            }}
+            className={`absolute inset-0 bg-[#0a192f]/90 ${isClosingSerie ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+          />
           <div 
             onClick={e => e.stopPropagation()}
-            className={`bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}
+            className={`relative z-10 bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto overflow-hidden ${isClosingSerie ? 'modal-panel-out' : 'modal-panel'}`}
           >
             <div className="p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100 shrink-0">
               <div className="text-left">
@@ -2918,13 +2919,14 @@ export default function ContenidoPage() {
       , document.body)}
 
       {selectedStory && createPortal(
-        <div 
-          onClick={handleCloseStory}
-          className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-center overflow-hidden ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}
-        >
+        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 overflow-hidden">
+          <div 
+            onClick={handleCloseStory}
+            className={`absolute inset-0 bg-[#0a192f]/90 ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+          />
           <div 
             onClick={e => e.stopPropagation()}
-            className={`bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}
+            className={`relative z-10 bg-white w-full max-w-lg rounded-[2rem] md:rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto overflow-hidden ${isClosingStory ? 'modal-panel-out' : 'modal-panel'}`}
           >
             <div className="p-6 md:p-8 pb-4 flex justify-between items-start bg-slate-50 border-b border-slate-100 shrink-0">
               <div className="text-left">
@@ -2991,13 +2993,14 @@ export default function ContenidoPage() {
       <Toast isVisible={toast.isVisible} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, isVisible: false })} />
 
       {showAudioReport && createPortal(
-        <div 
-          onClick={handleCloseAudioReport}
-          className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#0a192f]/90 text-left overflow-hidden ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}
-        >
+        <div className="fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 overflow-hidden">
+          <div 
+            onClick={handleCloseAudioReport}
+            className={`absolute inset-0 bg-[#0a192f]/90 ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+          />
           <div 
             onClick={e => e.stopPropagation()}
-            className={`bg-[#0a192f]/95 w-full max-w-lg rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto relative overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
+            className={`relative z-10 bg-[#0a192f]/95 w-full max-w-lg rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[82vh] md:max-h-[80vh] my-auto overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
             <div className="p-6 md:p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20 shrink-0">
               <div>
                 <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block italic opacity-70">Módulo de Mentoría Narrativa</span>
@@ -3288,14 +3291,15 @@ function FichaProduccionModal({ post, onClose, onToggleStatus, onSave }: { post:
   };
 
   return createPortal(
-    <div 
-      onClick={handleClose}
-      className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 bg-[#050c18]/90 overflow-hidden ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'}`}
-    >
+    <div className="fixed inset-0 z-[20000] flex items-center justify-center p-6 md:p-8 overflow-hidden">
+      <div 
+        onClick={handleClose}
+        className={`absolute inset-0 bg-[#050c18]/90 ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+      />
       <div 
         onClick={e => e.stopPropagation()}
         style={{ backgroundColor: '#142d53' }} 
-        className={`w-full max-w-[500px] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col border border-white/10 overflow-hidden max-h-[82vh] md:max-h-[80vh] my-auto ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}
+        className={`relative z-10 w-full max-w-[500px] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col border border-white/10 overflow-hidden max-h-[82vh] md:max-h-[80vh] my-auto ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}
       >
         <div className="px-8 py-6 border-b border-white/10 flex items-center justify-between bg-black/20 shrink-0">
           <div className="text-left flex-1 mr-4">
