@@ -474,6 +474,7 @@ export default function ContenidoPage() {
   const [tourStep, setTourStep] = useState<number>(0); // 1 = Voz en off, 2 = Reporte
   const [tourSubStep, setTourSubStep] = useState<number>(0);
   const [onboardingSuccessModal, setOnboardingSuccessModal] = useState<{ isOpen: boolean, type: 'voice' | 'report' }>({ isOpen: false, type: 'voice' });
+  const [streakDays, setStreakDays] = useState<number>(1);
 
   // Cargar progreso del Onboarding al montar
   useEffect(() => {
@@ -487,6 +488,36 @@ export default function ContenidoPage() {
           setOnboardingProgress(JSON.parse(savedProgress));
         } catch (e) {
           console.error(e);
+        }
+      }
+      // --- Lógica de Racha Diaria ---
+      const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+      const lastVisit = localStorage.getItem('epotech_last_visit');
+      const savedStreak = parseInt(localStorage.getItem('epotech_streak') || '1', 10);
+
+      if (!lastVisit) {
+        // Primera visita
+        localStorage.setItem('epotech_last_visit', today);
+        localStorage.setItem('epotech_streak', '1');
+        setStreakDays(1);
+      } else if (lastVisit === today) {
+        // Ya visitó hoy, mantener racha
+        setStreakDays(savedStreak);
+      } else {
+        const last = new Date(lastVisit);
+        const now = new Date(today);
+        const diffDays = Math.round((now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          // Visitó ayer → racha sube
+          const newStreak = savedStreak + 1;
+          localStorage.setItem('epotech_streak', String(newStreak));
+          localStorage.setItem('epotech_last_visit', today);
+          setStreakDays(newStreak);
+        } else {
+          // Saltó un día → resetear
+          localStorage.setItem('epotech_streak', '1');
+          localStorage.setItem('epotech_last_visit', today);
+          setStreakDays(1);
         }
       }
     }
@@ -1533,31 +1564,31 @@ export default function ContenidoPage() {
         {/* Encabezado 2 filas */}
         <div className="border-b border-white/5 bg-black/20">
           {/* Fila 1: X + Título + Ícono libro */}
-          <div className="px-4 pt-4 pb-2 flex items-center gap-3">
-            <button onClick={handleCloseScript} className="w-9 h-9 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white transition-colors border border-white/5 active:scale-95">
-              <X size={16} />
+          <div className="px-6 sm:px-8 pt-8 sm:pt-10 pb-4 flex items-center gap-4">
+            <button onClick={handleCloseScript} className="w-10 h-10 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white transition-colors border border-white/5 active:scale-95">
+              <X size={18} />
             </button>
             <div className="flex-1 min-w-0">
-              <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px] block leading-none mb-0.5">{selectedScript.category}</span>
-              <p className="text-sm font-black text-white leading-tight truncate">{selectedScript.title}</p>
+              <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px] block leading-none mb-1">{selectedScript.category}</span>
+              <p className="text-base sm:text-lg font-black text-white leading-tight truncate">{selectedScript.title}</p>
             </div>
             <button
               onClick={() => setShowFullScript(!showFullScript)}
-              className={`shrink-0 h-10 px-3 rounded-2xl flex items-center justify-center gap-1.5 transition-all active:scale-95 ${showFullScript ? "bg-white/5 text-white/40 border border-white/5" : "bg-[#48c1d2] text-[#0a192f] shadow-lg"}`}
+              className={`shrink-0 h-11 px-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 ${showFullScript ? "bg-white/5 text-white/40 border border-white/5" : "bg-[#48c1d2] text-[#0a192f] shadow-lg shadow-[#48c1d2]/20"}`}
             >
-              {showFullScript ? <Zap size={15} /> : <BookOpen size={15} />}
-              <span className="text-[9px] font-black uppercase tracking-tight">
+              {showFullScript ? <Zap size={16} /> : <BookOpen size={16} />}
+              <span className="text-[10px] font-black uppercase tracking-wider">
                 {showFullScript ? "Grabar" : "Ver Guion"}
               </span>
             </button>
           </div>
           {/* Fila 2: Velocidad */}
-          <div className="px-4 pb-4 flex items-center gap-2">
-            <span className="text-[8px] text-white/30 uppercase font-black tracking-widest">Velocidad:</span>
+          <div className="px-6 sm:px-8 pt-1 pb-6 flex items-center gap-3">
+            <span className="text-[9px] text-white/40 uppercase font-black tracking-widest">Velocidad:</span>
             <div className="flex items-center bg-white/5 rounded-xl border border-white/5 p-1 gap-1">
-              <button onClick={() => setVoiceSpeed(0.5)} className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 0.5 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>0.5x</button>
-              <button onClick={() => setVoiceSpeed(0.85)} className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 0.85 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>0.8x</button>
-              <button onClick={() => setVoiceSpeed(1)} className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 1 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>1x</button>
+              <button onClick={() => setVoiceSpeed(0.5)} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 0.5 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>0.5x</button>
+              <button onClick={() => setVoiceSpeed(0.85)} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 0.85 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>0.8x</button>
+              <button onClick={() => setVoiceSpeed(1)} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 1 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>1x</button>
             </div>
           </div>
         </div>
@@ -1566,14 +1597,14 @@ export default function ContenidoPage() {
         <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar flex flex-col">
           {selectedScript.isProductionMode ? (
             /* NUEVO MODO: EN CÁMARA (PRODUCCIÓN DUAL) */
-            <div className="p-6 space-y-12">
+            <div className="px-6 sm:px-8 py-8 space-y-10">
               {showFullScript ? (
                 /* Vista del Guion Completo para Producción */
                 <div className="animate-in fade-in zoom-in-95 duration-500 text-left space-y-8">
-                  <div className="p-8 bg-white/5 rounded-[2.5rem] border border-white/10 relative overflow-hidden">
+                  <div className="p-8 sm:p-10 bg-white/5 rounded-[2.5rem] border border-white/10 relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-6 opacity-5"><Mic size={80} className="text-[#48c1d2]" /></div>
-                    <div className="flex justify-between items-start mb-4 relative z-20">
-                      <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] block mt-2">Guion de Referencia</span>
+                    <div className="flex justify-between items-start mb-6 relative z-20">
+                      <span className="text-xs font-black text-[#48c1d2] uppercase tracking-[3px] block mt-2">Guion de Referencia</span>
                       <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript.fullDialogue); }} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isSpeaking ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500 hover:text-white' : 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 hover:bg-[#48c1d2] hover:text-[#0a192f]'}`} title={isSpeaking ? "Detener pronunciación" : "Escuchar pronunciación"}>
                         {isSpeaking ? <Square fill="currentColor" size={12} /> : <Volume2 size={18} />}
                       </button>
@@ -1737,7 +1768,7 @@ export default function ContenidoPage() {
             </div>
           ) : (
             /* MODO NORMAL: REELS / HISTORIAS (TELEPROMPTER) */
-            <div className="p-6 flex flex-col flex-1">
+            <div className="px-6 sm:px-8 py-8 flex flex-col flex-1">
               {showFullScript ? (
                 <div className="animate-in fade-in zoom-in-95 duration-500 text-left space-y-10 w-full flex-1">
                   <div className="space-y-10">
@@ -1835,16 +1866,16 @@ export default function ContenidoPage() {
                 </div>
               ) : (
                 <>
-                  <div className="flex justify-between items-center mb-6 px-2">
-                    <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px]">Paso {currentStepIdx + 1} de {selectedScript.steps.length}</span>
-                    <div className="flex gap-1">
+                  <div className="flex justify-between items-center mb-8 px-1">
+                    <span className="text-xs font-black text-[#48c1d2] uppercase tracking-[3px]">Paso {currentStepIdx + 1} de {selectedScript.steps.length}</span>
+                    <div className="flex gap-1.5">
                       {selectedScript.steps.map((_: any, i: number) => (
-                        <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === currentStepIdx ? 'w-6 bg-[#48c1d2]' : 'w-2 bg-white/10'}`} />
+                        <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentStepIdx ? 'w-8 bg-[#48c1d2]' : 'w-2.5 bg-white/10'}`} />
                       ))}
                     </div>
                   </div>
                   <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 text-left flex-1">
-                    <div className="bg-[#48c1d2] p-8 rounded-[40px] relative shadow-2xl shadow-[#48c1d2]/20">
+                    <div className="bg-[#48c1d2] px-8 pt-8 pb-10 rounded-[40px] relative shadow-2xl shadow-[#48c1d2]/20">
                       <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><Sparkles size={60} className="text-[#0a192f]" /></div>
                       <h4 className="text-[9px] font-black text-[#0a192f] uppercase tracking-[0.2em] mb-4 flex items-center justify-between w-full">
                         <div className="flex items-center gap-2"><Mic size={14} /> Tu guion para leer:</div>
@@ -1857,7 +1888,7 @@ export default function ContenidoPage() {
                         className="text-2xl font-black text-[#0a192f] leading-[1.1] tracking-tight "
                         wordClassName="text-[#142d53] border-b border-[#142d53]/40 hover:bg-[#142d53]/10"
                       />
-                      <div className="mt-8 flex flex-col items-center">
+                      <div className="mt-10 mb-2 flex flex-col items-center">
                         {isRecordingVoiceover ? (
                           <div className="flex flex-col items-center gap-2">
                             <button onClick={stopVoiceoverRecording} className="w-16 h-16 rounded-full bg-red-500 shadow-[0_0_30px_rgba(239,68,68,0.4)] flex items-center justify-center text-white animate-pulse border-4 border-red-400"><div className="w-5 h-5 bg-white rounded-sm" /></button>
@@ -1925,7 +1956,7 @@ export default function ContenidoPage() {
         </div>
 
         {/* Pie de Página (Controles Navegación) */}
-        <div className="p-6 border-t border-white/5 bg-[#0a192f]/80 backdrop-blur-md flex gap-3">
+        <div className="px-6 sm:px-8 py-6 border-t border-white/5 bg-[#0a192f]/80 backdrop-blur-md flex gap-3">
           {selectedScript.isProductionMode ? (
             /* Controles Modo Producción */
             !showFullScript && (
@@ -2082,41 +2113,41 @@ export default function ContenidoPage() {
           <div className="relative w-full bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_rgba(20,45,83,0.12)] overflow-hidden flex flex-col">
             
             {/* Cabecera */}
-            <div className="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50 to-transparent">
-              <div className="text-left relative bg-gradient-to-br from-[#142d53] to-[#0a192f] p-6 sm:p-8 rounded-[2rem] shadow-xl overflow-hidden text-white border border-[#48c1d2]/10">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[#48c1d2]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-                <div className="relative z-10">
-                  {!onboardingDone ? (
-                    <>
-                      <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 border border-[#48c1d2]/20 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
-                        🥇 Entrenamiento Obligatorio
+            <div className="relative p-6 md:p-8 flex justify-between items-start bg-gradient-to-br from-[#142d53] to-[#0a192f] border-b border-[#48c1d2]/20 overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#48c1d2]/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+              
+              <div className="relative z-10 text-left">
+                {!onboardingDone ? (
+                  <>
+                    <span className="text-[10px] sm:text-xs font-black text-[#48c1d2] bg-[#48c1d2]/10 border border-[#48c1d2]/20 px-3.5 py-1.5 rounded-full uppercase tracking-wider mb-3 flex items-center w-fit shadow-sm">
+                      🥇 Entrenamiento Obligatorio
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tighter leading-tight mt-1">
+                      ¡Bienvenido, <span className="text-[#48c1d2]">Sebastián!</span>
+                    </h2>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-wrap items-center gap-2 mb-4">
+                      <span className="text-[10px] sm:text-xs font-black text-[#142d53] bg-[#48c1d2] px-3.5 py-1.5 rounded-full uppercase tracking-wider inline-flex shadow-[0_0_15px_rgba(72,193,210,0.4)]">
+                        📋 Panel de Actividades
                       </span>
-                      <h2 className="text-[17px] sm:text-2xl md:text-3xl font-black text-white tracking-tighter leading-none whitespace-nowrap overflow-hidden text-ellipsis">
-                        ¡Bienvenido, <span className="text-[#48c1d2]">Sebastián!</span>
-                      </h2>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex flex-wrap items-center gap-2 mb-4">
-                        <span className="text-[9px] font-black text-[#142d53] bg-[#48c1d2] px-3 py-1.5 rounded-full uppercase tracking-wider inline-block shadow-[0_0_15px_rgba(72,193,210,0.4)]">
-                          📋 Panel de Actividades
-                        </span>
-                        <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full shadow-inner">
-                          <span className="text-[11px]">🔥</span>
-                          <span className="text-[9px] font-bold text-white uppercase tracking-wider">Racha: 3 Días</span>
-                        </div>
+                      <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full shadow-inner">
+                        <span className="text-xs">🔥</span>
+                        <span className="text-[10px] font-bold text-white uppercase tracking-wider">Racha: {streakDays} {streakDays === 1 ? 'Día' : 'Días'}</span>
                       </div>
-                      <h2 className="text-[17px] sm:text-2xl md:text-3xl font-black text-white tracking-tighter leading-none whitespace-nowrap overflow-hidden text-ellipsis">
-                        ¿Qué vas a hacer hoy, <span className="text-[#48c1d2]">Sebastián?</span>
-                      </h2>
-                    </>
-                  )}
-                </div>
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tighter leading-tight mt-1">
+                      ¿Qué vas a hacer hoy, <span className="text-[#48c1d2]">Sebastián?</span>
+                    </h2>
+                  </>
+                )}
               </div>
+              
               {onboardingDone && activeMision && (
                 <button 
                   onClick={() => setShowMissionModal(false)}
-                  className="w-10 h-10 rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-500 flex items-center justify-center text-slate-400 transition-all border border-slate-200/50"
+                  className="relative z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-red-500/20 hover:text-red-400 flex items-center justify-center text-white/70 transition-all border border-white/10"
                 >
                   <X size={20} />
                 </button>
@@ -2387,27 +2418,39 @@ export default function ContenidoPage() {
           if (!mision) return null;
           const MisionIcon = mision.icon;
           return (
-            <div className="mx-1 sm:mx-0 mb-10 p-5 md:p-6 bg-[#142d53] rounded-[2.5rem] border border-white/10 shadow-2xl shadow-[#142d53]/15 flex flex-col sm:flex-row items-center justify-between gap-4 animate-in slide-in-from-top-6 duration-500">
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 bg-[#48c1d2]/20 rounded-2xl flex items-center justify-center shadow-lg border border-[#48c1d2]/30">
-                  <MisionIcon className="text-[#48c1d2]" size={22} />
+            <div className="mx-1 sm:mx-0 mb-10 relative bg-gradient-to-br from-[#142d53] to-[#0a192f] rounded-[2rem] border border-white/8 shadow-2xl shadow-[#142d53]/30 overflow-hidden animate-in slide-in-from-top-6 duration-500">
+              {/* Glow decorativo */}
+              <div className="absolute top-0 right-0 w-72 h-72 bg-[#48c1d2]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#48c1d2]/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+
+              {/* Contenido */}
+              <div className="relative z-10 p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                <div className="flex items-center gap-5">
+                  {/* Ícono */}
+                  <div className="w-14 h-14 shrink-0 bg-[#48c1d2]/15 rounded-2xl flex items-center justify-center shadow-lg border border-[#48c1d2]/25 backdrop-blur-sm">
+                    <MisionIcon className="text-[#48c1d2]" size={26} />
+                  </div>
+                  {/* Texto */}
+                  <div>
+                    <span className="text-[9px] sm:text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-2 block">{mision.tag}</span>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tighter leading-tight">
+                      {mision.title.split(':').pop()?.trim() || mision.title}
+                    </h2>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-1 block">{mision.tag}</span>
-                  <h2 className="text-lg md:text-xl font-black text-white  tracking-tighter leading-none">
-                    {mision.title.split(':').pop()?.trim() || mision.title}
-                  </h2>
-                </div>
+
+                {/* Botón */}
+                <button
+                  onClick={() => {
+                    handleSelectMision(null);
+                    setShowMissionModal(true);
+                  }}
+                  className="shrink-0 flex items-center gap-2 px-5 py-3 bg-white/8 hover:bg-white/15 text-white/70 hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 active:scale-95 shadow-inner"
+                >
+                  <span className="text-base leading-none">↺</span>
+                  Cambiar Actividad
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  handleSelectMision(null);
-                  setShowMissionModal(true);
-                }}
-                className="px-5 py-3 bg-white/5 hover:bg-white/10 text-white hover:text-[#48c1d2] rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 active:scale-95 flex items-center gap-2 shrink-0 shadow-lg"
-              >
-                ↺ Cambiar de Actividad
-              </button>
             </div>
           );
         })()}
