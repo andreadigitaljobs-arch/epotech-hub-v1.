@@ -4754,18 +4754,42 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
     return (
       <div className="space-y-6 animate-in fade-in duration-500 text-left pb-10">
         {/* SUB-NAVEGACIÓN DEL HISTORIAL */}
-        <div className="flex bg-slate-100 p-1.5 rounded-[2rem] sticky top-0 z-20 shadow-sm mb-4">
+        <div className="flex bg-slate-100/80 backdrop-blur-md p-1.5 rounded-[2.2rem] sticky top-0 z-20 border border-slate-200/50 shadow-[0_4px_20px_rgba(20,45,83,0.04)] mb-6">
           <button
             onClick={() => setHistorialSubTab('stats')}
-            className={`flex-1 py-4 rounded-[1.8rem] text-[10px] font-black tracking-[2px] uppercase transition-all flex items-center justify-center gap-2 ${historialSubTab === 'stats' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`group flex-1 py-3.5 px-6 rounded-[1.8rem] text-[10px] font-black tracking-[2.5px] uppercase transition-all duration-300 ease-out flex items-center justify-center gap-2 ${
+              historialSubTab === 'stats'
+                ? 'bg-gradient-to-r from-[#142d53] to-[#1e3c66] text-[#48c1d2] border border-[#48c1d2]/25 shadow-[0_8px_30px_rgba(20,45,83,0.25),_0_0_15px_rgba(72,193,210,0.15)] scale-[1.01]'
+                : 'text-slate-400 hover:text-[#142d53] hover:bg-white/60 hover:shadow-sm'
+            }`}
           >
-            <TrendingUp size={14} /> ESTADÍSTICAS
+            <TrendingUp 
+              size={15} 
+              className={`transition-all duration-300 ${
+                historialSubTab === 'stats' 
+                  ? 'animate-pulse text-[#48c1d2] scale-110' 
+                  : 'group-hover:translate-y-[-1px] group-hover:translate-x-[1px]'
+              }`}
+            /> 
+            <span>ESTADÍSTICAS</span>
           </button>
           <button
             onClick={() => setHistorialSubTab('audios')}
-            className={`flex-1 py-4 rounded-[1.8rem] text-[10px] font-black tracking-[2px] uppercase transition-all flex items-center justify-center gap-2 ${historialSubTab === 'audios' ? 'bg-[#142d53] text-[#48c1d2] shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`group flex-1 py-3.5 px-6 rounded-[1.8rem] text-[10px] font-black tracking-[2.5px] uppercase transition-all duration-300 ease-out flex items-center justify-center gap-2 ${
+              historialSubTab === 'audios'
+                ? 'bg-gradient-to-r from-[#142d53] to-[#1e3c66] text-[#48c1d2] border border-[#48c1d2]/25 shadow-[0_8px_30px_rgba(20,45,83,0.25),_0_0_15px_rgba(72,193,210,0.15)] scale-[1.01]'
+                : 'text-slate-400 hover:text-[#142d53] hover:bg-white/60 hover:shadow-sm'
+            }`}
           >
-            <Mic size={14} /> HISTORIAL DE AUDIOS
+            <Mic 
+              size={15} 
+              className={`transition-all duration-300 ${
+                historialSubTab === 'audios' 
+                  ? 'animate-pulse text-[#48c1d2] scale-110' 
+                  : 'group-hover:scale-110 group-hover:rotate-[3deg]'
+              }`}
+            /> 
+            <span>HISTORIAL DE AUDIOS</span>
           </button>
         </div>
 
