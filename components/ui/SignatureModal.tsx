@@ -182,8 +182,15 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
   if (!mounted || !shouldRender) return null;
 
   return createPortal(
-    <div className={`fixed inset-0 z-[10000] flex items-center justify-center bg-[#0a192f]/80 backdrop-blur-sm p-6 md:p-8 overflow-y-auto transition-all duration-300 ${isClosing ? 'opacity-0' : 'opacity-100 animate-in fade-in'}`}>
-      <div className={`bg-white w-full max-w-2xl rounded-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[82vh] md:max-h-[80vh] w-full my-auto transition-all duration-300 ${isClosing ? 'scale-95 opacity-0 translate-y-10' : 'scale-100 opacity-100 translate-y-0 animate-in zoom-in-95'}`}>
+    <div 
+      onClick={onClose}
+      className={`fixed inset-0 z-[10000] flex items-center justify-center p-6 md:p-8 overflow-y-auto ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'}`}
+      style={{ background: "rgba(10, 25, 47, 0.85)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+    >
+      <div 
+        onClick={e => e.stopPropagation()}
+        className={`bg-white w-full max-w-2xl rounded-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[82vh] md:max-h-[80vh] w-full my-auto ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}
+      >
         <div className="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#48c1d2]/10 flex items-center justify-center text-[#48c1d2]">

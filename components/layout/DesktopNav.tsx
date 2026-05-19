@@ -11,7 +11,6 @@ export function DesktopNav() {
   const primaryNav = [
     { name: "Servicios", path: "/proyectos", icon: Briefcase },
     { name: "Contenido", path: "/contenido", icon: Sparkles },
-    { name: "Grabación", path: "/manual", icon: Video },
     { name: "Inspiración", path: "/referencias", icon: PlaySquare },
     { name: "Brief", path: "/brief", icon: Target },
   ];

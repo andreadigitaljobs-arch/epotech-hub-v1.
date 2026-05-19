@@ -79,12 +79,16 @@ import {
   Pause,
   Volume2,
   Square,
-  Edit3
+  Edit3,
+  UserCheck,
+  Compass
 } from "lucide-react";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { ScriptText } from "@/components/ui/ScriptText";
 import { guiones, guionesPresentacion, Script } from "@/data/scripts";
 import { mergeBlobsToWav } from "./audioUtils";
+import { Card } from "@/components/ui/Card";
+import { manual as staticManual } from "@/data/manual";
 
 // --- FUNCIÓN GLOBAL PARA FORZAR DESCARGA EN MÓVIL ---
 const forceDownload = async (url: string, filename: string) => {
@@ -423,7 +427,92 @@ export default function ContenidoPage() {
       }
     });
   };
-  const [guionTab, setGuionTab] = useState<'reels' | 'historias' | 'presentacion'>('reels');
+  const [guionTab, setGuionTab] = useState<'reels' | 'historias' | 'checklist' | 'presentacion'>('reels');
+
+  // --- ESTADOS INTEGRADOS DEL CHECKLIST DE OBRA ---
+  const [checklistActivePhase, setChecklistActivePhase] = useState("antes");
+  const [checklistActiveTooltip, setChecklistActiveTooltip] = useState<number | null>(null);
+  const [checklistExpandedProtocol, setChecklistExpandedProtocol] = useState<string | null>("reglas");
+  const [checklistData, setChecklistData] = useState<any>(() => {
+    const fasesInyectadas = staticManual.fases.map((fase: any) => {
+      let itemsFinales = [...fase.items];
+      
+      // 1. CÓMO PREPARAR EL CELULAR (Antes)
+      if (fase.id === 'antes') {
+        const hasTecnica = itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('CELULAR'));
+        if (!hasTecnica) {
+          itemsFinales = [
+            {
+              en: "⚙️ HOW TO SETUP YOUR PHONE",
+              es: "⚙️ CÓMO PREPARAR EL CELULAR",
+              tooltip: "Asegúrate de que todo esté bien antes de empezar:\n\n• Calidad: Configura tu cámara en 4K a 60 fps o 1080 a 60 fps\n• Posición: Graba con el celular parado (vertical)\n• Luz: Trata de que el sol te dé de frente, no por detrás\n• Lente: Limpia la cámara con un paño limpio antes de grabar\n• Audio: Acércate al celular si vas a hablar para que se escuche bien"
+            },
+            ...itemsFinales
+          ];
+        }
+      }
+      
+      // 2. OPTIMIZACIONES DURANTE
+      if (fase.id === 'durante') {
+        itemsFinales = itemsFinales.map((item: any) => {
+          const text = typeof item === 'string' ? item : item.es;
+          if (text.includes("1 video del equipo trabajando")) {
+            return {
+              ...item,
+              es: "5+ videos del equipo trabajando (variar ángulos)",
+              en: "5+ videos of the team working (vary angles)",
+              tooltip: "No grabes solo un video. Necesitas variedad para que el video final sea dinámico:\n\n• De frente\n• De lado\n• Desde arriba\n• Graba bien de cerca (los detalles)\n• Vista externa general"
+            };
+          }
+          return item;
+        });
+
+        if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('CLIPS CORTOS'))) {
+          itemsFinales.push({
+            en: "DETAILS AND SHORT CLIPS (5-10 SEC)",
+            es: "DETALLES Y CLIPS CORTOS (5-10 SEG)",
+            tooltip: "Necesitas MUCHOS clips cortos para que el video no sea aburrido. Graba mínimo 8-10 de estos:\n\n• Manchas/suciedad desapareciendo\n• Contraste agua sucia vs limpia\n• Presión del agua en acción\n• Texturas (antes vs después)\n• Expresión/técnica de Sebastián\n• Herramientas en detalle\n• Obstáculos siendo resueltos\n• Transformación visible"
+          });
+        }
+
+        if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('JENKRYFER'))) {
+          itemsFinales.push({
+            en: "JENKRYFER / ASSISTANT",
+            es: "JENKRYFER / ASISTENTE",
+            tooltip: "No es solo Sebastián, es un equipo. Si Jenkryfer o alguien está ayudando, graba:\n\n• Videos de ella montando herramientas\n• Videos de ella pasando accesorios\n• Videos de ella documentando (foto/video)\n• Videos de ambos trabajando en el mismo frame\n\nEsto humaniza todo y muestra equipo."
+          });
+        }
+
+        if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('VALOR AGREGADO'))) {
+          itemsFinales.push({ 
+            en: "EXTRA VALUE (DOORS, BINS, EXTRAS)", 
+            es: "VALOR AGREGADO (PUERTAS, BOTES, EXTRAS)", 
+            tooltip: "¿Hay algo extra que van a hacer hoy? (Ej: Puertas, botes de basura, etc.)\n\nSI → Grabar ANTES + PROCESO + DESPUÉS del extra.\nNO → Continuar con el trabajo normal.\n\nRecuerda: Mostrar estos detalles ayuda a que se aprecie todo el esfuerzo que pones en el trabajo." 
+          });
+        }
+      }
+
+      // 3. RESULTADO REALISTA (Al final)
+      if (fase.id === 'despues') {
+        if (!itemsFinales.some((item: any) => (typeof item === 'string' ? item : item.es).includes('RESULTADO FINAL REALISTA'))) {
+          itemsFinales.push({
+            en: "REALISTIC FINAL RESULT",
+            es: "RESULTADO FINAL REALISTA",
+            tooltip: "La honestidad genera confianza. No todo tiene que ser perfecto:\n\n• 1 video recorrido final (limpio, lento)\n• Graba bien de cerca las áreas difíciles (antes vs después)\n• Muestra áreas 100% limpias\n• Muestra áreas con limpieza parcial (ej: manchas de óxido persistentes)\n   → Graba el antes/después aunque sea parcial\n• Reacción del cliente (si existe)"
+          });
+        }
+      }
+
+      return { ...fase, items: itemsFinales };
+    });
+
+    return {
+      regla_oro: staticManual.regla.ruleEs,
+      haz_list: staticManual.comoGrabar.haz.map((h: any) => h.es),
+      evita_list: staticManual.comoGrabar.evita.map((e: any) => e.es),
+      fases: fasesInyectadas
+    };
+  });
   const [activeCategory, setActiveCategory] = useState<string>('Todas');
   const [activeFormat, setActiveFormat] = useState<string>('Todos');
   const [serviceType, setServiceType] = useState(typeParam);
@@ -556,7 +645,7 @@ export default function ContenidoPage() {
     window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
   };
 
-  const handleGuionTabChange = (tabId: 'reels' | 'historias' | 'presentacion') => {
+  const handleGuionTabChange = (tabId: 'reels' | 'historias' | 'checklist' | 'presentacion') => {
     setGuionTab(tabId);
     setSelectedWeek("");
     localStorage.setItem('epotech_guion_tab', tabId);
@@ -1829,7 +1918,16 @@ export default function ContenidoPage() {
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
-                <Sparkles size={15} /> Historias
+                <Sparkles size={15} /> Historias de Conexión
+              </button>
+              <button
+                onClick={() => handleGuionTabChange('checklist')}
+                className={`flex-1 py-3 px-2 sm:px-3 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${guionTab === 'checklist'
+                    ? 'bg-[#142d53] text-[#48c1d2] shadow-[0_4px_20px_rgba(20,45,83,0.3)] scale-[1.02]'
+                    : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                  }`}
+              >
+                <CheckCircle2 size={15} /> Checklist de Obra
               </button>
               <button
                 onClick={() => handleGuionTabChange('presentacion')}
@@ -1838,7 +1936,7 @@ export default function ContenidoPage() {
                     : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                   }`}
               >
-                <Clapperboard size={15} /> GRABACIÓN PRO
+                <Clapperboard size={15} /> Grabación Pro
               </button>
             </div>
 
@@ -1847,11 +1945,12 @@ export default function ContenidoPage() {
                 <h3 className="text-lg font-black text-[#142d53] mb-2 tracking-tight">
                   {guionTab === 'reels' && 'Estudio de Voz en Off'}
                   {guionTab === 'historias' && 'Laboratorio de Historias'}
+                  {guionTab === 'checklist' && 'Checklist de Grabación en Campo'}
                   {guionTab === 'presentacion' && 'Producción Profesional (Cámara)'}
                 </h3>
                 
                 {/* Tarjeta de Instrucciones Dinámica */}
-                {guionTab !== 'historias' && (
+                {guionTab !== 'historias' && guionTab !== 'checklist' && (
                   <div className="bg-white/60 backdrop-blur-md p-4 rounded-2xl border border-[#142d53]/5 mb-6 flex items-start gap-3 shadow-sm">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     guionTab === 'reels' ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-[#48c1d2] text-[#142d53]'
@@ -2216,6 +2315,337 @@ export default function ContenidoPage() {
                           </div>
                         </>
                       )}
+                    </div>
+                  ) : guionTab === 'checklist' ? (
+                    <div className="grid grid-cols-1 gap-6 text-left">
+                      {/* INTEGRACIÓN DEL MANUAL / CHECKLIST DE GRABACIÓN EN CAMPO */}
+                      <div>
+                        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
+                            <span className="text-[#48c1d2]">Guía completa de grabación:</span> Esta sección te muestra exactamente qué necesitamos que grabes o fotografíes en cada momento del día. Navega por las pestañas para conocer lo que debes capturar en el "Antes", "Durante" y "Después" del trabajo, además de ideas para tus historias de conexión. <span className="text-[#142d53] bg-[#48c1d2]/20 px-1 rounded">(Toca los elementos con "¿CÓMO GRABARLO?" para ver consejos técnicos)</span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        {/* Regla de Oro Compacta */}
+                        <div className="group bg-gradient-to-br from-[#142d53] to-[#1e3a8a] rounded-[2.5rem] p-8 relative overflow-hidden shadow-2xl border border-white/10">
+                          <div className="absolute -right-6 -bottom-6 opacity-[0.1] group-hover:opacity-20 transition-all duration-700 group-hover:scale-110">
+                            <Zap size={140} className="text-[#48c1d2]" />
+                          </div>
+                          <div className="relative z-10">
+                            <div className="flex items-center gap-2 mb-3">
+                              <div className="w-6 h-6 rounded-lg bg-[#48c1d2] flex items-center justify-center text-[#142d53]">
+                                <Star size={12} fill="currentColor" />
+                              </div>
+                              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#48c1d2]">Lo más importante</h3>
+                            </div>
+                            <p className="text-xl md:text-2xl font-black italic leading-tight text-white tracking-tight">
+                              "{checklistData.regla_oro}"
+                            </p>
+                            <div className="mt-4 flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] animate-pulse" />
+                              <span className="text-[8px] font-black uppercase tracking-widest text-white/40">Calidad Epotech</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Selector de Fase Compacto */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          {checklistData.fases.map((fase: any) => {
+                            const phaseIcons: Record<string, any> = {
+                              antes: Camera,
+                              durante: Settings,
+                              despues: Sparkles,
+                              humano: UserCheck,
+                            };
+                            const Icon = phaseIcons[fase.id] || Camera;
+                            const isActive = checklistActivePhase === fase.id;
+                            return (
+                              <button
+                                key={fase.id}
+                                onClick={() => {
+                                  setChecklistActivePhase(fase.id);
+                                  setChecklistActiveTooltip(null);
+                                }}
+                                className={`flex items-center gap-3 p-3 rounded-2xl transition-all border ${
+                                  isActive 
+                                    ? "bg-white border-[#48c1d2] shadow-md" 
+                                    : "bg-gray-50 border-transparent text-slate-400 opacity-70"
+                                }`}
+                              >
+                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${isActive ? "bg-[#48c1d2] text-[#142d53]" : "bg-white border border-slate-100"}`}>
+                                  <Icon size={14} />
+                                </div>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-left leading-tight">
+                                  {fase.titulo}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* Contenido de Fase */}
+                        <div className="min-h-[300px]">
+                          {checklistData.fases.map((fase: any) => {
+                            if (checklistActivePhase !== fase.id) return null;
+                            const phaseIcons: Record<string, any> = {
+                              antes: Camera,
+                              durante: Settings,
+                              despues: Sparkles,
+                              humano: UserCheck,
+                            };
+                            const phaseColors: Record<string, string> = {
+                              antes: "bg-[#142d53]/5 text-[#142d53] border-[#142d53]/10",
+                              durante: "bg-[#48c1d2]/10 text-[#142d53] border-[#48c1d2]/20",
+                              despues: "bg-[#142d53]/5 text-[#142d53] border-[#142d53]/10",
+                              humano: "bg-[#48c1d2]/10 text-[#142d53] border-[#48c1d2]/20",
+                            };
+                            const phaseMessages: Record<string, string> = {
+                              antes: "Registra el estado inicial. La suciedad extrema y el abandono son la clave para enganchar al espectador en los primeros 2 segundos.",
+                              durante: "Documenta el proceso con clips dinámicos de acción. Se debe apreciar la técnica de Sebastián, la presión del agua y la eliminación de suciedad.",
+                              despues: "Muestra el resultado final brillante. Debe verse impecable, nítido y transmitir la sensación de lujo/restauración de Epotech.",
+                              humano: "Reglas de oro para crear historias diarias rápidas sin esfuerzo. Muestra el detrás de cámaras, humaniza la marca y conecta en un nivel personal."
+                            };
+                            const Icon = phaseIcons[fase.id] || Play;
+                            const colorStyles = phaseColors[fase.id] || "bg-gray-100";
+
+                            return (
+                              <div key={fase.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <Card className="p-6 border-t-8 shadow-xl rounded-[2.5rem]" style={{ borderTopColor: fase.id === 'durante' || fase.id === 'humano' ? '#48c1d2' : '#142d53' }}>
+                                  <div className="flex items-center gap-3 mb-6">
+                                    <div className={`p-3 rounded-xl border ${colorStyles}`}>
+                                      <Icon size={18} />
+                                    </div>
+                                    <div>
+                                      <h3 className="text-xl font-black text-[#142d53] tracking-tighter">{fase.titulo}</h3>
+                                      <p className="text-[10px] font-bold text-slate-400 tracking-widest mt-0.5">Checklist de grabación</p>
+                                    </div>
+                                  </div>
+
+                                  <div className={`mb-8 p-6 rounded-3xl border border-slate-100 bg-slate-50/50 transition-all`}>
+                                    {checklistActivePhase === 'humano' ? (
+                                      <div className="space-y-6">
+                                        <p className={`text-xs font-black uppercase tracking-tight leading-relaxed text-[#142d53] mb-4`}>
+                                          <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 bg-[#142d53]`}>
+                                            Qué hacer aquí:
+                                          </span>
+                                          Aquí tienes ideas y reglas básicas para crear historias que generen confianza. No se trata de vender, sino de mostrar quién está detrás del trabajo y cómo es el día a día.
+                                        </p>
+                                        <div className="text-center pt-4">
+                                          <p className="text-[11px] font-black text-[#142d53] uppercase tracking-widest italic opacity-80 text-center">
+                                            "No necesitas actuar. Solo cuenta lo que estás haciendo como si se lo explicaras a un amigo."
+                                          </p>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <p className={`text-xs font-black uppercase tracking-tight leading-relaxed text-[#142d53]`}>
+                                        <span className={`inline-block text-white px-2 py-1 rounded mr-3 mb-1 bg-[#142d53]`}>
+                                          Qué hacer aquí:
+                                        </span>
+                                        {phaseMessages[checklistActivePhase]}
+                                      </p>
+                                    )}
+                                  </div>
+
+                                  {/* 📋 LISTADO DE ITEMS (Fases normales) */}
+                                  {checklistActivePhase !== 'protocolo' && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 relative">
+                                      {fase.items.map((item: any, idx: number) => (
+                                        <div 
+                                          key={idx} 
+                                          onClick={() => {
+                                            if (item.tooltip || checklistActivePhase === 'humano') {
+                                              setChecklistActiveTooltip(checklistActiveTooltip === idx ? null : idx);
+                                            }
+                                          }}
+                                          className={`group w-full flex flex-col items-start text-left p-5 bg-white rounded-[2rem] border transition-all active:scale-[0.98] cursor-pointer ${checklistActiveTooltip === idx ? 'border-[#48c1d2] bg-white shadow-xl ring-4 ring-[#48c1d2]/5' : 'border-slate-100 bg-gray-50/50 hover:bg-white hover:border-[#48c1d2]/50 hover:shadow-lg'}`}
+                                        >
+                                          <div className="flex items-start gap-3 w-full">
+                                            <div className={`mt-0.5 rounded-xl w-8 h-8 flex items-center justify-center shrink-0 text-xs font-black transition-all ${checklistActiveTooltip === idx ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-white border border-slate-100 text-slate-400 group-hover:text-[#48c1d2]'}`}>
+                                              {idx + 1}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                                <p className={`text-sm md:text-base font-black leading-tight transition-colors whitespace-normal ${checklistActiveTooltip === idx ? 'text-[#142d53]' : 'text-slate-600 group-hover:text-[#142d53]'}`}>
+                                                  {(item.es || item)}
+                                                </p>
+                                                <div className={`shrink-0 self-start sm:self-center px-2 py-1 rounded-lg text-[8px] font-black uppercase flex items-center gap-1 transition-all ${checklistActiveTooltip === idx ? 'bg-[#48c1d2] text-[#142d53]' : 'bg-slate-200/50 text-slate-500 group-hover:bg-[#142d53] group-hover:text-white'}`}>
+                                                  <HelpCircle size={10} /> 
+                                                  <span className="hidden md:inline">{checklistActiveTooltip === idx ? 'CERRAR' : '¿CÓMO GRABARLO?'}</span>
+                                                  <span className="md:hidden">{checklistActiveTooltip === idx ? 'CERRAR' : 'TOCA PARA VER'}</span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          
+                                          {/* Tooltip Detallado (Phase Humano / Stories Diarias) */}
+                                          {checklistActiveTooltip === idx && checklistActivePhase === 'humano' && (
+                                            <div className="mt-6 w-full space-y-3 animate-in slide-in-from-top-2 duration-300" onClick={(e) => e.stopPropagation()}>
+                                              <div className="grid grid-cols-1 gap-3">
+                                                  {/* Objetivo */}
+                                                  <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm text-left">
+                                                    <div className="flex items-center gap-2 mb-1.5">
+                                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Propósito de esta historia</span>
+                                                    </div>
+                                                    <p className="text-[12px] font-bold text-[#142d53] leading-relaxed">{item.objetivo}</p>
+                                                  </div>
+                                                  
+                                                  {/* Grabación */}
+                                                  <div className="bg-slate-50/80 p-4 rounded-2xl border-l-4 border-[#142d53] shadow-sm text-left">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                      <Smartphone size={14} className="text-[#142d53]" />
+                                                      <span className="text-[8px] font-black text-[#142d53] uppercase tracking-[0.2em]">Qué grabar en video</span>
+                                                    </div>
+                                                    <p className="text-[12px] font-bold text-slate-700 leading-relaxed mb-3">{item.grabar}</p>
+                                                    
+                                                    {(item.ejemplos || item.detalles) && (
+                                                      <div className="pt-2 border-t border-slate-200 mt-2">
+                                                        <p className="text-[9px] font-black text-slate-400 uppercase mb-2">Detalles para enfocar en la toma:</p>
+                                                        <div className="flex flex-wrap gap-1.5">
+                                                          {item.ejemplos?.map((ej: string, i: number) => (
+                                                            <span key={`ej-${i}`} className="px-2.5 py-1 bg-white border border-[#48c1d2]/40 rounded-lg text-[10px] font-bold text-[#142d53]">{ej}</span>
+                                                          ))}
+                                                          {item.detalles?.map((det: string, i: number) => (
+                                                            <span key={`det-${i}`} className="px-2.5 py-1 bg-white border border-[#142d53]/30 rounded-lg text-[10px] font-bold text-[#142d53]">{det}</span>
+                                                          ))}
+                                                        </div>
+                                                      </div>
+                                                    )}
+                                                  </div>
+
+                                                  {/* Narración */}
+                                                  <div className="bg-white p-4 rounded-2xl border-l-4 border-[#48c1d2] shadow-sm text-left">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                      <Mic size={14} className="text-[#48c1d2]" />
+                                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[0.2em]">Qué decir al hablar</span>
+                                                    </div>
+                                                    <p className="text-[12px] font-bold text-[#142d53] leading-relaxed mb-4">{item.narrar}</p>
+                                                    
+                                                    {item.demo && (
+                                                      <div className="bg-[#142d53]/5 p-4 rounded-xl border border-[#142d53]/10 relative group/demo transition-all hover:bg-[#142d53]/10 text-left">
+                                                        <div className="absolute -top-2 left-4 bg-[#142d53] text-white px-3 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest">Ejemplo práctico</div>
+                                                        <p className="text-[11px] font-medium text-[#142d53] italic leading-relaxed pt-1">{item.demo.replace(/^["“”]+|["“”]+$/g, '')}</p>
+                                                      </div>
+                                                    )}
+                                                  </div>
+
+                                                  {/* Duración/Reglas */}
+                                                  {(item.duracion || item.regla) && (
+                                                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                                                      {item.duracion && (
+                                                        <div className="flex items-center gap-2 text-[#142d53]/60">
+                                                          <Clock size={12} />
+                                                          <span className="text-[9px] font-black uppercase tracking-wider">{item.duracion}</span>
+                                                        </div>
+                                                      )}
+                                                      {item.regla && (
+                                                        <div className="bg-[#142d53]/5 px-4 py-2.5 rounded-2xl border border-[#142d53]/10 flex items-center gap-2 text-left">
+                                                          <div className="w-1.5 h-1.5 rounded-full bg-[#48c1d2] shrink-0" />
+                                                          <span className="text-[10px] font-bold text-[#142d53] leading-snug">{item.regla.replace('❌ ', '')}</span>
+                                                        </div>
+                                                      )}
+                                                    </div>
+                                                  )}
+                                              </div>
+                                            </div>
+                                          )}
+
+                                          {/* Tooltip Detallado (Original Phases) */}
+                                          {checklistActiveTooltip === idx && checklistActivePhase !== 'humano' && item.tooltip && (
+                                            <div className="mt-4 p-4 bg-[#142d53] text-white rounded-xl text-[10px] font-medium leading-relaxed animate-in zoom-in-95 duration-200 shadow-2xl relative border border-white/10 whitespace-pre-line w-full" onClick={(e) => e.stopPropagation()}>
+                                              <div className="absolute -top-2 left-6 w-4 h-4 bg-[#142d53] rotate-45 border-l border-t border-white/10"></div>
+                                              <span className="text-[#48c1d2] font-black uppercase block mb-1">Cómo hacerlo:</span>
+                                              {item.tooltip}
+                                            </div>
+                                          )}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                </Card>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        
+                        {/* ACORDEONES DE CALIDAD */}
+                        <div className="mt-12 space-y-4 pt-10 border-t-2 border-slate-100">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-2xl bg-[#48c1d2]/10 flex items-center justify-center text-[#48c1d2]">
+                                <ShieldCheck size={24} />
+                              </div>
+                              <div>
+                                <h3 className="text-xl font-black text-[#142d53] tracking-tighter">Buenas Prácticas de Grabación</h3>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Consejos clave para todo tu contenido</p>
+                              </div>
+                            </div>
+                            <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+                              Aplica para: Todas las Fases
+                            </p>
+                          </div>
+
+                          {/* ACORDEÓN: BUENAS PRÁCTICAS */}
+                          <div className="space-y-2">
+                            <button 
+                              onClick={() => setChecklistExpandedProtocol(checklistExpandedProtocol === 'reglas' ? null : 'reglas')}
+                              className={`w-full flex items-center justify-between p-5 rounded-[2rem] border transition-all ${checklistExpandedProtocol === 'reglas' ? 'bg-[#142d53] border-transparent shadow-xl text-white' : 'bg-white border-slate-100 hover:border-[#48c1d2]/30 shadow-sm'}`}
+                            >
+                              <div className="flex-1 min-w-0 flex items-center gap-4">
+                                <div className={`p-2.5 rounded-xl border shrink-0 ${checklistExpandedProtocol === 'reglas' ? 'bg-[#48c1d2] border-white/10 text-[#142d53]' : 'bg-[#48c1d2]/5 border-[#48c1d2]/10 text-[#48c1d2]'}`}>
+                                  <CheckCircle2 size={18} />
+                                </div>
+                                <div className="text-left min-w-0">
+                                  <h4 className={`text-base font-black tracking-tight leading-tight whitespace-normal ${checklistExpandedProtocol === 'reglas' ? 'text-white' : 'text-[#142d53]'}`}>Guía Rápida para el Equipo en Campo</h4>
+                                  <p className={`text-[8px] font-black uppercase tracking-widest opacity-60 ${checklistExpandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-400'}`}>Lo más importante al usar tu cámara</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 shrink-0 ml-4">
+                                <span className={`text-[8px] font-black uppercase tracking-widest ${checklistExpandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-300'}`}>
+                                  {checklistExpandedProtocol === 'reglas' ? 'Cerrar' : 'Toca para abrir'}
+                                </span>
+                                <div className={`${checklistExpandedProtocol === 'reglas' ? 'text-[#48c1d2]' : 'text-slate-300'}`}>
+                                  {checklistExpandedProtocol === 'reglas' ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                                </div>
+                              </div>
+                            </button>
+
+                            {checklistExpandedProtocol === 'reglas' && (
+                              <div className="bg-white p-4 md:p-6 rounded-[2rem] border border-slate-100 shadow-lg space-y-4 animate-in zoom-in-95 duration-300 mt-2">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-[#48c1d2]/20 flex items-center justify-center text-[#48c1d2] shrink-0">
+                                    <CheckCircle2 size={16} />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-xs md:text-sm font-black text-[#142d53] uppercase tracking-widest">Checklist de Calidad Visual</h4>
+                                    <p className="text-[10px] md:text-[11px] font-medium text-slate-500">Asegúrate de cumplir estos puntos antes de dar por terminado un video</p>
+                                  </div>
+                                </div>
+                                <ul className="grid grid-cols-2 gap-2">
+                                  {checklistData.haz_list.map((item: string, i: number) => (
+                                    <li key={i} className="flex items-center gap-2 bg-slate-50/80 py-2.5 px-3 rounded-xl border border-slate-100 transition-all hover:bg-white hover:border-[#48c1d2]/40 hover:shadow-sm group/item">
+                                      <div className="text-[#48c1d2] opacity-60 group-hover/item:opacity-100 transition-opacity shrink-0">
+                                        <CheckCircle2 size={14} />
+                                      </div>
+                                      <span className="text-[10px] md:text-[11px] font-bold text-[#142d53] leading-tight">{item}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="mt-8 flex items-center gap-3">
+                          <div className="bg-[#48c1d2]/10 p-1 rounded-lg text-[#48c1d2]">
+                            <AlertCircle size={12} />
+                          </div>
+                          <p className="text-[10px] font-bold text-[#142d53] uppercase tracking-tight">
+                            Tip: Clips de 5 segundos máximo para dinamismo.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 gap-4">
