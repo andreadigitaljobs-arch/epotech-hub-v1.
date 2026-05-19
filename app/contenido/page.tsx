@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 // Refined Narrative Workflow & Brand Colors Alignment
 
 import { useState, useEffect, useRef, Suspense } from "react";
@@ -2291,6 +2291,25 @@ export default function ContenidoPage() {
                       </div>
                       <span className="text-[8px] font-black uppercase tracking-widest text-[#48c1d2] mt-4 block">Hacer Simulacro 🗣️ →</span>
                     </div>
+                  </div>
+
+                  {/* Saltar Entrenamiento */}
+                  <div className="pt-2 flex justify-center">
+                    <button
+                      onClick={() => {
+                        localStorage.setItem('epotech_onboarding_done', 'true');
+                        localStorage.setItem('epotech_onboarding_progress', JSON.stringify({ voiceDone: true, reportDone: true }));
+                        setOnboardingDone(true);
+                        setOnboardingProgress({ voiceDone: true, reportDone: true });
+                        setIsOnboardingTour(false);
+                        setTourStep(0);
+                        setTourSubStep(0);
+                        showToast("Entrenamiento omitido. Bienvenido al Hub 🚀", "success");
+                      }}
+                      className="text-[9px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest transition-colors underline underline-offset-2"
+                    >
+                      Saltar entrenamiento
+                    </button>
                   </div>
 
                   {/* Reset Onboarding Button inside Onboarding stage */}
