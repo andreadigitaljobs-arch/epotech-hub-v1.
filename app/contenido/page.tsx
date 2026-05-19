@@ -4285,7 +4285,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
 
   // Sincronizar URL cuando cambian las vistas
   const updateUrl = (newView: string, m?: string, w?: string | number) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : searchParams.toString());
     params.set('view', newView);
     if (m) params.set('m', m);
     if (w) params.set('w', w.toString());
