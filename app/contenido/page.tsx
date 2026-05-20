@@ -568,6 +568,9 @@ export default function ContenidoPage() {
     } else {
       setActiveMision(null);
       localStorage.removeItem('epotech_active_mision');
+      // Reset activeTab back to 'guiones' to avoid showing the history section under the menu
+      setActiveTab('guiones');
+      localStorage.setItem('epotech_production_tab', 'guiones');
       // Clear URL search params without page reload
       router.replace(window.location.pathname, { scroll: false });
     }
