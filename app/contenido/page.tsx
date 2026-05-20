@@ -1223,7 +1223,6 @@ export default function ContenidoPage() {
 
   const handleCloseAudioReport = () => {
     setIsClosingAudioReport(true);
-    setReportSentSuccessfully(false);
     
     // REGRESA SIEMPRE AL MODAL PRINCIPAL DE MISIONES AL CERRAR ESTO, DE INMEDIATO
     setShowMissionModal(true);
@@ -1239,6 +1238,7 @@ export default function ContenidoPage() {
     setTimeout(() => {
       setShowAudioReport(false);
       setIsClosingAudioReport(false);
+      setReportSentSuccessfully(false);
     }, 500); // Aumentado a 500ms para sincronizar con la animación más dramática
   };
 
@@ -2494,8 +2494,8 @@ export default function ContenidoPage() {
                   }}
                   className="shrink-0 flex items-center gap-2 px-5 py-3 bg-white/8 hover:bg-white/15 text-white/70 hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10 active:scale-95 shadow-inner"
                 >
-                  <span className="text-base leading-none">↺</span>
-                  Cambiar Actividad
+                  <span className="text-base leading-none">←</span>
+                  Volver al Menú
                 </button>
               </div>
             </div>
@@ -3682,7 +3682,7 @@ export default function ContenidoPage() {
       {showAudioReport && createPortal(
         <div className="fixed inset-0 z-[20000] flex items-center justify-center p-4 md:p-8 overflow-hidden">
           <div 
-            onClick={handleCloseAudioReport}
+            onClick={reportSentSuccessfully ? undefined : handleCloseAudioReport}
             className={`absolute inset-0 bg-[#0a192f]/90 ${isClosingAudioReport ? 'modal-backdrop-out' : 'modal-backdrop'}`}
           />
           <div 
