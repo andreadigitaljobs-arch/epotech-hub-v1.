@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 // Refined Narrative Workflow & Brand Colors Alignment
 
 import { useState, useEffect, useRef, Suspense } from "react";
@@ -406,6 +406,16 @@ const MISIONES = [
     colorClasses: { bg: 'bg-sky-500', bgLight: 'bg-sky-500/10', text: 'text-sky-600', border: 'border-sky-500/30', hoverBorder: 'group-hover:border-sky-500/40' }
   },
   {
+    id: 'narracion',
+    title: "🗣️ Reportar Día de Trabajo",
+    desc: "Envía un audio corto describiendo tus tareas de hoy para que podamos crear nuevos guiones.",
+    icon: MessageSquare,
+    tag: "Reporte",
+    tab: 'guiones',
+    sub: 'checklist',
+    colorClasses: { bg: 'bg-blue-600', bgLight: 'bg-blue-600/10', text: 'text-blue-600', border: 'border-blue-600/30', hoverBorder: 'group-hover:border-blue-600/40' }
+  },
+  {
     id: 'historias',
     title: "🚗 Guía de Videos para Historias",
     desc: "Ideas rápidas y fáciles para grabar contenido informal en tu día a día (rutas, equipo, pausas).",
@@ -434,16 +444,6 @@ const MISIONES = [
     tab: 'guiones',
     sub: 'presentacion',
     colorClasses: { bg: 'bg-emerald-500', bgLight: 'bg-emerald-500/10', text: 'text-emerald-600', border: 'border-emerald-500/30', hoverBorder: 'group-hover:border-emerald-500/40' }
-  },
-  {
-    id: 'narracion',
-    title: "🗣️ Reportar Día de Trabajo",
-    desc: "Envía un audio corto describiendo tus tareas de hoy para que podamos crear nuevos guiones.",
-    icon: MessageSquare,
-    tag: "Reporte",
-    tab: 'guiones',
-    sub: 'checklist',
-    colorClasses: { bg: 'bg-blue-600', bgLight: 'bg-blue-600/10', text: 'text-blue-600', border: 'border-blue-600/30', hoverBorder: 'group-hover:border-blue-600/40' }
   },
   {
     id: 'historial',
@@ -979,6 +979,7 @@ export default function ContenidoPage() {
   const [productionMode, setProductionMode] = useState<'historias' | 'biblioteca' | 'manual'>('historias');
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [showAudioReport, setShowAudioReport] = useState(false);
+  const [reportSentSuccessfully, setReportSentSuccessfully] = useState(false);
 
   const [enCamaraSubTab, setEnCamaraSubTab] = useState<'pinned' | 'pro' | 'series'>('pinned');
   const [showFullScript, setShowFullScript] = useState(false);
@@ -1222,6 +1223,7 @@ export default function ContenidoPage() {
 
   const handleCloseAudioReport = () => {
     setIsClosingAudioReport(true);
+    setReportSentSuccessfully(false);
     
     // REGRESA SIEMPRE AL MODAL PRINCIPAL DE MISIONES AL CERRAR ESTO, DE INMEDIATO
     setShowMissionModal(true);
@@ -1357,7 +1359,7 @@ export default function ContenidoPage() {
         updateOnboardingProgress('reportDone', true);
         setOnboardingSuccessModal({ isOpen: true, type: 'report' });
       } else {
-        handleCloseAudioReport();
+        setReportSentSuccessfully(true);
       }
     } catch (err) {
       console.error(err);
@@ -3686,6 +3688,39 @@ export default function ContenidoPage() {
           <div 
             onClick={e => e.stopPropagation()}
             className={`relative z-10 bg-[#0a192f]/95 w-full max-w-xl md:max-w-2xl max-h-[calc(100vh-8rem)] rounded-[2rem] md:rounded-[40px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col max-h-[92vh] md:max-h-[90vh] my-auto overflow-hidden ${isClosingAudioReport ? 'modal-panel-out' : 'modal-panel'}`}>
+            {reportSentSuccessfully ? (
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-8 md:p-12 flex flex-col items-center justify-center text-center space-y-6 md:space-y-8 animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-[#48c1d2]/20 to-emerald-500/20 border border-[#48c1d2]/40 flex items-center justify-center text-3xl shadow-2xl relative group shrink-0">
+                  <div className="absolute inset-0 bg-[#48c1d2]/20 rounded-[2rem] blur-xl opacity-60 animate-pulse pointer-events-none" />
+                  🗣️
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-none">
+                    ¡Reporte Enviado <span className="text-[#48c1d2]">con éxito!</span>
+                  </h3>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+                    el equipo de edición ya tiene tu audio y está listo para crear videos geniales 🚀
+                  </p>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 p-6 rounded-[2rem] max-w-md text-left relative overflow-hidden">
+                  <p className="text-xs font-bold text-white/80 leading-relaxed">
+                    Tu reporte diario respondiendo las preguntas ha sido registrado en nuestra base de datos.
+                    Hemos guardado una copia en tu <strong>Historial de Audios</strong> por si quieres escucharla o descargarla después. ¡No necesitas hacer nada más!
+                  </p>
+                </div>
+
+                <button
+                  onClick={handleCloseAudioReport}
+                  style={{ paddingTop: '20px', paddingBottom: '20px' }}
+                  className="w-full max-w-xs rounded-full text-xs font-black uppercase tracking-[3px] bg-[#48c1d2] text-[#142d53] shadow-xl shadow-[#48c1d2]/20 hover:scale-[1.02] active:scale-98 transition-all"
+                >
+                  Entendido
+                </button>
+              </div>
+            ) : (
+              <>
             <div className="p-6 md:p-10 pb-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-black/40 to-transparent text-left relative z-20 shrink-0">
               <div>
                 <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[4px] mb-2 block  opacity-70">Módulo de Mentoría Narrativa</span>
@@ -3963,6 +3998,8 @@ export default function ContenidoPage() {
                 )}
               </button>
             </div>
+          </>
+        )}
           </div>
         </div>, document.body
       )}
