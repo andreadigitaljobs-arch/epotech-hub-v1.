@@ -888,87 +888,10 @@ export default function Home() {
 
 
 
+
+
+
       <div className="relative z-20">
-
-        {/* Quick Help Card */}
-
-        <div className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 mb-12 flex flex-col md:flex-row items-center gap-8 group">
-
-          <div 
-
-            onClick={() => setIsPlaying(true)}
-
-            className="w-full md:w-auto md:min-w-[300px] aspect-[9/16] max-h-[500px] bg-slate-900 rounded-[3rem] relative overflow-hidden flex items-center justify-center border-[12px] border-[#142d53] shadow-2xl group-hover:scale-[1.02] transition-transform duration-500 cursor-pointer mx-auto"
-
-          >
-
-            {isPlaying ? (
-
-              <iframe
-
-                src={`https://www.youtube.com/embed/${tutorialVideoId}?autoplay=1&rel=0&modestbranding=1`}
-
-                className="w-full h-full"
-
-                allow="autoplay; encrypted-media"
-
-                allowFullScreen
-
-              ></iframe>
-
-            ) : (
-
-              <>
-
-                <div className="absolute inset-0 bg-gradient-to-br from-[#142d53] to-[#48c1d2]/40 opacity-60"></div>
-
-                <div className="w-16 h-16 rounded-full bg-[#48c1d2] flex items-center justify-center shadow-2xl shadow-[#48c1d2]/50 relative z-10 group-hover:scale-110 transition-transform">
-
-                  <Play size={24} className="text-[#142d53] ml-1" fill="currentColor" />
-
-                </div>
-
-                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-10">
-
-                  <span className="text-white text-xs font-black uppercase tracking-widest bg-[#142d53]/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-
-                    Tutorial General
-
-                  </span>
-
-                  <span className="text-white/60 text-[10px] font-bold">1:45 min</span>
-
-                </div>
-
-              </>
-
-            )}
-
-          </div>
-
-          <div className="flex-1 space-y-4 text-left">
-
-            <h2 className="text-2xl font-black text-[#142d53] tracking-tight">¡Bienvenido a bordo!</h2>
-
-            <p className="text-slate-600 font-medium leading-relaxed text-sm">
-
-              He preparado este video para mostrarte cómo navegar por cada sección. Dale play y descubre cómo estamos organizando todo tu trabajo de 2026.
-
-            </p>
-
-            <div className="flex flex-wrap gap-2 pt-2">
-
-              <span className="bg-[#48c1d2]/10 text-[#48c1d2] text-[10px] font-black px-3 py-1 rounded-full uppercase">Paso a paso</span>
-
-              <span className="bg-purple-100 text-purple-600 text-[10px] font-black px-3 py-1 rounded-full uppercase">Navegación</span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
 
         {/* Categories Grid */}
 
