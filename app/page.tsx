@@ -50,33 +50,17 @@ const TUTORIAL_CARDS = [
 
   {
 
-    title: "El Poder de tus Guiones",
+    title: "Contenido",
 
-    description: "Usa tus notas de voz para que nosotros creemos guiones ganadores para ti.",
+    description: "Descubre qué grabar en tus trabajos (checklist), qué historias crear para tus Stories, y realiza tus reportes diarios con notas de voz, todo unificado en un solo lugar.",
 
-    icon: Sparkles,
+    icon: Video,
 
-    path: "/contenido?tab=guiones",
+    path: "/contenido",
 
     color: "cyan",
 
     tag: "Contenido"
-
-  },
-
-  {
-
-    title: "Manual de Grabación",
-
-    description: "Qué grabar Antes, Durante y Después de trabajar, y cómo hacer tus Stories. Todo lo que necesitamos que captures para editar videos geniales.",
-
-    icon: Camera,
-
-    path: "/manual",
-
-    color: "cyan",
-
-    tag: "Producción"
 
   },
 
