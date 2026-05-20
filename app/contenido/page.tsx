@@ -798,9 +798,9 @@ export default function ContenidoPage() {
     setToast({ message, type, isVisible: true });
   };
 
-  // Memoria de Pestaña e Inteligencia de URL
+  // Memoria de Pestana e Inteligencia de URL
   useEffect(() => {
-    const tabParam = searchParams.get('tab');
+    const tabParam = searchParams.get('tab') || (searchParams.get('sub') ? 'guiones' : null);
     const subTabParam = searchParams.get('sub');
     
     // Check if there is an active mission in localStorage
@@ -831,7 +831,13 @@ export default function ContenidoPage() {
 
     if (!tabParam) {
       const savedTab = localStorage.getItem('epotech_production_tab');
-      if (savedTab) setActiveTab(savedTab);
+      if (savedTab) {
+        setActiveTab(savedTab);
+        if (savedTab === 'historial') {
+          setActiveMision('historial');
+          localStorage.setItem('epotech_active_mision', 'historial');
+        }
+      }
     }
 
     if (subTabParam) {
