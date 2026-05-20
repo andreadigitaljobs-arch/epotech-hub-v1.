@@ -10,7 +10,7 @@ import {
 
   BookOpen, Video, Briefcase, PlaySquare, Target, 
 
-  Sparkles, HelpCircle, ArrowRight, Play, Mic, 
+  Sparkles, HelpCircle, ArrowRight, Mic, 
 
   Search, Smartphone, Zap, Bell, ShieldCheck, PenTool,
 
@@ -105,8 +105,6 @@ export default function Home() {
   useThemeColor("#f8fafc");
 
   const router = useRouter();
-
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -653,11 +651,6 @@ export default function Home() {
     }
 
   };
-
-
-
-  const tutorialVideoId = "dQw4w9WgXcQ"; // Placeholder, se puede cambiar luego
-
 
 
   return (
