@@ -195,22 +195,24 @@ export default function Home() {
           .from('firma_sebastian')
           .select('signature_data')
           .order('updated_at', { ascending: false })
-          .limit(1)
-          .single();
+          .limit(1);
 
-        if (data?.signature_data) {
-          setSavedSignature(data.signature_data);
-          // Sincronizar también en local para acceso offline
-          localStorage.setItem('epotech_signature', data.signature_data);
-          return;
+        if (error) throw error; // Error de red → caer al catch
+
+        if (data && data.length > 0) {
+          // Supabase tiene firma → mostrarla y cachear localmente
+          setSavedSignature(data[0].signature_data);
+          localStorage.setItem('epotech_signature', data[0].signature_data);
+        } else {
+          // Supabase está vacío → limpiar caché local también (la firma fue eliminada)
+          localStorage.removeItem('epotech_signature');
+          setSavedSignature(null);
         }
       } catch (err) {
-        // Si la tabla no existe aún o hay error de red, usamos localStorage como fallback
+        // Solo en error de red real → usar localStorage como respaldo offline
+        const saved = localStorage.getItem('epotech_signature');
+        if (saved) setSavedSignature(saved);
       }
-
-      // Fallback a localStorage si Supabase no tiene firma
-      const saved = localStorage.getItem('epotech_signature');
-      if (saved) setSavedSignature(saved);
     };
 
     loadSignature();
