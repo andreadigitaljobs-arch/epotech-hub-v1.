@@ -218,9 +218,9 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
           </button>
         </div>
 
-        <div className="p-6 md:p-8 flex-1 flex flex-col gap-6 w-full">
+        <div className="p-6 md:p-8 flex-1 flex flex-col gap-6 w-full overflow-y-auto">
           <div 
-            className={`relative min-h-[320px] md:min-h-[400px] w-full bg-slate-50 rounded-[2rem] border-2 border-dashed transition-all overflow-hidden flex-1 ${
+            className={`relative min-h-[250px] md:min-h-[320px] w-full bg-slate-50 rounded-[2rem] border-2 border-dashed transition-all overflow-hidden flex-1 ${
               isLocked ? "border-emerald-200 bg-emerald-50/20" : "border-slate-200 hover:border-[#48c1d2]/50"
             }`}
           >
