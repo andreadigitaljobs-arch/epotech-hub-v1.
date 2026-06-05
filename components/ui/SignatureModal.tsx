@@ -55,51 +55,56 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
   }, [shouldRender, isClosing]);
 
   useEffect(() => {
-    if (shouldRender && canvasRef.current && !isLocked) {
+    if (shouldRender && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
-      if (ctx) {
-        // Set transparent background
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.lineJoin = "round";
-        ctx.lineCap = "round";
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "#142d53"; // Dark brand color for signature
-      }
-      
-      // Resize canvas to its display size
+
+      // Resize canvas to its display size (necesario tanto bloqueado como desbloqueado)
       const resize = () => {
         const rect = canvas.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
         canvas.width = rect.width * window.devicePixelRatio;
         canvas.height = rect.height * window.devicePixelRatio;
-        ctx?.scale(window.devicePixelRatio, window.devicePixelRatio);
         if (ctx) {
+          ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
           ctx.lineJoin = "round";
           ctx.lineCap = "round";
           ctx.lineWidth = 3;
           ctx.strokeStyle = "#142d53";
         }
       };
-      
+
       resize();
       window.addEventListener("resize", resize);
       return () => window.removeEventListener("resize", resize);
     }
-  }, [shouldRender, isLocked]);
+  }, [shouldRender]);
 
-  // If already locked, draw the saved signature on open
+  // Si está bloqueada, dibujar la firma guardada en el canvas al abrir
   useEffect(() => {
     if (shouldRender && isLocked && savedSignature && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
-      if (ctx) {
+      if (!ctx) return;
+
+      const drawImage = () => {
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width === 0) {
+          // Canvas todavía no tiene tamaño, intentar de nuevo
+          setTimeout(drawImage, 100);
+          return;
+        }
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
         const img = new Image();
         img.onload = () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
         };
         img.src = savedSignature;
-      }
+      };
+
+      drawImage();
     }
   }, [shouldRender, isLocked, savedSignature]);
 
@@ -158,9 +163,10 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
   };
 
   const download = () => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const dataUrl = canvas.toDataURL("image/png");
+    // Usar directamente el dato guardado (fuente más confiable, viene de Supabase)
+    // Es un PNG con fondo transparente listo para usar
+    const dataUrl = savedSignature || canvasRef.current?.toDataURL("image/png");
+    if (dataUrl) {
       const link = document.createElement("a");
       link.download = "firma_epotech_sebastian.png";
       link.href = dataUrl;
