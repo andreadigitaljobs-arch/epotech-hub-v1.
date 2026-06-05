@@ -90,7 +90,6 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
       const drawImage = () => {
         const rect = canvas.getBoundingClientRect();
         if (rect.width === 0) {
-          // Canvas todavía no tiene tamaño, intentar de nuevo
           setTimeout(drawImage, 100);
           return;
         }
@@ -99,7 +98,8 @@ export function SignatureModal({ isOpen, onClose, onSave, onReset, savedSignatur
         const img = new Image();
         img.onload = () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
+          // Dibujar la imagen ocupando TODO el canvas (en píxeles reales, no CSS)
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         };
         img.src = savedSignature;
       };
