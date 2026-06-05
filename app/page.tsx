@@ -28,6 +28,8 @@ import { Toast, ToastType } from "@/components/ui/Toast";
 
 import { SignatureModal } from "@/components/ui/SignatureModal";
 
+import { supabase } from "@/lib/supabase";
+
 
 
 const TUTORIAL_CARDS = [
@@ -186,11 +188,32 @@ export default function Home() {
 
 
 
-    // Cargar firma guardada
+    // Cargar firma: primero desde Supabase (fuente de verdad compartida), con fallback a localStorage
+    const loadSignature = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('firma_sebastian')
+          .select('signature_data')
+          .order('updated_at', { ascending: false })
+          .limit(1)
+          .single();
 
-    const saved = localStorage.getItem('epotech_signature');
+        if (data?.signature_data) {
+          setSavedSignature(data.signature_data);
+          // Sincronizar también en local para acceso offline
+          localStorage.setItem('epotech_signature', data.signature_data);
+          return;
+        }
+      } catch (err) {
+        // Si la tabla no existe aún o hay error de red, usamos localStorage como fallback
+      }
 
-    if (saved) setSavedSignature(saved);
+      // Fallback a localStorage si Supabase no tiene firma
+      const saved = localStorage.getItem('epotech_signature');
+      if (saved) setSavedSignature(saved);
+    };
+
+    loadSignature();
 
 
 
@@ -204,26 +227,37 @@ export default function Home() {
 
 
 
-  const handleSaveSignature = (data: string) => {
-
+  const handleSaveSignature = async (data: string) => {
+    // Guardar localmente primero (respuesta inmediata)
     localStorage.setItem('epotech_signature', data);
-
     setSavedSignature(data);
+    showToast("Guardando firma...", "info");
 
-    showToast("Firma guardada y protegida.", "success");
-
+    try {
+      // Borrar la firma anterior y guardar la nueva en Supabase
+      await supabase.from('firma_sebastian').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      const { error } = await supabase.from('firma_sebastian').insert({ signature_data: data });
+      if (error) throw error;
+      showToast("¡Firma guardada y sincronizada!", "success");
+    } catch (err) {
+      // Si falla Supabase, la firma igual queda guardada localmente
+      showToast("Firma guardada localmente.", "success");
+    }
   };
 
 
 
-  const handleResetSignature = () => {
-
+  const handleResetSignature = async () => {
     localStorage.removeItem('epotech_signature');
-
     setSavedSignature(null);
 
-    showToast("Firma eliminada.", "success");
+    try {
+      await supabase.from('firma_sebastian').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    } catch (err) {
+      // Ignorar errores de red al eliminar
+    }
 
+    showToast("Firma eliminada.", "success");
   };
 
 
