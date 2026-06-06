@@ -23,23 +23,8 @@ export function BottomNav() {
   }, [pathname]);
 
   return (
-    <div className="fixed bottom-[calc(1.5rem+var(--safe-bottom))] left-0 right-0 z-[100] px-4 md:hidden pointer-events-none">
-      <nav className="mx-auto max-w-[480px] flex bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-2.5 rounded-[2.5rem] pointer-events-auto relative overflow-hidden">
-        
-        {/* Area del Indicador: Sincronizada con el padding (10px) y 5 pestañas (100/5 = 20%) */}
-        <div className="absolute inset-y-0 left-2.5 right-2.5 pointer-events-none">
-          <div 
-            className="absolute inset-y-0 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
-            style={{ 
-              left: `${activeIndex * 20}%`,
-              width: "20%",
-              opacity: activeIndex === -1 ? 0 : 1
-            }}
-          >
-            <div className="h-[75%] w-[90%] bg-gradient-to-tr from-[#48c1d2] to-[#35a5b5] rounded-full shadow-[0_10px_25px_rgba(72,193,210,0.4)]" />
-          </div>
-        </div>
-
+    <div className="fixed bottom-0 left-0 right-0 z-[100] md:hidden bg-[#0c192c]/95 backdrop-blur-xl border-t border-slate-800/80 px-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(0,0,0,0.3)]">
+      <nav className="flex items-center justify-around h-16 w-full max-w-lg mx-auto">
         {tabs.map((tab, i) => {
           const Icon = tab.icon;
           const isActive = activeIndex === i;
@@ -49,14 +34,21 @@ export function BottomNav() {
               key={tab.path}
               href={tab.path}
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="relative flex-1 flex flex-col items-center justify-center h-12 transition-all duration-300 active:scale-90"
+              className="relative flex-1 flex flex-col items-center justify-center h-full transition-all duration-200 active:scale-95"
             >
-              <div className={`transition-all duration-500 z-10 flex items-center justify-center ${isActive ? "text-white scale-110" : "text-slate-500"}`}>
-                <Icon size={isActive ? 16 : 14} strokeWidth={isActive ? 3 : 2} />
+              {/* Indicador premium superior tipo barra corta */}
+              <div 
+                className={`absolute top-0 w-8 h-[3px] rounded-b-full bg-[#48c1d2] transition-all duration-300 ${
+                  isActive ? "opacity-100 transform translate-y-0" : "opacity-0 transform -translate-y-1"
+                }`} 
+              />
+              
+              <div className={`transition-all duration-300 flex items-center justify-center ${isActive ? "text-[#48c1d2] scale-110" : "text-slate-400 hover:text-slate-300"}`}>
+                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
               </div>
               
               {/* Etiqueta del Botón */}
-              <span className={`mt-1 text-[6px] font-black uppercase tracking-tighter transition-all duration-500 z-10 ${isActive ? "text-white opacity-100" : "text-slate-500 opacity-60"}`}>
+              <span className={`mt-1 text-[9px] font-black uppercase tracking-widest transition-all duration-300 ${isActive ? "text-[#48c1d2]" : "text-slate-500 text-[8px]"}`}>
                 {tab.name}
               </span>
             </Link>
