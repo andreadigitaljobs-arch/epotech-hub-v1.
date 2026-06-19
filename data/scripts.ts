@@ -102,6 +102,80 @@ export const guiones: Script[] = [
     ],
     productionHack: 'Este video es tu carta de presentación. ¡Haz que brille!',
     createdAt: '2026-05-01'
+  },
+  {
+    id: 'window-cleaning-zach-salt-lake',
+    title: 'Window Cleaning Challenge in Salt Lake City (Zach)',
+    category: 'Voz en Off',
+    service: 'Window Cleaning',
+    duration: '60s',
+    fullDialogue: 'We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high. I’m not going to lie… this part was a little scary. Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed. We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work. With the right tools, we were able to reach each window and clean them one by one. And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned. But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn’t look perfect. Because for us, clean windows are not just about making a home look better. They’re about doing the job right. Would you clean windows this high?',
+    steps: [
+      {
+        label: 'THE CHALLENGE (Voice-over)',
+        script: 'We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high. I’m not going to lie… this part was a little scary.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Habla con tono de sorpresa/intriga para enganchar al espectador.'],
+          assisted: ['Asegúrate de eliminar ruidos del entorno al grabar.']
+        }
+      },
+      {
+        label: 'THE PREPARATION (Voice-over)',
+        script: 'Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Mantén un ritmo pausado y profesional.'],
+          assisted: ['Pronuncia claramente las herramientas ("squeegee", "mop", "soap").']
+        }
+      },
+      {
+        label: 'THE EXECUTION (Voice-over)',
+        script: 'We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work. With the right tools, we were able to reach each window and clean them one by one.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Habla con confianza y seguridad.'],
+          assisted: ['Haz pequeñas pausas entre frases para mayor claridad.']
+        }
+      },
+      {
+        label: 'TEAMWORK & TIME (Voice-over)',
+        script: 'And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Da énfasis con gratitud al mencionar a Jen Krifer.'],
+          assisted: ['Mantén el tono conversacional.']
+        }
+      },
+      {
+        label: 'THE PROMISE & CTA (Voice-over)',
+        script: 'But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn’t look perfect. Because for us, clean windows are not just about making a home look better. They’re about doing the job right. Would you clean windows this high?',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Haz una pregunta final retórica directa al espectador.'],
+          assisted: ['Termina con seguridad y una leve sonrisa en la voz.']
+        }
+      }
+    ],
+    tips: [
+      'Usa un tono narrativo (storytelling), contando una experiencia real.',
+      'Pronuncia los nombres de los lugares ("Salt Lake City") de forma clara.',
+      'Haz pausas dramáticas en los puntos clave (ej. "...some of them were this high").'
+    ],
+    checklist: [
+      'Introducción del reto grabada',
+      'Preparación y herramientas grabada',
+      'Proceso del trabajo grabado',
+      'Mención del equipo y tiempo grabada',
+      'Cierre de calidad y pregunta final grabada'
+    ],
+    productionHack: 'Muestra tomas rápidas en cámara rápida (timelapse) del trabajo en el techo y tomas de primer plano del squeegee limpiando el agua.',
+    createdAt: '2026-06-19'
   }
 ];
 
