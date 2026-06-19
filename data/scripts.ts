@@ -112,143 +112,73 @@ export const guiones: Script[] = [
     fullDialogue: 'We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high. I’m not going to lie… this part was a little scary. Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed. We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work. With the right tools, we were able to reach each window and clean them one by one. And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned. But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn’t look perfect. Because for us, clean windows are not just about making a home look better. They’re about doing the job right. Would you clean windows this high?',
     steps: [
       {
-        label: '1. THE CALL',
-        script: 'We got called to clean the windows of a two-story home in Salt Lake City.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
+        label: ‘1. THE HOOK’,
+        script: ‘We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high.’,
+        visualField: ‘N/A (Voz en off)’,
+        visualStudio: ‘N/A (Voz en off)’,
         advice: {
-          solo: ['Tono narrativo directo e intrigante para enganchar.'],
-          assisted: ['Evitar ruidos de fondo.']
+          solo: [‘Tono narrativo directo e intrigante. Dale énfasis a "this high" y haz una pausa al final.’],
+          assisted: [‘Evitar ruidos de fondo. Pronunciación clara.’]
         }
       },
       {
-        label: '2. THE SURPRISE',
-        script: 'But nobody told us some of them were this high.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
+        label: ‘2. THE HONESTY’,
+        script: ‘I’m not going to lie… this part was a little scary.’,
+        visualField: ‘N/A (Voz en off)’,
+        visualStudio: ‘N/A (Voz en off)’,
         advice: {
-          solo: ['Dale énfasis a la palabra "high" y haz una pequeña pausa al final.'],
-          assisted: ['Pronunciación clara.']
+          solo: [‘Habla con naturalidad y un tono más suave en "a little scary".’],
+          assisted: [‘Sonido limpio y cercano.’]
         }
       },
       {
-        label: '3. THE HONESTY',
-        script: 'I’m not going to lie… this part was a little scary.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
+        label: ‘3. THE CHALLENGE & PREPARATION’,
+        script: ‘Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed.’,
+        visualField: ‘N/A (Voz en off)’,
+        visualStudio: ‘N/A (Voz en off)’,
         advice: {
-          solo: ['Habla con naturalidad y un tono más suave en "a little scary".'],
-          assisted: ['Sonido limpio y cercano.']
+          solo: [‘Pausa después de "focus" y "patience". Pronuncia bien la lista de herramientas.’],
+          assisted: [‘Mantén el ritmo y tono profesional.’]
         }
       },
       {
-        label: '4. THE CHALLENGE',
-        script: 'Some windows were really tall, and getting up there takes focus, patience, and the right tools.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
+        label: ‘4. THE EXECUTION’,
+        script: ‘We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work.’,
+        visualField: ‘N/A (Voz en off)’,
+        visualStudio: ‘N/A (Voz en off)’,
         advice: {
-          solo: ['Haz una pequeña pausa después de cada palabra clave ("focus", "patience").'],
-          assisted: ['Mantén el ritmo.']
+          solo: [‘Dila con seguridad. Tono de alivio al decir "Luckily".’],
+          assisted: [‘Tono constante con pausas naturales.’]
         }
       },
       {
-        label: '5. THE PREPARATION',
-        script: 'So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
+        label: ‘5. WINDOW BY WINDOW’,
+        script: ‘With the right tools, we were able to reach each window and clean them one by one.’,
+        visualField: ‘N/A (Voz en off)’,
+        visualStudio: ‘N/A (Voz en off)’,
         advice: {
-          solo: ['Pronuncia bien la lista de herramientas.'],
-          assisted: ['Tono profesional y organizado.']
+          solo: [‘Dale peso a "one by one" al terminar.’],
+          assisted: [‘Tono de logro y avance.’]
         }
       },
       {
-        label: '6. THE START',
-        script: 'We started from the second floor.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
+        label: ‘6. TEAMWORK & COMPLETION’,
+        script: ‘And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned.’,
+        visualField: ‘N/A (Voz en off)’,
+        visualStudio: ‘N/A (Voz en off)’,
         advice: {
-          solo: ['Frase corta y directa. Dila con seguridad.'],
-          assisted: ['Tono constante.']
+          solo: [‘Menciona a Jen Krifer con gratitud. Termina con satisfacción, celebrando haber terminado.’],
+          assisted: [‘Voz clara y amigable. Tono de victoria al final.’]
         }
       },
       {
-        label: '7. THE ROOF ACCESS',
-        script: 'Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
+        label: ‘7. QUALITY CHECK & CTA’,
+        script: ‘But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn’t look perfect. Because for us, clean windows are not just about making a home look better. They’re about doing the job right. Would you clean windows this high?’,
+        visualField: ‘N/A (Voz en off)’,
+        visualStudio: ‘N/A (Voz en off)’,
         advice: {
-          solo: ['Habla con un tono de alivio al decir "Luckily".'],
-          assisted: ['Pausas naturales.']
-        }
-      },
-      {
-        label: '8. WINDOW BY WINDOW',
-        script: 'With the right tools, we were able to reach each window and clean them one by one.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Dale peso a "one by one" al terminar.'],
-          assisted: ['Tono de logro y avance.']
-        }
-      },
-      {
-        label: '9. TEAMWORK',
-        script: 'And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Menciona a Jen Krifer con gratitud y entusiasmo.'],
-          assisted: ['Voz clara y amigable.']
-        }
-      },
-      {
-        label: '10. COMPLETION',
-        script: 'After about two and a half hours, every window was cleaned.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Dilo con satisfacción, celebrando haber terminado.'],
-          assisted: ['Tono de victoria.']
-        }
-      },
-      {
-        label: '11. THE WALKTHROUGH',
-        script: 'But before leaving, we always do one final walkthrough inside and outside the property.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Tono serio, mostrando compromiso con la calidad.'],
-          assisted: ['Pausa en "final walkthrough".']
-        }
-      },
-      {
-        label: '12. DETAIL CHECK',
-        script: 'We check for spots, streaks, marks, and anything that doesn’t look perfect.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Pronuncia con claridad "spots, streaks, marks".'],
-          assisted: ['Tono meticuloso.']
-        }
-      },
-      {
-        label: '13. OUR STANDARD',
-        script: 'Because for us, clean windows are not just about making a home look better. They’re about doing the job right.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Esta es la frase insignia (marca registrada). Dila con total convicción.'],
-          assisted: ['Voz firme y profesional.']
-        }
-      },
-      {
-        label: '14. THE CTA QUESTION',
-        script: 'Would you clean windows this high?',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Pregunta directa al espectador. Sonríe levemente al terminar.'],
-          assisted: ['Tono conversacional y retador.']
+          solo: [‘Tono serio y comprometido. La frase "doing the job right" es la insignia — dila con convicción. Cierra con la pregunta directa al espectador.’],
+          assisted: [‘Pausa en "final walkthrough". Voz firme y profesional hasta el final.’]
         }
       }
     ],
@@ -258,20 +188,13 @@ export const guiones: Script[] = [
       'Haz pausas dramáticas en los puntos clave (ej. "...some of them were this high").'
     ],
     checklist: [
-      'Paso 1: Llamado inicial grabado',
-      'Paso 2: Sorpresa de la altura grabada',
-      'Paso 3: Sinceridad grabada',
-      'Paso 4: El reto grabado',
-      'Paso 5: Preparación de herramientas grabada',
-      'Paso 6: Inicio grabado',
-      'Paso 7: Acceso por el techo grabado',
-      'Paso 8: Limpieza de ventanas grabada',
-      'Paso 9: Trabajo en equipo con Jen grabado',
-      'Paso 10: Finalización grabada',
-      'Paso 11: Inspección de salida grabada',
-      'Paso 12: Búsqueda de imperfecciones grabada',
-      'Paso 13: Declaración de calidad grabada',
-      'Paso 14: Pregunta final (CTA) grabada'
+      'Paso 1: Hook grabado (llamado + sorpresa de la altura)',
+      'Paso 2: Honestidad grabada ("I\'m not going to lie…")',
+      'Paso 3: Reto y preparación grabados (herramientas)',
+      'Paso 4: Ejecución grabada (segundo piso + techo)',
+      'Paso 5: Limpieza ventana por ventana grabada',
+      'Paso 6: Trabajo en equipo y finalización grabados',
+      'Paso 7: Inspección de calidad y CTA grabados'
     ],
     productionHack: 'Muestra tomas rápidas en cámara rápida (timelapse) del trabajo en el techo y tomas de primer plano del squeegee limpiando el agua.',
     createdAt: '2026-06-19'
