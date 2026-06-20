@@ -1351,6 +1351,14 @@ export default function ContenidoPage() {
       if (insertError) throw insertError;
 
       showToast("¡Audio enviado al equipo con éxito!", "success");
+      fetch('/api/push', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          titulo: '🎤 Nuevo Reporte de Campo',
+          mensaje: `Se recibió un reporte de audio${reportTitle ? ': ' + reportTitle : ''}. Entra al Hub para revisarlo.`
+        })
+      }).catch(e => console.error('Push error:', e));
       setRecordedAudio(null);
       setAudioBlob(null);
       setRecordTime(0);
@@ -1404,6 +1412,16 @@ export default function ContenidoPage() {
       setVoiceoverFragments([]);
       setMergedVoiceoverUrl(null);
       deleteVoiceoverDraft(selectedScript.id);
+
+      // PUSH AL DUEÑO
+      fetch('/api/push', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          titulo: '🎙️ Nueva Locución Lista',
+          mensaje: `Se subió la locución: "${locucionTitle || selectedScript.title}". Entra al Hub para revisarla.`
+        })
+      }).catch(e => console.error('Push error:', e));
 
       // Si está en el simulacro de bienvenida, finaliza el onboarding
       if (isOnboardingTour && tourStep === 1) {
