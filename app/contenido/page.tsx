@@ -395,6 +395,16 @@ const ConfirmationDialog = ({
 
 const MISIONES = [
   {
+    id: 'vozoff',
+    title: "🎙️ Grabar Guiones",
+    desc: "Estudio interactivo para grabar tu voz sobre los guiones que el equipo ya ha preparado.",
+    icon: Mic,
+    tag: "Guiones",
+    tab: 'guiones',
+    sub: 'reels',
+    colorClasses: { bg: 'bg-purple-500', bgLight: 'bg-purple-500/10', text: 'text-purple-600', border: 'border-purple-500/30', hoverBorder: 'group-hover:border-purple-500/40' }
+  },
+  {
     id: 'checklist',
     title: "📷 ¿Qué grabar cuando voy a hacer un trabajo?",
     desc: "Instrucciones paso a paso sobre qué videos capturar antes, durante y después de un trabajo.",
@@ -424,16 +434,6 @@ const MISIONES = [
     tab: 'guiones',
     sub: 'historias',
     colorClasses: { bg: 'bg-orange-500', bgLight: 'bg-orange-500/10', text: 'text-orange-600', border: 'border-orange-500/30', hoverBorder: 'group-hover:border-orange-500/40' }
-  },
-  {
-    id: 'vozoff',
-    title: "🎙️ Grabar Voz en Off",
-    desc: "Estudio interactivo para grabar tu voz sobre los guiones que el equipo ya ha preparado.",
-    icon: Mic,
-    tag: "Voz en Off",
-    tab: 'guiones',
-    sub: 'reels',
-    colorClasses: { bg: 'bg-purple-500', bgLight: 'bg-purple-500/10', text: 'text-purple-600', border: 'border-purple-500/30', hoverBorder: 'group-hover:border-purple-500/40' }
   },
   {
     id: 'pro',
@@ -2660,7 +2660,7 @@ export default function ContenidoPage() {
                       : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
                     }`}
                 >
-                  <Mic size={15} /> Voz en Off
+                  <Mic size={15} /> Guiones
                 </button>
                 <button
                   onClick={() => handleGuionTabChange('historias')}

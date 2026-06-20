@@ -106,7 +106,7 @@ export const guiones: Script[] = [
   {
     id: 'window-cleaning-zach-salt-lake',
     title: 'Window Cleaning Challenge in Salt Lake City',
-    category: 'Voz en Off',
+    category: 'Guiones',
     service: 'Window Cleaning',
     duration: '60s',
     fullDialogue: "We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high. I'm not going to lie… this part was a little scary. Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed. We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work. With the right tools, we were able to reach each window and clean them one by one. And as always, Jen was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned. But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn't look perfect. Because for us, clean windows are not just about making a home look better. They're about doing the job right. Would you clean windows this high?",
@@ -213,7 +213,7 @@ export const guiones: Script[] = [
   {
     id: 'window-cleaning-problem-solution',
     title: 'Dirty Windows Problem/Solution',
-    category: 'Voz en Off',
+    category: 'Guiones',
     service: 'Window Cleaning',
     duration: '45s',
     fullDialogue: "Clean windows can completely change the way your home looks and feels. Sometimes windows don't look that dirty from far away, but once the sunlight hits them, you can see dust, water spots, fingerprints, and buildup. That's why professional window cleaning makes such a big difference. At Epotech Solutions, we help homeowners in Utah keep their windows clean, clear, and better maintained. If your windows need a refresh, send us a message today for a free quote.",
@@ -287,7 +287,7 @@ export const guiones: Script[] = [
   {
     id: 'window-cleaning-trust-walkthrough',
     title: 'Final Walkthrough Trust/Quality',
-    category: 'Voz en Off',
+    category: 'Guiones',
     service: 'Window Cleaning',
     duration: '45s',
     fullDialogue: "One thing we always do before leaving a job is a final walkthrough. We check the work from different angles, look for spots, marks, missed details, and anything that needs a final touch. For us, exterior cleaning is not just about finishing fast. It's about making sure the result looks clean, professional, and ready for the homeowner. That attention to detail is part of how we work at Epotech Solutions. Need exterior cleaning in Utah? Send us a message today for a free quote.",
@@ -361,7 +361,7 @@ export const guiones: Script[] = [
   {
     id: 'pressure-washing-service',
     title: 'Pressure Washing Service Utah',
-    category: 'Voz en Off',
+    category: 'Guiones',
     service: 'Pressure Washing',
     duration: '45s',
     fullDialogue: 'Your driveway is one of the first things people see when they arrive at your home. Over time, dirt, stains, dust, and buildup can make it look older than it really is. Pressure washing helps bring back a cleaner, fresher look to your exterior surfaces. At Epotech Solutions, we offer professional pressure washing services for homeowners in Utah. If your driveway, garage, or exterior surfaces need cleaning, send us a message today for a free quote.',
