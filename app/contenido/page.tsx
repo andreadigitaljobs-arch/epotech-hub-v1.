@@ -1574,10 +1574,16 @@ export default function ContenidoPage() {
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 bg-black/90"
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4 bg-black/90"
+      style={{
+        paddingTop: 'max(1.5rem, env(safe-area-inset-top))',
+        paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))',
+      }}
       onClick={(e) => { if (e.target === e.currentTarget) handleCloseScript(); }}
     >
-      <div className={`relative w-full max-w-lg max-h-[calc(100vh-3rem)] bg-[#0a192f] border border-white/10 rounded-[40px] overflow-y-auto flex flex-col shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}>
+      <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-y-auto flex flex-col shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}
+        style={{ maxHeight: '100%' }}
+      >
         {/* Encabezado 2 filas */}
         <div className="border-b border-white/5 bg-black/20">
           {/* Fila 1: X + Título + Ícono libro */}
