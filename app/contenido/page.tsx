@@ -2382,9 +2382,7 @@ export default function ContenidoPage() {
                             handleSelectMision(mision.id);
                             setShowMissionModal(false);
                           }}
-                          className={`relative p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border transition-all cursor-pointer group flex flex-col justify-between hover:shadow-xl active:scale-[0.98] duration-300 overflow-hidden ${
-                            mision.featured ? 'col-span-2' : 'col-span-1'
-                          } ${
+                          className={`relative p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border transition-all cursor-pointer group flex flex-col justify-between hover:shadow-xl active:scale-[0.98] duration-300 overflow-hidden col-span-1 ${
                             isActive 
                               ? `border-[#48c1d2] bg-[#48c1d2]/5 shadow-md shadow-[#48c1d2]/10` 
                               : `border-slate-200/60 bg-white ${colors.hoverBorder}`
