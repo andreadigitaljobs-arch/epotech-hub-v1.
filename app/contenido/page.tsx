@@ -412,7 +412,6 @@ const MISIONES = [
     tag: "Checklist",
     tab: 'guiones',
     sub: 'checklist',
-    featured: true,
     colorClasses: { bg: 'bg-sky-500', bgLight: 'bg-sky-500/10', text: 'text-sky-600', border: 'border-sky-500/30', hoverBorder: 'group-hover:border-sky-500/40' }
   },
   {
