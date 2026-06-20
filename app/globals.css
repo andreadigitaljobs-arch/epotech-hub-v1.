@@ -235,6 +235,11 @@ a:active, button:active, [role="button"]:active {
   50% { transform: translateX(4px); }
 }
 
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
 .animate-pulse-subtle {
   animation: pulse-subtle 2s infinite ease-in-out;
 }

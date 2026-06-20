@@ -1372,6 +1372,7 @@ export default function ContenidoPage() {
   };
 
   const [isUploadingLocucion, setIsUploadingLocucion] = useState(false);
+  const [locucionSent, setLocucionSent] = useState(false);
 
   const handleSendLocucion = async () => {
     if (!mergedVoiceoverUrl || !selectedScript) return;
@@ -1399,8 +1400,6 @@ export default function ContenidoPage() {
 
       if (insertError) throw insertError;
 
-      showToast('¡Locución enviada al equipo con éxito! 🎙️', 'success');
-      
       // LIMPIAR BORRADOR TRAS ENVÍO EXITOSO
       setVoiceoverFragments([]);
       setMergedVoiceoverUrl(null);
@@ -1411,7 +1410,11 @@ export default function ContenidoPage() {
         updateOnboardingProgress('voiceDone', true);
         setOnboardingSuccessModal({ isOpen: true, type: 'voice' });
       } else {
-        setSelectedScript(null);
+        setLocucionSent(true);
+        setTimeout(() => {
+          setLocucionSent(false);
+          setSelectedScript(null);
+        }, 3000);
       }
     } catch (err) {
       console.error(err);
@@ -1584,8 +1587,23 @@ export default function ContenidoPage() {
       <div className={`relative w-full max-w-lg bg-[#0a192f] border border-white/10 rounded-[40px] overflow-y-auto flex flex-col shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}
         style={{ maxHeight: '100%' }}
       >
+        {locucionSent && (
+          <div className="flex flex-col items-center justify-center py-16 px-8 text-center gap-6">
+            <div className="w-20 h-20 rounded-full bg-[#48c1d2]/10 border border-[#48c1d2]/30 flex items-center justify-center">
+              <span className="text-4xl">🎙️</span>
+            </div>
+            <div>
+              <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-2">¡Listo!</p>
+              <h3 className="text-xl font-black text-white leading-tight mb-3">Audio enviado al equipo</h3>
+              <p className="text-sm text-white/50 font-medium leading-relaxed">Tu locución fue guardada correctamente en el historial. El equipo la recibirá para edición.</p>
+            </div>
+            <div className="w-full h-1 rounded-full bg-white/5 overflow-hidden">
+              <div className="h-full bg-[#48c1d2] animate-[shrink_3s_linear_forwards]" style={{ width: '100%' }} />
+            </div>
+          </div>
+        )}
         {/* Encabezado 2 filas */}
-        <div className="border-b border-white/5 bg-black/20">
+        {!locucionSent && <div className="border-b border-white/5 bg-black/20">
           {/* Fila 1: X + Título + Ícono libro */}
           <div className="px-6 sm:px-8 pt-8 sm:pt-10 pb-4 flex items-center gap-4">
             <button onClick={handleCloseScript} className="w-10 h-10 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white transition-colors border border-white/5 active:scale-95">
@@ -1614,10 +1632,10 @@ export default function ContenidoPage() {
               <button onClick={() => setVoiceSpeed(1)} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 1 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>1x</button>
             </div>
           </div>
-        </div>
+        </div>}
 
         {/* Contenido principal */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar flex flex-col">
+        {!locucionSent && <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar flex flex-col">
           {selectedScript.isProductionMode ? (
             /* NUEVO MODO: EN CÁMARA (PRODUCCIÓN DUAL) */
             <div className="px-6 sm:px-8 py-8 space-y-10">
@@ -2113,7 +2131,7 @@ export default function ContenidoPage() {
               )}
             </>
           )}
-        </div>
+        </div>}
 
       </div>
     </div>, document.body
