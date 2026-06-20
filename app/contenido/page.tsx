@@ -1575,10 +1575,10 @@ export default function ContenidoPage() {
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center px-4 py-16 overflow-y-auto bg-black/90"
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 bg-black/90"
       onClick={(e) => { if (e.target === e.currentTarget) handleCloseScript(); }}
     >
-      <div className={`relative w-full max-w-lg max-h-[calc(100vh-8rem)] bg-[#0a192f] border border-white/10 rounded-[40px] overflow-hidden flex flex-col my-auto shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}>
+      <div className={`relative w-full max-w-lg max-h-[calc(100vh-3rem)] bg-[#0a192f] border border-white/10 rounded-[40px] overflow-y-auto flex flex-col shadow-2xl ${isClosing ? 'modal-panel-out' : 'modal-panel'}`}>
         {/* Encabezado 2 filas */}
         <div className="border-b border-white/5 bg-black/20">
           {/* Fila 1: X + Título + Ícono libro */}
@@ -2742,24 +2742,8 @@ export default function ContenidoPage() {
                 <div className="grid gap-4 content-transition" key={guionTab}>
                   {guionTab === 'reels' ? (
                     <>
-                      <div className="p-8 bg-gradient-to-br from-[#142d53] to-[#1e3a8a] rounded-[2.5rem] border border-white/10 shadow-xl relative overflow-hidden group mb-4 text-left">
-                        <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform">
-                          <Sparkles size={80} className="text-[#48c1d2]" />
-                        </div>
-                        <div className="relative z-10">
-                          <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-3 block">Próximamente: Tu Guion Personalizado</span>
-                          <h4 className="text-xl font-black text-white  tracking-tighter mb-3">Laboratorio de Inteligencia <span className="text-[#48c1d2]">Epotech</span></h4>
-                          <p className="text-[11px] font-medium text-slate-300 leading-relaxed max-w-[85%]">
-                            "Usa el <span className="text-[#48c1d2] font-black ">Reporte de Audio</span> al final de tu jornada. Nuestro equipo procesará tus notas y generará aquí mismo un guion estratégico basado en tus obras reales de hoy."
-                          </p>
-                          <div className="mt-6 flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-[#48c1d2] animate-pulse"></div>
-                            <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-widest">Esperando tu reporte...</span>
-                          </div>
-                        </div>
-                      </div>
-                      {/* Barra de Búsqueda */}
-                      <div className="mb-6 space-y-4">
+                      {/* Barra de Búsqueda — visible solo con más de 3 guiones */}
+                      {guiones.length > 3 && <div className="mb-6 space-y-4">
                         <div className="relative group">
                           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-[#48c1d2]">
                             <Search size={18} />
@@ -2775,7 +2759,7 @@ export default function ContenidoPage() {
                             className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-[#48c1d2] focus:ring-4 focus:ring-[#48c1d2]/5 transition-all shadow-sm"
                           />
                         </div>
-                      </div>
+                      </div>}
 
                       {/* Sistema de Pestañas de Tiempo (Pills) */}
                       {(() => {
@@ -2830,7 +2814,12 @@ export default function ContenidoPage() {
                                   </div>
                                   <div className="text-left flex-1">
                                     <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                    <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                    <div className="flex items-center gap-2">
+                                      <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                      {script.createdAt === '2026-06-19' && (
+                                        <span className="shrink-0 text-[8px] font-black text-white bg-[#48c1d2] px-2 py-0.5 rounded-full uppercase tracking-wider">Nuevo</span>
+                                      )}
+                                    </div>
                                     {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
                                       <p className="text-[9px] font-bold text-slate-400 mt-1  ">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
                                     )}
