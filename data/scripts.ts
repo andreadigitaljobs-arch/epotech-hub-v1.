@@ -1,4 +1,4 @@
-export interface RecordingAdvice {
+﻿export interface RecordingAdvice {
   solo: string[];
   assisted: string[];
 }
@@ -109,76 +109,76 @@ export const guiones: Script[] = [
     category: 'Voz en Off',
     service: 'Window Cleaning',
     duration: '60s',
-    fullDialogue: 'We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high. I’m not going to lie… this part was a little scary. Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed. We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work. With the right tools, we were able to reach each window and clean them one by one. And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned. But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn’t look perfect. Because for us, clean windows are not just about making a home look better. They’re about doing the job right. Would you clean windows this high?',
+    fullDialogue: 'We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high. I'm not going to lie… this part was a little scary. Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed. We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work. With the right tools, we were able to reach each window and clean them one by one. And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned. But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn't look perfect. Because for us, clean windows are not just about making a home look better. They're about doing the job right. Would you clean windows this high?',
     steps: [
       {
-        label: ‘1. THE HOOK’,
-        script: ‘We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high.’,
-        visualField: ‘N/A (Voz en off)’,
-        visualStudio: ‘N/A (Voz en off)’,
+        label: '1. THE HOOK',
+        script: 'We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: [‘Tono narrativo directo e intrigante. Dale énfasis a "this high" y haz una pausa al final.’],
-          assisted: [‘Evitar ruidos de fondo. Pronunciación clara.’]
+          solo: ['Tono narrativo directo e intrigante. Dale énfasis a "this high" y haz una pausa al final.'],
+          assisted: ['Evitar ruidos de fondo. Pronunciación clara.']
         }
       },
       {
-        label: ‘2. THE HONESTY’,
-        script: ‘I’m not going to lie… this part was a little scary.’,
-        visualField: ‘N/A (Voz en off)’,
-        visualStudio: ‘N/A (Voz en off)’,
+        label: '2. THE HONESTY',
+        script: "I'm not going to lie… this part was a little scary.",
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: [‘Habla con naturalidad y un tono más suave en "a little scary".’],
-          assisted: [‘Sonido limpio y cercano.’]
+          solo: ['Habla con naturalidad y un tono más suave en "a little scary".'],
+          assisted: ['Sonido limpio y cercano.']
         }
       },
       {
-        label: ‘3. THE CHALLENGE & PREPARATION’,
-        script: ‘Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed.’,
-        visualField: ‘N/A (Voz en off)’,
-        visualStudio: ‘N/A (Voz en off)’,
+        label: '3. THE CHALLENGE & PREPARATION',
+        script: 'Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: [‘Pausa después de "focus" y "patience". Pronuncia bien la lista de herramientas.’],
-          assisted: [‘Mantén el ritmo y tono profesional.’]
+          solo: ['Pausa después de "focus" y "patience". Pronuncia bien la lista de herramientas.'],
+          assisted: ['Mantén el ritmo y tono profesional.']
         }
       },
       {
-        label: ‘4. THE EXECUTION’,
-        script: ‘We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work.’,
-        visualField: ‘N/A (Voz en off)’,
-        visualStudio: ‘N/A (Voz en off)’,
+        label: '4. THE EXECUTION',
+        script: 'We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: [‘Dila con seguridad. Tono de alivio al decir "Luckily".’],
-          assisted: [‘Tono constante con pausas naturales.’]
+          solo: ['Dila con seguridad. Tono de alivio al decir "Luckily".'],
+          assisted: ['Tono constante con pausas naturales.']
         }
       },
       {
-        label: ‘5. WINDOW BY WINDOW’,
-        script: ‘With the right tools, we were able to reach each window and clean them one by one.’,
-        visualField: ‘N/A (Voz en off)’,
-        visualStudio: ‘N/A (Voz en off)’,
+        label: '5. WINDOW BY WINDOW',
+        script: 'With the right tools, we were able to reach each window and clean them one by one.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: [‘Dale peso a "one by one" al terminar.’],
-          assisted: [‘Tono de logro y avance.’]
+          solo: ['Dale peso a "one by one" al terminar.'],
+          assisted: ['Tono de logro y avance.']
         }
       },
       {
-        label: ‘6. TEAMWORK & COMPLETION’,
-        script: ‘And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned.’,
-        visualField: ‘N/A (Voz en off)’,
-        visualStudio: ‘N/A (Voz en off)’,
+        label: '6. TEAMWORK & COMPLETION',
+        script: 'And as always, Jen Krifer was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: [‘Menciona a Jen Krifer con gratitud. Termina con satisfacción, celebrando haber terminado.’],
-          assisted: [‘Voz clara y amigable. Tono de victoria al final.’]
+          solo: ['Menciona a Jen Krifer con gratitud. Termina con satisfacción, celebrando haber terminado.'],
+          assisted: ['Voz clara y amigable. Tono de victoria al final.']
         }
       },
       {
-        label: ‘7. QUALITY CHECK & CTA’,
-        script: ‘But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn’t look perfect. Because for us, clean windows are not just about making a home look better. They’re about doing the job right. Would you clean windows this high?’,
-        visualField: ‘N/A (Voz en off)’,
-        visualStudio: ‘N/A (Voz en off)’,
+        label: '7. QUALITY CHECK & CTA',
+        script: "But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn't look perfect. Because for us, clean windows are not just about making a home look better. They're about doing the job right. Would you clean windows this high?",
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: [‘Tono serio y comprometido. La frase "doing the job right" es la insignia — dila con convicción. Cierra con la pregunta directa al espectador.’],
-          assisted: [‘Pausa en "final walkthrough". Voz firme y profesional hasta el final.’]
+          solo: ['Tono serio y comprometido. La frase "doing the job right" es la insignia — dila con convicción. Cierra con la pregunta directa al espectador.'],
+          assisted: ['Pausa en "final walkthrough". Voz firme y profesional hasta el final.']
         }
       }
     ],
@@ -189,7 +189,7 @@ export const guiones: Script[] = [
     ],
     checklist: [
       'Paso 1: Hook grabado (llamado + sorpresa de la altura)',
-      'Paso 2: Honestidad grabada ("I\'m not going to lie…")',
+      'Paso 2: Honestidad grabada (I'm not going to lie…)',
       'Paso 3: Reto y preparación grabados (herramientas)',
       'Paso 4: Ejecución grabada (segundo piso + techo)',
       'Paso 5: Limpieza ventana por ventana grabada',
@@ -210,7 +210,7 @@ export const guionesPresentacion: Script[] = [
     duration: '60s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'The biggest mistake when hiring cleaners… is not the price. It’s not knowing who you’re letting into your home. Because it’s not just cleaning… it’s entering your space, where your family, your things, and your peace of mind are. My name is Sebastián. And every time we work on a property, we treat it as if it were our own. We care, we respect, and we leave the space better than we found it. Because in the end… it’s all about trust. If that’s what you’re looking for, reach out to us.',
+    fullDialogue: 'The biggest mistake when hiring cleaners… is not the price. It's not knowing who you're letting into your home. Because it's not just cleaning… it's entering your space, where your family, your things, and your peace of mind are. My name is Sebastián. And every time we work on a property, we treat it as if it were our own. We care, we respect, and we leave the space better than we found it. Because in the end… it's all about trust. If that's what you're looking for, reach out to us.',
     scenes: [
       {
         id: 'p1-e1',
@@ -233,7 +233,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e2',
         title: '🎬 ESCENA 2 — PUERTA (ACCIÓN)',
         talent: {
-          whatToSay: '“It’s not knowing who you’re letting into your home.”',
+          whatToSay: '“It's not knowing who you're letting into your home.”',
           howToMove: 'Ubícate adentro de la casa con la puerta cerrada. Abre la puerta y apenas asomes, di la frase mirando a la cámara.',
           gesture: 'Gesto de bienvenida natural al abrir la puerta.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -250,7 +250,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e3',
         title: '🎬 ESCENA 3 — INTERIOR (CONEXIÓN)',
         talent: {
-          whatToSay: '“Because it’s not just cleaning… it’s entering your space, where your family, your things, and your peace of mind are.”',
+          whatToSay: '“Because it's not just cleaning… it's entering your space, where your family, your things, and your peace of mind are.”',
           howToMove: 'Mira alrededor, señala el lugar, señala hacia arriba o lado, señala objetos cerca.',
           gesture: 'Gesto calmado (mano al pecho o suave).',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -284,7 +284,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e5',
         title: '🎬 ESCENA 5 — CIERRE & CTA',
         talent: {
-          whatToSay: '“Because in the end… it’s all about trust. If that’s what you’re looking for, reach out to us.”',
+          whatToSay: '“Because in the end… it's all about trust. If that's what you're looking for, reach out to us.”',
           howToMove: 'Pausa corta. Mira directo a cámara.',
           gesture: 'Serio, seguro.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -316,13 +316,13 @@ export const guionesPresentacion: Script[] = [
     duration: '75s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'If your driveway looks like this… it’s already getting damaged. And most people think it’s just dirt. But it’s not. It’s stains sinking in, buildup causing wear, and surfaces that slowly… deteriorate. And by the time you react… it’s more expensive to fix. That’s why we don’t just clean. We restore, protect, and transform spaces with professional cleaning, epoxy, and paint that actually lasts. It’s not just about aesthetics. It’s about taking care of what cost you money. See how it can look like this again on our profile.',
+    fullDialogue: 'If your driveway looks like this… it's already getting damaged. And most people think it's just dirt. But it's not. It's stains sinking in, buildup causing wear, and surfaces that slowly… deteriorate. And by the time you react… it's more expensive to fix. That's why we don't just clean. We restore, protect, and transform spaces with professional cleaning, epoxy, and paint that actually lasts. It's not just about aesthetics. It's about taking care of what cost you money. See how it can look like this again on our profile.',
     scenes: [
       {
         id: 'p2-e1',
         title: '🎬 ESCENA 1 — HOOK',
         talent: {
-          whatToSay: '“If your driveway looks like this… it’s already getting damaged.”',
+          whatToSay: '“If your driveway looks like this… it's already getting damaged.”',
           howToMove: 'OPCIÓN 1: Párate en un driveway sucio y señala el piso. OPCIÓN 2: Párate en la sala y señala hacia arriba (para poner foto del driveway en edición).',
           gesture: 'Autoridad, advertencia.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -339,7 +339,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e2',
         title: '🎬 ESCENA 2 — ERROR (ÁNGULO)',
         talent: {
-          whatToSay: '“And most people think it’s just dirt.”',
+          whatToSay: '“And most people think it's just dirt.”',
           howToMove: 'Camina un paso lateral.',
           gesture: 'Gesto leve de negación.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -356,7 +356,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e3',
         title: '🎬 ESCENA 3 — EXPLICACIÓN (ACCIÓN)',
         talent: {
-          whatToSay: '“But it’s not. It’s stains sinking in, buildup causing wear, and surfaces that slowly… deteriorate.”',
+          whatToSay: '“But it's not. It's stains sinking in, buildup causing wear, and surfaces that slowly… deteriorate.”',
           howToMove: 'OPCIÓN 1: Agáchate y pasa la mano por el driveway sucio. OPCIÓN 2: De pie, señala a los lados para fotos de apoyo.',
           gesture: 'Mira la superficie o las "fotos imaginarias" (no a cámara).',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -373,7 +373,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e4',
         title: '🎬 ESCENA 4 — CONSECUENCIA',
         talent: {
-          whatToSay: '“And by the time you react… it’s more expensive to fix.”',
+          whatToSay: '“And by the time you react… it's more expensive to fix.”',
           howToMove: 'OPCIÓN 1: Caminando por el driveway. OPCIÓN 2: Caminando por el pasillo/sala de la casa.',
           gesture: 'Mira a cámara al final de la frase.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -390,7 +390,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e5',
         title: '🎬 ESCENA 5 — SOLUCIÓN',
         talent: {
-          whatToSay: '“That’s why we don’t just clean. We restore, protect, and transform spaces with professional cleaning, epoxy, and paint that actually lasts.”',
+          whatToSay: '“That's why we don't just clean. We restore, protect, and transform spaces with professional cleaning, epoxy, and paint that actually lasts.”',
           howToMove: 'En área de trabajo / garaje. Señala herramientas o área. Toma algo (manguera/herramienta).',
           gesture: 'Mirando a cámara, seguro.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -407,7 +407,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e6',
         title: '🎬 ESCENA 6 — CIERRE',
         talent: {
-          whatToSay: '“It’s not just about aesthetics. It’s about taking care of what cost you money.”',
+          whatToSay: '“It's not just about aesthetics. It's about taking care of what cost you money.”',
           howToMove: 'Lugar limpio / neutro.',
           gesture: 'Mano al pecho o gesto firme.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -456,7 +456,7 @@ export const guionesPresentacion: Script[] = [
     duration: '90s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'This is the first thing most people do before choosing us… They check our reviews. And that’s completely valid. Because today there are many options… and it’s not always easy to know which one to choose. That’s why we let those who have already worked with us do the talking. We’ve worked with over 100 clients, and every space is different. That’s why we keep it simple: You message us, we look at your space, and we explain exactly what you need. No pressure, no complications. Just doing the job right so you can have peace of mind with the result. You can check our reviews… and decide with total confidence.',
+    fullDialogue: 'This is the first thing most people do before choosing us… They check our reviews. And that's completely valid. Because today there are many options… and it's not always easy to know which one to choose. That's why we let those who have already worked with us do the talking. We've worked with over 100 clients, and every space is different. That's why we keep it simple: You message us, we look at your space, and we explain exactly what you need. No pressure, no complications. Just doing the job right so you can have peace of mind with the result. You can check our reviews… and decide with total confidence.',
     scenes: [
       {
         id: 'p3-e1',
@@ -496,7 +496,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e3',
         title: '🎬 ESCENA 3 — VALIDACIÓN',
         talent: {
-          whatToSay: '“And that’s completely valid.”',
+          whatToSay: '“And that's completely valid.”',
           howToMove: 'Cambia posición levemente.',
           gesture: 'Asiente con la cabeza, natural.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -513,7 +513,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e4',
         title: '🎬 ESCENA 4 — OPCIONES',
         talent: {
-          whatToSay: '“Because today there are many options… and it’s not always easy to know which one to choose.”',
+          whatToSay: '“Because today there are many options… and it's not always easy to know which one to choose.”',
           howToMove: 'Caminando por entrada / driveway.',
           gesture: 'Mira a cámara al final de la frase.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -530,7 +530,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e5',
         title: '🎬 ESCENA 5 — PRUEBA SOCIAL',
         talent: {
-          whatToSay: '“That’s why we let those who have already worked with us do the talking.”',
+          whatToSay: '“That's why we let those who have already worked with us do the talking.”',
           howToMove: 'Frente a pared o fondo limpio.',
           gesture: 'Señala hacia arriba.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -547,7 +547,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e6',
         title: '🎬 ESCENA 6 — EXPERIENCIA',
         talent: {
-          whatToSay: '“We’ve worked with over 100 clients, and every space is different.”',
+          whatToSay: '“We've worked with over 100 clients, and every space is different.”',
           howToMove: 'En el área de trabajo.',
           gesture: 'Señala alrededor, gesto abierto.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -564,7 +564,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e7',
         title: '🎬 ESCENA 7 — PROCESO',
         talent: {
-          whatToSay: '“That’s why we keep it simple: You message us, we look at your space, and we explain exactly what you need.”',
+          whatToSay: '“That's why we keep it simple: You message us, we look at your space, and we explain exactly what you need.”',
           howToMove: 'Acércate un poco a cámara. Gesto de celular. Señala alrededor.',
           gesture: 'Señala a cámara al final.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
