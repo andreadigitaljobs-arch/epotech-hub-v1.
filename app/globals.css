@@ -240,6 +240,10 @@ a:active, button:active, [role="button"]:active {
   to { width: 0%; }
 }
 
+.animate-shrink-bar {
+  animation: shrink 3s linear forwards;
+}
+
 .animate-pulse-subtle {
   animation: pulse-subtle 2s infinite ease-in-out;
 }

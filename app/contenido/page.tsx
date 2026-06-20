@@ -1598,7 +1598,7 @@ export default function ContenidoPage() {
               <p className="text-sm text-white/50 font-medium leading-relaxed">Tu locución fue guardada correctamente en el historial. El equipo la recibirá para edición.</p>
             </div>
             <div className="w-full h-1 rounded-full bg-white/5 overflow-hidden">
-              <div className="h-full bg-[#48c1d2] animate-[shrink_3s_linear_forwards]" style={{ width: '100%' }} />
+              <div className="h-full bg-[#48c1d2] animate-shrink-bar" />
             </div>
           </div>
         )}
@@ -1994,7 +1994,7 @@ export default function ContenidoPage() {
               )}
             </div>
           )}
-        </div>
+        </div>}
 
         {/* Pie de Página (Controles Navegación) */}
         <div className="px-6 sm:px-8 py-6 border-t border-white/5 bg-[#0a192f]/80 backdrop-blur-md flex gap-3">
@@ -2131,7 +2131,7 @@ export default function ContenidoPage() {
               )}
             </>
           )}
-        </div>}
+        </div>
 
       </div>
     </div>, document.body
