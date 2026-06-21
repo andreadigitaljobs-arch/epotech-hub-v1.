@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 import { supabase } from "@/lib/supabase";
+import CalendarioTab from "./CalendarioTab";
 import Tesseract from 'tesseract.js';
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -2635,6 +2636,7 @@ export default function ContenidoPage() {
             <div className="flex bg-slate-50 p-1 rounded-2xl mb-6 border border-slate-100">
               {[
                 { id: 'guiones', name: 'Guiones', icon: Clapperboard, step: 1, help: 'Toca aquí para empezar tu día de grabación.' },
+                { id: 'calendario', name: 'Calendario', icon: CalendarDays },
                 { id: 'historial', name: 'Historial', icon: History }
               ].map((tab) => (
                 <div key={tab.id} className="flex-1 relative">
@@ -3436,7 +3438,7 @@ export default function ContenidoPage() {
             </div>
           </div>
         )}
-        {activeTab === 'calendario' && <CreacionSection contentDB={contentDB} toggleStatus={toggleGlobalStatus} onSelect={(key: string) => setSelectedProduction({ ...contentDB[key], day: key })} />}
+        {activeTab === 'calendario' && <CalendarioTab showToast={showToast} />}
         {activeTab === 'historial' && (
           <HistorialSection 
             contentDB={contentDB} 
