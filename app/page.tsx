@@ -66,21 +66,6 @@ const TUTORIAL_CARDS = [
 
   },
 
-  {
-
-    title: "Calendario de Contenido",
-
-    description: "Planifica semana a semana qué vas a publicar, con pilar, estado, copy, enlace del reel y métricas de cada post.",
-
-    icon: CalendarDays,
-
-    path: "/calendario",
-
-    color: "cyan",
-
-    tag: "Contenido"
-
-  },
 
   {
 

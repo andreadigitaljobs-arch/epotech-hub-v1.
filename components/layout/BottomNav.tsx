@@ -30,33 +30,41 @@ export function BottomNav() {
     <>
       {/* POPUP "MÁS" */}
       {moreOpen && (
-        <div
-          className="fixed inset-0 z-[99] md:hidden"
-          onClick={() => setMoreOpen(false)}
-        >
+        <>
+          {/* Overlay para cerrar */}
           <div
-            className="absolute bottom-[calc(4rem+env(safe-area-inset-bottom))] left-0 right-0 flex justify-end px-4"
-            onClick={e => e.stopPropagation()}
+            className="fixed inset-0 z-[98] md:hidden"
+            onClick={() => setMoreOpen(false)}
+          />
+          {/* Panel */}
+          <div
+            className="fixed z-[99] md:hidden right-3 flex flex-col gap-2"
+            style={{ bottom: `calc(4.5rem + env(safe-area-inset-bottom))` }}
           >
-            <div className="bg-[#0c192c]/98 border border-slate-700/60 rounded-3xl p-3 shadow-2xl backdrop-blur-xl flex flex-col gap-1 min-w-[160px] animate-in slide-in-from-bottom-2 duration-200">
-              {moreTabs.map(tab => {
-                const Icon = tab.icon;
-                const isActive = pathname === tab.path;
-                return (
-                  <Link
-                    key={tab.path}
-                    href={tab.path}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all active:scale-95 ${isActive ? "bg-[#48c1d2]/15 text-[#48c1d2]" : "text-slate-300 hover:bg-white/5"}`}
-                    onClick={() => setMoreOpen(false)}
-                  >
-                    <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
-                    <span className="text-[11px] font-black uppercase tracking-widest">{tab.name}</span>
-                  </Link>
-                );
-              })}
-            </div>
+            {moreTabs.map((tab, i) => {
+              const Icon = tab.icon;
+              const isActive = pathname === tab.path;
+              return (
+                <Link
+                  key={tab.path}
+                  href={tab.path}
+                  onClick={() => setMoreOpen(false)}
+                  className={`flex items-center gap-3 pl-4 pr-5 py-3.5 rounded-2xl border shadow-xl backdrop-blur-xl transition-all active:scale-95
+                    ${isActive
+                      ? "bg-[#48c1d2]/20 border-[#48c1d2]/40 text-[#48c1d2]"
+                      : "bg-[#0c1f3a]/95 border-white/10 text-white/80"
+                    }`}
+                  style={{ animationDelay: `${i * 40}ms` }}
+                >
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? "bg-[#48c1d2]/20" : "bg-white/5"}`}>
+                    <Icon size={16} strokeWidth={isActive ? 2.5 : 2} />
+                  </div>
+                  <span className="text-[11px] font-black uppercase tracking-widest">{tab.name}</span>
+                </Link>
+              );
+            })}
           </div>
-        </div>
+        </>
       )}
 
       {/* BOTTOM BAR */}
