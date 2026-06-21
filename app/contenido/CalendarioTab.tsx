@@ -114,15 +114,47 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
   const [tableError, setTableError] = useState(false);
   const [weekStart, setWeekStart] = useState(() => getMonday(new Date()));
   const [selectedDay, setSelectedDay] = useState(() => {
-    const today = new Date(); today.setHours(0,0,0,0); return today;
+    const today = new Date(); today.setHours(0, 0, 0, 0); return today;
   });
+  const [dayKey, setDayKey] = useState(0); // cambia al seleccionar día → re-anima tarjetas
+
+  // Modal agregar/editar
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const modalTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openModal = () => {
+    if (modalTimer.current) clearTimeout(modalTimer.current);
+    setModalOpen(true);
+    requestAnimationFrame(() => requestAnimationFrame(() => setModalVisible(true)));
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    modalTimer.current = setTimeout(() => setModalOpen(false), 280);
+  };
+
   const [editing, setEditing] = useState<Publicacion | null>(null);
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [saving, setSaving] = useState(false);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [metricsId, setMetricsId] = useState<string | null>(null);
+
+  // Métricas
+  const [metricsId, setMetricsId]   = useState<string | null>(null);
+  const [metricsVis, setMetricsVis] = useState<string | null>(null);
+  const metricsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [metricsForm, setMetricsForm] = useState({ views: "", likes: "", alcance: "" });
+
+  const openMetrics = (id: string, post: Publicacion) => {
+    if (metricsTimer.current) clearTimeout(metricsTimer.current);
+    setMetricsId(id);
+    setMetricsForm({ views: String(post.metricas_views || ""), likes: String(post.metricas_likes || ""), alcance: String(post.metricas_alcance || "") });
+    requestAnimationFrame(() => requestAnimationFrame(() => setMetricsVis(id)));
+  };
+
+  const closeMetrics = () => {
+    setMetricsVis(null);
+    metricsTimer.current = setTimeout(() => setMetricsId(null), 240);
+  };
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
@@ -158,7 +190,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
     base.setHours(12, 0, 0, 0);
     setEditing(null);
     setForm({ ...EMPTY_FORM, fecha_publicacion: base.toISOString().slice(0, 16) });
-    setModalOpen(true);
+    openModal();
   };
 
   const openEdit = (post: Publicacion) => {
@@ -180,7 +212,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
       checklist_caption: post.checklist_caption,
       checklist_publicado: post.checklist_publicado,
     });
-    setModalOpen(true);
+    openModal();
   };
 
   const savePost = async () => {
@@ -202,7 +234,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
     if (error) { showToast("Error al guardar", "error"); setSaving(false); return; }
     showToast(editing ? "Publicación actualizada" : "Publicación agregada", "success");
     setSaving(false);
-    setModalOpen(false);
+    closeModal();
     fetchPosts();
   };
 
@@ -221,7 +253,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
     }).eq("id", id);
     if (error) { showToast("Error al guardar métricas", "error"); return; }
     showToast("Métricas guardadas", "success");
-    setMetricsId(null);
+    closeMetrics();
     fetchPosts();
   };
 
@@ -243,13 +275,18 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
     edicion: posts.filter(p => p.estado === "En edición").length,
   };
 
+  const handleDaySelect = (day: Date) => {
+    setSelectedDay(day);
+    setDayKey(k => k + 1);
+  };
+
   if (tableError) {
     return (
-      <div className="p-6 space-y-4">
+      <div className="p-6 space-y-4 cal-fade-in-up">
         <div className="bg-amber-50 border border-amber-200 rounded-3xl p-6 text-center space-y-3">
           <AlertCircle className="mx-auto text-amber-500" size={32} />
           <p className="font-black text-amber-800 text-sm uppercase tracking-wider">Tabla no encontrada</p>
-          <p className="text-amber-700 text-xs leading-relaxed">Crea la tabla en Supabase antes de usar el calendario. Ve a tu proyecto en Supabase → SQL Editor y ejecuta el SQL que te dará Andrea.</p>
+          <p className="text-amber-700 text-xs leading-relaxed">Crea la tabla en Supabase antes de usar el calendario.</p>
         </div>
       </div>
     );
@@ -261,12 +298,13 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
       <div className="px-4 pt-4 pb-2">
         <div className="grid grid-cols-4 gap-2">
           {[
-            { label: "Esta semana", value: weekSummary.total, color: "text-slate-700", bg: "bg-slate-100" },
-            { label: "Publicados", value: weekSummary.publicados, color: "text-emerald-700", bg: "bg-emerald-50" },
-            { label: "Listos", value: weekSummary.listos, color: "text-[#0e7490]", bg: "bg-[#e0f7fa]" },
-            { label: "Edición", value: weekSummary.edicion, color: "text-amber-700", bg: "bg-amber-50" },
-          ].map(s => (
-            <div key={s.label} className={`${s.bg} rounded-2xl p-3 text-center`}>
+            { label: "Esta semana", value: weekSummary.total,      color: "text-slate-700",  bg: "bg-slate-100" },
+            { label: "Publicados",  value: weekSummary.publicados, color: "text-emerald-700", bg: "bg-emerald-50" },
+            { label: "Listos",      value: weekSummary.listos,     color: "text-[#0e7490]",  bg: "bg-[#e0f7fa]" },
+            { label: "Edición",     value: weekSummary.edicion,    color: "text-amber-700",  bg: "bg-amber-50" },
+          ].map((s, i) => (
+            <div key={s.label} className={`${s.bg} rounded-2xl p-3 text-center cal-fade-in-up`}
+              style={{ animationDelay: `${i * 55}ms` }}>
               <div className={`text-xl font-black ${s.color}`}>{s.value}</div>
               <div className={`text-[9px] font-black uppercase tracking-wider ${s.color} opacity-70 leading-tight mt-0.5`}>{s.label}</div>
             </div>
@@ -275,12 +313,14 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
       </div>
 
       {/* NAV SEMANA */}
-      <div className="px-4 py-3 flex items-center justify-between">
-        <button onClick={() => setWeekStart(d => addDays(d, -7))} className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center active:scale-95 transition-all">
+      <div className="px-4 py-3 flex items-center justify-between cal-fade-in" style={{ animationDelay: "80ms" }}>
+        <button onClick={() => setWeekStart(d => addDays(d, -7))}
+          className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center active:scale-95 transition-all">
           <ChevronLeft size={16} className="text-slate-500" />
         </button>
         <span className="text-xs font-black text-slate-600 uppercase tracking-wider">{formatDateRange(weekStart)}</span>
-        <button onClick={() => setWeekStart(d => addDays(d, 7))} className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center active:scale-95 transition-all">
+        <button onClick={() => setWeekStart(d => addDays(d, 7))}
+          className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center active:scale-95 transition-all">
           <ChevronRight size={16} className="text-slate-500" />
         </button>
       </div>
@@ -292,8 +332,9 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
           const isSelected = isSameDay(day, selectedDay);
           const isToday = isSameDay(day, new Date());
           return (
-            <button key={i} onClick={() => setSelectedDay(day)}
-              className={`flex flex-col items-center gap-1 flex-shrink-0 w-10 py-2 rounded-2xl transition-all active:scale-95 ${isSelected ? "bg-[#0a192f]" : isToday ? "bg-slate-100" : "bg-transparent"}`}
+            <button key={i} onClick={() => handleDaySelect(day)}
+              className={`cal-chip-in flex flex-col items-center gap-1 flex-shrink-0 w-10 py-2 rounded-2xl transition-all active:scale-95 ${isSelected ? "bg-[#0a192f]" : isToday ? "bg-slate-100" : "bg-transparent"}`}
+              style={{ animationDelay: `${120 + i * 40}ms` }}
             >
               <span className={`text-[9px] font-black uppercase tracking-wider ${isSelected ? "text-[#48c1d2]" : "text-slate-400"}`}>{DAYS_ES[(i + 1) % 7]}</span>
               <span className={`text-sm font-black ${isSelected ? "text-white" : isToday ? "text-[#0a192f]" : "text-slate-500"}`}>{day.getDate()}</span>
@@ -310,7 +351,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
 
       {/* POSTS DEL DÍA */}
       <div className="px-4 space-y-3">
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between mb-1 cal-fade-in" style={{ animationDelay: "200ms" }}>
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
             {DAYS_ES[selectedDay.getDay()]} {selectedDay.getDate()} {MONTHS_ES[selectedDay.getMonth()]}
           </span>
@@ -321,9 +362,9 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
         </div>
 
         {loading ? (
-          <div className="text-center py-8 text-slate-400 text-xs">Cargando...</div>
+          <div className="text-center py-8 text-slate-400 text-xs cal-fade-in">Cargando...</div>
         ) : postsForDay(selectedDay).length === 0 ? (
-          <div className="border border-dashed border-slate-200 rounded-3xl p-8 flex flex-col items-center gap-3">
+          <div key={`empty-${dayKey}`} className="border border-dashed border-slate-200 rounded-3xl p-8 flex flex-col items-center gap-3 cal-scale-in">
             <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
               <Plus size={18} className="text-slate-300" />
             </div>
@@ -333,166 +374,198 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
             </button>
           </div>
         ) : (
-          postsForDay(selectedDay).map(post => {
-            const pc = PILLAR_CONFIG[post.pilar];
-            const ec = ESTADO_CONFIG[post.estado];
-            const isExpanded = expandedId === post.id;
-            const checksDone = [post.checklist_grabado, post.checklist_editado, post.checklist_caption, post.checklist_publicado].filter(Boolean).length;
+          <div key={`posts-${dayKey}`} className="space-y-3">
+            {postsForDay(selectedDay).map((post, idx) => {
+              const pc = PILLAR_CONFIG[post.pilar];
+              const ec = ESTADO_CONFIG[post.estado];
+              const checksDone = [post.checklist_grabado, post.checklist_editado, post.checklist_caption, post.checklist_publicado].filter(Boolean).length;
+              const isMetricsOpen = metricsId === post.id;
 
-            return (
-              <div key={post.id} className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm">
-                {/* CABECERA */}
-                <div className="p-4 space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex flex-wrap gap-1.5">
-                      <span className={`text-[10px] font-black px-2.5 py-1 rounded-full border ${pc.bg} ${pc.color}`}>{post.pilar}</span>
-                      <span className={`text-[10px] font-black px-2.5 py-1 rounded-full ${ec.bg} ${ec.color}`}>{post.estado}</span>
+              return (
+                <div key={post.id}
+                  className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm cal-fade-in-up"
+                  style={{ animationDelay: `${idx * 70}ms` }}
+                >
+                  {/* CABECERA */}
+                  <div className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className={`text-[10px] font-black px-2.5 py-1 rounded-full border ${pc.bg} ${pc.color}`}>{post.pilar}</span>
+                        <span className={`text-[10px] font-black px-2.5 py-1 rounded-full ${ec.bg} ${ec.color}`}>{post.estado}</span>
+                      </div>
+                      <div className="flex gap-1 shrink-0">
+                        <button onClick={() => openEdit(post)} className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center active:scale-95 transition-all">
+                          <Edit2 size={12} className="text-slate-500" />
+                        </button>
+                        <button onClick={() => deletePost(post.id)} className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center active:scale-95 transition-all">
+                          <Trash2 size={12} className="text-red-400" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex gap-1 shrink-0">
-                      <button onClick={() => openEdit(post)} className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center active:scale-95 transition-all">
-                        <Edit2 size={12} className="text-slate-500" />
-                      </button>
-                      <button onClick={() => deletePost(post.id)} className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center active:scale-95 transition-all">
-                        <Trash2 size={12} className="text-red-400" />
-                      </button>
+
+                    <div className="flex items-center gap-3 text-[10px] text-slate-400 font-bold">
+                      <span className="flex items-center gap-1">
+                        <Clock size={11} />
+                        {new Date(post.fecha_publicacion).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                      <span className="text-slate-300">·</span>
+                      <span>{post.formato}</span>
+                      {post.redes?.length > 0 && (
+                        <>
+                          <span className="text-slate-300">·</span>
+                          <span className="flex items-center gap-1">
+                            {post.redes.map(r => <span key={r}>{REDES_ICONS[r]}</span>)}
+                          </span>
+                        </>
+                      )}
                     </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">{post.copy_caption}</p>
+
+                    {/* CHECKLIST BARRA */}
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1">
+                        {[
+                          { done: post.checklist_grabado,   label: "Grab" },
+                          { done: post.checklist_editado,   label: "Edit" },
+                          { done: post.checklist_caption,   label: "Cap" },
+                          { done: post.checklist_publicado, label: "Pub" },
+                        ].map((c, i) => (
+                          <div key={i} className={`flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-md ${c.done ? "bg-emerald-100 text-emerald-600" : "bg-slate-100 text-slate-400"}`}>
+                            {c.done ? <Check size={8} /> : <div className="w-2 h-2 rounded-full border border-slate-300" />}
+                            {c.label}
+                          </div>
+                        ))}
+                      </div>
+                      <span className="text-[9px] text-slate-400 ml-auto">{checksDone}/4</span>
+                    </div>
+
+                    {/* ENLACE */}
+                    {post.enlace_publicacion ? (
+                      <a href={post.enlace_publicacion} target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-[10px] font-black text-[#48c1d2] truncate">
+                        <ExternalLink size={11} /> Ver reel publicado
+                      </a>
+                    ) : post.estado === "Publicado" ? (
+                      <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+                        <Link2 size={11} /> Sin enlace todavía
+                      </div>
+                    ) : null}
                   </div>
 
-                  <div className="flex items-center gap-3 text-[10px] text-slate-400 font-bold">
-                    <span className="flex items-center gap-1"><Clock size={11} />{new Date(post.fecha_publicacion).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}</span>
-                    <span className="text-slate-300">·</span>
-                    <span>{post.formato}</span>
-                    {post.redes?.length > 0 && (
-                      <>
-                        <span className="text-slate-300">·</span>
-                        <span className="flex items-center gap-1">
-                          {post.redes.map(r => <span key={r}>{REDES_ICONS[r]}</span>)}
-                        </span>
-                      </>
-                    )}
-                  </div>
-
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">{post.copy_caption}</p>
-
-                  {/* CHECKLIST BARRA */}
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1">
-                      {[
-                        { done: post.checklist_grabado, label: "Grab" },
-                        { done: post.checklist_editado, label: "Edit" },
-                        { done: post.checklist_caption, label: "Cap" },
-                        { done: post.checklist_publicado, label: "Pub" },
-                      ].map((c, i) => (
-                        <div key={i} className={`flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-md ${c.done ? "bg-emerald-100 text-emerald-600" : "bg-slate-100 text-slate-400"}`}>
-                          {c.done ? <Check size={8} /> : <div className="w-2 h-2 rounded-full border border-slate-300" />}
-                          {c.label}
+                  {/* MÉTRICAS */}
+                  {post.estado === "Publicado" && (
+                    <div className="border-t border-slate-50 px-4 py-3">
+                      {(post.metricas_views || post.metricas_likes || post.metricas_alcance) ? (
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-4">
+                            <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold"><Eye size={11} className="text-slate-400" />{(post.metricas_views || 0).toLocaleString()}</div>
+                            <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold"><Heart size={11} className="text-pink-400" />{(post.metricas_likes || 0).toLocaleString()}</div>
+                            <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold"><Users size={11} className="text-blue-400" />{(post.metricas_alcance || 0).toLocaleString()}</div>
+                          </div>
+                          <button onClick={() => openMetrics(post.id, post)}
+                            className="text-[9px] font-black text-slate-400 uppercase tracking-wider active:scale-95 transition-all">Editar</button>
                         </div>
-                      ))}
-                    </div>
-                    <span className="text-[9px] text-slate-400 ml-auto">{checksDone}/4</span>
-                  </div>
+                      ) : (
+                        <button onClick={() => openMetrics(post.id, post)}
+                          className="w-full text-[10px] font-black text-[#48c1d2] uppercase tracking-wider flex items-center justify-center gap-1 py-1 active:scale-95 transition-all">
+                          <Plus size={11} /> Agregar métricas
+                        </button>
+                      )}
 
-                  {/* ENLACE */}
-                  {post.enlace_publicacion ? (
-                    <a href={post.enlace_publicacion} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-[10px] font-black text-[#48c1d2] truncate">
-                      <ExternalLink size={11} /> Ver reel publicado
-                    </a>
-                  ) : post.estado === "Publicado" ? (
-                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
-                      <Link2 size={11} /> Sin enlace todavía
+                      {/* Panel métricas con animación */}
+                      {isMetricsOpen && (
+                        <div className={`mt-3 space-y-2 ${metricsVis === post.id ? "cal-scale-in" : "cal-scale-out"}`}>
+                          <div className="grid grid-cols-3 gap-2">
+                            {[
+                              { key: "views",   label: "Views",   icon: <Eye size={10}/> },
+                              { key: "likes",   label: "Likes",   icon: <Heart size={10}/> },
+                              { key: "alcance", label: "Alcance", icon: <Users size={10}/> },
+                            ].map(f => (
+                              <div key={f.key}>
+                                <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-1">{f.icon}{f.label}</label>
+                                <input type="number"
+                                  value={metricsForm[f.key as keyof typeof metricsForm]}
+                                  onChange={e => setMetricsForm(m => ({ ...m, [f.key]: e.target.value }))}
+                                  className="w-full border border-slate-200 rounded-xl px-2 py-1.5 text-xs text-slate-700 text-center focus:outline-none focus:border-[#48c1d2]"
+                                  placeholder="0" />
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex gap-2">
+                            <button onClick={closeMetrics}
+                              className="flex-1 py-2 rounded-xl border border-slate-200 text-[10px] font-black text-slate-400 uppercase tracking-wider active:scale-95 transition-all">Cancelar</button>
+                            <button onClick={() => saveMetrics(post.id)}
+                              className="flex-1 py-2 rounded-xl bg-[#0a192f] text-[10px] font-black text-[#48c1d2] uppercase tracking-wider active:scale-95 transition-all">Guardar</button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ) : null}
+                  )}
+
+                  {/* NOTAS */}
+                  {post.notas_produccion && (
+                    <div className="border-t border-slate-50 px-4 py-3">
+                      <div className="flex items-start gap-2">
+                        <BookOpen size={11} className="text-slate-300 mt-0.5 shrink-0" />
+                        <p className="text-[10px] text-slate-400 leading-relaxed">{post.notas_produccion}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-
-                {/* MÉTRICAS */}
-                {post.estado === "Publicado" && (
-                  <div className="border-t border-slate-50 px-4 py-3">
-                    {(post.metricas_views || post.metricas_likes || post.metricas_alcance) ? (
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-4">
-                          <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold"><Eye size={11} className="text-slate-400" />{(post.metricas_views || 0).toLocaleString()}</div>
-                          <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold"><Heart size={11} className="text-pink-400" />{(post.metricas_likes || 0).toLocaleString()}</div>
-                          <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold"><Users size={11} className="text-blue-400" />{(post.metricas_alcance || 0).toLocaleString()}</div>
-                        </div>
-                        <button onClick={() => { setMetricsId(post.id); setMetricsForm({ views: String(post.metricas_views||""), likes: String(post.metricas_likes||""), alcance: String(post.metricas_alcance||"") }); }}
-                          className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Editar</button>
-                      </div>
-                    ) : (
-                      <button onClick={() => { setMetricsId(post.id); setMetricsForm({ views: "", likes: "", alcance: "" }); }}
-                        className="w-full text-[10px] font-black text-[#48c1d2] uppercase tracking-wider flex items-center justify-center gap-1 py-1">
-                        <Plus size={11} /> Agregar métricas
-                      </button>
-                    )}
-
-                    {metricsId === post.id && (
-                      <div className="mt-3 space-y-2 animate-in fade-in duration-300">
-                        <div className="grid grid-cols-3 gap-2">
-                          {[
-                            { key: "views", label: "Views", icon: <Eye size={10}/> },
-                            { key: "likes", label: "Likes", icon: <Heart size={10}/> },
-                            { key: "alcance", label: "Alcance", icon: <Users size={10}/> },
-                          ].map(f => (
-                            <div key={f.key}>
-                              <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-1">{f.icon}{f.label}</label>
-                              <input type="number" value={metricsForm[f.key as keyof typeof metricsForm]}
-                                onChange={e => setMetricsForm(m => ({ ...m, [f.key]: e.target.value }))}
-                                className="w-full border border-slate-200 rounded-xl px-2 py-1.5 text-xs text-slate-700 text-center focus:outline-none focus:border-[#48c1d2]" placeholder="0" />
-                            </div>
-                          ))}
-                        </div>
-                        <div className="flex gap-2">
-                          <button onClick={() => setMetricsId(null)} className="flex-1 py-2 rounded-xl border border-slate-200 text-[10px] font-black text-slate-400 uppercase tracking-wider active:scale-95 transition-all">Cancelar</button>
-                          <button onClick={() => saveMetrics(post.id)} className="flex-1 py-2 rounded-xl bg-[#0a192f] text-[10px] font-black text-[#48c1d2] uppercase tracking-wider active:scale-95 transition-all">Guardar</button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* NOTAS */}
-                {post.notas_produccion && (
-                  <div className="border-t border-slate-50 px-4 py-3">
-                    <div className="flex items-start gap-2">
-                      <BookOpen size={11} className="text-slate-300 mt-0.5 shrink-0" />
-                      <p className="text-[10px] text-slate-400 leading-relaxed">{post.notas_produccion}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })
+              );
+            })}
+          </div>
         )}
       </div>
 
-      {/* MODAL AGREGAR/EDITAR — portal directo al body */}
+      {/* MODAL AGREGAR/EDITAR */}
       {modalOpen && typeof window !== "undefined" && createPortal(
         <div
-          className="fixed inset-0 z-[99999] flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-sm"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-          onClick={e => { if (e.target === e.currentTarget) setModalOpen(false); }}
+          className={`fixed inset-0 z-[99999] flex items-end sm:items-center justify-center ${modalVisible ? "cal-fade-in" : "cal-fade-out"}`}
+          style={{
+            background: "rgba(0,0,0,0.75)",
+            backdropFilter: "blur(6px)",
+            paddingBottom: "env(safe-area-inset-bottom)",
+          }}
+          onClick={e => { if (e.target === e.currentTarget) closeModal(); }}
         >
-          <div className="w-full sm:max-w-lg bg-[#0a192f] sm:rounded-[28px] rounded-t-[28px] flex flex-col shadow-2xl border border-white/10 animate-in slide-in-from-bottom duration-300" style={{ maxHeight: "92dvh" }}>
+          <div
+            className={`w-full sm:max-w-lg flex flex-col shadow-2xl border border-white/10 ${modalVisible ? "cal-slide-up" : "cal-slide-down"}`}
+            style={{
+              background: "#0a192f",
+              borderRadius: "28px 28px 0 0",
+              maxHeight: "92dvh",
+            }}
+          >
+            {/* HANDLE BAR */}
+            <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
+              <div className="w-10 h-1 rounded-full bg-white/20" />
+            </div>
+
             {/* HEADER MODAL */}
-            <div className="flex-shrink-0 px-6 pt-5 pb-4 border-b border-white/10 flex items-center justify-between">
+            <div className="flex-shrink-0 px-6 pt-3 pb-4 border-b border-white/10 flex items-center justify-between">
               <div>
                 <p className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-0.5">Calendario</p>
                 <h2 className="text-sm font-black text-white">
                   {editing ? "Editar publicación" : "Nueva publicación"}
                 </h2>
               </div>
-              <button onClick={() => setModalOpen(false)} className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center active:scale-95 transition-all">
+              <button onClick={closeModal}
+                className="w-9 h-9 rounded-full flex items-center justify-center active:scale-95 transition-all"
+                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}>
                 <X size={16} className="text-white/60" />
               </button>
             </div>
 
-            <div className="overflow-y-auto flex-1 px-6 pt-5 space-y-5 pb-6">
+            <div className="overflow-y-auto flex-1 px-6 pt-5 space-y-5 pb-8">
               {/* FECHA Y HORA */}
               <div>
                 <label className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px] mb-2 block">Fecha y hora</label>
                 <input type="datetime-local" value={form.fecha_publicacion}
                   onChange={e => setForm(f => ({ ...f, fecha_publicacion: e.target.value }))}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#48c1d2] [color-scheme:dark]" />
+                  className="w-full rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#48c1d2] [color-scheme:dark]"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }} />
               </div>
 
               {/* PILAR */}
@@ -504,7 +577,8 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                     const active = form.pilar === p;
                     return (
                       <button key={p} onClick={() => setForm(f => ({ ...f, pilar: p }))}
-                        className={`py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-wider border transition-all active:scale-95 ${active ? `${pc.bg} ${pc.color} border-current` : "border-white/10 text-white/30 bg-white/3"}`}>
+                        className={`py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-wider border transition-all active:scale-95 ${active ? `${pc.bg} ${pc.color} border-current` : "text-white/30"}`}
+                        style={!active ? { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" } : {}}>
                         {p}
                       </button>
                     );
@@ -521,7 +595,8 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                     const active = form.estado === e;
                     return (
                       <button key={e} onClick={() => setForm(f => ({ ...f, estado: e }))}
-                        className={`flex-1 py-2 rounded-2xl text-[9px] font-black uppercase tracking-wider transition-all active:scale-95 ${active ? `${ec.bg} ${ec.color}` : "bg-white/5 text-white/30"}`}>
+                        className={`flex-1 py-2 rounded-2xl text-[9px] font-black uppercase tracking-wider transition-all active:scale-95 ${active ? `${ec.bg} ${ec.color}` : "text-white/30"}`}
+                        style={!active ? { background: "rgba(255,255,255,0.05)" } : {}}>
                         {e}
                       </button>
                     );
@@ -535,7 +610,10 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                 <div className="flex gap-2">
                   {(["Reel", "Carrusel", "Historia", "Foto"] as Formato[]).map(f => (
                     <button key={f} onClick={() => setForm(prev => ({ ...prev, formato: f }))}
-                      className={`flex-1 py-2 rounded-2xl text-[9px] font-black uppercase tracking-wider transition-all active:scale-95 ${form.formato === f ? "bg-[#48c1d2]/20 text-[#48c1d2] border border-[#48c1d2]/40" : "bg-white/5 text-white/30 border border-white/5"}`}>
+                      className={`flex-1 py-2 rounded-2xl text-[9px] font-black uppercase tracking-wider transition-all active:scale-95 ${form.formato === f ? "text-[#48c1d2]" : "text-white/30"}`}
+                      style={form.formato === f
+                        ? { background: "rgba(72,193,210,0.15)", border: "1px solid rgba(72,193,210,0.3)" }
+                        : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.05)" }}>
                       {f}
                     </button>
                   ))}
@@ -550,7 +628,10 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                     const active = form.redes.includes(r);
                     return (
                       <button key={r} onClick={() => toggleRed(r)}
-                        className={`flex-1 py-2.5 rounded-2xl text-[9px] font-black uppercase tracking-wider flex flex-col items-center gap-1.5 transition-all active:scale-95 border ${active ? "bg-[#48c1d2]/15 text-[#48c1d2] border-[#48c1d2]/30" : "bg-white/5 text-white/30 border-white/5"}`}>
+                        className={`flex-1 py-2.5 rounded-2xl text-[9px] font-black uppercase tracking-wider flex flex-col items-center gap-1.5 transition-all active:scale-95 ${active ? "text-[#48c1d2]" : "text-white/30"}`}
+                        style={active
+                          ? { background: "rgba(72,193,210,0.12)", border: "1px solid rgba(72,193,210,0.25)" }
+                          : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.05)" }}>
                         {REDES_ICONS[r]}
                         <span>{r === "YouTube Shorts" ? "YouTube" : r}</span>
                       </button>
@@ -562,9 +643,11 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
               {/* COPY */}
               <div>
                 <label className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px] mb-2 block">Copy / Caption</label>
-                <textarea value={form.copy_caption} onChange={e => setForm(f => ({ ...f, copy_caption: e.target.value }))}
+                <textarea value={form.copy_caption}
+                  onChange={e => setForm(f => ({ ...f, copy_caption: e.target.value }))}
                   rows={4} placeholder="Escribe el caption del post..."
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/20 leading-relaxed resize-none focus:outline-none focus:border-[#48c1d2]" />
+                  className="w-full rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/20 leading-relaxed resize-none focus:outline-none"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }} />
               </div>
 
               {/* ENLACE */}
@@ -573,15 +656,18 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                 <input type="url" value={form.enlace_publicacion}
                   onChange={e => setForm(f => ({ ...f, enlace_publicacion: e.target.value }))}
                   placeholder="https://www.instagram.com/reel/..."
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#48c1d2]" />
+                  className="w-full rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }} />
               </div>
 
-              {/* NOTAS DE PRODUCCIÓN */}
+              {/* NOTAS */}
               <div>
                 <label className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px] mb-2 block">Notas de producción</label>
-                <textarea value={form.notas_produccion} onChange={e => setForm(f => ({ ...f, notas_produccion: e.target.value }))}
+                <textarea value={form.notas_produccion}
+                  onChange={e => setForm(f => ({ ...f, notas_produccion: e.target.value }))}
                   rows={2} placeholder="Solo para uso interno del equipo..."
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/20 leading-relaxed resize-none focus:outline-none focus:border-[#48c1d2]" />
+                  className="w-full rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/20 leading-relaxed resize-none focus:outline-none"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }} />
               </div>
 
               {/* CHECKLIST */}
@@ -593,12 +679,20 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                     { key: "checklist_editado",   label: "Editado" },
                     { key: "checklist_caption",   label: "Caption listo" },
                     { key: "checklist_publicado", label: "Publicado en redes" },
-                  ].map(c => {
+                  ].map((c, i) => {
                     const val = form[c.key as keyof typeof form] as boolean;
                     return (
                       <button key={c.key} onClick={() => toggleChecklist(c.key as keyof typeof EMPTY_FORM)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all active:scale-95 text-left ${val ? "border-emerald-500/30 bg-emerald-500/10" : "border-white/10 bg-white/5"}`}>
-                        <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${val ? "bg-emerald-500" : "border-2 border-white/20"}`}>
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all active:scale-95 text-left"
+                        style={val
+                          ? { background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.25)" }
+                          : { background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                        <div style={{
+                          width: 20, height: 20, borderRadius: "50%", flexShrink: 0,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          background: val ? "#34d399" : "transparent",
+                          border: val ? "none" : "2px solid rgba(255,255,255,0.2)",
+                        }}>
                           {val && <Check size={11} className="text-white" />}
                         </div>
                         <span className={`text-xs font-black uppercase tracking-wider ${val ? "text-emerald-400" : "text-white/30"}`}>{c.label}</span>
@@ -610,7 +704,8 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
 
               {/* BOTÓN GUARDAR */}
               <button onClick={savePost} disabled={saving}
-                className="w-full py-4 rounded-2xl bg-[#48c1d2] text-[#0a192f] text-[11px] font-black uppercase tracking-widest active:scale-95 transition-all disabled:opacity-50 shadow-lg shadow-[#48c1d2]/20">
+                className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest active:scale-95 transition-all disabled:opacity-50"
+                style={{ background: "#48c1d2", color: "#0a192f", boxShadow: "0 8px 24px rgba(72,193,210,0.25)" }}>
                 {saving ? "Guardando..." : editing ? "Guardar cambios" : "Agregar publicación"}
               </button>
             </div>
