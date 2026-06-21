@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import {
   Plus, ChevronLeft, ChevronRight, X, Check, ExternalLink,
   Clock, Edit2, Trash2, Eye, Heart, Users, Link2,
-  Instagram, Youtube, Smartphone, BookOpen, AlertCircle
+  Camera, Video, Smartphone, BookOpen, AlertCircle
 } from "lucide-react";
 
 const supabase = createClient(
@@ -52,9 +52,9 @@ const ESTADO_CONFIG: Record<Estado, { color: string; bg: string }> = {
 };
 
 const REDES_ICONS: Record<Red, React.ReactNode> = {
-  "Instagram":     <Instagram size={12} />,
+  "Instagram":     <Camera size={12} />,
   "TikTok":        <Smartphone size={12} />,
-  "YouTube Shorts":<Youtube size={12} />,
+  "YouTube Shorts":<Video size={12} />,
 };
 
 const DAYS_ES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
