@@ -59,16 +59,23 @@ export function BottomNav() {
       {/* PANEL "MÁS" */}
       {moreOpen && (
         <div
-          className="fixed z-[99] md:hidden right-3"
+          className="fixed z-[99] md:hidden right-4"
           style={{
-            bottom: `calc(4.6rem + env(safe-area-inset-bottom))`,
-            transition: "opacity 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.25s cubic-bezier(0.4,0,0.2,1)",
+            bottom: `calc(4.8rem + env(safe-area-inset-bottom))`,
+            transition: "opacity 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s cubic-bezier(0.4,0,0.2,1)",
             opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0) scale(1)" : "translateY(12px) scale(0.95)",
+            transform: visible ? "translateY(0) scale(1)" : "translateY(10px) scale(0.94)",
             transformOrigin: "bottom right",
+            minWidth: 210,
           }}
         >
-          <div className="bg-[#0c1f3a]/98 border border-white/10 rounded-3xl shadow-2xl overflow-hidden" style={{ minWidth: 200 }}>
+          <div style={{
+            background: "rgba(10,22,44,0.97)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            borderRadius: 20,
+            overflow: "hidden",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(72,193,210,0.08)",
+          }}>
             {moreTabs.map((tab, i) => {
               const Icon = tab.icon;
               const isActive = pathname === tab.path;
@@ -77,29 +84,31 @@ export function BottomNav() {
                   key={tab.path}
                   href={tab.path}
                   onClick={closeMore}
-                  className={`flex items-center gap-3 px-5 py-4 transition-all active:scale-[0.97] ${
-                    isActive ? "text-[#48c1d2] bg-[#48c1d2]/10" : "text-white/80 hover:bg-white/5"
-                  } ${i > 0 ? "border-t border-white/5" : ""}`}
+                  className="flex items-center gap-3 px-4 py-4 transition-all active:scale-[0.97]"
+                  style={{
+                    borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                    background: isActive ? "rgba(72,193,210,0.1)" : "transparent",
+                    color: isActive ? "#48c1d2" : "rgba(255,255,255,0.85)",
+                  }}
                 >
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                    isActive ? "bg-[#48c1d2]/20" : "bg-white/8"
-                  }`}
-                    style={{ background: isActive ? "rgba(72,193,210,0.2)" : "rgba(255,255,255,0.05)" }}
-                  >
+                  <div style={{
+                    width: 34, height: 34,
+                    borderRadius: 10,
+                    background: isActive ? "rgba(72,193,210,0.18)" : "rgba(255,255,255,0.06)",
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                  }}>
                     <Icon size={15} strokeWidth={isActive ? 2.5 : 2} />
                   </div>
-                  <span className="text-[11px] font-black uppercase tracking-widest">{tab.name}</span>
+                  <span style={{ fontSize: 11, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.12em" }}>
+                    {tab.name}
+                  </span>
                   {isActive && (
-                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#48c1d2]" />
+                    <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: "#48c1d2" }} />
                   )}
                 </Link>
               );
             })}
           </div>
-          {/* Flechita apuntando a "Más" */}
-          <div
-            className="absolute -bottom-[7px] right-[28px] w-3.5 h-3.5 bg-[#0c1f3a] border-r border-b border-white/10 rotate-45"
-          />
         </div>
       )}
 
