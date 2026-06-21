@@ -8,13 +8,13 @@ import { createPortal } from "react-dom";
 
 import { 
 
-  BookOpen, Video, Briefcase, PlaySquare, Target, 
+  BookOpen, Video, Briefcase, PlaySquare, Target,
 
-  Sparkles, HelpCircle, ArrowRight, Mic, 
+  Sparkles, HelpCircle, ArrowRight, Mic,
 
   Search, Smartphone, Zap, Bell, ShieldCheck, PenTool,
 
-  Camera, Flame
+  Camera, Flame, CalendarDays
 
 } from "lucide-react";
 
@@ -59,6 +59,22 @@ const TUTORIAL_CARDS = [
     icon: Video,
 
     path: "/contenido",
+
+    color: "cyan",
+
+    tag: "Contenido"
+
+  },
+
+  {
+
+    title: "Calendario de Contenido",
+
+    description: "Planifica semana a semana qué vas a publicar, con pilar, estado, copy, enlace del reel y métricas de cada post.",
+
+    icon: CalendarDays,
+
+    path: "/calendario",
 
     color: "cyan",
 

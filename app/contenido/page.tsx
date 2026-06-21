@@ -2636,7 +2636,6 @@ export default function ContenidoPage() {
             <div className="flex bg-slate-50 p-1 rounded-2xl mb-6 border border-slate-100">
               {[
                 { id: 'guiones', name: 'Guiones', icon: Clapperboard, step: 1, help: 'Toca aquí para empezar tu día de grabación.' },
-                { id: 'calendario', name: 'Calendario', icon: CalendarDays },
                 { id: 'historial', name: 'Historial', icon: History }
               ].map((tab) => (
                 <div key={tab.id} className="flex-1 relative">
@@ -3438,7 +3437,6 @@ export default function ContenidoPage() {
             </div>
           </div>
         )}
-        {activeTab === 'calendario' && <CalendarioTab showToast={showToast} />}
         {activeTab === 'historial' && (
           <HistorialSection 
             contentDB={contentDB} 
