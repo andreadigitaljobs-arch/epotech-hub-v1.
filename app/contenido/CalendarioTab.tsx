@@ -526,7 +526,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
           <div className="text-center py-8 text-slate-400 text-xs cal-fade-in">Cargando...</div>
         ) : postsForDay(selectedDay).length === 0 ? (
           <div key={`empty-${dayKey}`} className="cal-scale-in">
-            <div className="rounded-3xl overflow-hidden" style={{ background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)", border: "1.5px dashed #cbd5e1" }}>
+            <div>
               <div className="px-6 py-10 flex flex-col items-center gap-4 text-center">
                 <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #e0f7fa, #b2ebf2)" }}>
                   <CalendarDays size={22} className="text-[#48c1d2]" />
