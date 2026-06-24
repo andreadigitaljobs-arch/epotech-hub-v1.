@@ -109,7 +109,7 @@ export const guiones: Script[] = [
     category: 'Guiones',
     service: 'Limpieza de Ventanas',
     duration: '60s',
-    fullDialogue: "Nos llamaron a limpiar las ventanas de una casa de dos pisos en Salt Lake City. Pero nadie nos avisó que algunas estaban tan altas. No voy a mentir… esa parte fue un poco intimidante. Algunas ventanas eran muy altas, y llegar hasta ahí requiere enfoque, paciencia y las herramientas correctas. Así que preparamos todo: la jaladora, el limpiador, el jabón y todo el equipo que necesitábamos. Empezamos desde el segundo piso. Por suerte, teníamos acceso a algunas de las ventanas superiores desde el techo, así que organizamos todo con cuidado y nos pusimos a trabajar. Con las herramientas adecuadas, pudimos alcanzar cada ventana y limpiarlas una por una. Y como siempre, Jen estaba ahí ayudándome con las herramientas, asistiendo durante el trabajo y grabando el proceso. Después de unas dos horas y media, todas las ventanas estaban limpias. Pero antes de irnos, siempre hacemos una revisión final por dentro y por fuera de la propiedad. Revisamos manchas, rayas, marcas y cualquier cosa que no se vea perfecta. Porque para nosotros, las ventanas limpias no se tratan solo de hacer que una casa se vea mejor. Se trata de hacer el trabajo bien. ¿Tú limpiarías ventanas tan altas?",
+    fullDialogue: "Nos llamaron a limpiar las ventanas de una casa de dos pisos en Salt Lake City. Pero nadie nos avisó que algunas estaban tan altas. No voy a mentir… esa parte fue un poco intimidante. Algunas ventanas eran muy altas, y llegar hasta ahí requiere enfoque, paciencia y las herramientas correctas. Así que bajamos todo de la camioneta: los limpiavidrios telescópicos, los aplicadores de microfibra, el jabón especializado para vidrios, los tobos y todos los implementos que necesitábamos para trabajar en altura. Empezamos desde el segundo piso. Por suerte, teníamos acceso a algunas de las ventanas superiores desde el techo, así que organizamos todo con cuidado y nos pusimos a trabajar. Con las herramientas adecuadas, pudimos alcanzar cada ventana y limpiarlas una por una. Y como siempre, Jen estaba ahí ayudándome con las herramientas, asistiendo durante el trabajo y grabando el proceso. Después de unas dos horas y media, todas las ventanas estaban limpias. Pero antes de irnos, siempre hacemos una revisión final por dentro y por fuera de la propiedad. Revisamos manchas, rayas, marcas y cualquier cosa que no se vea perfecta. Porque para nosotros, las ventanas limpias no se tratan solo de hacer que una casa se vea mejor. Se trata de hacer el trabajo bien. ¿Tú limpiarías ventanas tan altas?",
     steps: [
       {
         label: '1. EL GANCHO',
@@ -133,7 +133,7 @@ export const guiones: Script[] = [
       },
       {
         label: '3. EL RETO Y LA PREPARACIÓN',
-        script: 'Algunas ventanas eran muy altas, y llegar hasta ahí requiere enfoque, paciencia y las herramientas correctas. Así que preparamos todo: la jaladora, el limpiador, el jabón y todo el equipo que necesitábamos.',
+        script: 'Algunas ventanas eran muy altas, y llegar hasta ahí requiere enfoque, paciencia y las herramientas correctas. Así que bajamos todo de la camioneta: los limpiavidrios telescópicos, los aplicadores de microfibra, el jabón especializado para vidrios, los tobos y todos los implementos que necesitábamos para trabajar en altura.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -207,7 +207,7 @@ export const guiones: Script[] = [
       'Paso 7: Revisión de calidad grabada',
       'Paso 8: Estándar de marca y llamada a la acción grabados'
     ],
-    productionHack: 'Muestra tomas rápidas en cámara rápida (timelapse) del trabajo en el techo y tomas de primer plano de la jaladora limpiando el agua.',
+    productionHack: 'Muestra tomas rápidas en timelapse del trabajo en el techo y tomas de primer plano de la escobilla telescópica arrastrando el agua por el vidrio.',
     createdAt: '2026-06-19'
   },
   {
