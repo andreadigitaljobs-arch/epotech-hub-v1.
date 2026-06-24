@@ -6,7 +6,8 @@ import { createClient } from "@supabase/supabase-js";
 import {
   Plus, ChevronLeft, ChevronRight, X, Check, ExternalLink,
   Clock, Edit2, Trash2, Eye, Heart, Users, Link2,
-  Camera, Video, Smartphone, BookOpen, AlertCircle
+  Camera, Video, Smartphone, BookOpen, AlertCircle, Copy,
+  CalendarDays, List
 } from "lucide-react";
 
 const supabase = createClient(
@@ -58,7 +59,8 @@ const REDES_ICONS: Record<Red, React.ReactNode> = {
   "YouTube Shorts":<Video size={12} />,
 };
 
-const DAYS_ES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+const DAYS_ES   = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+const DAYS_SHORT = ["L", "M", "X", "J", "V", "S", "D"];
 const MONTHS_ES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 
 function getMonday(date: Date): Date {
@@ -80,6 +82,14 @@ function isSameDay(a: Date, b: Date) {
   return a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
     a.getDate() === b.getDate();
+}
+
+function getMonthGridStart(monthStart: Date): Date {
+  const d = new Date(monthStart.getFullYear(), monthStart.getMonth(), 1);
+  const dow = d.getDay();
+  const offset = dow === 0 ? -6 : 1 - dow;
+  d.setDate(d.getDate() + offset);
+  return d;
 }
 
 function formatDateRange(monday: Date): string {
@@ -116,7 +126,14 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
   const [selectedDay, setSelectedDay] = useState(() => {
     const today = new Date(); today.setHours(0, 0, 0, 0); return today;
   });
-  const [dayKey, setDayKey] = useState(0); // cambia al seleccionar día → re-anima tarjetas
+  const [dayKey, setDayKey] = useState(0);
+
+  // Vista semana / mes
+  const [calView, setCalView] = useState<"week" | "month">("week");
+  const [monthStart, setMonthStart] = useState(() => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  });
 
   // Modal agregar/editar
   const [modalOpen, setModalOpen] = useState(false);
@@ -160,8 +177,15 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
-    const from = weekStart.toISOString();
-    const to = addDays(weekStart, 7).toISOString();
+    let from: string, to: string;
+    if (calView === "month") {
+      const gridStart = getMonthGridStart(monthStart);
+      from = gridStart.toISOString();
+      to = addDays(gridStart, 42).toISOString();
+    } else {
+      from = weekStart.toISOString();
+      to = addDays(weekStart, 7).toISOString();
+    }
     const { data, error } = await supabase
       .from("calendario_publicaciones")
       .select("*")
@@ -178,7 +202,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
     }
     setPosts(data || []);
     setLoading(false);
-  }, [weekStart]);
+  }, [weekStart, monthStart, calView]);
 
   useEffect(() => { fetchPosts(); }, [fetchPosts]);
 
@@ -211,6 +235,30 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
       checklist_editado: post.checklist_editado,
       checklist_caption: post.checklist_caption,
       checklist_publicado: post.checklist_publicado,
+    });
+    openModal();
+  };
+
+  const duplicatePost = (post: Publicacion) => {
+    const base = new Date(selectedDay);
+    base.setHours(12, 0, 0, 0);
+    setEditing(null);
+    setForm({
+      fecha_publicacion: base.toISOString().slice(0, 16),
+      pilar: post.pilar,
+      estado: "En edición",
+      copy_caption: post.copy_caption,
+      enlace_publicacion: "",
+      redes: post.redes,
+      formato: post.formato,
+      metricas_views: undefined,
+      metricas_likes: undefined,
+      metricas_alcance: undefined,
+      notas_produccion: post.notas_produccion || "",
+      checklist_grabado: false,
+      checklist_editado: false,
+      checklist_caption: false,
+      checklist_publicado: false,
     });
     openModal();
   };
@@ -268,7 +316,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
     setForm(f => ({ ...f, [field]: !f[field as keyof typeof f] }));
   };
 
-  const weekSummary = {
+  const summary = {
     total: posts.length,
     publicados: posts.filter(p => p.estado === "Publicado").length,
     listos: posts.filter(p => p.estado === "Listo para publicar").length,
@@ -277,8 +325,13 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
 
   const handleDaySelect = (day: Date) => {
     setSelectedDay(day);
+    setWeekStart(getMonday(day));
     setDayKey(k => k + 1);
   };
+
+  // Mes: grid de 6 semanas × 7 días
+  const monthGridStart = getMonthGridStart(monthStart);
+  const monthGridDays  = Array.from({ length: 42 }, (_, i) => addDays(monthGridStart, i));
 
   if (tableError) {
     return (
@@ -294,14 +347,14 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
 
   return (
     <div className="pb-20">
-      {/* RESUMEN SEMANAL */}
+      {/* RESUMEN */}
       <div className="px-4 pt-4 pb-2">
         <div className="grid grid-cols-4 gap-2">
           {[
-            { label: "Esta semana", value: weekSummary.total,      color: "text-slate-700",  bg: "bg-slate-100" },
-            { label: "Publicados",  value: weekSummary.publicados, color: "text-emerald-700", bg: "bg-emerald-50" },
-            { label: "Listos",      value: weekSummary.listos,     color: "text-[#0e7490]",  bg: "bg-[#e0f7fa]" },
-            { label: "Edición",     value: weekSummary.edicion,    color: "text-amber-700",  bg: "bg-amber-50" },
+            { label: calView === "week" ? "Esta semana" : "Este mes", value: summary.total,      color: "text-slate-700",  bg: "bg-slate-100" },
+            { label: "Publicados",  value: summary.publicados, color: "text-emerald-700", bg: "bg-emerald-50" },
+            { label: "Listos",      value: summary.listos,     color: "text-[#0e7490]",  bg: "bg-[#e0f7fa]" },
+            { label: "Edición",     value: summary.edicion,    color: "text-amber-700",  bg: "bg-amber-50" },
           ].map((s, i) => (
             <div key={s.label} className={`${s.bg} rounded-2xl p-3 text-center cal-fade-in-up`}
               style={{ animationDelay: `${i * 55}ms` }}>
@@ -312,42 +365,111 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
         </div>
       </div>
 
-      {/* NAV SEMANA */}
+      {/* TOGGLE VISTA + NAV */}
       <div className="px-4 py-3 flex items-center justify-between cal-fade-in" style={{ animationDelay: "80ms" }}>
-        <button onClick={() => setWeekStart(d => addDays(d, -7))}
+        {/* Nav previo/siguiente */}
+        <button
+          onClick={() => calView === "week"
+            ? setWeekStart(d => addDays(d, -7))
+            : setMonthStart(d => new Date(d.getFullYear(), d.getMonth() - 1, 1))
+          }
           className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center active:scale-95 transition-all">
           <ChevronLeft size={16} className="text-slate-500" />
         </button>
-        <span className="text-xs font-black text-slate-600 uppercase tracking-wider">{formatDateRange(weekStart)}</span>
-        <button onClick={() => setWeekStart(d => addDays(d, 7))}
+
+        <span className="text-xs font-black text-slate-600 uppercase tracking-wider">
+          {calView === "week"
+            ? formatDateRange(weekStart)
+            : `${MONTHS_ES[monthStart.getMonth()]} ${monthStart.getFullYear()}`
+          }
+        </span>
+
+        <button
+          onClick={() => calView === "week"
+            ? setWeekStart(d => addDays(d, 7))
+            : setMonthStart(d => new Date(d.getFullYear(), d.getMonth() + 1, 1))
+          }
           className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center active:scale-95 transition-all">
           <ChevronRight size={16} className="text-slate-500" />
         </button>
       </div>
 
-      {/* CHIPS DE DÍAS */}
-      <div className="grid grid-cols-7 px-4 pb-3">
-        {weekDays.map((day, i) => {
-          const dayPosts = postsForDay(day);
-          const isSelected = isSameDay(day, selectedDay);
-          const isToday = isSameDay(day, new Date());
-          return (
-            <button key={i} onClick={() => handleDaySelect(day)}
-              className={`cal-chip-in flex flex-col items-center gap-1 py-2 rounded-2xl transition-all active:scale-95 ${isSelected ? "bg-[#0a192f]" : isToday ? "bg-slate-100" : "bg-transparent"}`}
-              style={{ animationDelay: `${120 + i * 40}ms` }}
-            >
-              <span className={`text-[9px] font-black uppercase tracking-wider ${isSelected ? "text-[#48c1d2]" : "text-slate-400"}`}>{DAYS_ES[(i + 1) % 7]}</span>
-              <span className={`text-sm font-black ${isSelected ? "text-white" : isToday ? "text-[#0a192f]" : "text-slate-500"}`}>{day.getDate()}</span>
-              <div className="flex gap-0.5">
-                {dayPosts.slice(0, 3).map((p, j) => (
-                  <div key={j} className={`w-1 h-1 rounded-full ${PILLAR_CONFIG[p.pilar].dot}`} />
-                ))}
-                {dayPosts.length === 0 && <div className="w-1 h-1 rounded-full bg-transparent" />}
-              </div>
-            </button>
-          );
-        })}
+      {/* TOGGLE SEMANA / MES */}
+      <div className="px-4 pb-3 flex justify-center">
+        <div className="flex bg-slate-100 rounded-2xl p-1 gap-1">
+          <button
+            onClick={() => setCalView("week")}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${calView === "week" ? "bg-white text-[#142d53] shadow-sm" : "text-slate-400"}`}>
+            <List size={11} /> Semana
+          </button>
+          <button
+            onClick={() => setCalView("month")}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${calView === "month" ? "bg-white text-[#142d53] shadow-sm" : "text-slate-400"}`}>
+            <CalendarDays size={11} /> Mes
+          </button>
+        </div>
       </div>
+
+      {calView === "week" ? (
+        /* ── VISTA SEMANA ── */
+        <div className="grid grid-cols-7 px-4 pb-3">
+          {weekDays.map((day, i) => {
+            const dayPosts = postsForDay(day);
+            const isSelected = isSameDay(day, selectedDay);
+            const isToday = isSameDay(day, new Date());
+            return (
+              <button key={i} onClick={() => handleDaySelect(day)}
+                className={`cal-chip-in flex flex-col items-center gap-1 py-2 rounded-2xl transition-all active:scale-95 ${isSelected ? "bg-[#0a192f]" : isToday ? "bg-slate-100" : "bg-transparent"}`}
+                style={{ animationDelay: `${120 + i * 40}ms` }}
+              >
+                <span className={`text-[9px] font-black uppercase tracking-wider ${isSelected ? "text-[#48c1d2]" : "text-slate-400"}`}>{DAYS_ES[(i + 1) % 7]}</span>
+                <span className={`text-sm font-black ${isSelected ? "text-white" : isToday ? "text-[#0a192f]" : "text-slate-500"}`}>{day.getDate()}</span>
+                {/* Contador o puntos */}
+                {dayPosts.length > 0 ? (
+                  <span className={`text-[9px] font-black rounded-full w-4 h-4 flex items-center justify-center ${isSelected ? "bg-[#48c1d2] text-[#0a192f]" : "bg-slate-200 text-slate-500"}`}>
+                    {dayPosts.length}
+                  </span>
+                ) : (
+                  <div className="w-4 h-4" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        /* ── VISTA MES ── */
+        <div className="px-4 pb-3 cal-fade-in-up">
+          {/* Cabeceras días */}
+          <div className="grid grid-cols-7 mb-1">
+            {DAYS_SHORT.map(d => (
+              <div key={d} className="text-center text-[9px] font-black text-slate-400 uppercase tracking-wider py-1">{d}</div>
+            ))}
+          </div>
+          {/* Celdas */}
+          <div className="grid grid-cols-7 gap-y-1">
+            {monthGridDays.map((day, i) => {
+              const dayPosts = postsForDay(day);
+              const isSelected = isSameDay(day, selectedDay);
+              const isToday   = isSameDay(day, new Date());
+              const inMonth   = day.getMonth() === monthStart.getMonth();
+              return (
+                <button key={i} onClick={() => handleDaySelect(day)}
+                  className={`flex flex-col items-center py-1.5 rounded-xl transition-all active:scale-95 relative ${isSelected ? "bg-[#0a192f]" : isToday ? "bg-slate-100" : "bg-transparent"}`}
+                >
+                  <span className={`text-[11px] font-black leading-none ${isSelected ? "text-white" : isToday ? "text-[#0a192f]" : inMonth ? "text-slate-600" : "text-slate-300"}`}>
+                    {day.getDate()}
+                  </span>
+                  <div className="flex gap-0.5 mt-1 min-h-[6px]">
+                    {dayPosts.slice(0, 3).map((p, j) => (
+                      <div key={j} className={`w-1 h-1 rounded-full ${PILLAR_CONFIG[p.pilar].dot} ${!inMonth ? "opacity-40" : ""}`} />
+                    ))}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* POSTS DEL DÍA */}
       <div className="px-4 space-y-3">
@@ -364,14 +486,23 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
         {loading ? (
           <div className="text-center py-8 text-slate-400 text-xs cal-fade-in">Cargando...</div>
         ) : postsForDay(selectedDay).length === 0 ? (
-          <div key={`empty-${dayKey}`} className="border border-dashed border-slate-200 rounded-3xl p-8 flex flex-col items-center gap-3 cal-scale-in">
-            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
-              <Plus size={18} className="text-slate-300" />
+          <div key={`empty-${dayKey}`} className="cal-scale-in">
+            <div className="rounded-3xl overflow-hidden" style={{ background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)", border: "1.5px dashed #cbd5e1" }}>
+              <div className="px-6 py-10 flex flex-col items-center gap-4 text-center">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #e0f7fa, #b2ebf2)" }}>
+                  <CalendarDays size={22} className="text-[#48c1d2]" />
+                </div>
+                <div>
+                  <p className="text-sm font-black text-slate-700 mb-1">Sin contenido este día</p>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">Agrega un reel, carrusel o historia<br/>para mantener tu perfil activo</p>
+                </div>
+                <button onClick={() => openAdd(selectedDay)}
+                  className="flex items-center gap-2 text-[11px] font-black text-white uppercase tracking-wider px-5 py-2.5 rounded-2xl active:scale-95 transition-all"
+                  style={{ background: "#142d53", boxShadow: "0 4px 14px rgba(20,45,83,0.25)" }}>
+                  <Plus size={13} /> Agregar publicación
+                </button>
+              </div>
             </div>
-            <p className="text-xs text-slate-400 text-center">Sin publicaciones este día</p>
-            <button onClick={() => openAdd(selectedDay)} className="text-[10px] font-black text-[#48c1d2] uppercase tracking-wider">
-              + Agregar contenido
-            </button>
           </div>
         ) : (
           <div key={`posts-${dayKey}`} className="space-y-3">
@@ -394,6 +525,9 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                         <span className={`text-[10px] font-black px-2.5 py-1 rounded-full ${ec.bg} ${ec.color}`}>{post.estado}</span>
                       </div>
                       <div className="flex gap-1 shrink-0">
+                        <button onClick={() => duplicatePost(post)} title="Duplicar" className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center active:scale-95 transition-all">
+                          <Copy size={11} className="text-slate-400" />
+                        </button>
                         <button onClick={() => openEdit(post)} className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center active:scale-95 transition-all">
                           <Edit2 size={12} className="text-slate-500" />
                         </button>
@@ -437,7 +571,11 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                           </div>
                         ))}
                       </div>
-                      <span className="text-[9px] text-slate-400 ml-auto">{checksDone}/4</span>
+                      {/* Barra de progreso */}
+                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-400 rounded-full transition-all" style={{ width: `${(checksDone / 4) * 100}%` }} />
+                      </div>
+                      <span className="text-[9px] text-slate-400">{checksDone}/4</span>
                     </div>
 
                     {/* ENLACE */}
@@ -473,7 +611,6 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                         </button>
                       )}
 
-                      {/* Panel métricas con animación */}
                       {isMetricsOpen && (
                         <div className={`mt-3 space-y-2 ${metricsVis === post.id ? "cal-scale-in" : "cal-scale-out"}`}>
                           <div className="grid grid-cols-3 gap-2">
@@ -679,7 +816,7 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
                     { key: "checklist_editado",   label: "Editado" },
                     { key: "checklist_caption",   label: "Caption listo" },
                     { key: "checklist_publicado", label: "Publicado en redes" },
-                  ].map((c, i) => {
+                  ].map((c) => {
                     const val = form[c.key as keyof typeof form] as boolean;
                     return (
                       <button key={c.key} onClick={() => toggleChecklist(c.key as keyof typeof EMPTY_FORM)}
