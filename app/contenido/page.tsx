@@ -1750,16 +1750,6 @@ export default function ContenidoPage() {
                                   </p>
                                 </div>
                               </div>
-                              {selectedScript.scenes[currentStepIdx].talent.demoUrl && (
-                                <div className="aspect-[9/16] max-w-[280px] mx-auto rounded-[3rem] overflow-hidden bg-black/40 border-8 border-[#142d53] relative group shadow-2xl">
-                                  <iframe
-                                    src={`https://www.youtube.com/embed/${getYoutubeId(selectedScript.scenes[currentStepIdx].talent.demoUrl)}?rel=0&modestbranding=1`}
-                                    className="w-full h-full"
-                                    allowFullScreen
-                                  ></iframe>
-                                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[7px] font-black text-white uppercase tracking-widest pointer-events-none border border-white/10">Ejemplo Visual</div>
-                                </div>
-                              )}
                             </div>
                           </div>
 
@@ -1800,16 +1790,6 @@ export default function ContenidoPage() {
                                   </p>
                                 </div>
                               </div>
-                              {selectedScript.scenes[currentStepIdx].camera.demoUrl && (
-                                <div className="aspect-[9/16] max-w-[280px] mx-auto rounded-[3rem] overflow-hidden bg-black/40 border-8 border-[#142d53] relative group shadow-2xl">
-                                  <iframe
-                                    src={`https://www.youtube.com/embed/${getYoutubeId(selectedScript.scenes[currentStepIdx].camera.demoUrl)}?rel=0&modestbranding=1`}
-                                    className="w-full h-full"
-                                    allowFullScreen
-                                  ></iframe>
-                                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[7px] font-black text-white uppercase tracking-widest pointer-events-none border border-white/10">Tutorial Cámara</div>
-                                </div>
-                              )}
                             </div>
                           </div>
                         </>
