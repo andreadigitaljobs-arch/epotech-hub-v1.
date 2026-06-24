@@ -1,4 +1,4 @@
-﻿export interface RecordingAdvice {
+export interface RecordingAdvice {
   solo: string[];
   assisted: string[];
 }
@@ -25,43 +25,43 @@ export interface ScriptScene {
   camera: CameraInstruction;
 }
 
-export interface ScriptStep { 
-  label: string; 
-  script: string; 
-  visualField: string; 
-  visualStudio: string; 
+export interface ScriptStep {
+  label: string;
+  script: string;
+  visualField: string;
+  visualStudio: string;
   advice: RecordingAdvice;
 }
 
-export interface Script { 
-  id: string; 
-  title: string; 
-  category: string; 
-  service: 'Pressure Washing' | 'Window Cleaning' | 'Epoxy Floors' | 'Marca Personal'; 
-  duration: string; 
-  fullDialogue: string; 
-  steps: ScriptStep[]; 
+export interface Script {
+  id: string;
+  title: string;
+  category: string;
+  service: 'Lavado a Presión' | 'Limpieza de Ventanas' | 'Pisos de Epoxi' | 'Marca Personal';
+  duration: string;
+  fullDialogue: string;
+  steps: ScriptStep[];
   scenes?: ScriptScene[];
   isPinned?: boolean;
   isProductionMode?: boolean;
-  tips: string[]; 
+  tips: string[];
   checklist: string[];
   productionHack?: string;
-  createdAt?: string; 
+  createdAt?: string;
 }
 
 export const guiones: Script[] = [
   {
     id: 'ejemplo-practica-oficial',
-    title: '[EJEMPLO DE PRÁCTICA] Epotech Official Presentation',
+    title: '[EJEMPLO DE PRÁCTICA] Presentación Oficial Epotech',
     category: 'Plantilla de Entrenamiento',
     service: 'Marca Personal',
     duration: '20s',
-    fullDialogue: 'Ready to make your property stand out in Utah? I\'m Sebastian, from Epotech Solutions. We specialize in high-level exterior cleaning and professional epoxy finishes for garages and sports areas. We leave your spaces spotless from floor to ceiling. Contact us and schedule your appointment!',
+    fullDialogue: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions. Nos especializamos en limpieza exterior de alto nivel y acabados de epoxi profesional para garajes y áreas deportivas. Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
     steps: [
       {
-        label: 'THE GREETING (Voice-over)',
-        script: 'Ready to make your property stand out in Utah? I\'m Sebastian, from Epotech Solutions.',
+        label: 'EL SALUDO (Voz en off)',
+        script: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -70,22 +70,22 @@ export const guiones: Script[] = [
         }
       },
       {
-        label: 'THE SPECIALTY (Voice-over)',
-        script: 'We specialize in high-level exterior cleaning and professional epoxy finishes for garages and sports areas.',
+        label: 'LA ESPECIALIDAD (Voz en off)',
+        script: 'Nos especializamos en limpieza exterior de alto nivel y acabados de epoxi profesional para garajes y áreas deportivas.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Pronuncia claro las palabras "high-level" y "professional".'],
+          solo: ['Pronuncia claro las palabras "alto nivel" y "profesional".'],
           assisted: ['Mantén un ritmo constante, sin correr.']
         }
       },
       {
-        label: 'THE PROMISE (Voice-over)',
-        script: 'We leave your spaces spotless from floor to ceiling. Contact us and schedule your appointment!',
+        label: 'LA PROMESA (Voz en off)',
+        script: 'Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Haz una pequeña pausa antes de "Contact us" para darle fuerza.'],
+          solo: ['Haz una pequeña pausa antes de "Contáctanos" para darle fuerza.'],
           assisted: ['Termina con un tono amable y profesional.']
         }
       }
@@ -105,65 +105,65 @@ export const guiones: Script[] = [
   },
   {
     id: 'window-cleaning-zach-salt-lake',
-    title: 'Window Cleaning Challenge in Salt Lake City',
+    title: 'Reto de Limpieza de Ventanas en Salt Lake City',
     category: 'Guiones',
-    service: 'Window Cleaning',
+    service: 'Limpieza de Ventanas',
     duration: '60s',
-    fullDialogue: "We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high. I'm not going to lie… this part was a little scary. Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed. We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work. With the right tools, we were able to reach each window and clean them one by one. And as always, Jen was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned. But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn't look perfect. Because for us, clean windows are not just about making a home look better. They're about doing the job right. Would you clean windows this high?",
+    fullDialogue: "Nos llamaron a limpiar las ventanas de una casa de dos pisos en Salt Lake City. Pero nadie nos avisó que algunas estaban tan altas. No voy a mentir… esa parte fue un poco intimidante. Algunas ventanas eran muy altas, y llegar hasta ahí requiere enfoque, paciencia y las herramientas correctas. Así que preparamos todo: la jaladora, el limpiador, el jabón y todo el equipo que necesitábamos. Empezamos desde el segundo piso. Por suerte, teníamos acceso a algunas de las ventanas superiores desde el techo, así que organizamos todo con cuidado y nos pusimos a trabajar. Con las herramientas adecuadas, pudimos alcanzar cada ventana y limpiarlas una por una. Y como siempre, Jen estaba ahí ayudándome con las herramientas, asistiendo durante el trabajo y grabando el proceso. Después de unas dos horas y media, todas las ventanas estaban limpias. Pero antes de irnos, siempre hacemos una revisión final por dentro y por fuera de la propiedad. Revisamos manchas, rayas, marcas y cualquier cosa que no se vea perfecta. Porque para nosotros, las ventanas limpias no se tratan solo de hacer que una casa se vea mejor. Se trata de hacer el trabajo bien. ¿Tú limpiarías ventanas tan altas?",
     steps: [
       {
-        label: '1. THE HOOK',
-        script: 'We got called to clean the windows of a two-story home in Salt Lake City. But nobody told us some of them were this high.',
+        label: '1. EL GANCHO',
+        script: 'Nos llamaron a limpiar las ventanas de una casa de dos pisos en Salt Lake City. Pero nadie nos avisó que algunas estaban tan altas.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono narrativo directo e intrigante. Dale énfasis a "this high" y haz una pausa al final.'],
+          solo: ['Tono narrativo directo e intrigante. Dale énfasis a "tan altas" y haz una pausa al final.'],
           assisted: ['Evitar ruidos de fondo. Pronunciación clara.']
         }
       },
       {
-        label: '2. THE HONESTY',
-        script: "I'm not going to lie… this part was a little scary.",
+        label: '2. LA HONESTIDAD',
+        script: "No voy a mentir… esa parte fue un poco intimidante.",
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Habla con naturalidad y un tono más suave en "a little scary".'],
+          solo: ['Habla con naturalidad y un tono más suave en "un poco intimidante".'],
           assisted: ['Sonido limpio y cercano.']
         }
       },
       {
-        label: '3. THE CHALLENGE & PREPARATION',
-        script: 'Some windows were really tall, and getting up there takes focus, patience, and the right tools. So we got everything ready: the squeegee, the mop, the soap, and all the equipment we needed.',
+        label: '3. EL RETO Y LA PREPARACIÓN',
+        script: 'Algunas ventanas eran muy altas, y llegar hasta ahí requiere enfoque, paciencia y las herramientas correctas. Así que preparamos todo: la jaladora, el limpiador, el jabón y todo el equipo que necesitábamos.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Pausa después de "focus" y "patience". Pronuncia bien la lista de herramientas.'],
+          solo: ['Pausa después de "enfoque" y "paciencia". Pronuncia bien la lista de herramientas.'],
           assisted: ['Mantén el ritmo y tono profesional.']
         }
       },
       {
-        label: '4. THE EXECUTION',
-        script: 'We started from the second floor. Luckily, we had access to some of the upper windows from the roof, so we carefully organized everything and got to work.',
+        label: '4. LA EJECUCIÓN',
+        script: 'Empezamos desde el segundo piso. Por suerte, teníamos acceso a algunas de las ventanas superiores desde el techo, así que organizamos todo con cuidado y nos pusimos a trabajar.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Dila con seguridad. Tono de alivio al decir "Luckily".'],
+          solo: ['Dila con seguridad. Tono de alivio al decir "Por suerte".'],
           assisted: ['Tono constante con pausas naturales.']
         }
       },
       {
-        label: '5. WINDOW BY WINDOW',
-        script: 'With the right tools, we were able to reach each window and clean them one by one.',
+        label: '5. VENTANA POR VENTANA',
+        script: 'Con las herramientas adecuadas, pudimos alcanzar cada ventana y limpiarlas una por una.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Dale peso a "one by one" al terminar.'],
+          solo: ['Dale peso a "una por una" al terminar.'],
           assisted: ['Tono de logro y avance.']
         }
       },
       {
-        label: '6. TEAMWORK & COMPLETION',
-        script: 'And as always, Jen was right there helping me with the tools, assisting during the job, and recording the process. After about two and a half hours, every window was cleaned.',
+        label: '6. TRABAJO EN EQUIPO Y FINALIZACIÓN',
+        script: 'Y como siempre, Jen estaba ahí ayudándome con las herramientas, asistiendo durante el trabajo y grabando el proceso. Después de unas dos horas y media, todas las ventanas estaban limpias.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -172,22 +172,22 @@ export const guiones: Script[] = [
         }
       },
       {
-        label: '7. QUALITY CHECK',
-        script: "But before leaving, we always do one final walkthrough inside and outside the property. We check for spots, streaks, marks, and anything that doesn't look perfect.",
+        label: '7. REVISIÓN DE CALIDAD',
+        script: "Pero antes de irnos, siempre hacemos una revisión final por dentro y por fuera de la propiedad. Revisamos manchas, rayas, marcas y cualquier cosa que no se vea perfecta.",
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono serio y meticuloso. Pausa en "final walkthrough".'],
-          assisted: ['Voz firme. Pronuncia con claridad "spots, streaks, marks".']
+          solo: ['Tono serio y meticuloso. Pausa en "revisión final".'],
+          assisted: ['Voz firme. Pronuncia con claridad "manchas, rayas, marcas".']
         }
       },
       {
-        label: '8. OUR STANDARD & CTA',
-        script: "Because for us, clean windows are not just about making a home look better. They're about doing the job right. Would you clean windows this high?",
+        label: '8. NUESTRO ESTÁNDAR Y LLAMADA A LA ACCIÓN',
+        script: "Porque para nosotros, las ventanas limpias no se tratan solo de hacer que una casa se vea mejor. Se trata de hacer el trabajo bien. ¿Tú limpiarías ventanas tan altas?",
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['La frase "doing the job right" es la insignia — dila con total conviccion. Cierra con la pregunta directa al espectador.'],
+          solo: ['La frase "hacer el trabajo bien" es la insignia — dila con total convicción. Cierra con la pregunta directa al espectador.'],
           assisted: ['Voz profesional y segura hasta el final.']
         }
       }
@@ -195,32 +195,32 @@ export const guiones: Script[] = [
     tips: [
       'Usa un tono narrativo (storytelling), contando una experiencia real.',
       'Pronuncia los nombres de los lugares ("Salt Lake City") de forma clara.',
-      'Haz pausas dramáticas en los puntos clave (ej. "...some of them were this high").'
+      'Haz pausas dramáticas en los puntos clave (ej. "...algunas estaban tan altas").'
     ],
     checklist: [
-      'Paso 1: Hook grabado (llamado y sorpresa de la altura)',
+      'Paso 1: Gancho grabado (llamado y sorpresa de la altura)',
       'Paso 2: Honestidad grabada',
-      'Paso 3: Reto y preparacion grabados (herramientas)',
-      'Paso 4: Ejecucion grabada (segundo piso y techo)',
+      'Paso 3: Reto y preparación grabados (herramientas)',
+      'Paso 4: Ejecución grabada (segundo piso y techo)',
       'Paso 5: Limpieza ventana por ventana grabada',
-      'Paso 6: Trabajo en equipo y finalizacion grabados',
-      'Paso 7: Inspeccion de calidad grabada',
-      'Paso 8: Estandar de marca y CTA grabados'
+      'Paso 6: Trabajo en equipo y finalización grabados',
+      'Paso 7: Revisión de calidad grabada',
+      'Paso 8: Estándar de marca y llamada a la acción grabados'
     ],
-    productionHack: 'Muestra tomas rapidas en camara rapida (timelapse) del trabajo en el techo y tomas de primer plano del squeegee limpiando el agua.',
+    productionHack: 'Muestra tomas rápidas en cámara rápida (timelapse) del trabajo en el techo y tomas de primer plano de la jaladora limpiando el agua.',
     createdAt: '2026-06-19'
   },
   {
     id: 'window-cleaning-problem-solution',
-    title: 'Dirty Windows Problem/Solution',
+    title: 'Problema/Solución de Ventanas Sucias',
     category: 'Guiones',
-    service: 'Window Cleaning',
+    service: 'Limpieza de Ventanas',
     duration: '45s',
-    fullDialogue: "Clean windows can completely change the way your home looks and feels. Sometimes windows don't look that dirty from far away, but once the sunlight hits them, you can see dust, water spots, fingerprints, and buildup. That's why professional window cleaning makes such a big difference. At Epotech Solutions, we help homeowners in Utah keep their windows clean, clear, and better maintained. If your windows need a refresh, send us a message today for a free quote.",
+    fullDialogue: "Las ventanas limpias pueden cambiar completamente la apariencia y sensación de tu hogar. A veces las ventanas no se ven tan sucias desde lejos, pero cuando les da el sol, puedes ver polvo, manchas de agua, huellas y residuos acumulados. Por eso la limpieza profesional de ventanas hace una diferencia tan grande. En Epotech Solutions, ayudamos a los dueños de casas en Utah a mantener sus ventanas limpias, transparentes y en mejor estado. Si tus ventanas necesitan una renovación, mándanos un mensaje hoy para un presupuesto gratis.",
     steps: [
       {
-        label: '1. THE HOOK',
-        script: 'Clean windows can completely change the way your home looks and feels.',
+        label: '1. EL GANCHO',
+        script: 'Las ventanas limpias pueden cambiar completamente la apariencia y sensación de tu hogar.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -229,28 +229,28 @@ export const guiones: Script[] = [
         }
       },
       {
-        label: '2. THE PROBLEM',
-        script: "Sometimes windows don't look that dirty from far away, but once the sunlight hits them, you can see dust, water spots, fingerprints, and buildup.",
+        label: '2. EL PROBLEMA',
+        script: "A veces las ventanas no se ven tan sucias desde lejos, pero cuando les da el sol, puedes ver polvo, manchas de agua, huellas y residuos acumulados.",
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Habla con tono de revelacion. Pausa despues de "far away".'],
-          assisted: ['Pronuncia con claridad "water spots" y "fingerprints".']
+          solo: ['Habla con tono de revelación. Pausa después de "desde lejos".'],
+          assisted: ['Pronuncia con claridad "manchas de agua" y "huellas".']
         }
       },
       {
-        label: '3. THE SOLUTION',
-        script: "That's why professional window cleaning makes such a big difference.",
+        label: '3. LA SOLUCIÓN',
+        script: "Por eso la limpieza profesional de ventanas hace una diferencia tan grande.",
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono de conviction. Es la frase clave del guion.'],
+          solo: ['Tono de convicción. Es la frase clave del guion.'],
           assisted: ['Voz firme y directa.']
         }
       },
       {
-        label: '4. THE BRAND',
-        script: 'At Epotech Solutions, we help homeowners in Utah keep their windows clean, clear, and better maintained.',
+        label: '4. LA MARCA',
+        script: 'En Epotech Solutions, ayudamos a los dueños de casas en Utah a mantener sus ventanas limpias, transparentes y en mejor estado.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -259,52 +259,52 @@ export const guiones: Script[] = [
         }
       },
       {
-        label: '5. THE CTA',
-        script: 'If your windows need a refresh, send us a message today for a free quote.',
+        label: '5. LLAMADA A LA ACCIÓN',
+        script: 'Si tus ventanas necesitan una renovación, mándanos un mensaje hoy para un presupuesto gratis.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono amigable e invitador. Sonrie levemente al terminar.'],
+          solo: ['Tono amigable e invitador. Sonríe levemente al terminar.'],
           assisted: ['Clara y directa al espectador.']
         }
       }
     ],
     tips: [
       'Mantén un ritmo constante y narrativo en todo el guion.',
-      'La frase clave es "makes such a big difference" — dale peso.',
-      'El CTA final debe sonar natural, no forzado.'
+      'La frase clave es "hace una diferencia tan grande" — dale peso.',
+      'La llamada a la acción final debe sonar natural, no forzada.'
     ],
     checklist: [
-      'Paso 1: Hook grabado',
+      'Paso 1: Gancho grabado',
       'Paso 2: Problema de las ventanas sucias grabado',
-      'Paso 3: Solucion profesional grabada',
+      'Paso 3: Solución profesional grabada',
       'Paso 4: Marca Epotech grabada',
-      'Paso 5: CTA final grabado'
+      'Paso 5: Llamada a la acción final grabada'
     ],
     productionHack: 'Muestra tomas de ventanas sucias vs limpias para acompañar la voz en off.',
     createdAt: '2026-06-19'
   },
   {
     id: 'window-cleaning-trust-walkthrough',
-    title: 'Final Walkthrough Trust/Quality',
+    title: 'Revisión Final: Confianza y Calidad',
     category: 'Guiones',
-    service: 'Window Cleaning',
+    service: 'Limpieza de Ventanas',
     duration: '45s',
-    fullDialogue: "One thing we always do before leaving a job is a final walkthrough. We check the work from different angles, look for spots, marks, missed details, and anything that needs a final touch. For us, exterior cleaning is not just about finishing fast. It's about making sure the result looks clean, professional, and ready for the homeowner. That attention to detail is part of how we work at Epotech Solutions. Need exterior cleaning in Utah? Send us a message today for a free quote.",
+    fullDialogue: "Una cosa que siempre hacemos antes de terminar un trabajo es una revisión final. Revisamos el trabajo desde diferentes ángulos, buscamos manchas, marcas, detalles que se nos puedan escapar y cualquier cosa que necesite un último retoque. Para nosotros, la limpieza exterior no se trata solo de terminar rápido. Se trata de asegurarnos de que el resultado se vea limpio, profesional y listo para el dueño de la casa. Esa atención al detalle es parte de cómo trabajamos en Epotech Solutions. ¿Necesitas limpieza exterior en Utah? Mándanos un mensaje hoy para un presupuesto gratis.",
     steps: [
       {
-        label: '1. THE HABIT',
-        script: 'One thing we always do before leaving a job is a final walkthrough.',
+        label: '1. EL HÁBITO',
+        script: 'Una cosa que siempre hacemos antes de terminar un trabajo es una revisión final.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono serio y comprometido. Pausa en "final walkthrough".'],
+          solo: ['Tono serio y comprometido. Pausa en "revisión final".'],
           assisted: ['Voz clara y profesional.']
         }
       },
       {
-        label: '2. THE PROCESS',
-        script: 'We check the work from different angles, look for spots, marks, missed details, and anything that needs a final touch.',
+        label: '2. EL PROCESO',
+        script: 'Revisamos el trabajo desde diferentes ángulos, buscamos manchas, marcas, detalles que se nos puedan escapar y cualquier cosa que necesite un último retoque.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -313,28 +313,28 @@ export const guiones: Script[] = [
         }
       },
       {
-        label: '3. OUR STANDARD',
-        script: "For us, exterior cleaning is not just about finishing fast. It's about making sure the result looks clean, professional, and ready for the homeowner.",
+        label: '3. NUESTRO ESTÁNDAR',
+        script: "Para nosotros, la limpieza exterior no se trata solo de terminar rápido. Se trata de asegurarnos de que el resultado se vea limpio, profesional y listo para el dueño de la casa.",
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Esta es la frase insignia. Dila con total conviction. Pausa entre las dos frases.'],
-          assisted: ['Voz firme. Enfasis en "clean, professional, and ready".']
+          solo: ['Esta es la frase insignia. Dila con total convicción. Pausa entre las dos frases.'],
+          assisted: ['Voz firme. Énfasis en "limpio, profesional y listo".']
         }
       },
       {
-        label: '4. THE IDENTITY',
-        script: 'That attention to detail is part of how we work at Epotech Solutions.',
+        label: '4. LA IDENTIDAD',
+        script: 'Esa atención al detalle es parte de cómo trabajamos en Epotech Solutions.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono de orgullo. Es la declaracion de identidad de marca.'],
+          solo: ['Tono de orgullo. Es la declaración de identidad de marca.'],
           assisted: ['Pronuncia "Epotech Solutions" con confianza.']
         }
       },
       {
-        label: '5. THE CTA',
-        script: 'Need exterior cleaning in Utah? Send us a message today for a free quote.',
+        label: '5. LLAMADA A LA ACCIÓN',
+        script: '¿Necesitas limpieza exterior en Utah? Mándanos un mensaje hoy para un presupuesto gratis.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -344,61 +344,61 @@ export const guiones: Script[] = [
       }
     ],
     tips: [
-      'El guion tiene un arco claro: habito → proceso → estandar → identidad → accion.',
-      'La frase del paso 3 es la mas importante del guion.',
-      'Habla como si le explicaras a un cliente por que haces las cosas bien.'
+      'El guion tiene un arco claro: hábito → proceso → estándar → identidad → acción.',
+      'La frase del paso 3 es la más importante del guion.',
+      'Habla como si le explicaras a un cliente por qué haces las cosas bien.'
     ],
     checklist: [
-      'Paso 1: Habito del walkthrough grabado',
-      'Paso 2: Proceso de revision grabado',
-      'Paso 3: Estandar de calidad grabado',
+      'Paso 1: Hábito del walkthrough grabado',
+      'Paso 2: Proceso de revisión grabado',
+      'Paso 3: Estándar de calidad grabado',
       'Paso 4: Identidad de marca grabada',
-      'Paso 5: CTA final grabado'
+      'Paso 5: Llamada a la acción final grabada'
     ],
-    productionHack: 'Graba clips del walkthrough real en el trabajo para acompañar cada parte del guion.',
+    productionHack: 'Graba clips de la revisión real en el trabajo para acompañar cada parte del guion.',
     createdAt: '2026-06-19'
   },
   {
     id: 'pressure-washing-service',
-    title: 'Pressure Washing Service Utah',
+    title: 'Servicio de Lavado a Presión en Utah',
     category: 'Guiones',
-    service: 'Pressure Washing',
+    service: 'Lavado a Presión',
     duration: '45s',
-    fullDialogue: 'Your driveway is one of the first things people see when they arrive at your home. Over time, dirt, stains, dust, and buildup can make it look older than it really is. Pressure washing helps bring back a cleaner, fresher look to your exterior surfaces. At Epotech Solutions, we offer professional pressure washing services for homeowners in Utah. If your driveway, garage, or exterior surfaces need cleaning, send us a message today for a free quote.',
+    fullDialogue: 'El camino de entrada a tu casa es una de las primeras cosas que la gente ve al llegar. Con el tiempo, la suciedad, las manchas, el polvo y los residuos acumulados pueden hacer que se vea más viejo de lo que realmente está. El lavado a presión ayuda a devolverle un aspecto más limpio y fresco a tus superficies exteriores. En Epotech Solutions, ofrecemos servicios profesionales de lavado a presión para dueños de casas en Utah. Si el camino de entrada, el garaje o las superficies exteriores de tu casa necesitan limpieza, mándanos un mensaje hoy para un presupuesto gratis.',
     steps: [
       {
-        label: '1. THE HOOK',
-        script: 'Your driveway is one of the first things people see when they arrive at your home.',
+        label: '1. EL GANCHO',
+        script: 'El camino de entrada a tu casa es una de las primeras cosas que la gente ve al llegar.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
           solo: ['Tono directo e impactante. Habla como si lo estuvieras señalando.'],
-          assisted: ['Pronunciacion clara de "driveway".']
+          assisted: ['Pronunciación clara y segura.']
         }
       },
       {
-        label: '2. THE PROBLEM',
-        script: 'Over time, dirt, stains, dust, and buildup can make it look older than it really is.',
+        label: '2. EL PROBLEMA',
+        script: 'Con el tiempo, la suciedad, las manchas, el polvo y los residuos acumulados pueden hacer que se vea más viejo de lo que realmente está.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Lista cada elemento con claridad. Pausa leve en "older than it really is".'],
+          solo: ['Lista cada elemento con claridad. Pausa leve en "más viejo de lo que realmente está".'],
           assisted: ['Ritmo constante, tono de advertencia.']
         }
       },
       {
-        label: '3. THE SOLUTION',
-        script: 'Pressure washing helps bring back a cleaner, fresher look to your exterior surfaces.',
+        label: '3. LA SOLUCIÓN',
+        script: 'El lavado a presión ayuda a devolverle un aspecto más limpio y fresco a tus superficies exteriores.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono de solucion y alivio. Pronuncia "pressure washing" con confianza.'],
-          assisted: ['Enfasis en "cleaner, fresher look".']
+          solo: ['Tono de solución y alivio. Pronuncia "lavado a presión" con confianza.'],
+          assisted: ['Énfasis en "más limpio y fresco".']
         }
       },
       {
-        label: '4. THE BRAND',
-        script: 'At Epotech Solutions, we offer professional pressure washing services for homeowners in Utah.',
+        label: '4. LA MARCA',
+        script: 'En Epotech Solutions, ofrecemos servicios profesionales de lavado a presión para dueños de casas en Utah.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
@@ -407,29 +407,29 @@ export const guiones: Script[] = [
         }
       },
       {
-        label: '5. THE CTA',
-        script: 'If your driveway, garage, or exterior surfaces need cleaning, send us a message today for a free quote.',
+        label: '5. LLAMADA A LA ACCIÓN',
+        script: 'Si el camino de entrada, el garaje o las superficies exteriores de tu casa necesitan limpieza, mándanos un mensaje hoy para un presupuesto gratis.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Cierra con tono amigable y accesible. Sonrie levemente.'],
+          solo: ['Cierra con tono amigable y accesible. Sonríe levemente.'],
           assisted: ['Natural y cercano.']
         }
       }
     ],
     tips: [
-      'Menciona "driveway" y "garage" para conectar con problemas reales del cliente.',
-      'La palabra "pressure washing" debe sonar segura y profesional.',
-      'El ritmo debe ser constante — no demasiado rapido ni demasiado lento.'
+      'Menciona "camino de entrada" y "garaje" para conectar con problemas reales del cliente.',
+      'La palabra "lavado a presión" debe sonar segura y profesional.',
+      'El ritmo debe ser constante — no demasiado rápido ni demasiado lento.'
     ],
     checklist: [
-      'Paso 1: Hook del driveway grabado',
+      'Paso 1: Gancho del camino de entrada grabado',
       'Paso 2: Problema del tiempo y suciedad grabado',
-      'Paso 3: Solucion de pressure washing grabada',
+      'Paso 3: Solución de lavado a presión grabada',
       'Paso 4: Marca Epotech grabada',
-      'Paso 5: CTA final grabado'
+      'Paso 5: Llamada a la acción final grabada'
     ],
-    productionHack: 'Muestra un before/after del driveway limpio vs sucio para acompañar la voz en off.',
+    productionHack: 'Muestra un antes/después del camino de entrada limpio vs sucio para acompañar la voz en off.',
     createdAt: '2026-06-19'
   }
 ];
@@ -443,13 +443,13 @@ export const guionesPresentacion: Script[] = [
     duration: '60s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'The biggest mistake when hiring cleaners… is not the price. It’s not knowing who you’re letting into your home. Because it’s not just cleaning… it’s entering your space, where your family, your things, and your peace of mind are. My name is Sebastián. And every time we work on a property, we treat it as if it were our own. We care, we respect, and we leave the space better than we found it. Because in the end… it’s all about trust. If that’s what you’re looking for, reach out to us.',
+    fullDialogue: 'El error más grande al contratar un servicio de limpieza… no es el precio. Es no saber quién estás dejando entrar a tu casa. Porque no es solo limpiar… es entrar a tu espacio, donde están tu familia, tus cosas y tu tranquilidad. Me llamo Sebastián. Y cada vez que trabajamos en una propiedad, la tratamos como si fuera nuestra. Nos importa, la respetamos y la dejamos mejor de como la encontramos. Porque al final… todo se trata de confianza. Si eso es lo que estás buscando, escríbenos.',
     scenes: [
       {
         id: 'p1-e1',
-        title: '🎬 ESCENA 1 — HOOK (AFUERA)',
+        title: '🎬 ESCENA 1 — GANCHO (AFUERA)',
         talent: {
-          whatToSay: '“The biggest mistake when hiring cleaners… is not the price.”',
+          whatToSay: '"El error más grande al contratar un servicio de limpieza… no es el precio."',
           howToMove: 'Parado afuera de una casa. Mira directo a cámara.',
           gesture: 'Habla normal (no actuado). Quédate quieto.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -466,7 +466,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e2',
         title: '🎬 ESCENA 2 — PUERTA (ACCIÓN)',
         talent: {
-          whatToSay: '“It’s not knowing who you’re letting into your home.”',
+          whatToSay: '"Es no saber quién estás dejando entrar a tu casa."',
           howToMove: 'Ubícate adentro de la casa con la puerta cerrada. Abre la puerta y apenas asomes, di la frase mirando a la cámara.',
           gesture: 'Gesto de bienvenida natural al abrir la puerta.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -483,8 +483,8 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e3',
         title: '🎬 ESCENA 3 — INTERIOR (CONEXIÓN)',
         talent: {
-          whatToSay: '“Because it’s not just cleaning… it’s entering your space, where your family, your things, and your peace of mind are.”',
-          howToMove: 'Mira alrededor, señala el lugar, señala hacia arriba o lado, señala objetos cerca.',
+          whatToSay: '"Porque no es solo limpiar… es entrar a tu espacio, donde están tu familia, tus cosas y tu tranquilidad."',
+          howToMove: 'Mira alrededor, señala el lugar, señala hacia arriba o al lado, señala objetos cerca.',
           gesture: 'Gesto calmado (mano al pecho o suave).',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
@@ -500,7 +500,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p1-e4',
         title: '🎬 ESCENA 4 — AUTORIDAD (TRABAJO)',
         talent: {
-          whatToSay: '“My name is Sebastián. And every time we work on a property, we treat it as if it were our own. We care, we respect, and we leave the space better than we found it.”',
+          whatToSay: '"Me llamo Sebastián. Y cada vez que trabajamos en una propiedad, la tratamos como si fuera nuestra. Nos importa, la respetamos y la dejamos mejor de como la encontramos."',
           howToMove: 'Mirando a cámara. Movimiento leve (natural). Señala el piso / área.',
           gesture: 'Gesto con manos. Señala resultado.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -515,9 +515,9 @@ export const guionesPresentacion: Script[] = [
       },
       {
         id: 'p1-e5',
-        title: '🎬 ESCENA 5 — CIERRE & CTA',
+        title: '🎬 ESCENA 5 — CIERRE Y LLAMADA A LA ACCIÓN',
         talent: {
-          whatToSay: '“Because in the end… it’s all about trust. If that’s what you’re looking for, reach out to us.”',
+          whatToSay: '"Porque al final… todo se trata de confianza. Si eso es lo que estás buscando, escríbenos."',
           howToMove: 'Pausa corta. Mira directo a cámara.',
           gesture: 'Serio, seguro.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -537,7 +537,7 @@ export const guionesPresentacion: Script[] = [
       'Mantén un tono pausado y seguro.',
       'Asegúrate de que la casa de fondo se vea impecable.'
     ],
-    checklist: ['Hook afuera', 'Acción puerta', 'Conexión interior', 'Autoridad', 'Cierre confianza'],
+    checklist: ['Gancho afuera', 'Acción puerta', 'Conexión interior', 'Autoridad', 'Cierre confianza'],
     productionHack: 'Usa luz natural de la mañana para la escena de afuera.',
     createdAt: '2026-05-05'
   },
@@ -549,19 +549,19 @@ export const guionesPresentacion: Script[] = [
     duration: '75s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'If your driveway looks like this… it’s already getting damaged. And most people think it’s just dirt. But it’s not. It’s stains sinking in, buildup causing wear, and surfaces that slowly… deteriorate. And by the time you react… it’s more expensive to fix. That’s why we don’t just clean. We restore, protect, and transform spaces with professional cleaning, epoxy, and paint that actually lasts. It’s not just about aesthetics. It’s about taking care of what cost you money. See how it can look like this again on our profile.',
+    fullDialogue: 'Si el piso de tu entrada se ve así… ya se está dañando. Y la mayoría de la gente cree que es solo suciedad. Pero no lo es. Son manchas que se hunden, residuos que causan desgaste y superficies que lentamente… se deterioran. Y cuando te das cuenta… ya es más caro repararlo. Por eso nosotros no solo limpiamos. Restauramos, protegemos y transformamos espacios con limpieza profesional, epoxi y pintura que de verdad dura. No es solo estética. Es cuidar lo que te costó dinero. Mira cómo puede quedar así de nuevo en nuestro perfil.',
     scenes: [
       {
         id: 'p2-e1',
-        title: '🎬 ESCENA 1 — HOOK',
+        title: '🎬 ESCENA 1 — GANCHO',
         talent: {
-          whatToSay: '“If your driveway looks like this… it’s already getting damaged.”',
-          howToMove: 'OPCIÓN 1: Párate en un driveway sucio y señala el piso. OPCIÓN 2: Párate en la sala y señala hacia arriba (para poner foto del driveway en edición).',
+          whatToSay: '"Si el piso de tu entrada se ve así… ya se está dañando."',
+          howToMove: 'OPCIÓN 1: Párate en un camino de entrada sucio y señala el piso. OPCIÓN 2: Párate en la sala y señala hacia arriba (para poner foto del piso en edición).',
           gesture: 'Autoridad, advertencia.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'OPCIÓN 1: Afuera en el driveway. OPCIÓN 2: En la sala, dejando aire arriba en el encuadre.',
+          whereToStand: 'OPCIÓN 1: Afuera en el camino de entrada. OPCIÓN 2: En la sala, dejando aire arriba en el encuadre.',
           angle: 'Plano medio.',
           movement: 'Fijo.',
           avoid: 'Moverse mucho.',
@@ -572,13 +572,13 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e2',
         title: '🎬 ESCENA 2 — ERROR (ÁNGULO)',
         talent: {
-          whatToSay: '“And most people think it’s just dirt.”',
+          whatToSay: '"Y la mayoría de la gente cree que es solo suciedad."',
           howToMove: 'Camina un paso lateral.',
           gesture: 'Gesto leve de negación.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'OPCIÓN 1: Acera del driveway. OPCIÓN 2: Desde otro ángulo en la sala.',
+          whereToStand: 'OPCIÓN 1: Acera del camino de entrada. OPCIÓN 2: Desde otro ángulo en la sala.',
           angle: 'Ángulo diagonal (cambio visual).',
           movement: 'Acompaña el paso levemente.',
           avoid: 'Frontal perfecto.',
@@ -589,8 +589,8 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e3',
         title: '🎬 ESCENA 3 — EXPLICACIÓN (ACCIÓN)',
         talent: {
-          whatToSay: '“But it’s not. It’s stains sinking in, buildup causing wear, and surfaces that slowly… deteriorate.”',
-          howToMove: 'OPCIÓN 1: Agáchate y pasa la mano por el driveway sucio. OPCIÓN 2: De pie, señala a los lados para fotos de apoyo.',
+          whatToSay: '"Pero no lo es. Son manchas que se hunden, residuos que causan desgaste y superficies que lentamente… se deterioran."',
+          howToMove: 'OPCIÓN 1: Agáchate y pasa la mano por el piso sucio. OPCIÓN 2: De pie, señala a los lados para fotos de apoyo.',
           gesture: 'Mira la superficie o las "fotos imaginarias" (no a cámara).',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
@@ -606,8 +606,8 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e4',
         title: '🎬 ESCENA 4 — CONSECUENCIA',
         talent: {
-          whatToSay: '“And by the time you react… it’s more expensive to fix.”',
-          howToMove: 'OPCIÓN 1: Caminando por el driveway. OPCIÓN 2: Caminando por el pasillo/sala de la casa.',
+          whatToSay: '"Y cuando te das cuenta… ya es más caro repararlo."',
+          howToMove: 'OPCIÓN 1: Caminando por el camino de entrada. OPCIÓN 2: Caminando por el pasillo/sala de la casa.',
           gesture: 'Mira a cámara al final de la frase.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
@@ -623,7 +623,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e5',
         title: '🎬 ESCENA 5 — SOLUCIÓN',
         talent: {
-          whatToSay: '“That’s why we don’t just clean. We restore, protect, and transform spaces with professional cleaning, epoxy, and paint that actually lasts.”',
+          whatToSay: '"Por eso nosotros no solo limpiamos. Restauramos, protegemos y transformamos espacios con limpieza profesional, epoxi y pintura que de verdad dura."',
           howToMove: 'En área de trabajo / garaje. Señala herramientas o área. Toma algo (manguera/herramienta).',
           gesture: 'Mirando a cámara, seguro.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -640,7 +640,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p2-e6',
         title: '🎬 ESCENA 6 — CIERRE',
         talent: {
-          whatToSay: '“It’s not just about aesthetics. It’s about taking care of what cost you money.”',
+          whatToSay: '"No es solo estética. Es cuidar lo que te costó dinero."',
           howToMove: 'Lugar limpio / neutro.',
           gesture: 'Mano al pecho o gesto firme.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -655,9 +655,9 @@ export const guionesPresentacion: Script[] = [
       },
       {
         id: 'p2-e7',
-        title: '🎬 ESCENA 7 — CTA',
+        title: '🎬 ESCENA 7 — LLAMADA A LA ACCIÓN',
         talent: {
-          whatToSay: '“See how it can look like this again on our profile.”',
+          whatToSay: '"Mira cómo puede quedar así de nuevo en nuestro perfil."',
           howToMove: 'Señala hacia arriba.',
           gesture: 'Invitación, sonrisa.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -677,7 +677,7 @@ export const guionesPresentacion: Script[] = [
       'Usa ángulos diagonales para mayor dinamismo.',
       'Asegúrate de que las manos de Sebastián se vean en la Escena 3.'
     ],
-    checklist: ['Hook Driveway', 'Cambio Ángulo', 'Acción Superficie', 'Caminata Natural', 'Autoridad Herramientas', 'Cierre Emocional', 'CTA Overlay'],
+    checklist: ['Gancho Camino Entrada', 'Cambio Ángulo', 'Acción Superficie', 'Caminata Natural', 'Autoridad Herramientas', 'Cierre Emocional', 'CTA Overlay'],
     productionHack: 'En la Escena 7, deja suficiente aire arriba para colocar los resultados Antes/Después.',
     createdAt: '2026-05-06'
   },
@@ -689,13 +689,13 @@ export const guionesPresentacion: Script[] = [
     duration: '90s',
     isPinned: true,
     isProductionMode: true,
-    fullDialogue: 'This is the first thing most people do before choosing us… They check our reviews. And that’s completely valid. Because today there are many options… and it’s not always easy to know which one to choose. That’s why we let those who have already worked with us do the talking. We’ve worked with over 100 clients, and every space is different. That’s why we keep it simple: You message us, we look at your space, and we explain exactly what you need. No pressure, no complications. Just doing the job right so you can have peace of mind with the result. You can check our reviews… and decide with total confidence.',
+    fullDialogue: 'Esto es lo primero que hace la mayoría de la gente antes de elegirnos… Ver nuestras reseñas. Y eso es completamente válido. Porque hoy hay muchas opciones… y no siempre es fácil saber cuál elegir. Por eso dejamos que quienes ya trabajaron con nosotros hablen por nosotros. Hemos trabajado con más de 100 clientes, y cada espacio es diferente. Por eso lo hacemos simple: nos escribes, vemos tu espacio y te explicamos exactamente lo que necesitas. Sin presión, sin complicaciones. Solo haciendo el trabajo bien para que tengas tranquilidad con el resultado. Puedes ver nuestras reseñas… y decidir con total confianza.',
     scenes: [
       {
         id: 'p3-e1',
-        title: '🎬 ESCENA 1 — HOOK',
+        title: '🎬 ESCENA 1 — GANCHO',
         talent: {
-          whatToSay: '“This is the first thing most people do before choosing us…”',
+          whatToSay: '"Esto es lo primero que hace la mayoría de la gente antes de elegirnos…"',
           howToMove: 'Afuera de la casa. Mira a cámara.',
           gesture: 'Gesto leve de intriga.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -712,7 +712,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e2',
         title: '🎬 ESCENA 2 — RESEÑAS',
         talent: {
-          whatToSay: '“They check our reviews.”',
+          whatToSay: '"Ver nuestras reseñas."',
           howToMove: 'Señala hacia arriba.',
           gesture: 'Seguridad, invitación visual.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -729,7 +729,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e3',
         title: '🎬 ESCENA 3 — VALIDACIÓN',
         talent: {
-          whatToSay: '“And that’s completely valid.”',
+          whatToSay: '"Y eso es completamente válido."',
           howToMove: 'Cambia posición levemente.',
           gesture: 'Asiente con la cabeza, natural.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -746,8 +746,8 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e4',
         title: '🎬 ESCENA 4 — OPCIONES',
         talent: {
-          whatToSay: '“Because today there are many options… and it’s not always easy to know which one to choose.”',
-          howToMove: 'Caminando por entrada / driveway.',
+          whatToSay: '"Porque hoy hay muchas opciones… y no siempre es fácil saber cuál elegir."',
+          howToMove: 'Caminando por entrada / camino de acceso.',
           gesture: 'Mira a cámara al final de la frase.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
@@ -763,7 +763,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e5',
         title: '🎬 ESCENA 5 — PRUEBA SOCIAL',
         talent: {
-          whatToSay: '“That’s why we let those who have already worked with us do the talking.”',
+          whatToSay: '"Por eso dejamos que quienes ya trabajaron con nosotros hablen por nosotros."',
           howToMove: 'Frente a pared o fondo limpio.',
           gesture: 'Señala hacia arriba.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -780,7 +780,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e6',
         title: '🎬 ESCENA 6 — EXPERIENCIA',
         talent: {
-          whatToSay: '“We’ve worked with over 100 clients, and every space is different.”',
+          whatToSay: '"Hemos trabajado con más de 100 clientes, y cada espacio es diferente."',
           howToMove: 'En el área de trabajo.',
           gesture: 'Señala alrededor, gesto abierto.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -797,7 +797,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e7',
         title: '🎬 ESCENA 7 — PROCESO',
         talent: {
-          whatToSay: '“That’s why we keep it simple: You message us, we look at your space, and we explain exactly what you need.”',
+          whatToSay: '"Por eso lo hacemos simple: nos escribes, vemos tu espacio y te explicamos exactamente lo que necesitas."',
           howToMove: 'Acércate un poco a cámara. Gesto de celular. Señala alrededor.',
           gesture: 'Señala a cámara al final.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -814,7 +814,7 @@ export const guionesPresentacion: Script[] = [
         id: 'p3-e8',
         title: '🎬 ESCENA 8 — TRANQUILIDAD',
         talent: {
-          whatToSay: '“No pressure, no complications. Just doing the job right so you can have peace of mind with the result.”',
+          whatToSay: '"Sin presión, sin complicaciones. Solo haciendo el trabajo bien para que tengas tranquilidad con el resultado."',
           howToMove: 'Pausa leve.',
           gesture: 'Gesto relajado. Mano al pecho.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -829,9 +829,9 @@ export const guionesPresentacion: Script[] = [
       },
       {
         id: 'p3-e9',
-        title: '🎬 ESCENA 9 — CTA',
+        title: '🎬 ESCENA 9 — LLAMADA A LA ACCIÓN',
         talent: {
-          whatToSay: '“You can check our reviews… and decide with total confidence.”',
+          whatToSay: '"Puedes ver nuestras reseñas… y decidir con total confianza."',
           howToMove: 'Mira directo a cámara.',
           gesture: 'Señala hacia arriba, sonrisa segura.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -839,7 +839,7 @@ export const guionesPresentacion: Script[] = [
         camera: {
           whereToStand: 'En la puerta principal, Sebastián mirando hacia afuera.',
           angle: 'Plano limpio.',
-          movement: 'Deja espacio arriba para reviews finales.',
+          movement: 'Deja espacio arriba para reseñas finales.',
           avoid: 'Cortar el gesto de señalar.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
@@ -851,7 +851,7 @@ export const guionesPresentacion: Script[] = [
       'El tono debe ser honesto y tranquilo.',
       'Cambia de lugar al menos 4 veces durante el video.'
     ],
-    checklist: ['Hook Curiosidad', 'Reseñas (Overlay)', 'Validación Ángulo', 'Caminata Natural', 'Prueba Social Fuerte', 'Autoridad Clientes', 'Proceso Simple', 'Cierre Tranquilidad', 'CTA Reseñas'],
+    checklist: ['Gancho Curiosidad', 'Reseñas (Overlay)', 'Validación Ángulo', 'Caminata Natural', 'Prueba Social Fuerte', 'Autoridad Clientes', 'Proceso Simple', 'Cierre Tranquilidad', 'CTA Reseñas'],
     productionHack: 'Captura pantallas de tus mejores reseñas de Google/Yelp para usarlas como overlays en edición.',
     createdAt: '2026-05-07'
   }
