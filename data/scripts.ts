@@ -295,6 +295,102 @@ export const guiones: Script[] = [
     productionHack: 'El paso 4 es perfecto para pantalla dividida antes/después. Graba el clip del antes en "el color cambia" y el del después en "toda la propiedad se ve más cuidada".',
     createdAt: '2026-06-24'
   },
+  {
+    id: 'pressure-washing-tecnica-correcta',
+    title: 'Lo Que Nunca Haría Si Esta Fuera Mi Casa',
+    category: 'Guiones',
+    service: 'Lavado a Presión',
+    duration: '40s',
+    fullDialogue: 'Si esta fuera mi casa, hay algo que nunca haría. Nunca usaría demasiada presión para limpiar ciertas superficies. Porque muchas personas creen que más presión significa mejor limpieza. Y no siempre es así. De hecho, usar demasiada presión puede dejar marcas permanentes, dañar el concreto o afectar algunas superficies. Lo importante no es usar más fuerza. Lo importante es usar la técnica correcta. Por eso cada trabajo requiere un enfoque diferente. Si no estás seguro de cómo limpiar una superficie exterior, escríbenos y con gusto te orientamos.',
+    steps: [
+      {
+        label: '1. EL GANCHO',
+        script: 'Si esta fuera mi casa, hay algo que nunca haría.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Pausa después de "nunca haría" — deja que la curiosidad del espectador se active antes de continuar.'],
+          assisted: ['Tono firme y directo. Esta frase debe atrapar.']
+        }
+      },
+      {
+        label: '2. LA ADVERTENCIA',
+        script: 'Nunca usaría demasiada presión para limpiar ciertas superficies.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono serio y seguro. Pronuncia "ciertas superficies" con claridad.'],
+          assisted: ['Sin ruidos de fondo. Esta frase es la respuesta al gancho.']
+        }
+      },
+      {
+        label: '3. EL ERROR COMÚN',
+        script: 'Porque muchas personas creen que más presión significa mejor limpieza. Y no siempre es así.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono empático — no estás juzgando, estás educando. Pausa en "Y no siempre es así."'],
+          assisted: ['Ritmo calmado. Deja respirar la frase final.']
+        }
+      },
+      {
+        label: '4. LAS CONSECUENCIAS',
+        script: 'De hecho, usar demasiada presión puede dejar marcas permanentes, dañar el concreto o afectar algunas superficies.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Lista cada consecuencia con claridad. "Marcas permanentes" es la más impactante — dale énfasis.'],
+          assisted: ['Tono de advertencia. Aquí va un clip de una superficie mal lavada si tienes uno.']
+        }
+      },
+      {
+        label: '5. LA CLAVE',
+        script: 'Lo importante no es usar más fuerza. Lo importante es usar la técnica correcta.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Esta es la frase insignia — las dos oraciones forman un contraste. Dila con convicción total.'],
+          assisted: ['Voz firme. Pausa entre las dos frases para que el contraste golpee.']
+        }
+      },
+      {
+        label: '6. NUESTRA DIFERENCIA',
+        script: 'Por eso cada trabajo requiere un enfoque diferente.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono de autoridad profesional. Corto y contundente.'],
+          assisted: ['Sin pausas largas — fluye directo desde el paso anterior.']
+        }
+      },
+      {
+        label: '7. LLAMADA A LA ACCIÓN',
+        script: 'Si no estás seguro de cómo limpiar una superficie exterior, escríbenos y con gusto te orientamos.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono amigable y accesible. Cierra como si le hablaras a un amigo.'],
+          assisted: ['Natural y cercano. No suenes a anuncio — suena a servicio.']
+        }
+      }
+    ],
+    tips: [
+      'El gancho funciona porque genera curiosidad inmediata — no lo corras.',
+      'El paso 5 es el corazón del guion: el contraste fuerza vs. técnica.',
+      'Acompaña con clips de trabajo real mostrando la técnica de diferentes ángulos y distancias.'
+    ],
+    checklist: [
+      'Paso 1: Gancho grabado',
+      'Paso 2: La advertencia grabada',
+      'Paso 3: El error común grabado',
+      'Paso 4: Las consecuencias grabadas',
+      'Paso 5: La clave (técnica vs. fuerza) grabada',
+      'Paso 6: Nuestra diferencia grabada',
+      'Paso 7: Llamada a la acción grabada'
+    ],
+    productionHack: 'Si tienes un clip de una superficie con marcas de presión excesiva, úsalo en el paso 4. Si no, un primer plano del trabajo cuidadoso con la manguera en el paso 5 refuerza la idea de técnica.',
+    createdAt: '2026-06-24'
+  },
 ];
 
 export const guionesPresentacion: Script[] = [
