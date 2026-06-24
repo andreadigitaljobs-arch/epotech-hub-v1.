@@ -326,14 +326,14 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
       </div>
 
       {/* CHIPS DE DÍAS */}
-      <div className="flex gap-1.5 px-4 pb-3 overflow-x-auto scrollbar-hide">
+      <div className="grid grid-cols-7 px-4 pb-3">
         {weekDays.map((day, i) => {
           const dayPosts = postsForDay(day);
           const isSelected = isSameDay(day, selectedDay);
           const isToday = isSameDay(day, new Date());
           return (
             <button key={i} onClick={() => handleDaySelect(day)}
-              className={`cal-chip-in flex flex-col items-center gap-1 flex-shrink-0 w-10 py-2 rounded-2xl transition-all active:scale-95 ${isSelected ? "bg-[#0a192f]" : isToday ? "bg-slate-100" : "bg-transparent"}`}
+              className={`cal-chip-in flex flex-col items-center gap-1 py-2 rounded-2xl transition-all active:scale-95 ${isSelected ? "bg-[#0a192f]" : isToday ? "bg-slate-100" : "bg-transparent"}`}
               style={{ animationDelay: `${120 + i * 40}ms` }}
             >
               <span className={`text-[9px] font-black uppercase tracking-wider ${isSelected ? "text-[#48c1d2]" : "text-slate-400"}`}>{DAYS_ES[(i + 1) % 7]}</span>
