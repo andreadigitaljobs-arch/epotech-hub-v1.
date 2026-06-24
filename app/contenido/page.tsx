@@ -1642,15 +1642,6 @@ export default function ContenidoPage() {
               </span>
             </button>
           </div>
-          {/* Fila 2: Velocidad */}
-          <div className="px-6 sm:px-8 pt-1 pb-6 flex items-center gap-3">
-            <span className="text-[9px] text-white/40 uppercase font-black tracking-widest">Velocidad:</span>
-            <div className="flex items-center bg-white/5 rounded-xl border border-white/5 p-1 gap-1">
-              <button onClick={() => setVoiceSpeed(0.5)} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 0.5 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>0.5x</button>
-              <button onClick={() => setVoiceSpeed(0.85)} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 0.85 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>0.8x</button>
-              <button onClick={() => setVoiceSpeed(1)} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-95 ${voiceSpeed === 1 ? 'bg-[#48c1d2] text-[#0a192f]' : 'text-white/50 hover:text-white'}`}>1x</button>
-            </div>
-          </div>
         </div>}
 
         {/* Contenido principal */}
@@ -1663,11 +1654,8 @@ export default function ContenidoPage() {
                 <div className="animate-in fade-in zoom-in-95 duration-500 text-left space-y-8">
                   <div className="p-8 sm:p-10 bg-white/5 rounded-[2.5rem] border border-white/10 relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-6 opacity-5"><Mic size={80} className="text-[#48c1d2]" /></div>
-                    <div className="flex justify-between items-start mb-6 relative z-20">
+                    <div className="mb-6 relative z-20">
                       <span className="text-xs font-black text-[#48c1d2] uppercase tracking-[3px] block mt-2">Guion de Referencia</span>
-                      <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript.fullDialogue); }} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isSpeaking ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500 hover:text-white' : 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 hover:bg-[#48c1d2] hover:text-[#0a192f]'}`} title={isSpeaking ? "Detener pronunciación" : "Escuchar pronunciación"}>
-                        {isSpeaking ? <Square fill="currentColor" size={12} /> : <Volume2 size={18} />}
-                      </button>
                     </div>
                     <ScriptText 
                       text={selectedScript.fullDialogue}
@@ -1731,11 +1719,8 @@ export default function ContenidoPage() {
                             <div className="p-6 space-y-6">
                               {selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay && (
                                 <div className="space-y-2">
-                                  <div className="flex justify-between items-start mb-2 relative z-20">
-                                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block  mt-1">Qué decir:</span>
-                                    <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay || ""); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isSpeaking ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500 hover:text-white' : 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/30 hover:bg-[#48c1d2] hover:text-[#0a192f]'}`} title={isSpeaking ? "Detener pronunciación" : "Escuchar pronunciación"}>
-                                      {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
-                                    </button>
+                                  <div className="mb-2 relative z-20">
+                                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mt-1">Qué decir:</span>
                                   </div>
                                   <ScriptText 
                                     text={selectedScript?.scenes?.[currentStepIdx]?.talent?.whatToSay || ""}
@@ -1837,9 +1822,6 @@ export default function ContenidoPage() {
                         <div className="flex items-center gap-3">
                           <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[3px]">ACTO {i + 1}</span>
                           <div className="flex-1 h-[1px] bg-white/10" />
-                          <button onClick={(e) => { e.stopPropagation(); handleSpeak(s.script); }} className="w-8 h-8 rounded-full bg-white/5 text-white/40 flex items-center justify-center hover:bg-[#48c1d2]/20 hover:text-[#48c1d2] transition-all border border-white/10">
-                            {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
-                          </button>
                         </div>
                         <ScriptText 
                           text={s.script}
@@ -1937,11 +1919,8 @@ export default function ContenidoPage() {
                   <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 text-left flex-1">
                     <div className="bg-[#48c1d2] px-8 pt-8 pb-10 rounded-[40px] relative shadow-2xl shadow-[#48c1d2]/20">
                       <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><Sparkles size={60} className="text-[#0a192f]" /></div>
-                      <h4 className="text-[9px] font-black text-[#0a192f] uppercase tracking-[0.2em] mb-4 flex items-center justify-between w-full">
-                        <div className="flex items-center gap-2"><Mic size={14} /> Tu guion para leer:</div>
-                        <button onClick={(e) => { e.stopPropagation(); handleSpeak(selectedScript.steps[currentStepIdx].script); }} className="w-8 h-8 rounded-full bg-[#0a192f]/10 text-[#0a192f] flex items-center justify-center hover:bg-[#0a192f]/20 transition-all border border-[#0a192f]/10" title="Escuchar pronunciación">
-                          {isSpeaking ? <Square fill="currentColor" size={10} /> : <Volume2 size={14} />}
-                        </button>
+                      <h4 className="text-[9px] font-black text-[#0a192f] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                        <Mic size={14} /> Tu guion para leer:
                       </h4>
                       <ScriptText 
                         text={selectedScript.steps[currentStepIdx].script}
