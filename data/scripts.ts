@@ -426,6 +426,81 @@ export const guiones: Script[] = [
     productionHack: 'Si tienes un clip de una superficie con marcas de presión excesiva, úsalo en el paso 4. Si no, un primer plano del trabajo cuidadoso con la manguera en el paso 5 refuerza la idea de técnica.',
     createdAt: '2026-06-24'
   },
+  {
+    id: 'window-cleaning-squeegee',
+    title: 'Para Qué Sirve el Squeegee',
+    category: 'Guiones',
+    service: 'Limpieza de Ventanas',
+    pilar: 'Herramientas',
+    duration: '30s',
+    fullDialogue: `Esta herramienta se llama squeegee. Y aunque parece simple, es una de las partes más importantes para limpiar ventanas. No es solo para quitar agua. Sirve para retirar el producto de limpieza de forma pareja, sin dejar rayas ni marcas. Por eso una ventana puede quedar manchada aunque uses buen jabón. El secreto no está solo en el producto. Está en cómo lo retiras.`,
+    steps: [
+      {
+        label: '1. EL GANCHO',
+        script: 'Esta herramienta se llama squeegee.',
+        visualField: 'Primer plano de la mano sosteniendo el squeegee en campo.',
+        visualStudio: 'Sostén el squeegee frente a cámara, bien encuadrado.',
+        advice: {
+          solo: ['Tono directo y confiado. Pausa breve antes de continuar — deja que el espectador lo vea.'],
+          assisted: ['Que Sebastian sostenga la herramienta limpia y sin agua todavía.']
+        }
+      },
+      {
+        label: '2. LA IMPORTANCIA',
+        script: 'Y aunque parece simple, es una de las partes más importantes para limpiar ventanas.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Énfasis en "más importantes". El contraste con "parece simple" es el gancho de atención.'],
+          assisted: ['Clip del squeegee deslizándose por el vidrio en movimiento fluido.']
+        }
+      },
+      {
+        label: '3. LA FUNCIÓN REAL',
+        script: 'No es solo para quitar agua. Sirve para retirar el producto de limpieza de forma pareja, sin dejar rayas ni marcas.',
+        visualField: 'Primer plano del squeegee pasando por el vidrio.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Pausa después de "No es solo para quitar agua." — ese silencio crea expectativa.'],
+          assisted: ['Clip en cámara lenta del squeegee si tienes. El movimiento lo dice todo.']
+        }
+      },
+      {
+        label: '4. EL PROBLEMA CONOCIDO',
+        script: 'Por eso una ventana puede quedar manchada aunque uses buen jabón.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono empático — este es el dolor del espectador. Habla como si lo entendieras.'],
+          assisted: ['Clip de una ventana con rayas o manchas si tienes material de antes/después.']
+        }
+      },
+      {
+        label: '5. EL SECRETO',
+        script: 'El secreto no está solo en el producto. Está en cómo lo retiras.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Esta es la frase cierre — dila despacio. Las dos oraciones forman un contraste deliberado.'],
+          assisted: ['Clip final: ventana perfectamente limpia después del squeegee.']
+        }
+      }
+    ],
+    tips: [
+      'El gancho funciona porque "squeegee" es una palabra que la mayoría no conoce — eso genera curiosidad.',
+      'El clip en cámara lenta del squeegee deslizándose puede ser el visual más impactante del video.',
+      'Este formato de "explicación de herramienta" tiene mucho potencial de viralidad en el nicho.'
+    ],
+    checklist: [
+      'Paso 1: Gancho con el squeegee en cámara grabado',
+      'Paso 2: La importancia grabada',
+      'Paso 3: La función real grabada',
+      'Paso 4: El problema conocido grabado',
+      'Paso 5: El secreto grabado'
+    ],
+    productionHack: 'Si tienes material de antes/después (ventana manchada vs. limpia), úsalo en el paso 4. El contraste visual refuerza exactamente lo que dice el guion.',
+    createdAt: '2026-06-24'
+  },
 ];
 
 export const guionesPresentacion: Script[] = [
