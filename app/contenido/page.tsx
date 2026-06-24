@@ -1815,10 +1815,12 @@ export default function ContenidoPage() {
                           text={s.script}
                           className="text-lg font-medium text-white/90 leading-relaxed "
                         />
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                          <h5 className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-2"><Video size={10} /> Referencia Visual</h5>
-                          <p className="text-[11px] font-bold text-white/40 leading-snug uppercase">{s.visualField}</p>
-                        </div>
+                        {s.visualField && !s.visualField.startsWith('N/A') && (
+                          <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                            <h5 className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-2"><Video size={10} /> Referencia Visual</h5>
+                            <p className="text-[11px] font-bold text-white/40 leading-snug uppercase">{s.visualField}</p>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
