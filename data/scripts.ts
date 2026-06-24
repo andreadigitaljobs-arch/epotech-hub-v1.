@@ -587,6 +587,103 @@ export const guiones: Script[] = [
     productionHack: 'Graba el paso 5 en el momento del día en que el sol pega directo en las ventanas. Ese clip con las marcas visibles al contraluz es el que engancha — sin él el video pierde su mayor impacto.',
     createdAt: '2026-06-24'
   },
+  {
+    id: 'window-cleaning-proceso-completo',
+    title: 'Lo Que Nadie Ve Entre el Antes y el Después',
+    category: 'Guiones',
+    service: 'Limpieza de Ventanas',
+    pilar: 'Proceso',
+    duration: '60s',
+    fullDialogue: `La mayoría de las personas nunca ve esta parte del trabajo. Solo ven el antes. Y el después. Pero entre esos dos momentos es donde ocurre toda la diferencia. Cuando llegamos a una ventana como esta, lo primero que hacemos no es limpiarla. Primero la revisamos. Buscamos manchas de agua, polvo acumulado, residuos y cualquier detalle que pueda afectar el resultado final. Después aplicamos nuestra solución de limpieza para empezar a desprender toda la suciedad que está adherida al vidrio. Una vez que la superficie está preparada, utilizamos un scrubber para trabajar toda la ventana. Este paso es importante porque ayuda a aflojar residuos que muchas veces no salen simplemente pasando un trapo. Luego utilizamos el squeegee para retirar el agua y el producto de forma uniforme, evitando marcas y dejando el vidrio mucho más limpio y transparente. Y cuando parece que ya terminamos... Todavía queda una última parte. Repasar los bordes. Eliminar cualquier gota. Y revisar los pequeños detalles que muchas personas ni siquiera notan. Porque una ventana no queda perfecta por casualidad. El resultado final no se crea al final. Se crea en cada paso del proceso. Si estás en Utah y quieres que tus ventanas vuelvan a verse claras y transparentes, envíanos un mensaje y con gusto te ayudamos.`,
+    steps: [
+      {
+        label: '1. EL GANCHO',
+        script: 'La mayoría de las personas nunca ve esta parte del trabajo. Solo ven el antes. Y el después. Pero entre esos dos momentos es donde ocurre toda la diferencia.',
+        visualField: 'Ventana sucia antes de empezar — primer plano de la superficie.',
+        visualStudio: 'Mira a cámara. Tono de quien va a revelar algo.',
+        advice: {
+          solo: ['Pausa después de "Y el después." — deja que la frase respire antes de la promesa.'],
+          assisted: ['Clip de antes/después en corte rápido si tienes material. El contraste refuerza el gancho.']
+        }
+      },
+      {
+        label: '2. LA REVISIÓN',
+        script: 'Cuando llegamos a una ventana como esta, lo primero que hacemos no es limpiarla. Primero la revisamos. Buscamos manchas de agua, polvo acumulado, residuos y cualquier detalle que pueda afectar el resultado final.',
+        visualField: 'Sebastian inspeccionando la ventana de cerca con la mano o una linterna.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Énfasis en "lo primero que hacemos NO es limpiarla" — ese contraste sorprende.'],
+          assisted: ['Clip de Sebastian mirando de cerca la ventana, señalando zonas específicas.']
+        }
+      },
+      {
+        label: '3. LA SOLUCIÓN DE LIMPIEZA',
+        script: 'Después aplicamos nuestra solución de limpieza para empezar a desprender toda la suciedad que está adherida al vidrio.',
+        visualField: 'Aplicación del producto en el vidrio — spray o aplicador.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono técnico pero accesible. "Adherida al vidrio" muestra que sabes de lo que hablas.'],
+          assisted: ['Clip del producto siendo aplicado — que se vea la espuma o el líquido en el vidrio.']
+        }
+      },
+      {
+        label: '4. EL SCRUBBER',
+        script: 'Una vez que la superficie está preparada, utilizamos un scrubber para trabajar toda la ventana. Este paso es importante porque ayuda a aflojar residuos que muchas veces no salen simplemente pasando un trapo.',
+        visualField: 'Sebastian usando el scrubber en movimientos amplios por el vidrio.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Pausa antes de "Este paso es importante" — esa pausa le da peso a la explicación.'],
+          assisted: ['Clip horizontal del scrubber trabajando la superficie — que se vea el movimiento completo.']
+        }
+      },
+      {
+        label: '5. EL SQUEEGEE',
+        script: 'Luego utilizamos el squeegee para retirar el agua y el producto de forma uniforme, evitando marcas y dejando el vidrio mucho más limpio y transparente.',
+        visualField: 'Squeegee pasando por el vidrio en movimientos limpios — primer plano.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Énfasis en "de forma uniforme" — esa es la diferencia técnica que distingue el trabajo profesional.'],
+          assisted: ['Este es el clip más visual del video. Cámara lenta si es posible.']
+        }
+      },
+      {
+        label: '6. LOS DETALLES FINALES',
+        script: 'Y cuando parece que ya terminamos... Todavía queda una última parte. Repasar los bordes. Eliminar cualquier gota. Y revisar los pequeños detalles que muchas personas ni siquiera notan.',
+        visualField: 'Sebastian repasando bordes con un paño de microfibra — detalle fino.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Pausa larga después de "ya terminamos..." — esa pausa crea suspenso antes del giro.'],
+          assisted: ['Clip de los toques finales: borde, esquinas, últimas gotas. Transmite perfeccionismo.']
+        }
+      },
+      {
+        label: '7. EL CIERRE (FILOSOFÍA + CTA)',
+        script: 'Porque una ventana no queda perfecta por casualidad. El resultado final no se crea al final. Se crea en cada paso del proceso. Si estás en Utah y quieres que tus ventanas vuelvan a verse claras y transparentes, envíanos un mensaje y con gusto te ayudamos.',
+        visualField: 'Ventana terminada — contraluz limpio, sin marcas.',
+        visualStudio: 'Mira a cámara para el CTA.',
+        advice: {
+          solo: ['Las dos frases de filosofía son el corazón del video — dízlas despacio y con convicción.'],
+          assisted: ['Clip final de la ventana perfecta + Sebastian mirando a cámara para el CTA.']
+        }
+      }
+    ],
+    tips: [
+      'El gancho promete mostrar "lo que nadie ve" — cada paso del proceso debe sentirse como una revelación.',
+      'El clip del squeegee en cámara lenta (paso 5) es el más compartible del video.',
+      'La filosofía del cierre ("no se crea al final, se crea en cada paso") puede usarse como texto superpuesto.'
+    ],
+    checklist: [
+      'Paso 1: Gancho con ventana sucia grabado',
+      'Paso 2: La revisión inicial grabada',
+      'Paso 3: Aplicación del producto grabada',
+      'Paso 4: Scrubber en acción grabado',
+      'Paso 5: Squeegee en movimiento grabado',
+      'Paso 6: Repaso de bordes y detalles grabado',
+      'Paso 7: Ventana terminada + CTA grabado'
+    ],
+    productionHack: 'Graba este video en una sola sesión de trabajo real — el flujo continuo hace que el proceso se sienta auténtico. El clip del resultado final (paso 7) con el sol de lado para que el vidrio brille es la imagen de cierre perfecta.',
+    createdAt: '2026-06-24'
+  },
 ];
 
 export const guionesPresentacion: Script[] = [
