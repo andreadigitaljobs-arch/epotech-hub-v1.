@@ -18,7 +18,7 @@ export default function CalendarioPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-8">
+    <div className="min-h-screen bg-white pb-8">
       {/* HEADER */}
       <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
         <div className="flex items-center gap-4 px-4 py-4">
