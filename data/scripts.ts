@@ -501,6 +501,92 @@ export const guiones: Script[] = [
     productionHack: 'Si tienes material de antes/después (ventana manchada vs. limpia), úsalo en el paso 4. El contraste visual refuerza exactamente lo que dice el guion.',
     createdAt: '2026-06-24'
   },
+  {
+    id: 'window-cleaning-por-que-manchas',
+    title: 'Por Qué Quedan Manchas Aunque Limpies',
+    category: 'Guiones',
+    service: 'Limpieza de Ventanas',
+    pilar: 'Errores',
+    duration: '35s',
+    fullDialogue: `Te voy a mostrar por qué mucha gente limpia sus ventanas y aun así quedan manchadas. Porque el problema normalmente no es la suciedad. Es cómo la retiras. Muchas personas limpian sus ventanas con un trapo y creen que ya está... Pero el trapo muchas veces solo mueve la suciedad. No la elimina por completo. Por eso la ventana parece limpia al principio... Pero cuando le pega el sol, vuelven a aparecer las marcas. La diferencia está en el proceso.`,
+    steps: [
+      {
+        label: '1. EL GANCHO',
+        script: 'Te voy a mostrar por qué mucha gente limpia sus ventanas y aun así quedan manchadas.',
+        visualField: 'Ventana con marcas visibles al contraluz o con sol directo.',
+        visualStudio: 'Mira directo a cámara. Tono de "tengo información que te interesa".',
+        advice: {
+          solo: ['Pausa larga después de "manchadas" — ese silencio genera la pregunta en el espectador.'],
+          assisted: ['Grábalo con el sol pegando en la ventana para que las marcas se vean en cámara.']
+        }
+      },
+      {
+        label: '2. EL REENCUADRE',
+        script: 'Porque el problema normalmente no es la suciedad. Es cómo la retiras.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Énfasis total en "Es cómo la retiras." — esa frase reencuadra todo lo que creían saber.'],
+          assisted: ['Pausa breve entre las dos oraciones. Deja que el contraste aterrice.']
+        }
+      },
+      {
+        label: '3. EL ERROR COMÚN',
+        script: 'Muchas personas limpian sus ventanas con un trapo y creen que ya está...',
+        visualField: 'Clip de alguien pasando un trapo por la ventana.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono empático, no burlón. Describes algo que hace mucha gente — incluyendo posiblemente el espectador.'],
+          assisted: ['Si tienes clip de Sebastian usando solo un trapo como demostración del error, ideal.']
+        }
+      },
+      {
+        label: '4. LA EXPLICACIÓN',
+        script: 'Pero el trapo muchas veces solo mueve la suciedad. No la elimina por completo.',
+        visualField: 'Primer plano del vidrio después del trapo — marcas visibles.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono de quien tiene la respuesta que el espectador necesitaba. "No la elimina por completo" — dale peso.'],
+          assisted: ['Clip en cámara lenta del trapo pasando y dejando residuos si tienes material así.']
+        }
+      },
+      {
+        label: '5. LA CONSECUENCIA (EL MOMENTO DEL SOL)',
+        script: 'Por eso la ventana parece limpia al principio... Pero cuando le pega el sol, vuelven a aparecer las marcas.',
+        visualField: 'Contraluz del sol en la ventana — marcas visibles.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Pausa entre "al principio..." y "Pero cuando le pega el sol" — ese silencio construye el momento.'],
+          assisted: ['Este clip es el más importante del video. Con el sol pegando, las marcas deben verse claras en cámara.']
+        }
+      },
+      {
+        label: '6. LA PROMESA',
+        script: 'La diferencia está en el proceso.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Corto y contundente. No expliques el proceso todavía — la frase cierra el video generando curiosidad.'],
+          assisted: ['Clip de cierre: ventana perfectamente limpia al contraluz, sin ninguna marca.']
+        }
+      }
+    ],
+    tips: [
+      'El momento del sol en el paso 5 es el visual más poderoso — planifica grabarlo con luz natural.',
+      'Este guion funciona como intro a una serie donde el siguiente video explica el proceso correcto.',
+      'La frase de cierre "La diferencia está en el proceso" deja al espectador queriendo más.'
+    ],
+    checklist: [
+      'Paso 1: Gancho con ventana manchada grabado',
+      'Paso 2: El reencuadre grabado',
+      'Paso 3: El error del trapo grabado',
+      'Paso 4: La explicación grabada',
+      'Paso 5: Clip con sol directo en ventana grabado',
+      'Paso 6: La promesa grabada'
+    ],
+    productionHack: 'Graba el paso 5 en el momento del día en que el sol pega directo en las ventanas. Ese clip con las marcas visibles al contraluz es el que engancha — sin él el video pierde su mayor impacto.',
+    createdAt: '2026-06-24'
+  },
 ];
 
 export const guionesPresentacion: Script[] = [
