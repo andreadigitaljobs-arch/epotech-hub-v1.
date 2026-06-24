@@ -7,15 +7,16 @@ import {
   Plus, ChevronLeft, ChevronRight, X, Check, ExternalLink,
   Clock, Edit2, Trash2, Eye, Heart, Users, Link2,
   Camera, Video, Smartphone, BookOpen, AlertCircle, Copy,
-  CalendarDays, List
+  CalendarDays, List, ChevronDown
 } from "lucide-react";
+import { PILARES_INFO, type PilarContenido } from "@/data/scripts";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-type Pilar = "Educativo" | "Satisfactorio" | "Pareja" | "Before/After";
+type Pilar = PilarContenido;
 type Estado = "En edición" | "Listo para publicar" | "Publicado";
 type Formato = "Reel" | "Carrusel" | "Historia" | "Foto";
 type Red = "Instagram" | "TikTok" | "YouTube Shorts";
@@ -41,10 +42,11 @@ interface Publicacion {
 }
 
 const PILLAR_CONFIG: Record<Pilar, { color: string; bg: string; dot: string }> = {
-  "Educativo":     { color: "text-blue-400",   bg: "bg-blue-500/10 border-blue-500/20",   dot: "bg-blue-400" },
-  "Satisfactorio": { color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20", dot: "bg-emerald-400" },
-  "Pareja":        { color: "text-pink-400",    bg: "bg-pink-500/10 border-pink-500/20",   dot: "bg-pink-400" },
-  "Before/After":  { color: "text-amber-400",   bg: "bg-amber-500/10 border-amber-500/20", dot: "bg-amber-400" },
+  "Transformaciones": { color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20", dot: "bg-emerald-400" },
+  "Errores":          { color: "text-rose-400",    bg: "bg-rose-500/10 border-rose-500/20",       dot: "bg-rose-400" },
+  "Herramientas":     { color: "text-blue-400",    bg: "bg-blue-500/10 border-blue-500/20",       dot: "bg-blue-400" },
+  "Proceso":          { color: "text-violet-400",  bg: "bg-violet-500/10 border-violet-500/20",   dot: "bg-violet-400" },
+  "Experiencia":      { color: "text-amber-400",   bg: "bg-amber-500/10 border-amber-500/20",     dot: "bg-amber-400" },
 };
 
 const ESTADO_CONFIG: Record<Estado, { color: string; bg: string }> = {
@@ -102,7 +104,7 @@ function formatDateRange(monday: Date): string {
 
 const EMPTY_FORM: Omit<Publicacion, "id" | "created_at"> = {
   fecha_publicacion: new Date().toISOString().slice(0, 16),
-  pilar: "Educativo",
+  pilar: "Transformaciones",
   estado: "En edición",
   copy_caption: "",
   enlace_publicacion: "",
@@ -127,6 +129,8 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
     const today = new Date(); today.setHours(0, 0, 0, 0); return today;
   });
   const [dayKey, setDayKey] = useState(0);
+
+  const [pilaresOpen, setPilaresOpen] = useState(false);
 
   // Vista semana / mes
   const [calView, setCalView] = useState<"week" | "month">("week");
@@ -347,6 +351,41 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
 
   return (
     <div className="pb-20">
+
+      {/* PILARES DE CONTENIDO — acordeón */}
+      <div className="px-4 pt-4">
+        <button
+          onClick={() => setPilaresOpen(o => !o)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-[#0a192f] rounded-2xl text-left transition-all active:scale-[0.99]"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-black text-[#48c1d2] uppercase tracking-widest">5 Pilares de contenido</span>
+          </div>
+          <ChevronDown size={14} className={`text-[#48c1d2] transition-transform duration-300 ${pilaresOpen ? "rotate-180" : ""}`} />
+        </button>
+        {pilaresOpen && (
+          <div className="mt-2 space-y-2 cal-fade-in-up">
+            {(Object.entries(PILARES_INFO) as [PilarContenido, typeof PILARES_INFO[PilarContenido]][]).map(([key, info]) => {
+              const pc = PILLAR_CONFIG[key];
+              return (
+                <div key={key} className={`px-4 py-3 rounded-2xl border ${pc.bg}`}>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-base leading-none">{info.emoji}</span>
+                    <span className={`text-[11px] font-black uppercase tracking-wider ${pc.color}`}>{key}</span>
+                    <span className="text-[10px] text-slate-500 font-medium ml-1">— {info.descripcion}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 ml-6">
+                    {info.ejemplos.map(ej => (
+                      <span key={ej} className="text-[9px] font-semibold text-slate-500 bg-white/60 rounded-full px-2 py-0.5 border border-slate-200">{ej}</span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
       {/* RESUMEN */}
       <div className="px-4 pt-4 pb-2">
         <div className="grid grid-cols-4 gap-2">
@@ -708,15 +747,17 @@ export default function CalendarioTab({ showToast }: { showToast: (msg: string, 
               {/* PILAR */}
               <div>
                 <label className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px] mb-2 block">Pilar de contenido</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {(["Educativo", "Satisfactorio", "Pareja", "Before/After"] as Pilar[]).map(p => {
+                <div className="grid grid-cols-1 gap-2">
+                  {(["Transformaciones", "Errores", "Herramientas", "Proceso", "Experiencia"] as Pilar[]).map(p => {
                     const pc = PILLAR_CONFIG[p];
                     const active = form.pilar === p;
+                    const info = PILARES_INFO[p];
                     return (
                       <button key={p} onClick={() => setForm(f => ({ ...f, pilar: p }))}
-                        className={`py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-wider border transition-all active:scale-95 ${active ? `${pc.bg} ${pc.color} border-current` : "text-white/30"}`}
+                        className={`py-2.5 px-4 rounded-2xl text-[11px] font-black uppercase tracking-wider border transition-all active:scale-95 flex items-center gap-2 ${active ? `${pc.bg} ${pc.color} border-current` : "text-white/30"}`}
                         style={!active ? { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" } : {}}>
-                        {p}
+                        <span>{info.emoji}</span>
+                        <span>{p}</span>
                       </button>
                     );
                   })}

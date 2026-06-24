@@ -86,7 +86,15 @@ import {
 } from "lucide-react";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { ScriptText } from "@/components/ui/ScriptText";
-import { guiones, guionesPresentacion, Script } from "@/data/scripts";
+import { guiones, guionesPresentacion, Script, PILARES_INFO, type PilarContenido } from "@/data/scripts";
+
+const PILAR_COLORS: Record<PilarContenido, string> = {
+  Transformaciones: "#34d399",
+  Errores:          "#fb7185",
+  Herramientas:     "#60a5fa",
+  Proceso:          "#a78bfa",
+  Experiencia:      "#fbbf24",
+};
 import { mergeBlobsToWav } from "./audioUtils";
 import { Card } from "@/components/ui/Card";
 import { manual as staticManual } from "@/data/manual";
@@ -2832,10 +2840,15 @@ export default function ContenidoPage() {
                                     <Clapperboard size={18} />
                                   </div>
                                   <div className="text-left flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 mb-0.5">
+                                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                                       <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                      {script.createdAt === '2026-06-19' && (
+                                      {(script.createdAt === '2026-06-19' || script.createdAt === '2026-06-24') && (
                                         <span className="shrink-0 text-[8px] font-black text-white bg-[#48c1d2] px-2 py-0.5 rounded-full uppercase tracking-wider">Nuevo</span>
+                                      )}
+                                      {script.pilar && (
+                                        <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
+                                          {PILARES_INFO[script.pilar].emoji} {script.pilar}
+                                        </span>
                                       )}
                                     </div>
                                     <h4 className="text-sm font-black text-[#142d53] leading-snug">{script.title}</h4>
@@ -2910,7 +2923,14 @@ export default function ContenidoPage() {
                                     <Video size={18} />
                                   </div>
                                   <div className="text-left flex-1 min-w-0">
-                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px] block mb-0.5">{script.category}</span>
+                                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
+                                      {script.pilar && (
+                                        <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
+                                          {PILARES_INFO[script.pilar].emoji} {script.pilar}
+                                        </span>
+                                      )}
+                                    </div>
                                     <h4 className="text-sm font-black text-[#142d53] leading-snug">{script.title}</h4>
                                     <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
                                   </div>
@@ -2982,7 +3002,14 @@ export default function ContenidoPage() {
                                           <Clapperboard size={18} />
                                         </div>
                                         <div className="text-left flex-1 min-w-0">
-                                          <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px] block mb-0.5">{script.category}</span>
+                                          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                                            <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
+                                            {script.pilar && (
+                                              <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
+                                                {PILARES_INFO[script.pilar].emoji} {script.pilar}
+                                              </span>
+                                            )}
+                                          </div>
                                           <h4 className="text-sm font-black text-[#142d53] leading-snug">{script.title}</h4>
                                           <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Grabación Pro</p>
                                         </div>

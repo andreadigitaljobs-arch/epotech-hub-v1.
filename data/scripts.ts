@@ -33,11 +33,42 @@ export interface ScriptStep {
   advice: RecordingAdvice;
 }
 
+export type PilarContenido = 'Transformaciones' | 'Errores' | 'Herramientas' | 'Proceso' | 'Experiencia';
+
+export const PILARES_INFO: Record<PilarContenido, { emoji: string; descripcion: string; ejemplos: string[] }> = {
+  'Transformaciones': {
+    emoji: '✨',
+    descripcion: 'Before & after de trabajos reales',
+    ejemplos: ['Ventanas', 'Driveways', 'Epoxi', 'Canchas'],
+  },
+  'Errores': {
+    emoji: '⚠️',
+    descripcion: 'Corrección de mitos y errores comunes',
+    ejemplos: ['El error más común al limpiar ventanas', 'Por qué más presión no es mejor', 'Lo que nunca haría en mi casa'],
+  },
+  'Herramientas': {
+    emoji: '🔧',
+    descripcion: 'Explicación del equipo profesional',
+    ejemplos: ['Por qué uso esta Surface Cleaner', 'La diferencia entre estas dos boquillas', 'La herramienta que más tiempo me ahorra'],
+  },
+  'Proceso': {
+    emoji: '📋',
+    descripcion: 'Cómo se hace el trabajo paso a paso',
+    ejemplos: ['Lo que nadie ve antes del epoxi', 'Por qué el lijado es tan importante', 'El paso que arruina la mayoría de los pisos'],
+  },
+  'Experiencia': {
+    emoji: '🎙️',
+    descripcion: 'Historias y lecciones personales',
+    ejemplos: ['Lo que aprendí limpiando casas en Utah', 'El trabajo más difícil que me ha tocado', 'El error más grande cuando empecé'],
+  },
+};
+
 export interface Script {
   id: string;
   title: string;
   category: string;
   service: 'Lavado a Presión' | 'Limpieza de Ventanas' | 'Pisos de Epoxi' | 'Marca Personal';
+  pilar?: PilarContenido;
   duration: string;
   fullDialogue: string;
   steps: ScriptStep[];
@@ -56,6 +87,7 @@ export const guiones: Script[] = [
     title: '[EJEMPLO DE PRÁCTICA] Presentación Oficial Epotech',
     category: 'Plantilla de Entrenamiento',
     service: 'Marca Personal',
+    pilar: 'Experiencia',
     duration: '20s',
     fullDialogue: '¿Listo para que tu propiedad destaque en Utah? Soy Sebastián, de Epotech Solutions. Nos especializamos en limpieza exterior de alto nivel y acabados de epoxi profesional para garajes y áreas deportivas. Dejamos tus espacios impecables de piso a techo. ¡Contáctanos y agenda tu cita!',
     steps: [
@@ -108,6 +140,7 @@ export const guiones: Script[] = [
     title: 'Reto de Limpieza de Ventanas en Salt Lake City',
     category: 'Guiones',
     service: 'Limpieza de Ventanas',
+    pilar: 'Experiencia',
     duration: '60s',
     fullDialogue: "Nos llamaron a limpiar las ventanas de una casa de dos pisos en Salt Lake City. Pero nadie nos avisó que algunas estaban tan altas. No voy a mentir… esa parte fue un poco intimidante. Algunas ventanas eran muy altas, y llegar hasta ahí requiere enfoque, paciencia y las herramientas correctas. Así que bajamos todo de la camioneta: los limpiavidrios telescópicos, los aplicadores de microfibra, el jabón especializado para vidrios, los tobos y todos los implementos que necesitábamos para trabajar en altura. Empezamos desde el segundo piso. Por suerte, teníamos acceso a algunas de las ventanas superiores desde el techo, así que organizamos todo con cuidado y nos pusimos a trabajar. Con las herramientas adecuadas, pudimos alcanzar cada ventana y limpiarlas una por una. Y como siempre, Jen estaba ahí ayudándome con las herramientas, asistiendo durante el trabajo y grabando el proceso. Después de unas dos horas y media, todas las ventanas estaban limpias. Pero antes de irnos, siempre hacemos una revisión final por dentro y por fuera de la propiedad. Revisamos manchas, rayas, marcas y cualquier cosa que no se vea perfecta. Porque para nosotros, las ventanas limpias no se tratan solo de hacer que una casa se vea mejor. Se trata de hacer el trabajo bien. ¿Tú limpiarías ventanas tan altas?",
     steps: [
@@ -215,6 +248,7 @@ export const guiones: Script[] = [
     title: 'La Pregunta Que Más Me Hacen',
     category: 'Guiones',
     service: 'Lavado a Presión',
+    pilar: 'Errores',
     duration: '45s',
     fullDialogue: 'Una de las preguntas que más me hacen los clientes es: "¿De verdad el lavado a presión hace tanta diferencia?" Y mi respuesta siempre es la misma. Mira esto. La mayoría de las veces la gente se acostumbra a ver la suciedad todos los días. La ven tan seguido que dejan de notarla. Pero cuando limpias correctamente una superficie, la diferencia es enorme. El color cambia. La apariencia cambia. Y toda la propiedad se ve más cuidada. Por eso muchas veces no necesitas reemplazar nada. Solo devolverle la limpieza que perdió con los años. Si quieres ver cómo se vería tu propiedad después de una limpieza profesional, envíanos un mensaje.',
     steps: [
@@ -300,6 +334,7 @@ export const guiones: Script[] = [
     title: 'Lo Que Nunca Haría Si Esta Fuera Mi Casa',
     category: 'Guiones',
     service: 'Lavado a Presión',
+    pilar: 'Errores',
     duration: '40s',
     fullDialogue: 'Si esta fuera mi casa, hay algo que nunca haría. Nunca usaría demasiada presión para limpiar ciertas superficies. Porque muchas personas creen que más presión significa mejor limpieza. Y no siempre es así. De hecho, usar demasiada presión puede dejar marcas permanentes, dañar el concreto o afectar algunas superficies. Lo importante no es usar más fuerza. Lo importante es usar la técnica correcta. Por eso cada trabajo requiere un enfoque diferente. Si no estás seguro de cómo limpiar una superficie exterior, escríbenos y con gusto te orientamos.',
     steps: [
@@ -399,6 +434,7 @@ export const guionesPresentacion: Script[] = [
     title: '1. ¿Quién soy y por qué Epotech? (Confianza)',
     category: 'VIDEO FIJADO: Confianza',
     service: 'Marca Personal',
+    pilar: 'Experiencia',
     duration: '60s',
     isPinned: true,
     isProductionMode: true,
@@ -505,6 +541,7 @@ export const guionesPresentacion: Script[] = [
     title: '2. ¿Qué hacemos? (Autoridad y Valor)',
     category: 'VIDEO FIJADO: Autoridad',
     service: 'Marca Personal',
+    pilar: 'Proceso',
     duration: '75s',
     isPinned: true,
     isProductionMode: true,
@@ -645,6 +682,7 @@ export const guionesPresentacion: Script[] = [
     title: '3. Resultados Garantizados (Reseñas)',
     category: 'VIDEO FIJADO: Resultados',
     service: 'Marca Personal',
+    pilar: 'Experiencia',
     duration: '90s',
     isPinned: true,
     isProductionMode: true,
