@@ -211,227 +211,90 @@ export const guiones: Script[] = [
     createdAt: '2026-06-19'
   },
   {
-    id: 'window-cleaning-problem-solution',
-    title: 'Problema/Solución de Ventanas Sucias',
-    category: 'Guiones',
-    service: 'Limpieza de Ventanas',
-    duration: '45s',
-    fullDialogue: "Las ventanas limpias pueden cambiar completamente la apariencia y sensación de tu hogar. A veces las ventanas no se ven tan sucias desde lejos, pero cuando les da el sol, puedes ver polvo, manchas de agua, huellas y residuos acumulados. Por eso la limpieza profesional de ventanas hace una diferencia tan grande. En Epotech Solutions, ayudamos a los dueños de casas en Utah a mantener sus ventanas limpias, transparentes y en mejor estado. Si tus ventanas necesitan una renovación, mándanos un mensaje hoy para un presupuesto gratis.",
-    steps: [
-      {
-        label: '1. EL GANCHO',
-        script: 'Las ventanas limpias pueden cambiar completamente la apariencia y sensación de tu hogar.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Tono calmado y seguro. Deja que la frase aterrice antes de continuar.'],
-          assisted: ['Sonido limpio, sin ruido de fondo.']
-        }
-      },
-      {
-        label: '2. EL PROBLEMA',
-        script: "A veces las ventanas no se ven tan sucias desde lejos, pero cuando les da el sol, puedes ver polvo, manchas de agua, huellas y residuos acumulados.",
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Habla con tono de revelación. Pausa después de "desde lejos".'],
-          assisted: ['Pronuncia con claridad "manchas de agua" y "huellas".']
-        }
-      },
-      {
-        label: '3. LA SOLUCIÓN',
-        script: "Por eso la limpieza profesional de ventanas hace una diferencia tan grande.",
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Tono de convicción. Es la frase clave del guion.'],
-          assisted: ['Voz firme y directa.']
-        }
-      },
-      {
-        label: '4. LA MARCA',
-        script: 'En Epotech Solutions, ayudamos a los dueños de casas en Utah a mantener sus ventanas limpias, transparentes y en mejor estado.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Pronuncia "Epotech Solutions" con orgullo. Ritmo pausado.'],
-          assisted: ['Tono profesional y confiable.']
-        }
-      },
-      {
-        label: '5. LLAMADA A LA ACCIÓN',
-        script: 'Si tus ventanas necesitan una renovación, mándanos un mensaje hoy para un presupuesto gratis.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Tono amigable e invitador. Sonríe levemente al terminar.'],
-          assisted: ['Clara y directa al espectador.']
-        }
-      }
-    ],
-    tips: [
-      'Mantén un ritmo constante y narrativo en todo el guion.',
-      'La frase clave es "hace una diferencia tan grande" — dale peso.',
-      'La llamada a la acción final debe sonar natural, no forzada.'
-    ],
-    checklist: [
-      'Paso 1: Gancho grabado',
-      'Paso 2: Problema de las ventanas sucias grabado',
-      'Paso 3: Solución profesional grabada',
-      'Paso 4: Marca Epotech grabada',
-      'Paso 5: Llamada a la acción final grabada'
-    ],
-    productionHack: 'Muestra tomas de ventanas sucias vs limpias para acompañar la voz en off.',
-    createdAt: '2026-06-19'
-  },
-  {
-    id: 'window-cleaning-trust-walkthrough',
-    title: 'Revisión Final: Confianza y Calidad',
-    category: 'Guiones',
-    service: 'Limpieza de Ventanas',
-    duration: '45s',
-    fullDialogue: "Una cosa que siempre hacemos antes de terminar un trabajo es una revisión final. Revisamos el trabajo desde diferentes ángulos, buscamos manchas, marcas, detalles que se nos puedan escapar y cualquier cosa que necesite un último retoque. Para nosotros, la limpieza exterior no se trata solo de terminar rápido. Se trata de asegurarnos de que el resultado se vea limpio, profesional y listo para el dueño de la casa. Esa atención al detalle es parte de cómo trabajamos en Epotech Solutions. ¿Necesitas limpieza exterior en Utah? Mándanos un mensaje hoy para un presupuesto gratis.",
-    steps: [
-      {
-        label: '1. EL HÁBITO',
-        script: 'Una cosa que siempre hacemos antes de terminar un trabajo es una revisión final.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Tono serio y comprometido. Pausa en "revisión final".'],
-          assisted: ['Voz clara y profesional.']
-        }
-      },
-      {
-        label: '2. EL PROCESO',
-        script: 'Revisamos el trabajo desde diferentes ángulos, buscamos manchas, marcas, detalles que se nos puedan escapar y cualquier cosa que necesite un último retoque.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Habla con meticulosidad. Lista cada elemento con claridad.'],
-          assisted: ['Ritmo pausado entre cada item de la lista.']
-        }
-      },
-      {
-        label: '3. NUESTRO ESTÁNDAR',
-        script: "Para nosotros, la limpieza exterior no se trata solo de terminar rápido. Se trata de asegurarnos de que el resultado se vea limpio, profesional y listo para el dueño de la casa.",
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Esta es la frase insignia. Dila con total convicción. Pausa entre las dos frases.'],
-          assisted: ['Voz firme. Énfasis en "limpio, profesional y listo".']
-        }
-      },
-      {
-        label: '4. LA IDENTIDAD',
-        script: 'Esa atención al detalle es parte de cómo trabajamos en Epotech Solutions.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Tono de orgullo. Es la declaración de identidad de marca.'],
-          assisted: ['Pronuncia "Epotech Solutions" con confianza.']
-        }
-      },
-      {
-        label: '5. LLAMADA A LA ACCIÓN',
-        script: '¿Necesitas limpieza exterior en Utah? Mándanos un mensaje hoy para un presupuesto gratis.',
-        visualField: 'N/A (Voz en off)',
-        visualStudio: 'N/A (Voz en off)',
-        advice: {
-          solo: ['Pregunta directa al espectador. Cierra con tono amigable.'],
-          assisted: ['Natural y cercano al final.']
-        }
-      }
-    ],
-    tips: [
-      'El guion tiene un arco claro: hábito → proceso → estándar → identidad → acción.',
-      'La frase del paso 3 es la más importante del guion.',
-      'Habla como si le explicaras a un cliente por qué haces las cosas bien.'
-    ],
-    checklist: [
-      'Paso 1: Hábito del walkthrough grabado',
-      'Paso 2: Proceso de revisión grabado',
-      'Paso 3: Estándar de calidad grabado',
-      'Paso 4: Identidad de marca grabada',
-      'Paso 5: Llamada a la acción final grabada'
-    ],
-    productionHack: 'Graba clips de la revisión real en el trabajo para acompañar cada parte del guion.',
-    createdAt: '2026-06-19'
-  },
-  {
-    id: 'pressure-washing-service',
-    title: 'Servicio de Lavado a Presión en Utah',
+    id: 'pressure-washing-pregunta-frecuente',
+    title: 'La Pregunta Que Más Me Hacen',
     category: 'Guiones',
     service: 'Lavado a Presión',
     duration: '45s',
-    fullDialogue: 'El camino de entrada a tu casa es una de las primeras cosas que la gente ve al llegar. Con el tiempo, la suciedad, las manchas, el polvo y los residuos acumulados pueden hacer que se vea más viejo de lo que realmente está. El lavado a presión ayuda a devolverle un aspecto más limpio y fresco a tus superficies exteriores. En Epotech Solutions, ofrecemos servicios profesionales de lavado a presión para dueños de casas en Utah. Si el camino de entrada, el garaje o las superficies exteriores de tu casa necesitan limpieza, mándanos un mensaje hoy para un presupuesto gratis.',
+    fullDialogue: 'Una de las preguntas que más me hacen los clientes es: "¿De verdad el lavado a presión hace tanta diferencia?" Y mi respuesta siempre es la misma. Mira esto. La mayoría de las veces la gente se acostumbra a ver la suciedad todos los días. La ven tan seguido que dejan de notarla. Pero cuando limpias correctamente una superficie, la diferencia es enorme. El color cambia. La apariencia cambia. Y toda la propiedad se ve más cuidada. Por eso muchas veces no necesitas reemplazar nada. Solo devolverle la limpieza que perdió con los años. Si quieres ver cómo se vería tu propiedad después de una limpieza profesional, envíanos un mensaje.',
     steps: [
       {
         label: '1. EL GANCHO',
-        script: 'El camino de entrada a tu casa es una de las primeras cosas que la gente ve al llegar.',
+        script: 'Una de las preguntas que más me hacen los clientes es: "¿De verdad el lavado a presión hace tanta diferencia?"',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono directo e impactante. Habla como si lo estuvieras señalando.'],
-          assisted: ['Pronunciación clara y segura.']
+          solo: ['Tono conversacional, como si le hablaras directamente a un cliente. Haz una pausa breve antes de la pregunta.'],
+          assisted: ['Sonido limpio. La pregunta debe sonar natural, no leída.']
         }
       },
       {
-        label: '2. EL PROBLEMA',
-        script: 'Con el tiempo, la suciedad, las manchas, el polvo y los residuos acumulados pueden hacer que se vea más viejo de lo que realmente está.',
+        label: '2. LA RESPUESTA',
+        script: 'Y mi respuesta siempre es la misma. Mira esto.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Lista cada elemento con claridad. Pausa leve en "más viejo de lo que realmente está".'],
-          assisted: ['Ritmo constante, tono de advertencia.']
+          solo: ['Pausa corta después de "la misma". "Mira esto" debe sonar directo, con confianza.'],
+          assisted: ['Tono seguro. Esta frase engancha — dale peso.']
         }
       },
       {
-        label: '3. LA SOLUCIÓN',
-        script: 'El lavado a presión ayuda a devolverle un aspecto más limpio y fresco a tus superficies exteriores.',
+        label: '3. EL PROBLEMA',
+        script: 'La mayoría de las veces la gente se acostumbra a ver la suciedad todos los días. La ven tan seguido que dejan de notarla.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Tono de solución y alivio. Pronuncia "lavado a presión" con confianza.'],
-          assisted: ['Énfasis en "más limpio y fresco".']
+          solo: ['Tono empático, sin juzgar. Habla despacio para que aterrice la idea.'],
+          assisted: ['Ritmo pausado. Es el momento de reflexión del espectador.']
         }
       },
       {
-        label: '4. LA MARCA',
-        script: 'En Epotech Solutions, ofrecemos servicios profesionales de lavado a presión para dueños de casas en Utah.',
+        label: '4. LA TRANSFORMACIÓN',
+        script: 'Pero cuando limpias correctamente una superficie, la diferencia es enorme. El color cambia. La apariencia cambia. Y toda la propiedad se ve más cuidada.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Pronuncia "Epotech Solutions" con orgullo. Tono profesional.'],
-          assisted: ['Voz segura y directa.']
+          solo: ['Cada frase corta es un golpe — dale énfasis a cada una. Especialmente "el color cambia" y "la apariencia cambia".'],
+          assisted: ['Tono de impacto. Aquí va el antes/después en pantalla.']
         }
       },
       {
-        label: '5. LLAMADA A LA ACCIÓN',
-        script: 'Si el camino de entrada, el garaje o las superficies exteriores de tu casa necesitan limpieza, mándanos un mensaje hoy para un presupuesto gratis.',
+        label: '5. LA SOLUCIÓN',
+        script: 'Por eso muchas veces no necesitas reemplazar nada. Solo devolverle la limpieza que perdió con los años.',
         visualField: 'N/A (Voz en off)',
         visualStudio: 'N/A (Voz en off)',
         advice: {
-          solo: ['Cierra con tono amigable y accesible. Sonríe levemente.'],
-          assisted: ['Natural y cercano.']
+          solo: ['Tono de alivio y solución. "Solo devolverle la limpieza" debe sonar simple y tranquilizador.'],
+          assisted: ['Voz firme y directa. Esta es la frase insignia del guion.']
+        }
+      },
+      {
+        label: '6. LLAMADA A LA ACCIÓN',
+        script: 'Si quieres ver cómo se vería tu propiedad después de una limpieza profesional, envíanos un mensaje.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: {
+          solo: ['Tono amigable e invitador. Cierra con energía positiva.'],
+          assisted: ['Natural y cercano. No suenes a anuncio — suena a conversación.']
         }
       }
     ],
     tips: [
-      'Menciona "camino de entrada" y "garaje" para conectar con problemas reales del cliente.',
-      'La palabra "lavado a presión" debe sonar segura y profesional.',
-      'El ritmo debe ser constante — no demasiado rápido ni demasiado lento.'
+      'El gancho funciona porque replica una pregunta real — el espectador se identifica.',
+      'Las frases cortas del paso 4 son el momento más fuerte — no las corras.',
+      'Acompaña con clips de antes/después reales para máximo impacto.'
     ],
     checklist: [
-      'Paso 1: Gancho del camino de entrada grabado',
-      'Paso 2: Problema del tiempo y suciedad grabado',
-      'Paso 3: Solución de lavado a presión grabada',
-      'Paso 4: Marca Epotech grabada',
-      'Paso 5: Llamada a la acción final grabada'
+      'Paso 1: Gancho con la pregunta grabado',
+      'Paso 2: Respuesta directa grabada',
+      'Paso 3: El problema de acostumbrarse grabado',
+      'Paso 4: La transformación grabada',
+      'Paso 5: La solución grabada',
+      'Paso 6: Llamada a la acción grabada'
     ],
-    productionHack: 'Muestra un antes/después del camino de entrada limpio vs sucio para acompañar la voz en off.',
-    createdAt: '2026-06-19'
-  }
+    productionHack: 'El paso 4 es perfecto para pantalla dividida antes/después. Graba el clip del antes en "el color cambia" y el del después en "toda la propiedad se ve más cuidada".',
+    createdAt: '2026-06-24'
+  },
 ];
 
 export const guionesPresentacion: Script[] = [
