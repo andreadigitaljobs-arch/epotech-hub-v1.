@@ -2826,24 +2826,24 @@ export default function ContenidoPage() {
                                     setShowFullScript(true);
                                     if (showHelp) setTeleHelpStep(1);
                                   }}
-                                  className={`bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:border-[#48c1d2]/50 transition-all cursor-pointer active:scale-95 relative overflow-hidden`}
+                                  className={`bg-white px-4 py-4 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-3 group hover:border-[#48c1d2]/50 transition-all cursor-pointer active:scale-95 relative overflow-hidden`}
                                 >
-                                  <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 group-hover:text-[#48c1d2] transition-colors">
-                                    <Clapperboard size={20} />
+                                  <div className="w-10 h-10 shrink-0 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 group-hover:text-[#48c1d2] transition-colors">
+                                    <Clapperboard size={18} />
                                   </div>
-                                  <div className="text-left flex-1">
-                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                    <div className="flex items-center gap-2">
-                                      <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                  <div className="text-left flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 mb-0.5">
+                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
                                       {script.createdAt === '2026-06-19' && (
                                         <span className="shrink-0 text-[8px] font-black text-white bg-[#48c1d2] px-2 py-0.5 rounded-full uppercase tracking-wider">Nuevo</span>
                                       )}
                                     </div>
+                                    <h4 className="text-sm font-black text-[#142d53] leading-snug">{script.title}</h4>
                                     {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
-                                      <p className="text-[9px] font-bold text-slate-400 mt-1  ">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
+                                      <p className="text-[9px] font-bold text-slate-400 mt-1">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
                                     )}
                                   </div>
-                                  <ChevronRight size={16} className="text-slate-200 group-hover:text-[#48c1d2] transition-all" />
+                                  <ChevronRight size={16} className="shrink-0 text-slate-200 group-hover:text-[#48c1d2] transition-all" />
                                 </div>
                               ))}
                               
@@ -2904,17 +2904,17 @@ export default function ContenidoPage() {
                                     setCurrentStepIdx(0);
                                     setShowFullScript(true);
                                   }}
-                                  className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
+                                  className="bg-white px-4 py-4 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-3 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
                                 >
-                                  <div className="w-14 h-14 bg-[#48c1d2]/5 rounded-[1.5rem] flex items-center justify-center text-[#48c1d2] group-hover:bg-[#48c1d2]/20 transition-all">
-                                    <Video size={24} />
+                                  <div className="w-10 h-10 shrink-0 bg-[#48c1d2]/5 rounded-2xl flex items-center justify-center text-[#48c1d2] group-hover:bg-[#48c1d2]/20 transition-all">
+                                    <Video size={18} />
                                   </div>
-                                  <div className="text-left flex-1">
-                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                    <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                  <div className="text-left flex-1 min-w-0">
+                                    <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px] block mb-0.5">{script.category}</span>
+                                    <h4 className="text-sm font-black text-[#142d53] leading-snug">{script.title}</h4>
                                     <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Estratégico</p>
                                   </div>
-                                  <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
+                                  <ChevronRight size={16} className="shrink-0 text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
                                 </div>
                               ))}
                           </div>
@@ -2976,17 +2976,17 @@ export default function ContenidoPage() {
                                           setCurrentStepIdx(0);
                                           setShowFullScript(true);
                                         }}
-                                        className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
+                                        className="bg-white px-4 py-4 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-3 group hover:border-[#48c1d2] transition-all cursor-pointer relative overflow-hidden"
                                       >
-                                        <div className="w-14 h-14 bg-slate-50 rounded-[1.5rem] flex items-center justify-center text-[#142d53] group-hover:bg-slate-100 transition-all">
-                                          <Clapperboard size={24} />
+                                        <div className="w-10 h-10 shrink-0 bg-slate-50 rounded-2xl flex items-center justify-center text-[#142d53] group-hover:bg-slate-100 transition-all">
+                                          <Clapperboard size={18} />
                                         </div>
-                                        <div className="text-left flex-1">
-                                          <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                          <h4 className="text-sm font-black text-[#142d53] leading-tight">{script.title}</h4>
+                                        <div className="text-left flex-1 min-w-0">
+                                          <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px] block mb-0.5">{script.category}</span>
+                                          <h4 className="text-sm font-black text-[#142d53] leading-snug">{script.title}</h4>
                                           <p className="text-[10px] font-medium text-slate-400 mt-1">{script.duration} • Grabación Pro</p>
                                         </div>
-                                        <ChevronRight size={18} className="text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
+                                        <ChevronRight size={16} className="shrink-0 text-slate-200 group-hover:text-[#48c1d2] group-hover:translate-x-1 transition-all" />
                                       </div>
                                     ))}
 
