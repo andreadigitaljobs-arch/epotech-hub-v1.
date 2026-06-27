@@ -186,40 +186,40 @@ a:active, button:active, [role="button"]:active {
    MODAL ANIMATIONS (EPOTECH PREMIUM ENGINE)
 ────────────────────────────────────────── */
 @keyframes modal-backdrop-in {
-  from { opacity: 0; backdrop-filter: blur(0px); }
-  to   { opacity: 1; backdrop-filter: blur(12px); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes modal-panel-in {
-  from { opacity: 0; transform: scale(0.95) translateY(24px); }
-  to   { opacity: 1; transform: scale(1)   translateY(0); }
+  from { opacity: 0; transform: scale(0.95) translateY(28px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.modal-backdrop { 
-  animation: modal-backdrop-in 0.35s ease-out both; 
+.modal-backdrop {
+  animation: modal-backdrop-in 0.25s ease-out both;
 }
 
-.modal-panel { 
-  animation: modal-panel-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; 
+.modal-panel {
+  animation: modal-panel-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Salida Cinemática */
+/* Salida */
 @keyframes modal-backdrop-out {
-  from { opacity: 1; backdrop-filter: blur(12px); }
-  to   { opacity: 0; backdrop-filter: blur(0px); }
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 @keyframes modal-panel-out {
   from { opacity: 1; transform: scale(1) translateY(0); }
-  to   { opacity: 0; transform: scale(0.97) translateY(16px); }
+  to   { opacity: 0; transform: scale(0.96) translateY(20px); }
 }
 
 .modal-backdrop-out {
-  animation: modal-backdrop-out 0.3s ease-in forwards;
+  animation: modal-backdrop-out 0.35s ease-in-out forwards;
 }
 
 .modal-panel-out {
-  animation: modal-panel-out 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+  animation: modal-panel-out 0.3s ease-in forwards;
 }
 
 /* ──────────────────────────────────────────

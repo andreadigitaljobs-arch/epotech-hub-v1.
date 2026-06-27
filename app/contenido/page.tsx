@@ -1628,7 +1628,7 @@ export default function ContenidoPage() {
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4 bg-black/90"
+    <div className={`fixed inset-0 z-[9999] flex items-center justify-center px-4 ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'} bg-black/90`}
       style={{
         paddingTop: 'max(1.5rem, env(safe-area-inset-top))',
         paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))',
