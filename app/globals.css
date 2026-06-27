@@ -294,19 +294,6 @@ a:active, button:active, [role="button"]:active {
   animation: bounce-x 1.2s infinite ease-in-out;
 }
 
-/* Hide menus and expand main content area when a modal is open */
-body.modal-open aside,
-body.modal-open nav,
-body.modal-open [class*="BottomNav"],
-body.modal-open [class*="DesktopNav"] {
-  display: none !important;
-}
-
-body.modal-open main {
-  margin-left: 0 !important;
-  padding-bottom: 0 !important;
-  padding-top: 0 !important;
-}
 
 
 
