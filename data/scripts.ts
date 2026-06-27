@@ -83,6 +83,56 @@ export interface Script {
 
 export const guiones: Script[] = [
   {
+    id: 'prueba-squeegee',
+    title: '[PRUEBA] Para Qué Sirve el Squeegee',
+    category: 'Plantilla de Entrenamiento',
+    service: 'Limpieza de Ventanas',
+    pilar: 'Herramientas',
+    duration: '30s',
+    fullDialogue: `Esta herramienta se llama squeegee. Y aunque parece simple, es una de las partes más importantes para limpiar ventanas. No es solo para quitar agua. Sirve para retirar el producto de limpieza de forma pareja, sin dejar rayas ni marcas. Por eso una ventana puede quedar manchada aunque uses buen jabón. El secreto no está solo en el producto. Está en cómo lo retiras.`,
+    steps: [
+      {
+        label: '1. EL GANCHO',
+        script: 'Esta herramienta se llama squeegee.',
+        visualField: 'Primer plano del squeegee en mano.',
+        visualStudio: 'Sostén el squeegee frente a cámara.',
+        advice: { solo: ['Tono directo. Pausa breve después.'], assisted: ['Que se vea bien la herramienta.'] }
+      },
+      {
+        label: '2. LA IMPORTANCIA',
+        script: 'Y aunque parece simple, es una de las partes más importantes para limpiar ventanas.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: { solo: ['Énfasis en "más importantes".'], assisted: ['Clip del squeegee en movimiento.'] }
+      },
+      {
+        label: '3. LA FUNCIÓN REAL',
+        script: 'No es solo para quitar agua. Sirve para retirar el producto de limpieza de forma pareja, sin dejar rayas ni marcas.',
+        visualField: 'Primer plano del squeegee pasando por vidrio.',
+        visualStudio: 'N/A (Voz en off)',
+        advice: { solo: ['Pausa después de "No es solo para quitar agua."'], assisted: ['Cámara lenta si tienes.'] }
+      },
+      {
+        label: '4. EL PROBLEMA',
+        script: 'Por eso una ventana puede quedar manchada aunque uses buen jabón.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: { solo: ['Tono empático.'], assisted: ['Clip de ventana con marcas si tienes.'] }
+      },
+      {
+        label: '5. EL SECRETO',
+        script: 'El secreto no está solo en el producto. Está en cómo lo retiras.',
+        visualField: 'N/A (Voz en off)',
+        visualStudio: 'N/A (Voz en off)',
+        advice: { solo: ['Dízlas despacio. Son dos frases en contraste.'], assisted: ['Cierre con ventana limpia.'] }
+      }
+    ],
+    tips: ['Este es un guion de prueba para verificar el flujo de grabación.'],
+    checklist: ['Paso 1 grabado', 'Paso 2 grabado', 'Paso 3 grabado', 'Paso 4 grabado', 'Paso 5 grabado'],
+    productionHack: 'Guion de prueba — úsalo para testear el flujo completo de grabación y envío.',
+    createdAt: '2026-06-27'
+  },
+  {
     id: 'ejemplo-practica-oficial',
     title: '[EJEMPLO DE PRÁCTICA] Presentación Oficial Epotech',
     category: 'Plantilla de Entrenamiento',
