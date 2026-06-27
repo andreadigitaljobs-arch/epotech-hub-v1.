@@ -1439,6 +1439,14 @@ export default function ContenidoPage() {
       setMergedVoiceoverUrl(null);
       deleteVoiceoverDraft(selectedScript.id);
 
+      // MARCAR COMO GRABADO AUTOMÁTICAMENTE
+      setGrabados(prev => {
+        const next = new Set(prev);
+        next.add(selectedScript.id);
+        localStorage.setItem('epotech_grabados', JSON.stringify([...next]));
+        return next;
+      });
+
       // PUSH AL DUEÑO
       fetch('/api/push', {
         method: 'POST',
@@ -1889,7 +1897,16 @@ export default function ContenidoPage() {
                         <><Share2 size={16} /> Enviar al Equipo</>
                       )}
                     </button>
-                    <a href={mergedVoiceoverUrl} download={`Locucion_${selectedScript.id}.wav`} className="w-full py-4 bg-white/5 text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10">
+                    <a href={mergedVoiceoverUrl} download={`Locucion_${selectedScript.id}.wav`}
+                      onClick={() => {
+                        setGrabados(prev => {
+                          const next = new Set(prev);
+                          next.add(selectedScript.id);
+                          localStorage.setItem('epotech_grabados', JSON.stringify([...next]));
+                          return next;
+                        });
+                      }}
+                      className="w-full py-4 bg-white/5 text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10">
                       <Download size={16} /> Descargar Audio Final
                     </a>
                     {!isOnboardingTour && (
