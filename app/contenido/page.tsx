@@ -591,8 +591,7 @@ export default function ContenidoPage() {
     } catch { return new Set(); }
   });
 
-  const toggleGrabado = (e: React.MouseEvent, scriptId: string) => {
-    e.stopPropagation();
+  const toggleGrabado = (_e: any, scriptId: string) => {
     setGrabados(prev => {
       const next = new Set(prev);
       next.has(scriptId) ? next.delete(scriptId) : next.add(scriptId);
@@ -2844,42 +2843,46 @@ export default function ContenidoPage() {
                               {groups[activeWeek]?.map((script) => (
                                 <div
                                   key={script.id}
-                                  onClick={() => {
-                                    setSelectedScript(script);
-                                    setCurrentStepIdx(0);
-                                    setShowFullScript(true);
-                                    if (showHelp) setTeleHelpStep(1);
-                                  }}
-                                  className={`px-4 py-4 rounded-[2rem] border shadow-sm flex items-center gap-3 group transition-all cursor-pointer active:scale-95 relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100 hover:border-[#48c1d2]/50'}`}
+                                  className={`px-4 py-4 rounded-[2rem] border shadow-sm flex items-center gap-3 group transition-all relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100'}`}
                                 >
-                                  <div className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center transition-colors ${grabados.has(script.id) ? 'bg-emerald-100 text-emerald-500' : 'bg-slate-50 text-slate-300 group-hover:text-[#48c1d2]'}`}>
-                                    {grabados.has(script.id) ? <CheckCircle size={18} /> : <Clapperboard size={18} />}
-                                  </div>
-                                  <div className="text-left flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                      {grabados.has(script.id) && (
-                                        <span className="shrink-0 text-[8px] font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full uppercase tracking-wider">✓ Grabado</span>
-                                      )}
-                                      {(script.createdAt === '2026-06-19' || script.createdAt === '2026-06-24') && !grabados.has(script.id) && (
-                                        <span className="shrink-0 text-[8px] font-black text-white bg-[#48c1d2] px-2 py-0.5 rounded-full uppercase tracking-wider">Nuevo</span>
-                                      )}
-                                      {script.pilar && (
-                                        <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
-                                          {PILARES_INFO[script.pilar].emoji} Pilar: {script.pilar}
-                                        </span>
+                                  {/* Área clickeable para abrir el guion */}
+                                  <div
+                                    className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer active:scale-95 transition-all"
+                                    onClick={() => {
+                                      setSelectedScript(script);
+                                      setCurrentStepIdx(0);
+                                      setShowFullScript(true);
+                                      if (showHelp) setTeleHelpStep(1);
+                                    }}
+                                  >
+                                    <div className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center transition-colors ${grabados.has(script.id) ? 'bg-emerald-100 text-emerald-500' : 'bg-slate-50 text-slate-300 group-hover:text-[#48c1d2]'}`}>
+                                      {grabados.has(script.id) ? <CheckCircle size={18} /> : <Clapperboard size={18} />}
+                                    </div>
+                                    <div className="text-left min-w-0">
+                                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                                        <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
+                                        {grabados.has(script.id) && (
+                                          <span className="shrink-0 text-[8px] font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full uppercase tracking-wider">✓ Grabado</span>
+                                        )}
+                                        {(script.createdAt === '2026-06-19' || script.createdAt === '2026-06-24') && !grabados.has(script.id) && (
+                                          <span className="shrink-0 text-[8px] font-black text-white bg-[#48c1d2] px-2 py-0.5 rounded-full uppercase tracking-wider">Nuevo</span>
+                                        )}
+                                        {script.pilar && (
+                                          <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
+                                            {PILARES_INFO[script.pilar].emoji} Pilar: {script.pilar}
+                                          </span>
+                                        )}
+                                      </div>
+                                      <h4 className={`text-sm font-black leading-snug ${grabados.has(script.id) ? 'text-emerald-700' : 'text-[#142d53]'}`}>{script.title}</h4>
+                                      {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
+                                        <p className="text-[9px] font-bold text-slate-400 mt-1">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
                                       )}
                                     </div>
-                                    <h4 className={`text-sm font-black leading-snug ${grabados.has(script.id) ? 'text-emerald-700' : 'text-[#142d53]'}`}>{script.title}</h4>
-                                    {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
-                                      <p className="text-[9px] font-bold text-slate-400 mt-1">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
-                                    )}
                                   </div>
+                                  {/* Botón grabado — área independiente, sin relación con el click del modal */}
                                   <button
-                                    onPointerDown={(e) => { e.stopPropagation(); e.preventDefault(); toggleGrabado(e as any, script.id); }}
-                                    onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
+                                    onClick={() => toggleGrabado({ stopPropagation: () => {} } as any, script.id)}
                                     className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-90 ${grabados.has(script.id) ? 'bg-emerald-200 text-emerald-600' : 'bg-slate-100 text-slate-300 hover:bg-emerald-100 hover:text-emerald-500'}`}
-                                    title={grabados.has(script.id) ? 'Marcar como no grabado' : 'Marcar como grabado'}
                                   >
                                     <Check size={14} />
                                   </button>
