@@ -2817,9 +2817,15 @@ export default function ContenidoPage() {
                         </div>
                       </div>}
 
-                      {/* Sistema de Pestañas de Tiempo (Pills) */}
                       {(() => {
-                        const filtered = guiones.filter(s => {
+                        const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+                        const fmtDate = (d?: string) => {
+                          if (!d) return '';
+                          const [,m,day] = d.split('-');
+                          return `${parseInt(day)} ${MESES[parseInt(m)-1]}`;
+                        };
+
+                        const allFiltered = guiones.filter(s => {
                           if (s.category.toUpperCase() === 'PLANTILLA DE ENTRENAMIENTO') return false;
                           if (scriptFilter === 'grabados' && !grabados.has(s.id)) return false;
                           if (scriptFilter === 'pendientes' && grabados.has(s.id)) return false;
@@ -2829,85 +2835,72 @@ export default function ContenidoPage() {
                                  normalizeText(s.service).includes(query) ||
                                  normalizeText(s.category).includes(query);
                         });
-                        const groups = groupScriptsByWeek(filtered);
-                        const groupKeys = Object.keys(groups);
-                        
-                        // Determinar qué pestaña mostrar
-                        const activeWeek = selectedWeek || groupKeys[0] || "";
-                        if (activeWeek && !selectedWeek && groupKeys.length > 0) {
-                          setSelectedWeek(activeWeek);
-                        }
+
+                        // Pendientes primero (más recientes arriba), grabados al final
+                        const pendientes = allFiltered.filter(s => !grabados.has(s.id)).reverse();
+                        const grabadosList = allFiltered.filter(s => grabados.has(s.id)).reverse();
+                        const sorted = [...pendientes, ...grabadosList];
+
+                        const renderCard = (script: Script) => (
+                          <div key={script.id} className={`rounded-[2rem] border shadow-sm flex items-center group transition-all relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100'}`}>
+                            <button
+                              onClick={() => {
+                                setSelectedScript(script);
+                                setCurrentStepIdx(0);
+                                setShowFullScript(true);
+                                if (showHelp) setTeleHelpStep(1);
+                              }}
+                              className="flex items-center gap-3 flex-1 min-w-0 px-4 py-4 text-left active:scale-95 transition-all"
+                            >
+                              <div className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center transition-colors ${grabados.has(script.id) ? 'bg-emerald-100 text-emerald-500' : 'bg-slate-50 text-slate-300 group-hover:text-[#48c1d2]'}`}>
+                                {grabados.has(script.id) ? <CheckCircle size={18} /> : <Clapperboard size={18} />}
+                              </div>
+                              <div className="text-left min-w-0">
+                                <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                                  <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
+                                  {grabados.has(script.id)
+                                    ? <span className="shrink-0 text-[8px] font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full uppercase tracking-wider">✓ Grabado</span>
+                                    : <span className="shrink-0 text-[8px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full uppercase tracking-wider">⏳ Pendiente</span>
+                                  }
+                                  {script.pilar && (
+                                    <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
+                                      {PILARES_INFO[script.pilar].emoji} Pilar: {script.pilar}
+                                    </span>
+                                  )}
+                                </div>
+                                <h4 className={`text-sm font-black leading-snug ${grabados.has(script.id) ? 'text-emerald-700' : 'text-[#142d53]'}`}>{script.title}</h4>
+                                {script.createdAt && (
+                                  <p className="text-[9px] font-bold text-slate-400 mt-0.5">{fmtDate(script.createdAt)} · {script.duration}</p>
+                                )}
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => toggleGrabado(null, script.id)}
+                              className={`shrink-0 w-12 self-stretch flex items-center justify-center transition-all active:scale-90 border-l ${grabados.has(script.id) ? 'border-emerald-200 text-emerald-500' : 'border-slate-100 text-slate-300 hover:text-emerald-500'}`}
+                            >
+                              <Check size={15} />
+                            </button>
+                          </div>
+                        );
 
                         return (
-                          <div className="space-y-6">
-                            {groupKeys.length > 1 && (
-                              <div className="flex flex-wrap gap-2">
-                                {groupKeys.map(key => (
-                                  <button
-                                    key={key}
-                                    onClick={() => setSelectedWeek(key)}
-                                    className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${activeWeek === key ? 'bg-[#142d53] text-white border-[#142d53] shadow-md' : 'bg-white text-slate-400 border-slate-200'}`}
-                                  >
-                                    {key}
-                                  </button>
-                                ))}
+                          <div className="space-y-2">
+                            {sorted.length === 0 ? (
+                              <div className="py-12 text-center rounded-[2rem] border border-dashed border-slate-200">
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No se encontraron guiones</p>
                               </div>
+                            ) : (
+                              <>
+                                {pendientes.length > 0 && grabadosList.length > 0 && scriptFilter === 'todos' && (
+                                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1 pb-1">⏳ Por grabar ({pendientes.length})</p>
+                                )}
+                                {pendientes.map(renderCard)}
+                                {pendientes.length > 0 && grabadosList.length > 0 && scriptFilter === 'todos' && (
+                                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1 pt-3 pb-1">✓ Grabados ({grabadosList.length})</p>
+                                )}
+                                {grabadosList.map(renderCard)}
+                              </>
                             )}
-
-                            {/* Listado de la Pestaña Seleccionada */}
-                            <div className="grid gap-4">
-                              {groups[activeWeek]?.map((script) => (
-                                <div key={script.id} className={`rounded-[2rem] border shadow-sm flex items-center group transition-all relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100'}`}>
-                                  {/* Botón principal — abre el guion */}
-                                  <button
-                                    onClick={() => {
-                                      setSelectedScript(script);
-                                      setCurrentStepIdx(0);
-                                      setShowFullScript(true);
-                                      if (showHelp) setTeleHelpStep(1);
-                                    }}
-                                    className="flex items-center gap-3 flex-1 min-w-0 px-4 py-4 text-left active:scale-95 transition-all"
-                                  >
-                                    <div className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center transition-colors ${grabados.has(script.id) ? 'bg-emerald-100 text-emerald-500' : 'bg-slate-50 text-slate-300 group-hover:text-[#48c1d2]'}`}>
-                                      {grabados.has(script.id) ? <CheckCircle size={18} /> : <Clapperboard size={18} />}
-                                    </div>
-                                    <div className="text-left min-w-0">
-                                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                                        <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                        {grabados.has(script.id) && (
-                                          <span className="shrink-0 text-[8px] font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full uppercase tracking-wider">✓ Grabado</span>
-                                        )}
-                                        {(script.createdAt === '2026-06-19' || script.createdAt === '2026-06-24') && !grabados.has(script.id) && (
-                                          <span className="shrink-0 text-[8px] font-black text-white bg-[#48c1d2] px-2 py-0.5 rounded-full uppercase tracking-wider">Nuevo</span>
-                                        )}
-                                        {script.pilar && (
-                                          <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
-                                            {PILARES_INFO[script.pilar].emoji} Pilar: {script.pilar}
-                                          </span>
-                                        )}
-                                      </div>
-                                      <h4 className={`text-sm font-black leading-snug ${grabados.has(script.id) ? 'text-emerald-700' : 'text-[#142d53]'}`}>{script.title}</h4>
-                                      {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
-                                        <p className="text-[9px] font-bold text-slate-400 mt-1">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
-                                      )}
-                                    </div>
-                                  </button>
-                                  {/* Botón grabado — completamente separado */}
-                                  <button
-                                    onClick={() => toggleGrabado(null, script.id)}
-                                    className={`shrink-0 w-12 h-full flex items-center justify-center transition-all active:scale-90 border-l ${grabados.has(script.id) ? 'border-emerald-200 text-emerald-500' : 'border-slate-100 text-slate-300 hover:text-emerald-500'}`}
-                                  >
-                                    <Check size={15} />
-                                  </button>
-                                </div>
-                              ))}
-                              
-                              {groupKeys.length === 0 && (
-                                <div className="py-12 text-center bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
-                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No se encontraron guiones</p>
-                                </div>
-                              )}
-                            </div>
                           </div>
                         );
                       })()}
