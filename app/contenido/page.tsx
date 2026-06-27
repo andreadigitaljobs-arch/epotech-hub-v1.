@@ -1528,10 +1528,13 @@ export default function ContenidoPage() {
     const isAnyModalOpen = !!(selectedScript || selectedStory || showAudioReport || selectedProduction || selectedSerie || confirmDialog.isOpen || onboardingSuccessModal.isOpen);
     
     if (isAnyModalOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
       document.body.classList.add('modal-open');
     } else {
       document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
       document.body.style.height = '';
       document.documentElement.style.overflow = '';
       document.documentElement.style.height = '';
