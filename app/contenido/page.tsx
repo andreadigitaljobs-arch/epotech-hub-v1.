@@ -749,6 +749,7 @@ export default function ContenidoPage() {
   
   // NUEVOS ESTADOS: Búsqueda y Organización
   const [scriptSearchQuery, setScriptSearchQuery] = useState("");
+  const [scriptFilter, setScriptFilter] = useState<'todos' | 'grabados' | 'pendientes'>('todos');
   const [selectedWeek, setSelectedWeek] = useState<string>("");
   const [selectedSerie, setSelectedSerie] = useState<any>(null);
   const [isClosingSerie, setIsClosingSerie] = useState(false);
@@ -2801,15 +2802,30 @@ export default function ContenidoPage() {
                             className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-[#48c1d2] focus:ring-4 focus:ring-[#48c1d2]/5 transition-all shadow-sm"
                           />
                         </div>
+                        {/* Filtro grabado / pendiente */}
+                        <div className="flex gap-2 mt-3">
+                          {([
+                            { id: 'todos',      label: 'Todos' },
+                            { id: 'pendientes', label: '⏳ Pendientes' },
+                            { id: 'grabados',   label: '✓ Grabados' },
+                          ] as const).map(f => (
+                            <button key={f.id} onClick={() => setScriptFilter(f.id)}
+                              className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border ${scriptFilter === f.id ? 'bg-[#142d53] text-white border-[#142d53]' : 'bg-white text-slate-400 border-slate-200'}`}>
+                              {f.label}
+                            </button>
+                          ))}
+                        </div>
                       </div>}
 
                       {/* Sistema de Pestañas de Tiempo (Pills) */}
                       {(() => {
                         const filtered = guiones.filter(s => {
                           if (s.category.toUpperCase() === 'PLANTILLA DE ENTRENAMIENTO') return false;
+                          if (scriptFilter === 'grabados' && !grabados.has(s.id)) return false;
+                          if (scriptFilter === 'pendientes' && grabados.has(s.id)) return false;
                           if (!scriptSearchQuery) return true;
                           const query = normalizeText(scriptSearchQuery);
-                          return normalizeText(s.title).includes(query) || 
+                          return normalizeText(s.title).includes(query) ||
                                  normalizeText(s.service).includes(query) ||
                                  normalizeText(s.category).includes(query);
                         });
