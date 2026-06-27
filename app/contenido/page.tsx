@@ -2849,7 +2849,7 @@ export default function ContenidoPage() {
                                       )}
                                       {script.pilar && (
                                         <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
-                                          {PILARES_INFO[script.pilar].emoji} {script.pilar}
+                                          {PILARES_INFO[script.pilar].emoji} Pilar: {script.pilar}
                                         </span>
                                       )}
                                     </div>
@@ -2935,7 +2935,7 @@ export default function ContenidoPage() {
                                       <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
                                       {script.pilar && (
                                         <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
-                                          {PILARES_INFO[script.pilar].emoji} {script.pilar}
+                                          {PILARES_INFO[script.pilar].emoji} Pilar: {script.pilar}
                                         </span>
                                       )}
                                     </div>
@@ -3014,7 +3014,7 @@ export default function ContenidoPage() {
                                             <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
                                             {script.pilar && (
                                               <span className="shrink-0 text-[8px] font-bold px-2 py-0.5 rounded-full" style={{ color: PILAR_COLORS[script.pilar], background: `${PILAR_COLORS[script.pilar]}18` }}>
-                                                {PILARES_INFO[script.pilar].emoji} {script.pilar}
+                                                {PILARES_INFO[script.pilar].emoji} Pilar: {script.pilar}
                                               </span>
                                             )}
                                           </div>
