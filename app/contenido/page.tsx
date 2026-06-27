@@ -82,7 +82,12 @@ import {
   Square,
   Edit3,
   UserCheck,
-  Compass
+  Compass,
+  GripVertical,
+  ArrowUp,
+  ArrowDown,
+  ChevronsUp,
+  ChevronsDown
 } from "lucide-react";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { ScriptText } from "@/components/ui/ScriptText";
@@ -604,6 +609,32 @@ export default function ContenidoPage() {
     } else {
       await supabase.from('grabados').upsert({ script_id: scriptId });
     }
+  };
+
+  const [ordenGuiones, setOrdenGuiones] = useState<string[]>([]);
+  const [modoReorden, setModoReorden] = useState(false);
+
+  useEffect(() => {
+    supabase.from('configuracion').select('valor').eq('clave', 'orden_guiones').single().then(({ data }) => {
+      if (data?.valor) setOrdenGuiones(data.valor as string[]);
+    });
+  }, []);
+
+  const moverScript = async (scriptId: string, dir: 'up' | 'down' | 'top' | 'bottom', allIds: string[]) => {
+    const base = [
+      ...ordenGuiones.filter(id => allIds.includes(id)),
+      ...allIds.filter(id => !ordenGuiones.includes(id)),
+    ];
+    const idx = base.indexOf(scriptId);
+    if (idx === -1) return;
+    const next = [...base];
+    next.splice(idx, 1);
+    if (dir === 'up') next.splice(Math.max(0, idx - 1), 0, scriptId);
+    else if (dir === 'down') next.splice(Math.min(next.length, idx + 1), 0, scriptId);
+    else if (dir === 'top') next.unshift(scriptId);
+    else next.push(scriptId);
+    setOrdenGuiones(next);
+    await supabase.from('configuracion').upsert({ clave: 'orden_guiones', valor: next });
   };
 
   const [activeTab, setActiveTab] = useState('guiones');
@@ -2800,8 +2831,8 @@ export default function ContenidoPage() {
                             className="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-[#48c1d2] focus:ring-4 focus:ring-[#48c1d2]/5 transition-all shadow-sm"
                           />
                         </div>
-                        {/* Filtro grabado / pendiente */}
-                        <div className="flex gap-2 mt-3">
+                        {/* Filtro grabado / pendiente + reordenar */}
+                        <div className="flex gap-2 mt-3 flex-wrap">
                           {([
                             { id: 'todos',      label: 'Todos' },
                             { id: 'pendientes', label: '⏳ Pendientes' },
@@ -2812,6 +2843,12 @@ export default function ContenidoPage() {
                               {f.label}
                             </button>
                           ))}
+                          <button
+                            onClick={() => setModoReorden(v => !v)}
+                            className={`ml-auto px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border flex items-center gap-1.5 ${modoReorden ? 'bg-violet-600 text-white border-violet-600' : 'bg-white text-slate-400 border-slate-200'}`}
+                          >
+                            <GripVertical size={11} /> {modoReorden ? 'Listo' : 'Reordenar'}
+                          </button>
                         </div>
                       </div>}
 
@@ -2834,21 +2871,37 @@ export default function ContenidoPage() {
                                  normalizeText(s.category).includes(query);
                         });
 
-                        // Pendientes primero (más recientes arriba), grabados al final
-                        const pendientes = allFiltered.filter(s => !grabados.has(s.id)).reverse();
-                        const grabadosList = allFiltered.filter(s => grabados.has(s.id)).reverse();
-                        const sorted = [...pendientes, ...grabadosList];
+                        // Aplicar orden personalizado o default (pendientes primero)
+                        const allIds = guiones.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO').map(s => s.id);
+                        let sorted: Script[];
+                        if (ordenGuiones.length > 0) {
+                          const orderedIds = [
+                            ...ordenGuiones.filter(id => allIds.includes(id)),
+                            ...allIds.filter(id => !ordenGuiones.includes(id)),
+                          ];
+                          sorted = orderedIds.map(id => allFiltered.find(s => s.id === id)).filter(Boolean) as Script[];
+                        } else {
+                          const pendientes = allFiltered.filter(s => !grabados.has(s.id)).reverse();
+                          const grabadosList = allFiltered.filter(s => grabados.has(s.id)).reverse();
+                          sorted = [...pendientes, ...grabadosList];
+                        }
 
-                        const renderCard = (script: Script) => (
+                        const renderCard = (script: Script, idx: number) => (
                           <div key={script.id} className={`rounded-[2rem] border shadow-sm flex items-center group transition-all relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100'}`}>
+                            {modoReorden && (
+                              <div className="shrink-0 pl-3 flex items-center text-slate-300">
+                                <GripVertical size={16} />
+                              </div>
+                            )}
                             <button
                               onClick={() => {
+                                if (modoReorden) return;
                                 setSelectedScript(script);
                                 setCurrentStepIdx(0);
                                 setShowFullScript(true);
                                 if (showHelp) setTeleHelpStep(1);
                               }}
-                              className="flex items-center gap-3 flex-1 min-w-0 px-4 py-4 text-left active:scale-95 transition-all"
+                              className={`flex items-center gap-3 flex-1 min-w-0 px-4 py-4 text-left transition-all ${modoReorden ? 'opacity-70' : 'active:scale-95'}`}
                             >
                               <div className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center transition-colors ${grabados.has(script.id) ? 'bg-emerald-100 text-emerald-500' : 'bg-slate-50 text-slate-300 group-hover:text-[#48c1d2]'}`}>
                                 {grabados.has(script.id) ? <CheckCircle size={18} /> : <Clapperboard size={18} />}
@@ -2872,12 +2925,29 @@ export default function ContenidoPage() {
                                 )}
                               </div>
                             </button>
-                            <button
-                              onClick={() => toggleGrabado(null, script.id)}
-                              className={`shrink-0 w-12 self-stretch flex items-center justify-center transition-all active:scale-90 border-l ${grabados.has(script.id) ? 'border-emerald-200 text-emerald-500' : 'border-slate-100 text-slate-300 hover:text-emerald-500'}`}
-                            >
-                              <Check size={15} />
-                            </button>
+                            {modoReorden ? (
+                              <div className="shrink-0 flex flex-col border-l border-slate-100">
+                                <button onClick={() => moverScript(script.id, 'top', allIds)} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100">
+                                  <ChevronsUp size={13} />
+                                </button>
+                                <button onClick={() => moverScript(script.id, 'up', allIds)} disabled={idx === 0} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100 disabled:opacity-20">
+                                  <ArrowUp size={13} />
+                                </button>
+                                <button onClick={() => moverScript(script.id, 'down', allIds)} disabled={idx === sorted.length - 1} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100 disabled:opacity-20">
+                                  <ArrowDown size={13} />
+                                </button>
+                                <button onClick={() => moverScript(script.id, 'bottom', allIds)} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all">
+                                  <ChevronsDown size={13} />
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => toggleGrabado(null, script.id)}
+                                className={`shrink-0 w-12 self-stretch flex items-center justify-center transition-all active:scale-90 border-l ${grabados.has(script.id) ? 'border-emerald-200 text-emerald-500' : 'border-slate-100 text-slate-300 hover:text-emerald-500'}`}
+                              >
+                                <Check size={15} />
+                              </button>
+                            )}
                           </div>
                         );
 
@@ -2888,16 +2958,7 @@ export default function ContenidoPage() {
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No se encontraron guiones</p>
                               </div>
                             ) : (
-                              <>
-                                {pendientes.length > 0 && grabadosList.length > 0 && scriptFilter === 'todos' && (
-                                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1 pb-1">⏳ Por grabar ({pendientes.length})</p>
-                                )}
-                                {pendientes.map(renderCard)}
-                                {pendientes.length > 0 && grabadosList.length > 0 && scriptFilter === 'todos' && (
-                                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1 pt-3 pb-1">✓ Grabados ({grabadosList.length})</p>
-                                )}
-                                {grabadosList.map(renderCard)}
-                              </>
+                              sorted.map((script, idx) => renderCard(script, idx))
                             )}
                           </div>
                         );
