@@ -2841,19 +2841,16 @@ export default function ContenidoPage() {
                             {/* Listado de la Pestaña Seleccionada */}
                             <div className="grid gap-4">
                               {groups[activeWeek]?.map((script) => (
-                                <div
-                                  key={script.id}
-                                  className={`px-4 py-4 rounded-[2rem] border shadow-sm flex items-center gap-3 group transition-all relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100'}`}
-                                >
-                                  {/* Área clickeable para abrir el guion */}
-                                  <div
-                                    className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer active:scale-95 transition-all"
+                                <div key={script.id} className={`rounded-[2rem] border shadow-sm flex items-center group transition-all relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100'}`}>
+                                  {/* Botón principal — abre el guion */}
+                                  <button
                                     onClick={() => {
                                       setSelectedScript(script);
                                       setCurrentStepIdx(0);
                                       setShowFullScript(true);
                                       if (showHelp) setTeleHelpStep(1);
                                     }}
+                                    className="flex items-center gap-3 flex-1 min-w-0 px-4 py-4 text-left active:scale-95 transition-all"
                                   >
                                     <div className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center transition-colors ${grabados.has(script.id) ? 'bg-emerald-100 text-emerald-500' : 'bg-slate-50 text-slate-300 group-hover:text-[#48c1d2]'}`}>
                                       {grabados.has(script.id) ? <CheckCircle size={18} /> : <Clapperboard size={18} />}
@@ -2878,13 +2875,13 @@ export default function ContenidoPage() {
                                         <p className="text-[9px] font-bold text-slate-400 mt-1">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
                                       )}
                                     </div>
-                                  </div>
-                                  {/* Botón grabado — área independiente, sin relación con el click del modal */}
+                                  </button>
+                                  {/* Botón grabado — completamente separado */}
                                   <button
-                                    onClick={() => toggleGrabado({ stopPropagation: () => {} } as any, script.id)}
-                                    className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-90 ${grabados.has(script.id) ? 'bg-emerald-200 text-emerald-600' : 'bg-slate-100 text-slate-300 hover:bg-emerald-100 hover:text-emerald-500'}`}
+                                    onClick={() => toggleGrabado(null, script.id)}
+                                    className={`shrink-0 w-12 h-full flex items-center justify-center transition-all active:scale-90 border-l ${grabados.has(script.id) ? 'border-emerald-200 text-emerald-500' : 'border-slate-100 text-slate-300 hover:text-emerald-500'}`}
                                   >
-                                    <Check size={14} />
+                                    <Check size={15} />
                                   </button>
                                 </div>
                               ))}
