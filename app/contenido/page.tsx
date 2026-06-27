@@ -2876,7 +2876,8 @@ export default function ContenidoPage() {
                                     )}
                                   </div>
                                   <button
-                                    onClick={(e) => toggleGrabado(e, script.id)}
+                                    onPointerDown={(e) => { e.stopPropagation(); e.preventDefault(); toggleGrabado(e as any, script.id); }}
+                                    onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
                                     className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-90 ${grabados.has(script.id) ? 'bg-emerald-200 text-emerald-600' : 'bg-slate-100 text-slate-300 hover:bg-emerald-100 hover:text-emerald-500'}`}
                                     title={grabados.has(script.id) ? 'Marcar como no grabado' : 'Marcar como grabado'}
                                   >
