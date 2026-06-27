@@ -584,6 +584,23 @@ export default function ContenidoPage() {
     }
   };
 
+  const [grabados, setGrabados] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem('epotech_grabados');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch { return new Set(); }
+  });
+
+  const toggleGrabado = (e: React.MouseEvent, scriptId: string) => {
+    e.stopPropagation();
+    setGrabados(prev => {
+      const next = new Set(prev);
+      next.has(scriptId) ? next.delete(scriptId) : next.add(scriptId);
+      localStorage.setItem('epotech_grabados', JSON.stringify([...next]));
+      return next;
+    });
+  };
+
   const [activeTab, setActiveTab] = useState('guiones');
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
@@ -2816,15 +2833,18 @@ export default function ContenidoPage() {
                                     setShowFullScript(true);
                                     if (showHelp) setTeleHelpStep(1);
                                   }}
-                                  className={`bg-white px-4 py-4 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-3 group hover:border-[#48c1d2]/50 transition-all cursor-pointer active:scale-95 relative overflow-hidden`}
+                                  className={`px-4 py-4 rounded-[2rem] border shadow-sm flex items-center gap-3 group transition-all cursor-pointer active:scale-95 relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100 hover:border-[#48c1d2]/50'}`}
                                 >
-                                  <div className="w-10 h-10 shrink-0 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 group-hover:text-[#48c1d2] transition-colors">
-                                    <Clapperboard size={18} />
+                                  <div className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center transition-colors ${grabados.has(script.id) ? 'bg-emerald-100 text-emerald-500' : 'bg-slate-50 text-slate-300 group-hover:text-[#48c1d2]'}`}>
+                                    {grabados.has(script.id) ? <CheckCircle size={18} /> : <Clapperboard size={18} />}
                                   </div>
                                   <div className="text-left flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                                       <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-[2px]">{script.category}</span>
-                                      {(script.createdAt === '2026-06-19' || script.createdAt === '2026-06-24') && (
+                                      {grabados.has(script.id) && (
+                                        <span className="shrink-0 text-[8px] font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full uppercase tracking-wider">✓ Grabado</span>
+                                      )}
+                                      {(script.createdAt === '2026-06-19' || script.createdAt === '2026-06-24') && !grabados.has(script.id) && (
                                         <span className="shrink-0 text-[8px] font-black text-white bg-[#48c1d2] px-2 py-0.5 rounded-full uppercase tracking-wider">Nuevo</span>
                                       )}
                                       {script.pilar && (
@@ -2833,12 +2853,18 @@ export default function ContenidoPage() {
                                         </span>
                                       )}
                                     </div>
-                                    <h4 className="text-sm font-black text-[#142d53] leading-snug">{script.title}</h4>
+                                    <h4 className={`text-sm font-black leading-snug ${grabados.has(script.id) ? 'text-emerald-700' : 'text-[#142d53]'}`}>{script.title}</h4>
                                     {script.category === 'PLANTILLA DE ENTRENAMIENTO' && (
                                       <p className="text-[9px] font-bold text-slate-400 mt-1">"Usa este ejemplo para practicar cómo grabar por partes antes de tu guion real."</p>
                                     )}
                                   </div>
-                                  <ChevronRight size={16} className="shrink-0 text-slate-200 group-hover:text-[#48c1d2] transition-all" />
+                                  <button
+                                    onClick={(e) => toggleGrabado(e, script.id)}
+                                    className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-90 ${grabados.has(script.id) ? 'bg-emerald-200 text-emerald-600' : 'bg-slate-100 text-slate-300 hover:bg-emerald-100 hover:text-emerald-500'}`}
+                                    title={grabados.has(script.id) ? 'Marcar como no grabado' : 'Marcar como grabado'}
+                                  >
+                                    <Check size={14} />
+                                  </button>
                                 </div>
                               ))}
                               
