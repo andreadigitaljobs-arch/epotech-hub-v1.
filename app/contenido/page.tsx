@@ -2845,7 +2845,7 @@ export default function ContenidoPage() {
                           />
                         </div>
                         {/* Filtro grabado / pendiente + reordenar */}
-                        <div className="flex gap-2 mt-3 flex-wrap">
+                        <div className="flex gap-2 mt-3">
                           {([
                             { id: 'todos',      label: 'Todos' },
                             { id: 'pendientes', label: '⏳ Pendientes' },
@@ -2856,12 +2856,6 @@ export default function ContenidoPage() {
                               {f.label}
                             </button>
                           ))}
-                          <button
-                            onClick={() => setModoReorden(v => !v)}
-                            className={`ml-auto px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border flex items-center gap-1.5 ${modoReorden ? 'bg-violet-600 text-white border-violet-600' : 'bg-white text-slate-400 border-slate-200'}`}
-                          >
-                            <GripVertical size={11} /> {modoReorden ? 'Listo' : 'Reordenar'}
-                          </button>
                         </div>
                       </div>}
 
@@ -2969,6 +2963,16 @@ export default function ContenidoPage() {
 
                         return (
                           <div className="space-y-2">
+                            {/* Botón reordenar encima de la lista */}
+                            <div className="flex justify-end mb-1">
+                              <button
+                                onClick={() => setModoReorden(v => !v)}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${modoReorden ? 'bg-violet-600 text-white shadow-md' : 'text-slate-400 hover:text-violet-600'}`}
+                              >
+                                <GripVertical size={11} /> {modoReorden ? 'Listo ✓' : 'Reordenar'}
+                              </button>
+                            </div>
+
                             {allFiltered.length === 0 ? (
                               <div className="py-12 text-center rounded-[2rem] border border-dashed border-slate-200">
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No se encontraron guiones</p>
