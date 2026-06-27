@@ -584,20 +584,26 @@ export default function ContenidoPage() {
     }
   };
 
-  const [grabados, setGrabados] = useState<Set<string>>(() => {
-    try {
-      const saved = localStorage.getItem('epotech_grabados');
-      return saved ? new Set(JSON.parse(saved)) : new Set();
-    } catch { return new Set(); }
-  });
+  const [grabados, setGrabados] = useState<Set<string>>(new Set());
 
-  const toggleGrabado = (_e: any, scriptId: string) => {
+  useEffect(() => {
+    supabase.from('grabados').select('script_id').then(({ data }) => {
+      if (data) setGrabados(new Set(data.map((r: any) => r.script_id)));
+    });
+  }, []);
+
+  const toggleGrabado = async (_e: any, scriptId: string) => {
+    const isGrabado = grabados.has(scriptId);
     setGrabados(prev => {
       const next = new Set(prev);
-      next.has(scriptId) ? next.delete(scriptId) : next.add(scriptId);
-      localStorage.setItem('epotech_grabados', JSON.stringify([...next]));
+      isGrabado ? next.delete(scriptId) : next.add(scriptId);
       return next;
     });
+    if (isGrabado) {
+      await supabase.from('grabados').delete().eq('script_id', scriptId);
+    } else {
+      await supabase.from('grabados').upsert({ script_id: scriptId });
+    }
   };
 
   const [activeTab, setActiveTab] = useState('guiones');
@@ -1440,12 +1446,8 @@ export default function ContenidoPage() {
       deleteVoiceoverDraft(selectedScript.id);
 
       // MARCAR COMO GRABADO AUTOMÁTICAMENTE
-      setGrabados(prev => {
-        const next = new Set(prev);
-        next.add(selectedScript.id);
-        localStorage.setItem('epotech_grabados', JSON.stringify([...next]));
-        return next;
-      });
+      setGrabados(prev => { const next = new Set(prev); next.add(selectedScript.id); return next; });
+      supabase.from('grabados').upsert({ script_id: selectedScript.id });
 
       // PUSH AL DUEÑO
       fetch('/api/push', {
@@ -1899,12 +1901,8 @@ export default function ContenidoPage() {
                     </button>
                     <a href={mergedVoiceoverUrl} download={`Locucion_${selectedScript.id}.wav`}
                       onClick={() => {
-                        setGrabados(prev => {
-                          const next = new Set(prev);
-                          next.add(selectedScript.id);
-                          localStorage.setItem('epotech_grabados', JSON.stringify([...next]));
-                          return next;
-                        });
+                        setGrabados(prev => { const next = new Set(prev); next.add(selectedScript.id); return next; });
+                        supabase.from('grabados').upsert({ script_id: selectedScript.id });
                       }}
                       className="w-full py-4 bg-white/5 text-white hover:bg-white/10 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10">
                       <Download size={16} /> Descargar Audio Final
