@@ -620,21 +620,34 @@ export default function ContenidoPage() {
     });
   }, []);
 
-  const moverScript = async (scriptId: string, dir: 'up' | 'down' | 'top' | 'bottom', allIds: string[]) => {
-    const base = [
+  // Mueve dentro de su sección (sectionIds = IDs ya ordenados de esa sección)
+  const moverScript = async (scriptId: string, dir: 'up' | 'down' | 'top' | 'bottom', sectionIds: string[]) => {
+    const allIds = guiones.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO').map(s => s.id);
+    const fullOrdered = [
       ...ordenGuiones.filter(id => allIds.includes(id)),
       ...allIds.filter(id => !ordenGuiones.includes(id)),
     ];
-    const idx = base.indexOf(scriptId);
-    if (idx === -1) return;
-    const next = [...base];
-    next.splice(idx, 1);
-    if (dir === 'up') next.splice(Math.max(0, idx - 1), 0, scriptId);
-    else if (dir === 'down') next.splice(Math.min(next.length, idx + 1), 0, scriptId);
-    else if (dir === 'top') next.unshift(scriptId);
-    else next.push(scriptId);
-    setOrdenGuiones(next);
-    await supabase.from('configuracion').upsert({ clave: 'orden_guiones', valor: next });
+    const secIdx = sectionIds.indexOf(scriptId);
+    if (secIdx === -1) return;
+    const newSection = [...sectionIds];
+    newSection.splice(secIdx, 1);
+    if (dir === 'up')     newSection.splice(Math.max(0, secIdx - 1), 0, scriptId);
+    else if (dir === 'down')   newSection.splice(Math.min(newSection.length, secIdx + 1), 0, scriptId);
+    else if (dir === 'top')    newSection.unshift(scriptId);
+    else                        newSection.push(scriptId);
+    // Reconstruir el orden global reemplazando solo los IDs de esta sección
+    const newFull: string[] = [];
+    let inserted = false;
+    for (const id of fullOrdered) {
+      if (sectionIds.includes(id)) {
+        if (!inserted) { newFull.push(...newSection); inserted = true; }
+      } else {
+        newFull.push(id);
+      }
+    }
+    if (!inserted) newFull.push(...newSection);
+    setOrdenGuiones(newFull);
+    await supabase.from('configuracion').upsert({ clave: 'orden_guiones', valor: newFull });
   };
 
   const [activeTab, setActiveTab] = useState('guiones');
@@ -2871,22 +2884,24 @@ export default function ContenidoPage() {
                                  normalizeText(s.category).includes(query);
                         });
 
-                        // Aplicar orden personalizado o default (pendientes primero)
-                        const allIds = guiones.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO').map(s => s.id);
-                        let sorted: Script[];
-                        if (ordenGuiones.length > 0) {
-                          const orderedIds = [
-                            ...ordenGuiones.filter(id => allIds.includes(id)),
-                            ...allIds.filter(id => !ordenGuiones.includes(id)),
-                          ];
-                          sorted = orderedIds.map(id => allFiltered.find(s => s.id === id)).filter(Boolean) as Script[];
-                        } else {
-                          const pendientes = allFiltered.filter(s => !grabados.has(s.id)).reverse();
-                          const grabadosList = allFiltered.filter(s => grabados.has(s.id)).reverse();
-                          sorted = [...pendientes, ...grabadosList];
-                        }
+                        // Ordenar cada sección independientemente usando el orden personalizado
+                        const applyOrder = (scripts: Script[]) => {
+                          if (ordenGuiones.length === 0) return [...scripts].reverse();
+                          return [...scripts].sort((a, b) => {
+                            const ia = ordenGuiones.indexOf(a.id);
+                            const ib = ordenGuiones.indexOf(b.id);
+                            if (ia === -1 && ib === -1) return 0;
+                            if (ia === -1) return 1;
+                            if (ib === -1) return -1;
+                            return ia - ib;
+                          });
+                        };
+                        const pendientes  = applyOrder(allFiltered.filter(s => !grabados.has(s.id)));
+                        const grabadosList = applyOrder(allFiltered.filter(s => grabados.has(s.id)));
 
-                        const renderCard = (script: Script, idx: number) => (
+                        const renderCard = (script: Script, idxInSection: number, sectionList: Script[]) => {
+                          const sectionIds = sectionList.map(s => s.id);
+                          return (
                           <div key={script.id} className={`rounded-[2rem] border shadow-sm flex items-center group transition-all relative overflow-hidden ${grabados.has(script.id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-100'}`}>
                             {modoReorden && (
                               <div className="shrink-0 pl-3 flex items-center text-slate-300">
@@ -2927,16 +2942,16 @@ export default function ContenidoPage() {
                             </button>
                             {modoReorden ? (
                               <div className="shrink-0 flex flex-col border-l border-slate-100">
-                                <button onClick={() => moverScript(script.id, 'top', allIds)} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100">
+                                <button onClick={() => moverScript(script.id, 'top', sectionIds)} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100">
                                   <ChevronsUp size={13} />
                                 </button>
-                                <button onClick={() => moverScript(script.id, 'up', allIds)} disabled={idx === 0} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100 disabled:opacity-20">
+                                <button onClick={() => moverScript(script.id, 'up', sectionIds)} disabled={idxInSection === 0} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100 disabled:opacity-20">
                                   <ArrowUp size={13} />
                                 </button>
-                                <button onClick={() => moverScript(script.id, 'down', allIds)} disabled={idx === sorted.length - 1} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100 disabled:opacity-20">
+                                <button onClick={() => moverScript(script.id, 'down', sectionIds)} disabled={idxInSection === sectionList.length - 1} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all border-b border-slate-100 disabled:opacity-20">
                                   <ArrowDown size={13} />
                                 </button>
-                                <button onClick={() => moverScript(script.id, 'bottom', allIds)} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all">
+                                <button onClick={() => moverScript(script.id, 'bottom', sectionIds)} className="px-3 py-2 text-slate-400 hover:text-[#142d53] active:scale-90 transition-all">
                                   <ChevronsDown size={13} />
                                 </button>
                               </div>
@@ -2949,16 +2964,34 @@ export default function ContenidoPage() {
                               </button>
                             )}
                           </div>
-                        );
+                          );
+                        };
 
                         return (
                           <div className="space-y-2">
-                            {sorted.length === 0 ? (
+                            {allFiltered.length === 0 ? (
                               <div className="py-12 text-center rounded-[2rem] border border-dashed border-slate-200">
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No se encontraron guiones</p>
                               </div>
                             ) : (
-                              sorted.map((script, idx) => renderCard(script, idx))
+                              <>
+                                {pendientes.length > 0 && (
+                                  <>
+                                    {grabadosList.length > 0 && scriptFilter === 'todos' && (
+                                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1 pb-1">⏳ Por grabar ({pendientes.length})</p>
+                                    )}
+                                    {pendientes.map((s, i) => renderCard(s, i, pendientes))}
+                                  </>
+                                )}
+                                {grabadosList.length > 0 && (
+                                  <>
+                                    {pendientes.length > 0 && scriptFilter === 'todos' && (
+                                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1 pt-3 pb-1">✓ Grabados ({grabadosList.length})</p>
+                                    )}
+                                    {grabadosList.map((s, i) => renderCard(s, i, grabadosList))}
+                                  </>
+                                )}
+                              </>
                             )}
                           </div>
                         );
