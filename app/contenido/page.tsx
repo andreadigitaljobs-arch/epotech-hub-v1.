@@ -592,9 +592,19 @@ export default function ContenidoPage() {
   const [grabados, setGrabados] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    supabase.from('grabados').select('script_id').then(({ data }) => {
-      if (data) setGrabados(new Set(data.map((r: any) => r.script_id)));
-    });
+    const fetchGrabados = () =>
+      supabase.from('grabados').select('script_id').then(({ data }) => {
+        if (data) setGrabados(new Set(data.map((r: any) => r.script_id)));
+      });
+
+    fetchGrabados();
+
+    const channel = supabase
+      .channel('grabados-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'grabados' }, fetchGrabados)
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, []);
 
   const toggleGrabado = async (_e: any, scriptId: string) => {
