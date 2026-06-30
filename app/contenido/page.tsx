@@ -2466,10 +2466,10 @@ export default function ContenidoPage() {
                       // Calcular pendientes reales (Dynamic Badge)
                       let dynamicBadge = undefined;
                       if (mision.id === 'vozoff' && guiones) {
-                        const count = guiones.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO').length;
+                        const count = guiones.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO' && !grabados.has(s.id)).length;
                         if (count > 0) dynamicBadge = `${count} Pendiente${count !== 1 ? 's' : ''}`;
                       } else if (mision.id === 'pro' && guionesPresentacion) {
-                        const count = guionesPresentacion.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO').length;
+                        const count = guionesPresentacion.filter(s => s.category.toUpperCase() !== 'PLANTILLA DE ENTRENAMIENTO' && !grabados.has(s.id)).length;
                         if (count > 0) dynamicBadge = `${count} Pendiente${count !== 1 ? 's' : ''}`;
                       }
 
