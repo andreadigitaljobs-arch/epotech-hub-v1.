@@ -38,6 +38,8 @@ export default function MasterPanel() {
   const [reportesAudio, setReportesAudio] = useState<any[]>([]);
   const [locuciones, setLocuciones] = useState<any[]>([]);
   const [sceneConfig, setSceneConfig] = useState<Record<string, { audio_enabled: boolean; video_url: string | null }>>({});
+  const [sceneConfigDraft, setSceneConfigDraft] = useState<Record<string, string>>({});
+  const [sceneSaved, setSceneSaved] = useState<string | null>(null);
   const [selectedScriptId, setSelectedScriptId] = useState<string>('');
   const [selectedSceneIdx, setSelectedSceneIdx] = useState(0);
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -110,7 +112,13 @@ export default function MasterPanel() {
     const current = sceneConfig[sceneId] || { audio_enabled: false, video_url: null };
     const updated = { ...current, [field]: value };
     setSceneConfig(prev => ({ ...prev, [sceneId]: updated }));
-    await supabase.from('scene_config').upsert({ scene_id: sceneId, audio_enabled: updated.audio_enabled, video_url: updated.video_url });
+    const { error } = await supabase
+      .from('scene_config')
+      .upsert({ scene_id: sceneId, audio_enabled: updated.audio_enabled, video_url: updated.video_url }, { onConflict: 'scene_id' });
+    if (!error) {
+      setSceneSaved(sceneId);
+      setTimeout(() => setSceneSaved(null), 2000);
+    }
   }
 
   async function fetchHistory() {
@@ -503,7 +511,12 @@ export default function MasterPanel() {
             {/* Panel de la escena seleccionada */}
             {scene && cfg && (
               <div className="border-2 border-slate-100 rounded-[2rem] p-6 space-y-6 bg-white">
-                <p className="text-[11px] font-black text-slate-500 uppercase tracking-widest">{scene.title}</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-black text-slate-500 uppercase tracking-widest">{scene.title}</p>
+                  {sceneSaved === scene.id && (
+                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-wider">✓ Guardado</span>
+                  )}
+                </div>
 
                 {/* Toggle micrófono */}
                 <div className="flex items-center justify-between">
@@ -534,8 +547,13 @@ export default function MasterPanel() {
                   <input
                     type="text"
                     placeholder="https://www.youtube.com/watch?v=..."
-                    value={cfg.video_url || ''}
-                    onChange={e => updateSceneConfig(scene.id, 'video_url', e.target.value || null)}
+                    value={sceneConfigDraft[scene.id] ?? cfg.video_url ?? ''}
+                    onChange={e => setSceneConfigDraft(prev => ({ ...prev, [scene.id]: e.target.value }))}
+                    onBlur={e => {
+                      const val = e.target.value.trim() || null;
+                      setSceneConfigDraft(prev => { const n = { ...prev }; delete n[scene.id]; return n; });
+                      updateSceneConfig(scene.id, 'video_url', val);
+                    }}
                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 py-3 text-sm font-bold text-slate-700 placeholder:text-slate-300 outline-none focus:border-[#48c1d2] transition-all"
                   />
                   {cfg.video_url && (
