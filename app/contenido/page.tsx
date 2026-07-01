@@ -2004,13 +2004,13 @@ export default function ContenidoPage() {
 
                                 // Layout compacto para instrucciones cortas
                                 return (
-                                  <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                      <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1">Cómo moverse:</span>
+                                  <div className="grid grid-cols-2 gap-3">
+                                    <div className="bg-[#48c1d2]/10 border border-[#48c1d2]/20 rounded-2xl p-3 space-y-1">
+                                      <span className="text-[8px] font-black text-[#48c1d2] uppercase tracking-wider block">Cómo moverse</span>
                                       <p className="text-[11px] font-bold text-white/80 leading-snug">{howToMove}</p>
                                     </div>
-                                    <div>
-                                      <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1">Gesto/Actitud:</span>
+                                    <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-2xl p-3 space-y-1">
+                                      <span className="text-[8px] font-black text-yellow-400 uppercase tracking-wider block">Actitud</span>
                                       <p className="text-[11px] font-bold text-white/80 leading-snug">{gesture}</p>
                                     </div>
                                   </div>
