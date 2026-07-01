@@ -210,7 +210,7 @@ const deleteVoiceoverDraft = async (scriptId: string) => {
 };
 // -------------------------------------------------------------
 
-const CustomAudioPlayer = ({ src, title = "Reporte de Audio" }: { src: string, title?: string }) => {
+const CustomAudioPlayer = ({ src, title = "Reporte de Audio", light = false }: { src: string, title?: string, light?: boolean }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -285,7 +285,7 @@ const CustomAudioPlayer = ({ src, title = "Reporte de Audio" }: { src: string, t
           box-shadow: 0 0 10px rgba(72,193,210,0.5);
         }
       `}} />
-      <div className="w-full flex flex-col p-4 bg-[#142d53] rounded-[2rem] border border-white/10 shadow-inner gap-4" onClick={(e) => e.stopPropagation()}>
+      <div className={`w-full flex flex-col p-4 rounded-[2rem] border shadow-inner gap-4 ${light ? 'bg-[#142d53]/15 border-[#142d53]/15' : 'bg-[#142d53] border-white/10'}`} onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -295,8 +295,8 @@ const CustomAudioPlayer = ({ src, title = "Reporte de Audio" }: { src: string, t
               {isPlaying ? <Pause size={20} /> : <Play size={20} className="ml-1" />}
             </button>
             <div className="flex flex-col text-left overflow-hidden">
-              <span className="text-[10px] font-black text-white/50 uppercase tracking-[2px]">{title}</span>
-              <span className={`text-[11px] font-black uppercase tracking-widest truncate ${isPlaying ? 'text-[#48c1d2] animate-pulse' : 'text-white'}`}>
+              <span className={`text-[10px] font-black uppercase tracking-[2px] ${light ? 'text-[#142d53]/50' : 'text-white/50'}`}>{title}</span>
+              <span className={`text-[11px] font-black uppercase tracking-widest truncate ${isPlaying ? 'text-[#48c1d2] animate-pulse' : light ? 'text-[#142d53]' : 'text-white'}`}>
                 {isPlaying ? 'Reproduciendo...' : 'Listo para oír'}
               </span>
             </div>
@@ -313,7 +313,7 @@ const CustomAudioPlayer = ({ src, title = "Reporte de Audio" }: { src: string, t
         <div className="w-full px-2 flex flex-col gap-2">
           <div className="flex justify-between items-center px-1 mb-[-4px]">
             <span className="text-[9px] font-black text-[#48c1d2] tracking-wider">{formatTime(currentTime)}</span>
-            <span className="text-[9px] font-bold text-white/40 tracking-wider">{formatTime(duration)}</span>
+            <span className={`text-[9px] font-bold tracking-wider ${light ? 'text-[#142d53]/40' : 'text-white/40'}`}>{formatTime(duration)}</span>
           </div>
           <input
             type="range"
@@ -329,9 +329,9 @@ const CustomAudioPlayer = ({ src, title = "Reporte de Audio" }: { src: string, t
                 setCurrentTime(newTime);
               }
             }}
-            className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer custom-slider outline-none"
+            className={`w-full h-1.5 rounded-lg appearance-none cursor-pointer custom-slider outline-none ${light ? 'bg-[#142d53]/10' : 'bg-white/10'}`}
             style={{
-              background: `linear-gradient(to right, [#48c1d2] ${progress}%, rgba(255,255,255,0.1) ${progress}%)`
+              background: `linear-gradient(to right, #48c1d2 ${progress}%, ${light ? 'rgba(20,45,83,0.1)' : 'rgba(255,255,255,0.1)'} ${progress}%)`
             }}
           />
         </div>
@@ -5367,7 +5367,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                           <Trash2 size={12} />
                         </button>
                       </div>
-                      <CustomAudioPlayer title={loc.script_title} src={loc.audio_url} />
+                      <CustomAudioPlayer title={loc.script_title} src={loc.audio_url} light={usado} />
                       <div className="flex gap-2">
                         <button
                           onClick={() => toggleUsadoEnVideo(loc.id, usado)}
