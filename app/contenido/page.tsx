@@ -2091,12 +2091,20 @@ export default function ContenidoPage() {
                                 </div>
                                 <div className="rounded-[2rem] overflow-hidden border border-white/10 w-full max-w-[280px] aspect-[9/16]">
                                   <iframe
+                                    key={`${videoId}-${videoAutoplay}`}
                                     ref={sceneIframeRef}
-                                    src={`https://www.youtube-nocookie.com/embed/${videoId}${videoAutoplay ? '?autoplay=1' : ''}`}
+                                    src={`https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1${videoAutoplay ? '&autoplay=1' : ''}`}
                                     title="Video de instrucción"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
                                     className="w-full h-full"
+                                    onLoad={() => {
+                                      if (videoAutoplay) {
+                                        sceneIframeRef.current?.contentWindow?.postMessage(
+                                          '{"event":"command","func":"playVideo","args":""}', '*'
+                                        );
+                                      }
+                                    }}
                                   />
                                 </div>
                               </div>
