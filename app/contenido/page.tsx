@@ -2224,11 +2224,11 @@ export default function ContenidoPage() {
 
 
       {mounted && showMissionModal && (
-        <div className="max-w-2xl mx-auto px-3 md:px-6 py-6 pb-4 animate-in fade-in duration-300 content-transition">
+        <div className="max-w-2xl lg:max-w-5xl mx-auto px-3 md:px-6 lg:px-8 py-6 lg:py-10 pb-4 animate-in fade-in duration-300 content-transition">
           <div className="relative w-full bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_rgba(20,45,83,0.12)] overflow-hidden flex flex-col">
-            
+
             {/* Cabecera */}
-            <div className="relative p-6 md:p-8 flex justify-between items-end bg-gradient-to-br from-[#142d53] to-[#0a192f] border-b border-[#48c1d2]/20 overflow-hidden">
+            <div className="relative p-6 md:p-8 lg:p-12 flex justify-between items-end bg-gradient-to-br from-[#142d53] to-[#0a192f] border-b border-[#48c1d2]/20 overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#48c1d2]/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
               
               <div className="relative z-10 text-left flex-1">
@@ -2237,7 +2237,7 @@ export default function ContenidoPage() {
                     <span className="text-[10px] sm:text-xs font-black text-[#48c1d2] bg-[#48c1d2]/10 border border-[#48c1d2]/20 px-3.5 py-1.5 rounded-full uppercase tracking-wider mb-3 flex items-center w-fit shadow-sm">
                       🥇 Entrenamiento Obligatorio
                     </span>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tighter leading-tight mt-1">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tighter leading-tight mt-1">
                       ¡Bienvenido, <span className="text-[#48c1d2]">Sebastián!</span>
                     </h2>
                   </>
@@ -2252,7 +2252,7 @@ export default function ContenidoPage() {
                         <span className="text-[9px] font-bold text-white uppercase tracking-wider">Racha: {streakDays} {streakDays === 1 ? 'Día' : 'Días'}</span>
                       </div>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tighter leading-tight mt-1">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tighter leading-tight mt-1">
                       ¿Qué vas a hacer hoy, <span className="text-[#48c1d2]">Sebastián?</span>
                     </h2>
                   </>
@@ -2261,7 +2261,7 @@ export default function ContenidoPage() {
 
               {/* Avatar de Sebastián */}
               <div className="relative z-10 shrink-0 ml-4 mr-4 md:mr-2">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_20px_rgba(72,193,210,0.25)] overflow-hidden">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_20px_rgba(72,193,210,0.25)] overflow-hidden">
                   <img
                     src="/sebastian.jpg"
                     alt="Sebastián"
@@ -2283,7 +2283,7 @@ export default function ContenidoPage() {
             </div>
 
             {/* Contenido Modal */}
-            <div className="p-5 md:p-8 space-y-5">
+            <div className="p-5 md:p-8 lg:p-10 space-y-5 lg:space-y-8">
               {!onboardingDone ? (
                 /* Contenido Onboarding */
                 <div className="space-y-6 text-left">
@@ -2457,7 +2457,7 @@ export default function ContenidoPage() {
                   </p>
                   
                   {/* Grid de Botones Directos */}
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
                     {MISIONES.map((mision) => {
                       const Icon = mision.icon;
                       const isActive = activeMision === mision.id;
@@ -2480,7 +2480,7 @@ export default function ContenidoPage() {
                             handleSelectMision(mision.id);
                             setShowMissionModal(false);
                           }}
-                          className={`relative p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border transition-all cursor-pointer group flex flex-col justify-between hover:shadow-xl active:scale-[0.98] duration-300 overflow-hidden col-span-1 ${
+                          className={`relative p-5 sm:p-6 lg:p-8 rounded-[1.5rem] sm:rounded-[2rem] border transition-all cursor-pointer group flex flex-col justify-between hover:shadow-xl active:scale-[0.98] duration-300 overflow-hidden col-span-1 ${
                             isActive 
                               ? `border-[#48c1d2] bg-[#48c1d2]/5 shadow-md shadow-[#48c1d2]/10` 
                               : `border-slate-200/60 bg-white ${colors.hoverBorder}`
@@ -2491,8 +2491,8 @@ export default function ContenidoPage() {
                           
                           <div className="relative z-10 flex-1 flex flex-col">
                             <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mb-4 gap-3">
-                              <div className={`w-10 h-10 rounded-[14px] flex items-center justify-center shrink-0 transition-colors duration-300 shadow-sm ${isActive ? 'bg-[#48c1d2] text-white' : `${colors.bgLight} ${colors.text} group-hover:${colors.bg} group-hover:text-white`}`}>
-                                <Icon size={20} className="sm:w-5 sm:h-5" />
+                              <div className={`w-10 h-10 lg:w-14 lg:h-14 rounded-[14px] lg:rounded-[18px] flex items-center justify-center shrink-0 transition-colors duration-300 shadow-sm ${isActive ? 'bg-[#48c1d2] text-white' : `${colors.bgLight} ${colors.text} group-hover:${colors.bg} group-hover:text-white`}`}>
+                                <Icon size={20} className="lg:w-7 lg:h-7" />
                               </div>
                               <div className="flex flex-wrap gap-2 items-center">
                                 {dynamicBadge && (
@@ -2505,12 +2505,12 @@ export default function ContenidoPage() {
                                 </span>
                               </div>
                             </div>
-                            <h4 className="text-[13px] sm:text-[15px] font-black text-[#142d53] leading-tight mb-2 tracking-tight">{mision.title}</h4>
-                            <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-relaxed">{mision.desc}</p>
+                            <h4 className="text-[13px] sm:text-[15px] lg:text-lg font-black text-[#142d53] leading-tight mb-2 tracking-tight">{mision.title}</h4>
+                            <p className="text-[10px] sm:text-[11px] lg:text-sm text-slate-500 font-medium leading-relaxed">{mision.desc}</p>
                           </div>
                           
                           <div className="relative z-10 mt-5 flex justify-end">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-[#48c1d2] text-white shadow-md' : 'bg-slate-100 text-slate-400 group-hover:bg-[#142d53] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg'}`}>
+                            <div className={`w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-[#48c1d2] text-white shadow-md' : 'bg-slate-100 text-slate-400 group-hover:bg-[#142d53] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg'}`}>
                               <ArrowRight size={14} className={isActive ? '' : '-translate-x-0.5 group-hover:translate-x-0 transition-transform'} />
                             </div>
                           </div>
@@ -2545,7 +2545,7 @@ export default function ContenidoPage() {
             </div>
             
             {/* Pie de Página */}
-            <div className="p-6 md:p-8 bg-slate-50 border-t border-slate-100 text-center shrink-0">
+            <div className="p-6 md:p-8 lg:p-10 bg-slate-50 border-t border-slate-100 text-center shrink-0">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
                 El Hub Epotech configura tu entorno de producción de forma autónoma.
               </p>
