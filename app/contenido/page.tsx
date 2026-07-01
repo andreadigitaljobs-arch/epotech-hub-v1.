@@ -5316,8 +5316,8 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                       <div className="flex items-center justify-between px-1">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest block">Locución</span>
-                            <span className={`text-[7px] font-black px-2 py-0.5 rounded-full border ${statusStyles}`}>
+                            <span className={`text-[10px] font-black uppercase tracking-widest block ${usado ? 'text-[#142d53]' : 'text-[#48c1d2]'}`}>Locución</span>
+                            <span className={`text-[7px] font-black px-2 py-0.5 rounded-full border ${usado ? 'bg-[#142d53]/10 text-[#142d53] border-[#142d53]/20' : statusStyles}`}>
                               {statusLabel}
                             </span>
                           </div>
@@ -5325,22 +5325,22 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                           {editingItemId === loc.id ? (
                             <div className="space-y-2 mt-2">
                               <div className="flex items-center gap-2">
-                                <input 
-                                  type="text" 
-                                  value={editingTitle} 
+                                <input
+                                  type="text"
+                                  value={editingTitle}
                                   onChange={(e) => setEditingTitle(e.target.value)}
-                                  className="flex-1 bg-white/5 border border-[#48c1d2]/30 rounded-lg px-2 py-1 text-xs font-bold text-white outline-none"
+                                  className={`flex-1 border rounded-lg px-2 py-1 text-xs font-bold outline-none ${usado ? 'bg-white/60 border-[#142d53]/20 text-[#142d53]' : 'bg-white/5 border-[#48c1d2]/30 text-white'}`}
                                   autoFocus
                                 />
                                 <button onClick={() => handleUpdateLocucionTitle(loc.id, editingTitle)} className="p-1.5 bg-[#48c1d2] text-[#142d53] rounded-lg"><CheckCircle2 size={12} /></button>
-                                <button onClick={() => setEditingItemId(null)} className="p-1.5 bg-white/5 text-white/40 rounded-lg"><X size={12} /></button>
+                                <button onClick={() => setEditingItemId(null)} className={`p-1.5 rounded-lg ${usado ? 'bg-[#142d53]/10 text-[#142d53]/40' : 'bg-white/5 text-white/40'}`}><X size={12} /></button>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="text-[7px] font-black text-white/30 uppercase tracking-widest">Cambiar Estado:</span>
-                                <select 
-                                  value={loc.estado || 'recibido'} 
+                                <span className={`text-[7px] font-black uppercase tracking-widest ${usado ? 'text-[#142d53]/50' : 'text-white/30'}`}>Cambiar Estado:</span>
+                                <select
+                                  value={loc.estado || 'recibido'}
                                   onChange={(e) => handleUpdateLocucionStatus(loc.id, e.target.value)}
-                                  className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[8px] font-bold text-[#48c1d2] outline-none"
+                                  className={`border rounded-lg px-2 py-1 text-[8px] font-bold text-[#48c1d2] outline-none ${usado ? 'bg-white/40 border-[#142d53]/10' : 'bg-white/5 border-white/10'}`}
                                 >
                                   <option value="recibido" className="bg-[#142d53]">VOZ ENVIADA</option>
                                   <option value="editando" className="bg-[#142d53]">EN EDICIÓN</option>
@@ -5350,10 +5350,10 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                             </div>
                           ) : (
                             <div className="flex items-center gap-2 group/title">
-                              <p className="text-sm font-black text-white uppercase  truncate leading-tight">{loc.script_title}</p>
-                              <button 
+                              <p className={`text-sm font-black uppercase truncate leading-tight ${usado ? 'text-[#142d53]' : 'text-white'}`}>{loc.script_title}</p>
+                              <button
                                 onClick={() => { setEditingItemId(loc.id); setEditingTitle(loc.script_title || ''); }}
-                                className="p-1.5 bg-white/5 text-[#48c1d2] rounded-lg hover:bg-[#48c1d2]/20 transition-all ml-1"
+                                className={`p-1.5 rounded-lg transition-all ml-1 ${usado ? 'bg-[#142d53]/10 text-[#142d53] hover:bg-[#142d53]/20' : 'bg-white/5 text-[#48c1d2] hover:bg-[#48c1d2]/20'}`}
                                 title="Editar nombre"
                               >
                                 <Edit3 size={12} />
@@ -5361,8 +5361,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                             </div>
                           )}
 
-                          
-                          <p className="text-[10px] font-bold text-white/40 uppercase mt-0.5">{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                          <p className={`text-[10px] font-bold uppercase mt-0.5 ${usado ? 'text-[#142d53]/50' : 'text-white/40'}`}>{new Date(loc.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         </div>
                         <button onClick={() => handleDeleteLocucion(loc.id, loc.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20 shrink-0 ml-2">
                           <Trash2 size={12} />
