@@ -772,15 +772,15 @@ export const guionesPresentacion: Script[] = [
         title: '🎬 ESCENA 5 — CIERRE Y LLAMADA A LA ACCIÓN',
         talent: {
           whatToSay: '"Porque al final… todo se trata de confianza. Si eso es lo que estás buscando, escríbenos."',
-          howToMove: 'Pausa corta. Mira directo a cámara.',
-          gesture: 'Serio, seguro.',
+          howToMove: 'Párate al lado de la camioneta, junto a la puerta del piloto. Pon la mano en la manija, ábrela despacio y sube al carro. Ya sentado, mira directo a cámara y di tu frase con calma y seguridad.\n\nAl decir "escríbenos" — arranca la camioneta y avanza lentamente hacia adelante hasta salir de cuadro. No te apures. Que el movimiento del carro sea el cierre visual.',
+          gesture: 'Serio y confiado durante toda la escena. Al arrancar el carro no mires a cámara — enfócate en el camino como si fueras a trabajar. Ese momento de "ya me voy a trabajar" es el poder del cierre.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'En el patio o pasillo interior de la casa.',
-          angle: 'Cámara fija.',
-          movement: 'Buen encuadre.',
-          avoid: 'No te muevas.',
+          whereToStand: 'Parada frente a la camioneta, un poco a un lado para ver la puerta y a él al mismo tiempo. Cuando él suba, muévete suavemente hacia la ventana del piloto para capturar su cara.',
+          angle: 'Plano medio/entero al principio. Cuando arranque el carro, quédate fija y deja que la camioneta avance y salga de cuadro sola.',
+          movement: 'Sigue el movimiento de él al abrir la puerta y subir. Cuando arranque, NO sigas el carro — mantén la cámara quieta y deja que se aleje.',
+          avoid: 'No sigas el carro cuando arranque — cámara fija. No cortes antes de que la camioneta desaparezca del cuadro.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       }
