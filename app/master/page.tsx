@@ -355,7 +355,7 @@ export default function MasterPanel() {
          
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            {reportesAudio.map(r => (
-             <Card key={r.id} className="p-6 border-2 border-slate-100 bg-white rounded-[2rem] shadow-xl relative group overflow-hidden">
+             <div key={r.id} className="p-6 border-2 border-slate-100 bg-white rounded-[2rem] shadow-xl relative group overflow-hidden">
                 <div className="flex justify-between items-start mb-4">
                    <span className="text-[8px] font-black px-3 py-1.5 bg-[#142d53] text-[#48c1d2] rounded-xl tracking-widest uppercase shadow-md truncate max-w-[70%]">
                      {r.proyecto_id === 'manual' ? 'Libre' : r.proyecto_id}
@@ -383,7 +383,7 @@ export default function MasterPanel() {
                       </button>
                    </div>
                 </div>
-             </Card>
+             </div>
            ))}
            {reportesAudio.length === 0 && (
              <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-300 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[3rem]">
@@ -408,31 +408,30 @@ export default function MasterPanel() {
          
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            {locuciones.map(loc => (
-             <Card key={loc.id} className="p-6 border-2 border-[#48c1d2]/20 bg-[#142d53] rounded-[2rem] shadow-xl relative group overflow-hidden">
+             <div key={loc.id} className="p-6 border-2 border-[#48c1d2]/20 bg-[#142d53] rounded-[2rem] shadow-xl relative group overflow-hidden">
                 <div className="flex justify-between items-start mb-3">
                    <div className="flex-1 min-w-0 mr-2">
                      <span className="text-[7px] font-black text-[#48c1d2] uppercase tracking-widest block mb-0.5 opacity-60">Locución</span>
                      <h4 className="text-xs font-black text-white leading-tight truncate">{loc.script_title}</h4>
                      <p className="text-[8px] font-bold text-white/40 mt-1 uppercase tracking-tighter">{formatDate(loc.created_at)}</p>
                    </div>
-                   <button 
+                   <button
                      onClick={() => deleteLocucion(loc.id, loc.audio_url)}
                      className="text-white/20 hover:text-red-400 transition-colors bg-white/5 p-2 rounded-lg shrink-0"
                    >
                      <Trash2 size={16} />
                    </button>
                 </div>
-                
                 <div className="space-y-3">
                    <audio src={loc.audio_url} controls className="w-full h-10 rounded-xl opacity-80" />
-                   <button 
+                   <button
                      onClick={() => forceDownload(loc.audio_url, loc.id)}
                      className="w-full flex items-center justify-center gap-2 text-[9px] font-black text-[#48c1d2] tracking-widest uppercase bg-[#48c1d2]/10 px-4 py-3 rounded-xl border border-[#48c1d2]/20 active:scale-95 hover:bg-[#48c1d2]/20 transition-all"
                    >
                      <Download size={14} /> Descargar
                    </button>
                 </div>
-             </Card>
+             </div>
            ))}
            {locuciones.length === 0 && (
              <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-300 bg-[#142d53]/50 border-2 border-dashed border-white/5 rounded-[3rem]">
