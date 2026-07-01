@@ -1622,6 +1622,16 @@ export default function ContenidoPage() {
     }
   };
 
+  useEffect(() => {
+    supabase.from('scene_config').select('*').then(({ data }) => {
+      if (data) {
+        const map: Record<string, { audio_enabled: boolean; video_url: string | null }> = {};
+        data.forEach((c: any) => { map[c.scene_id] = { audio_enabled: c.audio_enabled, video_url: c.video_url }; });
+        setSceneConfig(map);
+      }
+    });
+  }, []);
+
   const updateSceneConfig = async (sceneId: string, field: 'audio_enabled' | 'video_url', value: any) => {
     const current = sceneConfig[sceneId] || { audio_enabled: false, video_url: null };
     const updated = { ...current, [field]: value };
@@ -1895,10 +1905,14 @@ export default function ContenidoPage() {
                           </h3>
 
                           {/* VIDEO DE INSTRUCCIÓN */}
-                          {selectedScript.scenes[currentStepIdx].videoUrl && (() => {
-                            const raw = selectedScript.scenes[currentStepIdx].videoUrl!;
+                          {(() => {
+                            const sceneId = selectedScript.scenes[currentStepIdx].id;
+                            const raw = sceneConfig[sceneId]?.video_url || selectedScript.scenes[currentStepIdx].videoUrl || '';
+                            if (!raw) return null;
                             const videoId = raw.includes('youtu.be/')
                               ? raw.split('youtu.be/')[1]?.split('?')[0]
+                              : raw.includes('shorts/')
+                              ? raw.split('shorts/')[1]?.split('?')[0]
                               : raw.split('v=')[1]?.split('&')[0];
                             return videoId ? (
                               <div className="rounded-[2rem] overflow-hidden border border-white/10">

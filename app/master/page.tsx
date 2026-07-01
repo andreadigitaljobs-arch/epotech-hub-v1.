@@ -38,6 +38,8 @@ export default function MasterPanel() {
   const [reportesAudio, setReportesAudio] = useState<any[]>([]);
   const [locuciones, setLocuciones] = useState<any[]>([]);
   const [sceneConfig, setSceneConfig] = useState<Record<string, { audio_enabled: boolean; video_url: string | null }>>({});
+  const [selectedScriptId, setSelectedScriptId] = useState<string>('');
+  const [selectedSceneIdx, setSelectedSceneIdx] = useState(0);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
     message: "",
@@ -442,71 +444,132 @@ export default function MasterPanel() {
          </div>
       </div>
       {/* CONFIGURACIÓN DE ESCENAS */}
-      <div className="mt-12 md:mt-16">
-        <h3 className="text-lg md:text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-2 flex items-center gap-3 px-1">
-          <div className="bg-[#48c1d2]/20 p-2 rounded-xl text-[#48c1d2] shrink-0">
-            <Settings size={20} />
-          </div>
-          Configurar Escenas
-        </h3>
-        <p className="text-xs font-bold text-slate-400 mb-6 px-1 leading-relaxed">
-          Activa el micrófono de voz en off o pega un video de YouTube por escena. Solo tú puedes ver esto.
-        </p>
+      {(() => {
+        const scripts = guionesPresentacion.filter(s => s.isPinned && s.scenes && s.scenes.length > 0);
+        const activeScriptId = selectedScriptId || scripts[0]?.id || '';
+        const activeScript = scripts.find(s => s.id === activeScriptId) || scripts[0];
+        const scenes = activeScript?.scenes || [];
+        const sceneIdx = Math.min(selectedSceneIdx, scenes.length - 1);
+        const scene = scenes[sceneIdx];
+        const cfg = scene ? (sceneConfig[scene.id] || { audio_enabled: false, video_url: null }) : null;
 
-        <div className="space-y-8">
-          {guionesPresentacion.filter(s => s.isPinned && s.scenes && s.scenes.length > 0).map(script => (
-            <div key={script.id}>
-              <div className="flex items-center gap-2 mb-3 px-1">
-                <Video size={14} className="text-[#48c1d2]" />
-                <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">{script.title}</span>
+        return (
+          <div className="mt-12 md:mt-16">
+            <h3 className="text-lg md:text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-2 flex items-center gap-3 px-1">
+              <div className="bg-[#48c1d2]/20 p-2 rounded-xl text-[#48c1d2] shrink-0">
+                <Settings size={20} />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {script.scenes!.map(scene => {
-                  const cfg = sceneConfig[scene.id] || { audio_enabled: false, video_url: null };
-                  return (
-                    <Card key={scene.id} className="p-5 border-2 border-slate-100 rounded-[2rem] space-y-4">
-                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{scene.title}</p>
+              Configurar Escenas
+            </h3>
+            <p className="text-xs font-bold text-slate-400 mb-6 px-1 leading-relaxed">
+              Activa el micrófono de voz en off o pega un video de YouTube por escena. Solo tú puedes ver esto.
+            </p>
 
-                      {/* Toggle micrófono */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Mic size={14} className={cfg.audio_enabled ? 'text-[#48c1d2]' : 'text-slate-300'} />
-                          <span className={`text-[11px] font-bold ${cfg.audio_enabled ? 'text-[#142d53]' : 'text-slate-400'}`}>
-                            Grabador de voz en off
-                          </span>
-                        </div>
-                        <button
-                          onClick={() => updateSceneConfig(scene.id, 'audio_enabled', !cfg.audio_enabled)}
-                          className={`w-12 h-6 rounded-full transition-all relative ${cfg.audio_enabled ? 'bg-[#48c1d2]' : 'bg-slate-200'}`}
-                        >
-                          <span className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all shadow-sm ${cfg.audio_enabled ? 'left-7' : 'left-1'}`} />
-                        </button>
-                      </div>
-
-                      {/* URL de YouTube */}
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          <PlayCircle size={14} className={cfg.video_url ? 'text-[#48c1d2]' : 'text-slate-300'} />
-                          <span className={`text-[11px] font-bold ${cfg.video_url ? 'text-[#142d53]' : 'text-slate-400'}`}>
-                            Video de YouTube
-                          </span>
-                        </div>
-                        <input
-                          type="text"
-                          placeholder="https://www.youtube.com/watch?v=..."
-                          value={cfg.video_url || ''}
-                          onChange={e => updateSceneConfig(scene.id, 'video_url', e.target.value || null)}
-                          className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 py-3 text-[11px] font-bold text-slate-700 placeholder:text-slate-300 outline-none focus:border-[#48c1d2] transition-all"
-                        />
-                      </div>
-                    </Card>
-                  );
-                })}
+            {/* Selector de guión */}
+            {scripts.length > 1 && (
+              <div className="flex flex-wrap gap-2 mb-5">
+                {scripts.map(s => (
+                  <button
+                    key={s.id}
+                    onClick={() => { setSelectedScriptId(s.id); setSelectedSceneIdx(0); }}
+                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all border-2 ${activeScriptId === s.id ? 'bg-[#142d53] text-[#48c1d2] border-[#142d53]' : 'bg-white text-slate-400 border-slate-200 hover:border-slate-300'}`}
+                  >
+                    {s.title}
+                  </button>
+                ))}
               </div>
+            )}
+
+            {/* Selector de escena — pills numeradas */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {scenes.map((sc, i) => {
+                const c = sceneConfig[sc.id] || { audio_enabled: false, video_url: null };
+                const hasConfig = c.audio_enabled || !!c.video_url;
+                return (
+                  <button
+                    key={sc.id}
+                    onClick={() => setSelectedSceneIdx(i)}
+                    className={`relative w-10 h-10 rounded-2xl text-[11px] font-black transition-all border-2 ${i === sceneIdx ? 'bg-[#48c1d2] text-[#142d53] border-[#48c1d2] shadow-lg shadow-[#48c1d2]/30' : 'bg-white text-slate-400 border-slate-200 hover:border-[#48c1d2]/50'}`}
+                  >
+                    {i + 1}
+                    {hasConfig && (
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#48c1d2] border-2 border-white" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
-          ))}
-        </div>
-      </div>
+
+            {/* Panel de la escena seleccionada */}
+            {scene && cfg && (
+              <div className="border-2 border-slate-100 rounded-[2rem] p-6 space-y-6 bg-white">
+                <p className="text-[11px] font-black text-slate-500 uppercase tracking-widest">{scene.title}</p>
+
+                {/* Toggle micrófono */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Mic size={16} className={cfg.audio_enabled ? 'text-[#48c1d2]' : 'text-slate-300'} />
+                    <div>
+                      <p className={`text-sm font-black ${cfg.audio_enabled ? 'text-[#142d53]' : 'text-slate-400'}`}>Grabador de voz en off</p>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Sebastián podrá grabar audio en esta escena</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => updateSceneConfig(scene.id, 'audio_enabled', !cfg.audio_enabled)}
+                    className={`w-14 h-7 rounded-full transition-all relative shrink-0 ${cfg.audio_enabled ? 'bg-[#48c1d2]' : 'bg-slate-200'}`}
+                  >
+                    <span className={`absolute top-1.5 w-4 h-4 rounded-full bg-white transition-all shadow-sm ${cfg.audio_enabled ? 'left-9' : 'left-1.5'}`} />
+                  </button>
+                </div>
+
+                {/* URL de YouTube */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <PlayCircle size={16} className={cfg.video_url ? 'text-[#48c1d2]' : 'text-slate-300'} />
+                    <div>
+                      <p className={`text-sm font-black ${cfg.video_url ? 'text-[#142d53]' : 'text-slate-400'}`}>Video de YouTube</p>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Se mostrará en el modal de instrucciones</p>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    value={cfg.video_url || ''}
+                    onChange={e => updateSceneConfig(scene.id, 'video_url', e.target.value || null)}
+                    className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 py-3 text-sm font-bold text-slate-700 placeholder:text-slate-300 outline-none focus:border-[#48c1d2] transition-all"
+                  />
+                  {cfg.video_url && (
+                    <button
+                      onClick={() => updateSceneConfig(scene.id, 'video_url', null)}
+                      className="text-[9px] font-black text-red-400 hover:text-red-500 uppercase tracking-widest"
+                    >
+                      Quitar video
+                    </button>
+                  )}
+                </div>
+
+                {/* Navegación prev/next */}
+                <div className="flex gap-3 pt-2">
+                  <button
+                    onClick={() => setSelectedSceneIdx(i => Math.max(0, i - 1))}
+                    disabled={sceneIdx === 0}
+                    className="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-wider border-2 border-slate-200 text-slate-400 disabled:opacity-30 hover:border-slate-300 transition-all"
+                  >
+                    ← Escena anterior
+                  </button>
+                  <button
+                    onClick={() => setSelectedSceneIdx(i => Math.min(scenes.length - 1, i + 1))}
+                    disabled={sceneIdx === scenes.length - 1}
+                    className="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-wider bg-[#142d53] text-[#48c1d2] disabled:opacity-30 hover:bg-[#142d53]/80 transition-all"
+                  >
+                    Siguiente escena →
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })()}
 
       <Toast
         message={toast.message}
