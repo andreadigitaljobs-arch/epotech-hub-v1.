@@ -743,10 +743,10 @@ export const guionesPresentacion: Script[] = [
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'En la sala o comedor. Ponte frente a él.',
-          angle: 'Plano de cintura hacia arriba.',
-          movement: 'Quédate quieta.',
-          avoid: 'No cambies ángulo. No hagas zoom.',
+          whereToStand: 'Párate frente a él, en el lado opuesto a donde está limpiando. Que se vea tanto a él como la superficie que limpia en el mismo cuadro.',
+          angle: 'Plano medio (cintura hacia arriba). Cuando él deje el trapo y mire a cámara, ese momento es el más importante — asegurate de tenerlo bien encuadrado.',
+          movement: 'Al inicio puedes hacer un leve acercamiento mientras limpia. Cuando voltea a cámara — quieta.',
+          avoid: 'No ponerse de espaldas a la ventana (contra-luz). No cortar la mano con el trapo del cuadro.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       },
@@ -760,10 +760,10 @@ export const guionesPresentacion: Script[] = [
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'Donde estés trabajando o en la camioneta. Luz natural si es posible.',
-          angle: 'Plano medio o plano entero según el movimiento. Vertical 9:16.',
-          movement: 'Los b-rolls pueden tener movimiento leve de cámara — eso se ve profesional.',
-          avoid: 'No grabes en lugares oscuros. No usar ropa de casa — siempre uniforme de trabajo.',
+          whereToStand: 'Cambia de posición para cada b-roll. No los grabes todos desde el mismo lugar.',
+          angle: 'Varía: plano entero para los de movimiento (cargar camioneta, caminar), plano medio para el saludo y el resultado. Siempre vertical 9:16.',
+          movement: 'En los b-rolls de acción (limpiar, cargar) puedes caminar junto a él o hacer un leve paneo. Se ve más dinámico que cámara fija.',
+          avoid: 'No grabar en contra de la luz. No grabar con ropa de casa — él debe estar con uniforme y cinturón en todos. Cada clip mínimo 6 segundos.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       },
