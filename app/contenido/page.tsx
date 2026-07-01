@@ -1101,6 +1101,9 @@ export default function ContenidoPage() {
   const [sceneRecordTime, setSceneRecordTime] = useState(0);
   const sceneMediaRecorder = useRef<MediaRecorder | null>(null);
   const sceneAudioChunks = useRef<Blob[]>([]);
+  const sceneVideoRef = useRef<HTMLDivElement | null>(null);
+  const sceneIframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [videoAutoplay, setVideoAutoplay] = useState(false);
   const [isUploadingVozCamara, setIsUploadingVozCamara] = useState(false);
   const [vozCamaraSent, setVozCamaraSent] = useState(false);
   const [vocesCamara, setVocesCamara] = useState<any[]>([]);
@@ -1901,33 +1904,31 @@ export default function ContenidoPage() {
                     >
                       {selectedScript.scenes?.[currentStepIdx] && (
                         <>
-                          <h3 className="text-2xl font-black text-white  tracking-tighter text-center">
-                            {selectedScript?.scenes?.[currentStepIdx]?.title}
-                          </h3>
-
-                          {/* VIDEO DE INSTRUCCIÓN */}
                           {(() => {
                             const sceneId = selectedScript.scenes[currentStepIdx].id;
                             const raw = sceneConfig[sceneId]?.video_url || selectedScript.scenes[currentStepIdx].videoUrl || '';
-                            if (!raw) return null;
-                            const videoId = raw.includes('youtu.be/')
-                              ? raw.split('youtu.be/')[1]?.split('?')[0]
-                              : raw.includes('shorts/')
-                              ? raw.split('shorts/')[1]?.split('?')[0]
-                              : raw.split('v=')[1]?.split('&')[0];
-                            return videoId ? (
-                              <div className="flex justify-center">
-                                <div className="rounded-[2rem] overflow-hidden border border-white/10 w-full max-w-[280px] aspect-[9/16]">
-                                  <iframe
-                                    src={`https://www.youtube-nocookie.com/embed/${videoId}`}
-                                    title="Video de instrucción"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                    className="w-full h-full"
-                                  />
-                                </div>
+                            const hasVideo = !!(raw && (raw.includes('youtu.be/') || raw.includes('shorts/') || raw.includes('v=')));
+                            return (
+                              <div className="flex items-center justify-between gap-3">
+                                <h3 className="text-2xl font-black text-white tracking-tighter">
+                                  {selectedScript?.scenes?.[currentStepIdx]?.title}
+                                </h3>
+                                {hasVideo && (
+                                  <button
+                                    onClick={() => {
+                                      setVideoAutoplay(true);
+                                      setTimeout(() => {
+                                        sceneVideoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                      }, 50);
+                                    }}
+                                    className="shrink-0 flex items-center gap-1.5 bg-[#48c1d2]/10 border border-[#48c1d2]/30 text-[#48c1d2] text-[9px] font-black uppercase tracking-wider px-3 py-2 rounded-xl hover:bg-[#48c1d2]/20 transition-all"
+                                  >
+                                    <PlayCircle size={13} />
+                                    Tutorial
+                                  </button>
+                                )}
                               </div>
-                            ) : null;
+                            );
                           })()}
 
                           {/* INSTRUCCIONES SEBASTIÁN */}
@@ -2070,6 +2071,37 @@ export default function ContenidoPage() {
                               </div>
                             </div>
                           </div>
+
+                          {/* VIDEO TUTORIAL — al final, se abre con el botón */}
+                          {(() => {
+                            const sceneId = selectedScript.scenes[currentStepIdx].id;
+                            const raw = sceneConfig[sceneId]?.video_url || selectedScript.scenes[currentStepIdx].videoUrl || '';
+                            if (!raw) return null;
+                            const videoId = raw.includes('youtu.be/')
+                              ? raw.split('youtu.be/')[1]?.split('?')[0]
+                              : raw.includes('shorts/')
+                              ? raw.split('shorts/')[1]?.split('?')[0]
+                              : raw.split('v=')[1]?.split('&')[0];
+                            if (!videoId) return null;
+                            return (
+                              <div ref={sceneVideoRef} className="flex flex-col items-center gap-3">
+                                <div className="flex items-center gap-2 w-full">
+                                  <PlayCircle size={13} className="text-[#48c1d2]" />
+                                  <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px]">Video tutorial</span>
+                                </div>
+                                <div className="rounded-[2rem] overflow-hidden border border-white/10 w-full max-w-[280px] aspect-[9/16]">
+                                  <iframe
+                                    ref={sceneIframeRef}
+                                    src={`https://www.youtube-nocookie.com/embed/${videoId}${videoAutoplay ? '?autoplay=1' : ''}`}
+                                    title="Video de instrucción"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="w-full h-full"
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })()}
 
                         </>
                       )}
@@ -2280,6 +2312,7 @@ export default function ContenidoPage() {
                     setDirection(-1);
                     setCurrentStepIdx(prev => prev - 1);
                     setSceneRecordedUrl(null); setSceneRecordedBlob(null); setSceneRecordTime(0);
+                    setVideoAutoplay(false);
                   }}
                   className={`flex-1 py-5 px-4 rounded-[24px] text-[10px] font-black uppercase tracking-tight transition-all ${currentStepIdx === 0 ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-white/10 text-white hover:bg-white/20 border border-white/10 active:scale-95'}`}
                 >
@@ -2291,6 +2324,7 @@ export default function ContenidoPage() {
                       setDirection(1);
                       setCurrentStepIdx(prev => prev + 1);
                       setSceneRecordedUrl(null); setSceneRecordedBlob(null); setSceneRecordTime(0);
+                      setVideoAutoplay(false);
                     }}
                     className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
                   >
