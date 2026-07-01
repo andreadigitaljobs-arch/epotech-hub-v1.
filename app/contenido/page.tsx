@@ -4555,6 +4555,11 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
     }
   };
 
+  const toggleUsadoEnVideo = async (locId: string, current: boolean) => {
+    await supabase.from('locuciones').update({ usado_en_video: !current }).eq('id', locId);
+    setLocuciones(prev => prev.map(l => l.id === locId ? { ...l, usado_en_video: !current } : l));
+  };
+
   const handleUpdateLocucionTitle = async (locId: string, newTitle: string) => {
     try {
       await supabase.from('locuciones').update({ script_title: newTitle }).eq('id', locId);
@@ -5293,20 +5298,21 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aún no hay locuciones enviadas</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                   {locuciones.map((loc: any) => {
                     const status = loc.estado || 'recibido';
-                    const statusStyles = 
+                    const usado = loc.usado_en_video === true;
+                    const statusStyles =
                       status === 'publicado' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
                       status === 'editando' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
                       'bg-slate-500/20 text-slate-400 border-slate-500/30';
-                    const statusLabel = 
+                    const statusLabel =
                       status === 'publicado' ? 'VIDEO PUBLICADO' :
                       status === 'editando' ? 'EN EDICIÓN' :
                       'VOZ ENVIADA';
 
                     return (
-                    <div key={loc.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-[#48c1d2]/10 space-y-3">
+                    <div key={loc.id} className={`p-4 rounded-[2rem] border space-y-3 transition-all ${usado ? 'bg-violet-900/60 border-violet-500/40' : 'bg-[#142d53] border-[#48c1d2]/10'}`}>
                       <div className="flex items-center justify-between px-1">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
@@ -5363,12 +5369,20 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                         </button>
                       </div>
                       <CustomAudioPlayer title={loc.script_title} src={loc.audio_url} />
-                      <button 
-                        onClick={() => forceDownload(loc.audio_url, `Locucion_${loc.id}.wav`)}
-                        className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
-                      >
-                        <Download size={12} /> Descargar WAV
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => toggleUsadoEnVideo(loc.id, usado)}
+                          className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border ${usado ? 'bg-violet-500/20 text-violet-300 border-violet-500/30 hover:bg-violet-500/30' : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'}`}
+                        >
+                          <CheckCircle size={12} /> {usado ? '✓ Usado en video' : 'Marcar como usado'}
+                        </button>
+                        <button
+                          onClick={() => forceDownload(loc.audio_url, `Locucion_${loc.id}.wav`)}
+                          className="px-4 py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
+                        >
+                          <Download size={12} />
+                        </button>
+                      </div>
                     </div>
                     );
                   })}
