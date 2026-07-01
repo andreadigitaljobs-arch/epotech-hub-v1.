@@ -1961,6 +1961,70 @@ export default function ContenidoPage() {
                                   </p>
                                 </div>
                               </div>
+
+                              {/* GRABADOR DE VOZ EN OFF — dentro de la tarjeta de Sebastián */}
+                              {(() => {
+                                const sid = selectedScript.scenes[currentStepIdx].id;
+                                if (!sceneConfig[sid]?.audio_enabled) return null;
+                                return (
+                                  <div className="border-t border-[#48c1d2]/20 pt-5 space-y-4">
+                                    <div className="flex items-center gap-2">
+                                      <Mic size={13} className="text-[#48c1d2]" />
+                                      <span className="text-[9px] font-black text-[#48c1d2] uppercase tracking-[2px]">Grabar Voz en Off</span>
+                                    </div>
+                                    {vozCamaraSent ? (
+                                      <div className="flex items-center gap-3 py-2">
+                                        <CheckCircle2 size={20} className="text-[#48c1d2]" />
+                                        <div>
+                                          <p className="text-sm font-black text-white">¡Voz enviada!</p>
+                                          <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Guardada en el historial</p>
+                                        </div>
+                                      </div>
+                                    ) : sceneRecordedUrl ? (
+                                      <div className="space-y-3">
+                                        <CustomAudioPlayer title="Voz grabada" src={sceneRecordedUrl} />
+                                        <div className="flex gap-2">
+                                          <button
+                                            onClick={() => { setSceneRecordedUrl(null); setSceneRecordedBlob(null); setSceneRecordTime(0); }}
+                                            className="flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-white/5 text-white/50 border border-white/10 hover:bg-white/10 transition-all"
+                                          >
+                                            Grabar de nuevo
+                                          </button>
+                                          <button
+                                            onClick={handleSendVozCamara}
+                                            disabled={isUploadingVozCamara}
+                                            className="flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-[#48c1d2] text-[#142d53] hover:bg-[#48c1d2]/80 transition-all disabled:opacity-50"
+                                          >
+                                            {isUploadingVozCamara ? 'Enviando...' : 'Enviar Voz'}
+                                          </button>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center gap-4">
+                                        <button
+                                          onClick={sceneIsRecording ? stopSceneRecording : startSceneRecording}
+                                          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all shrink-0 ${sceneIsRecording ? 'bg-red-500 hover:bg-red-400 animate-pulse' : 'bg-[#48c1d2] hover:bg-[#48c1d2]/80'}`}
+                                        >
+                                          {sceneIsRecording ? <div className="w-4 h-4 rounded-sm bg-white" /> : <Mic size={18} className="text-[#142d53]" />}
+                                        </button>
+                                        <div>
+                                          {sceneIsRecording ? (
+                                            <div className="flex items-center gap-2">
+                                              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                                              <span className="text-sm font-black text-white tabular-nums">{formatTime(sceneRecordTime)}</span>
+                                            </div>
+                                          ) : (
+                                            <p className="text-sm font-black text-white/60">Toca para grabar</p>
+                                          )}
+                                          <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest">
+                                            {sceneIsRecording ? 'Grabando...' : 'Voz en off para esta escena'}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })()}
                             </div>
                           </div>
 
@@ -2004,68 +2068,6 @@ export default function ContenidoPage() {
                             </div>
                           </div>
 
-                          {/* GRABADOR DE VOZ EN OFF POR ESCENA */}
-                          {(() => {
-                            const sid = selectedScript.scenes[currentStepIdx].id;
-                            const cfg = sceneConfig[sid];
-                            if (!cfg?.audio_enabled) return null;
-                            return (
-                              <div className="bg-[#48c1d2]/5 rounded-[2.5rem] border border-[#48c1d2]/20 overflow-hidden">
-                                <div className="p-5 border-b border-[#48c1d2]/10 bg-[#48c1d2]/10 flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded-full bg-[#48c1d2] flex items-center justify-center text-[#142d53]">
-                                    <Mic size={16} />
-                                  </div>
-                                  <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px]">Grabar Voz en Off — Esta Escena</span>
-                                </div>
-                                <div className="p-5 space-y-4">
-                                  {vozCamaraSent ? (
-                                    <div className="text-center py-4 space-y-2">
-                                      <CheckCircle2 size={32} className="text-[#48c1d2] mx-auto" />
-                                      <p className="text-sm font-black text-white">¡Voz enviada!</p>
-                                      <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Guardada en el historial</p>
-                                    </div>
-                                  ) : sceneRecordedUrl ? (
-                                    <div className="space-y-3">
-                                      <CustomAudioPlayer title="Voz grabada" src={sceneRecordedUrl} />
-                                      <div className="flex gap-2">
-                                        <button
-                                          onClick={() => { setSceneRecordedUrl(null); setSceneRecordedBlob(null); setSceneRecordTime(0); }}
-                                          className="flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest bg-white/5 text-white/50 border border-white/10 hover:bg-white/10 transition-all"
-                                        >
-                                          Grabar de nuevo
-                                        </button>
-                                        <button
-                                          onClick={handleSendVozCamara}
-                                          disabled={isUploadingVozCamara}
-                                          className="flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest bg-[#48c1d2] text-[#142d53] hover:bg-[#48c1d2]/80 transition-all disabled:opacity-50"
-                                        >
-                                          {isUploadingVozCamara ? 'Enviando...' : 'Enviar Voz'}
-                                        </button>
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    <div className="flex flex-col items-center gap-4 py-2">
-                                      {sceneIsRecording && (
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                                          <span className="text-sm font-black text-white tabular-nums">{formatTime(sceneRecordTime)}</span>
-                                        </div>
-                                      )}
-                                      <button
-                                        onClick={sceneIsRecording ? stopSceneRecording : startSceneRecording}
-                                        className={`w-16 h-16 rounded-full flex items-center justify-center transition-all ${sceneIsRecording ? 'bg-red-500 hover:bg-red-400 animate-pulse' : 'bg-[#48c1d2] hover:bg-[#48c1d2]/80'}`}
-                                      >
-                                        {sceneIsRecording ? <div className="w-5 h-5 rounded-sm bg-white" /> : <Mic size={24} className="text-[#142d53]" />}
-                                      </button>
-                                      <p className="text-[9px] font-black text-white/30 uppercase tracking-widest">
-                                        {sceneIsRecording ? 'Toca para detener' : 'Toca para grabar'}
-                                      </p>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })()}
                         </>
                       )}
                     </motion.div>
