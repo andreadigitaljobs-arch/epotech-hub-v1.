@@ -1951,20 +1951,71 @@ export default function ContenidoPage() {
                                   />
                                 </div>
                               )}
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 ">Cómo moverse:</span>
-                                  <p className="text-[11px] font-bold text-white/80 leading-snug whitespace-pre-line">
-                                    {selectedScript?.scenes?.[currentStepIdx]?.talent?.howToMove}
-                                  </p>
-                                </div>
-                                <div>
-                                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 ">Gesto/Actitud:</span>
-                                  <p className="text-[11px] font-bold text-white/80 leading-snug">
-                                    {selectedScript.scenes[currentStepIdx].talent.gesture}
-                                  </p>
-                                </div>
-                              </div>
+                              {(() => {
+                                const howToMove = selectedScript?.scenes?.[currentStepIdx]?.talent?.howToMove || '';
+                                const gesture = selectedScript?.scenes?.[currentStepIdx]?.talent?.gesture || '';
+                                const isLong = howToMove.includes('\n\n') || howToMove.length > 120;
+
+                                if (isLong) {
+                                  // Layout expandido para instrucciones largas con pasos
+                                  const blocks = howToMove.split('\n\n').filter(Boolean);
+                                  return (
+                                    <div className="space-y-4">
+                                      {blocks.map((block, bi) => {
+                                        const lines = block.split('\n').filter(Boolean);
+                                        const isNumberedList = lines.some(l => /^\d+\./.test(l.trim()));
+                                        const header = !isNumberedList ? lines[0] : null;
+                                        const items = isNumberedList ? lines : lines.slice(1);
+                                        return (
+                                          <div key={bi} className={`rounded-2xl p-4 space-y-2 ${bi === 0 ? 'bg-[#48c1d2]/10 border border-[#48c1d2]/20' : bi === blocks.length - 1 ? 'bg-white/5 border border-white/10' : 'bg-white/5 border border-white/10'}`}>
+                                            {header && (
+                                              <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-wider">{header}</p>
+                                            )}
+                                            {isNumberedList ? (
+                                              <div className="space-y-2">
+                                                {items.map((item, ii) => {
+                                                  const match = item.trim().match(/^(\d+)\.\s(.+)/);
+                                                  if (!match) return <p key={ii} className="text-[11px] font-bold text-white/80">{item}</p>;
+                                                  return (
+                                                    <div key={ii} className="flex gap-3 items-start">
+                                                      <span className="shrink-0 w-6 h-6 rounded-full bg-[#48c1d2] text-[#142d53] text-[10px] font-black flex items-center justify-center mt-0.5">{match[1]}</span>
+                                                      <p className="text-[11px] font-bold text-white/80 leading-snug flex-1">{match[2]}</p>
+                                                    </div>
+                                                  );
+                                                })}
+                                              </div>
+                                            ) : (
+                                              items.map((line, li) => (
+                                                <p key={li} className="text-[11px] font-bold text-white/80 leading-snug">{line}</p>
+                                              ))
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                      {gesture && (
+                                        <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-2xl p-4">
+                                          <span className="text-[8px] font-black text-yellow-400 uppercase tracking-widest block mb-1">Actitud</span>
+                                          <p className="text-[11px] font-bold text-white/80 leading-snug">{gesture}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                }
+
+                                // Layout compacto para instrucciones cortas
+                                return (
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1">Cómo moverse:</span>
+                                      <p className="text-[11px] font-bold text-white/80 leading-snug">{howToMove}</p>
+                                    </div>
+                                    <div>
+                                      <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1">Gesto/Actitud:</span>
+                                      <p className="text-[11px] font-bold text-white/80 leading-snug">{gesture}</p>
+                                    </div>
+                                  </div>
+                                );
+                              })()}
 
                               {/* GRABADOR DE VOZ EN OFF — dentro de la tarjeta de Sebastián */}
                               {(() => {
