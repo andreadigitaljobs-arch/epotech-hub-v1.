@@ -5312,7 +5312,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                       'VOZ ENVIADA';
 
                     return (
-                    <div key={loc.id} className={`p-4 rounded-[2rem] border space-y-3 transition-all ${usado ? 'bg-[#0a2a2e] border-[#48c1d2]/50' : 'bg-[#142d53] border-[#48c1d2]/10'}`}>
+                    <div key={loc.id} className={`p-4 rounded-[2rem] border space-y-3 transition-all ${usado ? 'bg-[#48c1d2]/20 border-[#48c1d2]' : 'bg-[#142d53] border-[#48c1d2]/10'}`}>
                       <div className="flex items-center justify-between px-1">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
