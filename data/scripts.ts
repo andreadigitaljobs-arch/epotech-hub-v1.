@@ -738,8 +738,8 @@ export const guionesPresentacion: Script[] = [
         title: '🎬 ESCENA 3 — INTERIOR (CONEXIÓN)',
         talent: {
           whatToSay: '"Porque no es solo limpiar… es entrar a tu espacio, donde están tu familia, tus cosas y tu tranquilidad."',
-          howToMove: 'Mira alrededor, señala el lugar, señala hacia arriba o al lado, señala objetos cerca.',
-          gesture: 'Gesto calmado (mano al pecho o suave).',
+          howToMove: 'Empieza simulando que limpias una ventana o superficie con un trapo. A mitad de la frase, detente, mira directo a cámara y termina de hablar. Puedes señalar algunas cosas del espacio si quieres (ventana, piso, mueble).',
+          gesture: 'Natural y tranquilo. El trapo en la mano da contexto visual. Al mirar a cámara, pausa un segundo antes de hablar.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
