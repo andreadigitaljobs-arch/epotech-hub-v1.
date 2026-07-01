@@ -1693,6 +1693,7 @@ export default function ContenidoPage() {
     
     if (isAnyModalOpen) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
       document.body.classList.add('modal-open');
     } else {
       document.body.style.overflow = '';
@@ -1701,7 +1702,7 @@ export default function ContenidoPage() {
       document.documentElement.style.height = '';
       document.body.classList.remove('modal-open');
     }
-    
+
     return () => {
       document.body.style.overflow = '';
       document.body.style.height = '';
@@ -1792,7 +1793,7 @@ export default function ContenidoPage() {
   };
 
   const modalContent = selectedScript && mounted ? createPortal(
-    <div className={`fixed inset-0 z-[9999] flex items-center justify-center px-4 ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'} bg-black/90`}
+    <div className={`fixed inset-0 z-[9999] flex items-center justify-center px-4 overflow-hidden ${isClosing ? 'modal-backdrop-out' : 'modal-backdrop'} bg-black/90`}
       style={{
         paddingTop: 'max(1.5rem, env(safe-area-inset-top))',
         paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))',
