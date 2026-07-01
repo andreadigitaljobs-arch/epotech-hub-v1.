@@ -4560,6 +4560,11 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
     setLocuciones(prev => prev.map(l => l.id === locId ? { ...l, usado_en_video: !current } : l));
   };
 
+  const toggleUsadoReporte = async (reportId: string, current: boolean) => {
+    await supabase.from('reportes_audio').update({ usado_en_video: !current }).eq('id', reportId);
+    setAudioReports(prev => prev.map(r => r.id === reportId ? { ...r, usado_en_video: !current } : r));
+  };
+
   const handleUpdateLocucionTitle = async (locId: string, newTitle: string) => {
     try {
       await supabase.from('locuciones').update({ script_title: newTitle }).eq('id', locId);
@@ -5198,44 +5203,45 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                   {audioReports.map((report: any) => {
                     const status = report.estado || 'pendiente';
-                    const statusStyles = 
+                    const usadoR = report.usado_en_video === true;
+                    const statusStyles =
                       status === 'completado' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
                       status === 'en_proceso' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
                       'bg-slate-500/20 text-slate-400 border-slate-500/30';
-                    const statusLabel = 
+                    const statusLabel =
                       status === 'completado' ? 'GUIONES LISTOS' :
                       status === 'en_proceso' ? 'PROCESANDO' :
                       'RECIBIDO';
 
                     return (
-                    <div key={report.id} className="p-4 bg-[#142d53] rounded-[2rem] border border-white/10 space-y-3">
+                    <div key={report.id} className={`p-4 rounded-[2rem] border space-y-3 transition-all ${usadoR ? 'bg-[#48c1d2]/20 border-[#48c1d2]' : 'bg-[#142d53] border-white/10'}`}>
                       <div className="flex items-center justify-between px-1">
                         <div className="flex-1 mr-4">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">Reporte de Campo</span>
-                            <span className={`text-[7px] font-black px-2 py-0.5 rounded-full border ${statusStyles} animate-pulse`}>
+                            <span className={`text-[10px] font-black uppercase tracking-widest ${usadoR ? 'text-[#142d53]' : 'text-[#48c1d2]'}`}>Reporte de Campo</span>
+                            <span className={`text-[7px] font-black px-2 py-0.5 rounded-full border animate-pulse ${usadoR ? 'bg-[#142d53]/10 text-[#142d53] border-[#142d53]/20' : statusStyles}`}>
                               {statusLabel}
                             </span>
                           </div>
                           {editingItemId === report.id ? (
                             <div className="space-y-2 mt-2">
                               <div className="flex items-center gap-2">
-                                <input 
-                                  type="text" 
-                                  value={editingTitle} 
+                                <input
+                                  type="text"
+                                  value={editingTitle}
                                   onChange={(e) => setEditingTitle(e.target.value)}
-                                  className="flex-1 bg-white/5 border border-[#48c1d2]/30 rounded-lg px-2 py-1 text-xs font-bold text-white outline-none"
+                                  className={`flex-1 border rounded-lg px-2 py-1 text-xs font-bold outline-none ${usadoR ? 'bg-white/60 border-[#142d53]/20 text-[#142d53]' : 'bg-white/5 border-[#48c1d2]/30 text-white'}`}
                                   autoFocus
                                 />
                                 <button onClick={() => handleUpdateReportTitle(report.id, editingTitle)} className="p-1.5 bg-[#48c1d2] text-[#142d53] rounded-lg"><CheckCircle2 size={12} /></button>
-                                <button onClick={() => setEditingItemId(null)} className="p-1.5 bg-white/5 text-white/40 rounded-lg"><X size={12} /></button>
+                                <button onClick={() => setEditingItemId(null)} className={`p-1.5 rounded-lg ${usadoR ? 'bg-[#142d53]/10 text-[#142d53]/40' : 'bg-white/5 text-white/40'}`}><X size={12} /></button>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="text-[7px] font-black text-white/30 uppercase tracking-widest">Cambiar Estado:</span>
-                                <select 
-                                  value={report.estado || 'pendiente'} 
+                                <span className={`text-[7px] font-black uppercase tracking-widest ${usadoR ? 'text-[#142d53]/50' : 'text-white/30'}`}>Cambiar Estado:</span>
+                                <select
+                                  value={report.estado || 'pendiente'}
                                   onChange={(e) => handleUpdateReportStatus(report.id, e.target.value)}
-                                  className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[8px] font-bold text-[#48c1d2] outline-none"
+                                  className={`border rounded-lg px-2 py-1 text-[8px] font-bold text-[#48c1d2] outline-none ${usadoR ? 'bg-white/40 border-[#142d53]/10' : 'bg-white/5 border-white/10'}`}
                                 >
                                   <option value="pendiente" className="bg-[#142d53]">RECIBIDO</option>
                                   <option value="en_proceso" className="bg-[#142d53]">PROCESANDO</option>
@@ -5245,32 +5251,40 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                             </div>
                           ) : (
                             <div className="flex items-center gap-2 group/title">
-                              <p className="text-[11px] font-bold text-white/90 uppercase">{report.titulo || 'Sin Título'}</p>
-                              <button 
+                              <p className={`text-[11px] font-bold uppercase ${usadoR ? 'text-[#142d53]' : 'text-white/90'}`}>{report.titulo || 'Sin Título'}</p>
+                              <button
                                 onClick={() => { setEditingItemId(report.id); setEditingTitle(report.titulo || ''); }}
-                                className="p-1.5 bg-white/5 text-[#48c1d2] rounded-lg hover:bg-[#48c1d2]/20 transition-all ml-1"
+                                className={`p-1.5 rounded-lg transition-all ml-1 ${usadoR ? 'bg-[#142d53]/10 text-[#142d53] hover:bg-[#142d53]/20' : 'bg-white/5 text-[#48c1d2] hover:bg-[#48c1d2]/20'}`}
                                 title="Editar nombre"
                               >
                                 <Edit3 size={10} />
                               </button>
                             </div>
                           )}
-                          <p className="text-[9px] font-bold text-white/40 uppercase mt-0.5">{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                          <p className={`text-[9px] font-bold uppercase mt-0.5 ${usadoR ? 'text-[#142d53]/50' : 'text-white/40'}`}>{new Date(report.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         </div>
                         <div className="flex items-center gap-2 shrink-0 ml-2">
-                          <span className="text-[9px] font-bold text-white/40 uppercase whitespace-nowrap">{report.duracion || ''}</span>
+                          <span className={`text-[9px] font-bold uppercase whitespace-nowrap ${usadoR ? 'text-[#142d53]/50' : 'text-white/40'}`}>{report.duracion || ''}</span>
                           <button onClick={() => handleDeleteReport(report.id, report.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20">
                             <Trash2 size={12} />
                           </button>
                         </div>
                       </div>
-                      <CustomAudioPlayer title={report.titulo || "Reporte de Audio"} src={report.audio_url} />
-                      <button 
-                        onClick={() => forceDownload(report.audio_url, `Reporte_Audio_${report.id}.wav`)}
-                        className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-white/10"
-                      >
-                        <Download size={12} /> Descargar WAV
-                      </button>
+                      <CustomAudioPlayer title={report.titulo || "Reporte de Audio"} src={report.audio_url} light={usadoR} />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => toggleUsadoReporte(report.id, usadoR)}
+                          className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border ${usadoR ? 'bg-[#48c1d2]/20 text-[#142d53] border-[#48c1d2]/40 hover:bg-[#48c1d2]/30' : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'}`}
+                        >
+                          <CheckCircle size={12} /> {usadoR ? '✓ Usado en video' : 'Marcar como usado'}
+                        </button>
+                        <button
+                          onClick={() => forceDownload(report.audio_url, `Reporte_Audio_${report.id}.wav`)}
+                          className={`px-4 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border ${usadoR ? 'bg-[#142d53]/10 text-[#142d53] border-[#142d53]/20 hover:bg-[#142d53]/20' : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'}`}
+                        >
+                          <Download size={12} />
+                        </button>
+                      </div>
                     </div>
                     );
                   })}
