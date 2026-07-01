@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { Card } from "@/components/ui/Card";
-import { 
-  Send, 
-  Bell, 
-  ShieldCheck, 
-  Zap, 
+import {
+  Send,
+  Bell,
+  ShieldCheck,
+  Zap,
   Lightbulb,
-  RefreshCcw, 
+  RefreshCcw,
   Trash2,
   Calendar,
   MessageSquare,
@@ -17,10 +17,14 @@ import {
   AlertCircle,
   Mic,
   Download,
-  ArrowLeft
+  ArrowLeft,
+  Settings,
+  Video,
+  PlayCircle
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Toast, ToastType } from "@/components/ui/Toast";
+import { guionesPresentacion } from "@/data/scripts";
 
 export default function MasterPanel() {
   const [loading, setLoading] = useState(true);
@@ -33,6 +37,7 @@ export default function MasterPanel() {
   const [history, setHistory] = useState<any[]>([]);
   const [reportesAudio, setReportesAudio] = useState<any[]>([]);
   const [locuciones, setLocuciones] = useState<any[]>([]);
+  const [sceneConfig, setSceneConfig] = useState<Record<string, { audio_enabled: boolean; video_url: string | null }>>({});
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
     message: "",
@@ -64,6 +69,7 @@ export default function MasterPanel() {
     fetchHistory();
     fetchAudios();
     fetchLocuciones();
+    fetchSceneConfig();
 
     const channel = supabase.channel('audios-channel')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'reportes_audio' }, () => fetchAudios())
@@ -87,6 +93,22 @@ export default function MasterPanel() {
       .select("*")
       .order("created_at", { ascending: false });
     if (data) setLocuciones(data);
+  }
+
+  async function fetchSceneConfig() {
+    const { data } = await supabase.from('scene_config').select('*');
+    if (data) {
+      const map: Record<string, { audio_enabled: boolean; video_url: string | null }> = {};
+      data.forEach((c: any) => { map[c.scene_id] = { audio_enabled: c.audio_enabled, video_url: c.video_url }; });
+      setSceneConfig(map);
+    }
+  }
+
+  async function updateSceneConfig(sceneId: string, field: 'audio_enabled' | 'video_url', value: any) {
+    const current = sceneConfig[sceneId] || { audio_enabled: false, video_url: null };
+    const updated = { ...current, [field]: value };
+    setSceneConfig(prev => ({ ...prev, [sceneId]: updated }));
+    await supabase.from('scene_config').upsert({ scene_id: sceneId, audio_enabled: updated.audio_enabled, video_url: updated.video_url });
   }
 
   async function fetchHistory() {
@@ -420,7 +442,74 @@ export default function MasterPanel() {
            )}
          </div>
       </div>
-      <Toast 
+      {/* CONFIGURACIÓN DE ESCENAS */}
+      <div className="mt-12 md:mt-16">
+        <h3 className="text-lg md:text-xl font-black text-[var(--primary)] uppercase tracking-widest mb-2 flex items-center gap-3 px-1">
+          <div className="bg-[#48c1d2]/20 p-2 rounded-xl text-[#48c1d2] shrink-0">
+            <Settings size={20} />
+          </div>
+          Configurar Escenas
+        </h3>
+        <p className="text-xs font-bold text-slate-400 mb-6 px-1 leading-relaxed">
+          Activa el micrófono de voz en off o pega un video de YouTube por escena. Solo tú puedes ver esto.
+        </p>
+
+        <div className="space-y-8">
+          {guionesPresentacion.filter(s => s.isPinned && s.scenes && s.scenes.length > 0).map(script => (
+            <div key={script.id}>
+              <div className="flex items-center gap-2 mb-3 px-1">
+                <Video size={14} className="text-[#48c1d2]" />
+                <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">{script.title}</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {script.scenes!.map(scene => {
+                  const cfg = sceneConfig[scene.id] || { audio_enabled: false, video_url: null };
+                  return (
+                    <Card key={scene.id} className="p-5 border-2 border-slate-100 rounded-[2rem] space-y-4">
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{scene.title}</p>
+
+                      {/* Toggle micrófono */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Mic size={14} className={cfg.audio_enabled ? 'text-[#48c1d2]' : 'text-slate-300'} />
+                          <span className={`text-[11px] font-bold ${cfg.audio_enabled ? 'text-[#142d53]' : 'text-slate-400'}`}>
+                            Grabador de voz en off
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => updateSceneConfig(scene.id, 'audio_enabled', !cfg.audio_enabled)}
+                          className={`w-12 h-6 rounded-full transition-all relative ${cfg.audio_enabled ? 'bg-[#48c1d2]' : 'bg-slate-200'}`}
+                        >
+                          <span className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all shadow-sm ${cfg.audio_enabled ? 'left-7' : 'left-1'}`} />
+                        </button>
+                      </div>
+
+                      {/* URL de YouTube */}
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <PlayCircle size={14} className={cfg.video_url ? 'text-[#48c1d2]' : 'text-slate-300'} />
+                          <span className={`text-[11px] font-bold ${cfg.video_url ? 'text-[#142d53]' : 'text-slate-400'}`}>
+                            Video de YouTube
+                          </span>
+                        </div>
+                        <input
+                          type="text"
+                          placeholder="https://www.youtube.com/watch?v=..."
+                          value={cfg.video_url || ''}
+                          onChange={e => updateSceneConfig(scene.id, 'video_url', e.target.value || null)}
+                          className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 py-3 text-[11px] font-bold text-slate-700 placeholder:text-slate-300 outline-none focus:border-[#48c1d2] transition-all"
+                        />
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Toast
         message={toast.message}
         type={toast.type}
         isVisible={toast.isVisible}

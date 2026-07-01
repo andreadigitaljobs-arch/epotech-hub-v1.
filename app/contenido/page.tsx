@@ -3221,15 +3221,6 @@ export default function ContenidoPage() {
                             </div>
                           </div>
 
-                          <div className="flex justify-end mb-1">
-                            <button
-                              onClick={() => setShowSceneConfigPanel(true)}
-                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider text-[#48c1d2] hover:bg-[#48c1d2]/10 transition-all border border-[#48c1d2]/30"
-                            >
-                              <Settings size={11} /> Configurar Escenas
-                            </button>
-                          </div>
-
                           <div className="grid gap-4">
                             {guionesPresentacion
                               .filter(s => {
