@@ -1954,7 +1954,7 @@ export default function ContenidoPage() {
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-1 ">Cómo moverse:</span>
-                                  <p className="text-[11px] font-bold text-white/80 leading-snug">
+                                  <p className="text-[11px] font-bold text-white/80 leading-snug whitespace-pre-line">
                                     {selectedScript?.scenes?.[currentStepIdx]?.talent?.howToMove}
                                   </p>
                                 </div>
@@ -2004,26 +2004,29 @@ export default function ContenidoPage() {
                                         </div>
                                       </div>
                                     ) : (
-                                      <div className="flex items-center gap-4">
+                                      <div className="flex flex-col items-center gap-3 py-2">
+                                        {sceneIsRecording && (
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                                            <span className="text-lg font-black text-white tabular-nums">{formatTime(sceneRecordTime)}</span>
+                                          </div>
+                                        )}
                                         <button
                                           onClick={sceneIsRecording ? stopSceneRecording : startSceneRecording}
-                                          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all shrink-0 ${sceneIsRecording ? 'bg-red-500 hover:bg-red-400 animate-pulse' : 'bg-[#48c1d2] hover:bg-[#48c1d2]/80'}`}
+                                          className={`w-20 h-20 rounded-full flex items-center justify-center transition-all shadow-xl ${sceneIsRecording ? 'bg-red-500 shadow-red-500/40 animate-pulse' : 'bg-[#48c1d2] shadow-[#48c1d2]/40 hover:scale-105 active:scale-95'}`}
                                         >
-                                          {sceneIsRecording ? <div className="w-4 h-4 rounded-sm bg-white" /> : <Mic size={18} className="text-[#142d53]" />}
+                                          {sceneIsRecording
+                                            ? <div className="w-6 h-6 rounded-md bg-white" />
+                                            : <Mic size={32} className="text-[#142d53]" />}
                                         </button>
-                                        <div>
-                                          {sceneIsRecording ? (
-                                            <div className="flex items-center gap-2">
-                                              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                                              <span className="text-sm font-black text-white tabular-nums">{formatTime(sceneRecordTime)}</span>
-                                            </div>
-                                          ) : (
-                                            <p className="text-sm font-black text-white/60">Toca para grabar</p>
-                                          )}
-                                          <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest">
-                                            {sceneIsRecording ? 'Grabando...' : 'Voz en off para esta escena'}
+                                        <p className="text-sm font-black text-white/80">
+                                          {sceneIsRecording ? 'Toca para detener' : 'Toca para grabar tu voz'}
+                                        </p>
+                                        {!sceneIsRecording && (
+                                          <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest text-center">
+                                            Lee la frase de arriba en voz alta
                                           </p>
-                                        </div>
+                                        )}
                                       </div>
                                     )}
                                   </div>

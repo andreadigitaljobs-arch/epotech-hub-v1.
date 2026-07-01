@@ -755,15 +755,15 @@ export const guionesPresentacion: Script[] = [
         title: '🎬 ESCENA 4 — AUTORIDAD (TRABAJO)',
         talent: {
           whatToSay: '"Me llamo Sebastián. Y cada vez que trabajamos en una propiedad, la tratamos como si fuera nuestra. Nos importa, la respetamos y la dejamos mejor de como la encontramos."',
-          howToMove: 'Mirando a cámara. Movimiento leve (natural). Señala el piso / área.',
-          gesture: 'Gesto con manos. Señala resultado.',
+          howToMove: '🎙️ PASO 1 — GRABA EL AUDIO: Usa el botón de abajo para grabar la frase en voz alta, claro y seguro. No necesitas estar frente a cámara, solo necesitamos tu voz.\n\n🎬 PASO 2 — GRABA 5 VIDEOS B-ROLL (sin hablar): Vístete con tu cinturón de implementos y tu uniforme de trabajo. Estos videos van a ir encima de tu voz y le dan vida visual al video. Graba cada uno de 5 a 8 segundos:\n\n1. Saludo a cámara — parado frente a la camioneta con el cinturón puesto, sonríes y asientes con la cabeza como diciendo "aquí estoy".\n2. Cargando la camioneta — subes cubetas, mopas o materiales al maletero o asiento trasero.\n3. Llegando a trabajar — bajas de la camioneta, agarras tus implementos y caminas hacia la propiedad con actitud.\n4. En acción — limpias una ventana, pasas un trapeador o aplicás un producto en el piso. Que se note el movimiento.\n5. Resultado final — señalas o miras orgulloso una superficie limpia, un piso brillante o una ventana sin manchas.\n\n⚡ Estos clips los uniremos con tu audio y los videos que ya tenemos de trabajos reales.',
+          gesture: 'Cinturón de implementos puesto en todos los videos. Actitud seria y profesional — esta es tu carta de presentación en redes. Que se note que te lo tomás en serio.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         },
         camera: {
-          whereToStand: 'En la cocina (apoyado en la isla). Graba en diagonal.',
-          angle: 'Plano medio.',
-          movement: 'Mantén estabilidad.',
-          avoid: 'No grabes muy lejos. No cortes antes de que termine.',
+          whereToStand: 'Donde estés trabajando o en la camioneta. Luz natural si es posible.',
+          angle: 'Plano medio o plano entero según el movimiento. Vertical 9:16.',
+          movement: 'Los b-rolls pueden tener movimiento leve de cámara — eso se ve profesional.',
+          avoid: 'No grabes en lugares oscuros. No usar ropa de casa — siempre uniforme de trabajo.',
           demoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
       },
