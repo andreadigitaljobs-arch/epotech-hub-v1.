@@ -861,13 +861,13 @@ export default function ContenidoPage() {
       
       const cleanText = textToRead.replace(/[“”]/g, '');
       const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'en-US';
+      utterance.lang = 'es-ES';
       utterance.rate = voiceSpeed; 
       
       const voices = window.speechSynthesis.getVoices();
-      let usVoice = voices.find(v => v.lang === 'en-US' && (v.name.includes('Premium') || v.name.includes('Samantha') || v.name.includes('Google US English') || v.name.includes('Natural')));
-      if (!usVoice) usVoice = voices.find(v => v.lang === 'en-US');
-      if (usVoice) utterance.voice = usVoice;
+      let esVoice = voices.find(v => v.lang.startsWith('es-') && (v.name.includes('Premium') || v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Monica') || v.name.includes('Paulina') || v.name.includes('Jorge') || v.name.includes('Helena')));
+      if (!esVoice) esVoice = voices.find(v => v.lang.startsWith('es-'));
+      if (esVoice) utterance.voice = esVoice;
       
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
@@ -1093,6 +1093,21 @@ export default function ContenidoPage() {
   const [activeVoiceoverAudio, setActiveVoiceoverAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlayingVoiceover, setIsPlayingVoiceover] = useState(false);
   const [initialHistorialSubTab, setInitialHistorialSubTab] = useState<'stats' | 'audios'>('stats');
+
+  // --- GRABADORA 3: VOZ EN OFF POR ESCENA (GUIONES A CÁMARA) ---
+  const [sceneIsRecording, setSceneIsRecording] = useState(false);
+  const [sceneRecordedUrl, setSceneRecordedUrl] = useState<string | null>(null);
+  const [sceneRecordedBlob, setSceneRecordedBlob] = useState<Blob | null>(null);
+  const [sceneRecordTime, setSceneRecordTime] = useState(0);
+  const sceneMediaRecorder = useRef<MediaRecorder | null>(null);
+  const sceneAudioChunks = useRef<Blob[]>([]);
+  const [isUploadingVozCamara, setIsUploadingVozCamara] = useState(false);
+  const [vozCamaraSent, setVozCamaraSent] = useState(false);
+  const [vocesCamara, setVocesCamara] = useState<any[]>([]);
+
+  // --- CONFIGURACIÓN DE ESCENAS ---
+  const [sceneConfig, setSceneConfig] = useState<Record<string, { audio_enabled: boolean; video_url: string | null }>>({});
+  const [showSceneConfigPanel, setShowSceneConfigPanel] = useState(false);
 
   // Sincronizar reactivamente el sub-paso de guía basado en si la toma del paso actual ya fue grabada
   useEffect(() => {
@@ -1357,6 +1372,16 @@ export default function ContenidoPage() {
     return () => clearInterval(interval);
   }, [isRecording, isPaused]);
 
+  useEffect(() => {
+    let interval: any;
+    if (sceneIsRecording) {
+      interval = setInterval(() => setSceneRecordTime(prev => prev + 1), 1000);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [sceneIsRecording]);
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -1530,6 +1555,78 @@ export default function ContenidoPage() {
     } finally {
       setIsUploadingLocucion(false);
     }
+  };
+
+  const startSceneRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mimeType = MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : 'audio/webm';
+      const recorder = new MediaRecorder(stream, { mimeType });
+      sceneMediaRecorder.current = recorder;
+      sceneAudioChunks.current = [];
+      recorder.ondataavailable = (e) => sceneAudioChunks.current.push(e.data);
+      recorder.onstop = () => {
+        const blob = new Blob(sceneAudioChunks.current, { type: mimeType });
+        setSceneRecordedBlob(blob);
+        setSceneRecordedUrl(URL.createObjectURL(blob));
+        stream.getTracks().forEach(t => t.stop());
+      };
+      recorder.start();
+      setSceneIsRecording(true);
+      setSceneRecordTime(0);
+    } catch {
+      showToast("Error al acceder al micrófono", "error");
+    }
+  };
+
+  const stopSceneRecording = () => {
+    sceneMediaRecorder.current?.stop();
+    setSceneIsRecording(false);
+  };
+
+  const handleSendVozCamara = async () => {
+    if (!sceneRecordedBlob || !selectedScript) return;
+    setIsUploadingVozCamara(true);
+    try {
+      const scene = selectedScript.scenes?.[currentStepIdx];
+      const wavBlob = await mergeBlobsToWav([sceneRecordedBlob]);
+      const fileName = `voz_camara_${scene?.id}_${Date.now()}.wav`;
+      const { error: uploadError } = await supabase.storage.from('audios').upload(fileName, wavBlob, { contentType: 'audio/wav' });
+      if (uploadError) throw uploadError;
+      const { data: publicUrlData } = supabase.storage.from('audios').getPublicUrl(fileName);
+      const { error: insertError } = await supabase.from('voces_camara').insert({
+        scene_id: scene?.id,
+        script_id: selectedScript.id,
+        scene_title: scene?.title,
+        script_title: selectedScript.title,
+        audio_url: publicUrlData.publicUrl
+      });
+      if (insertError) throw insertError;
+      setSceneRecordedBlob(null);
+      setSceneRecordedUrl(null);
+      setVozCamaraSent(true);
+      setTimeout(() => setVozCamaraSent(false), 3000);
+      fetch('/api/push', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          titulo: '🎙️ Nueva Voz en Off (Guión a Cámara)',
+          mensaje: `Se grabó la voz de: "${scene?.title}" — ${selectedScript.title}`
+        })
+      }).catch(() => {});
+    } catch (err) {
+      console.error(err);
+      showToast('Error al enviar la voz', 'error');
+    } finally {
+      setIsUploadingVozCamara(false);
+    }
+  };
+
+  const updateSceneConfig = async (sceneId: string, field: 'audio_enabled' | 'video_url', value: any) => {
+    const current = sceneConfig[sceneId] || { audio_enabled: false, video_url: null };
+    const updated = { ...current, [field]: value };
+    setSceneConfig(prev => ({ ...prev, [sceneId]: updated }));
+    await supabase.from('scene_config').upsert({ scene_id: sceneId, audio_enabled: updated.audio_enabled, video_url: updated.video_url });
   };
 
   useEffect(() => {
@@ -1797,6 +1894,25 @@ export default function ContenidoPage() {
                             {selectedScript?.scenes?.[currentStepIdx]?.title}
                           </h3>
 
+                          {/* VIDEO DE INSTRUCCIÓN */}
+                          {selectedScript.scenes[currentStepIdx].videoUrl && (() => {
+                            const raw = selectedScript.scenes[currentStepIdx].videoUrl!;
+                            const videoId = raw.includes('youtu.be/')
+                              ? raw.split('youtu.be/')[1]?.split('?')[0]
+                              : raw.split('v=')[1]?.split('&')[0];
+                            return videoId ? (
+                              <div className="rounded-[2rem] overflow-hidden border border-white/10">
+                                <iframe
+                                  src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+                                  title="Video de instrucción"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                  className="w-full aspect-video"
+                                />
+                              </div>
+                            ) : null;
+                          })()}
+
                           {/* INSTRUCCIONES SEBASTIÁN */}
                           <div className="bg-[#48c1d2]/5 rounded-[2.5rem] border border-[#48c1d2]/20 overflow-hidden">
                             <div className="p-6 border-b border-[#48c1d2]/10 bg-[#48c1d2]/10 flex items-center gap-3">
@@ -1873,6 +1989,69 @@ export default function ContenidoPage() {
                               </div>
                             </div>
                           </div>
+
+                          {/* GRABADOR DE VOZ EN OFF POR ESCENA */}
+                          {(() => {
+                            const sid = selectedScript.scenes[currentStepIdx].id;
+                            const cfg = sceneConfig[sid];
+                            if (!cfg?.audio_enabled) return null;
+                            return (
+                              <div className="bg-[#48c1d2]/5 rounded-[2.5rem] border border-[#48c1d2]/20 overflow-hidden">
+                                <div className="p-5 border-b border-[#48c1d2]/10 bg-[#48c1d2]/10 flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-[#48c1d2] flex items-center justify-center text-[#142d53]">
+                                    <Mic size={16} />
+                                  </div>
+                                  <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px]">Grabar Voz en Off — Esta Escena</span>
+                                </div>
+                                <div className="p-5 space-y-4">
+                                  {vozCamaraSent ? (
+                                    <div className="text-center py-4 space-y-2">
+                                      <CheckCircle2 size={32} className="text-[#48c1d2] mx-auto" />
+                                      <p className="text-sm font-black text-white">¡Voz enviada!</p>
+                                      <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Guardada en el historial</p>
+                                    </div>
+                                  ) : sceneRecordedUrl ? (
+                                    <div className="space-y-3">
+                                      <CustomAudioPlayer title="Voz grabada" src={sceneRecordedUrl} />
+                                      <div className="flex gap-2">
+                                        <button
+                                          onClick={() => { setSceneRecordedUrl(null); setSceneRecordedBlob(null); setSceneRecordTime(0); }}
+                                          className="flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest bg-white/5 text-white/50 border border-white/10 hover:bg-white/10 transition-all"
+                                        >
+                                          Grabar de nuevo
+                                        </button>
+                                        <button
+                                          onClick={handleSendVozCamara}
+                                          disabled={isUploadingVozCamara}
+                                          className="flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest bg-[#48c1d2] text-[#142d53] hover:bg-[#48c1d2]/80 transition-all disabled:opacity-50"
+                                        >
+                                          {isUploadingVozCamara ? 'Enviando...' : 'Enviar Voz'}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div className="flex flex-col items-center gap-4 py-2">
+                                      {sceneIsRecording && (
+                                        <div className="flex items-center gap-2">
+                                          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                                          <span className="text-sm font-black text-white tabular-nums">{formatTime(sceneRecordTime)}</span>
+                                        </div>
+                                      )}
+                                      <button
+                                        onClick={sceneIsRecording ? stopSceneRecording : startSceneRecording}
+                                        className={`w-16 h-16 rounded-full flex items-center justify-center transition-all ${sceneIsRecording ? 'bg-red-500 hover:bg-red-400 animate-pulse' : 'bg-[#48c1d2] hover:bg-[#48c1d2]/80'}`}
+                                      >
+                                        {sceneIsRecording ? <div className="w-5 h-5 rounded-sm bg-white" /> : <Mic size={24} className="text-[#142d53]" />}
+                                      </button>
+                                      <p className="text-[9px] font-black text-white/30 uppercase tracking-widest">
+                                        {sceneIsRecording ? 'Toca para detener' : 'Toca para grabar'}
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })()}
                         </>
                       )}
                     </motion.div>
@@ -2081,6 +2260,7 @@ export default function ContenidoPage() {
                   onClick={() => {
                     setDirection(-1);
                     setCurrentStepIdx(prev => prev - 1);
+                    setSceneRecordedUrl(null); setSceneRecordedBlob(null); setSceneRecordTime(0);
                   }}
                   className={`flex-1 py-5 px-4 rounded-[24px] text-[10px] font-black uppercase tracking-tight transition-all ${currentStepIdx === 0 ? 'bg-white/5 text-white/20 cursor-not-allowed' : 'bg-white/10 text-white hover:bg-white/20 border border-white/10 active:scale-95'}`}
                 >
@@ -2091,6 +2271,7 @@ export default function ContenidoPage() {
                     onClick={() => {
                       setDirection(1);
                       setCurrentStepIdx(prev => prev + 1);
+                      setSceneRecordedUrl(null); setSceneRecordedBlob(null); setSceneRecordTime(0);
                     }}
                     className="flex-[2] py-5 px-4 bg-[#48c1d2] text-[#0a192f] text-[10px] font-black uppercase tracking-tight rounded-[24px] shadow-xl shadow-[#48c1d2]/20 transition-all active:scale-95 border-b-4 border-[#3aa8b8]"
                   >
@@ -3040,13 +3221,22 @@ export default function ContenidoPage() {
                             </div>
                           </div>
 
+                          <div className="flex justify-end mb-1">
+                            <button
+                              onClick={() => setShowSceneConfigPanel(true)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider text-[#48c1d2] hover:bg-[#48c1d2]/10 transition-all border border-[#48c1d2]/30"
+                            >
+                              <Settings size={11} /> Configurar Escenas
+                            </button>
+                          </div>
+
                           <div className="grid gap-4">
                             {guionesPresentacion
                               .filter(s => {
                                 if (!s.isPinned) return false;
                                 if (!scriptSearchQuery) return true;
                                 const query = normalizeText(scriptSearchQuery);
-                                return normalizeText(s.title).includes(query) || 
+                                return normalizeText(s.title).includes(query) ||
                                        normalizeText(s.service).includes(query) ||
                                        normalizeText(s.category).includes(query);
                               })
@@ -3783,9 +3973,89 @@ export default function ContenidoPage() {
         </div>
       , document.body)}
 
+      {/* PANEL DE CONFIGURACIÓN DE ESCENAS */}
+      {showSceneConfigPanel && mounted && createPortal(
+        <div className="fixed inset-0 z-[25000] flex items-end sm:items-center justify-center px-0 sm:px-4 py-0 sm:py-8">
+          <div onClick={() => setShowSceneConfigPanel(false)} className="absolute inset-0 bg-[#0a192f]/80 backdrop-blur-sm" />
+          <div
+            onClick={e => e.stopPropagation()}
+            className="relative z-10 bg-[#0d1f3c] w-full sm:max-w-2xl rounded-t-[2.5rem] sm:rounded-[2.5rem] flex flex-col max-h-[90vh] overflow-hidden shadow-2xl"
+          >
+            <div className="p-6 border-b border-white/10 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#48c1d2]/20 flex items-center justify-center">
+                  <Settings size={16} className="text-[#48c1d2]" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-black text-white">Configurar Escenas</h2>
+                  <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest">Activa micrófono o pega URL de YouTube por escena</p>
+                </div>
+              </div>
+              <button onClick={() => setShowSceneConfigPanel(false)} className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-white/50 hover:text-white">
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6">
+              {guionesPresentacion.filter(s => s.isPinned && s.scenes && s.scenes.length > 0).map(script => (
+                <div key={script.id} className="space-y-3">
+                  <div className="flex items-center gap-2 px-1">
+                    <Video size={12} className="text-[#48c1d2]" />
+                    <span className="text-[10px] font-black text-[#48c1d2] uppercase tracking-widest">{script.title}</span>
+                  </div>
+                  {script.scenes!.map(scene => {
+                    const cfg = sceneConfig[scene.id] || { audio_enabled: false, video_url: null };
+                    return (
+                      <div key={scene.id} className="bg-white/5 rounded-[1.5rem] border border-white/10 p-4 space-y-4">
+                        <p className="text-[10px] font-black text-white/60 uppercase tracking-widest">{scene.title}</p>
+
+                        {/* Toggle audio */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Mic size={13} className={cfg.audio_enabled ? 'text-[#48c1d2]' : 'text-white/30'} />
+                            <span className={`text-[10px] font-bold ${cfg.audio_enabled ? 'text-white' : 'text-white/40'}`}>Grabador de Voz en Off</span>
+                          </div>
+                          <button
+                            onClick={() => updateSceneConfig(scene.id, 'audio_enabled', !cfg.audio_enabled)}
+                            className={`w-12 h-6 rounded-full transition-all relative ${cfg.audio_enabled ? 'bg-[#48c1d2]' : 'bg-white/10'}`}
+                          >
+                            <span className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${cfg.audio_enabled ? 'left-7' : 'left-1'}`} />
+                          </button>
+                        </div>
+
+                        {/* URL de YouTube */}
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <PlayCircle size={13} className={cfg.video_url ? 'text-[#48c1d2]' : 'text-white/30'} />
+                            <span className={`text-[10px] font-bold ${cfg.video_url ? 'text-white' : 'text-white/40'}`}>Video de YouTube</span>
+                          </div>
+                          <input
+                            type="text"
+                            placeholder="https://www.youtube.com/watch?v=..."
+                            value={cfg.video_url || ''}
+                            onChange={e => updateSceneConfig(scene.id, 'video_url', e.target.value || null)}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-[11px] font-bold text-white/80 placeholder:text-white/20 outline-none focus:border-[#48c1d2]/50"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+
+            <div className="p-4 border-t border-white/10 shrink-0">
+              <button onClick={() => setShowSceneConfigPanel(false)} className="w-full py-4 bg-[#48c1d2] text-[#142d53] font-black text-[11px] uppercase tracking-widest rounded-2xl">
+                Listo
+              </button>
+            </div>
+          </div>
+        </div>
+      , document.body)}
+
       {selectedStory && createPortal(
         <div className="fixed inset-0 z-[20000] flex items-center justify-center px-4 py-12 md:px-8 md:py-14 overflow-hidden">
-          <div 
+          <div
             onClick={handleCloseStory}
             className={`absolute inset-0 bg-[#0a192f]/90 ${isClosingStory ? 'modal-backdrop-out' : 'modal-backdrop'}`}
           />
@@ -4565,6 +4835,32 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
     setAudioReports(prev => prev.map(r => r.id === reportId ? { ...r, usado_en_video: !current } : r));
   };
 
+  const [vocesCamara, setVocesCamara] = useState<any[]>([]);
+
+  const toggleUsadoVozCamara = async (id: string, current: boolean) => {
+    await supabase.from('voces_camara').update({ usado_en_video: !current }).eq('id', id);
+    setVocesCamara(prev => prev.map((v: any) => v.id === id ? { ...v, usado_en_video: !current } : v));
+  };
+
+  const handleDeleteVozCamara = async (id: string, audioUrl: string) => {
+    requestConfirm(
+      "¿Eliminar Voz?",
+      "Se borrará el audio permanentemente. No se puede deshacer.",
+      async () => {
+        try {
+          const fileName = audioUrl.split('/').pop();
+          if (fileName) await supabase.storage.from('audios').remove([fileName]);
+          await supabase.from('voces_camara').delete().eq('id', id);
+          setVocesCamara(prev => prev.filter((v: any) => v.id !== id));
+          showToast("Voz eliminada", "success");
+        } catch {
+          showToast("Error al eliminar", "error");
+        }
+      },
+      "BORRAR DEFINITIVO"
+    );
+  };
+
   const handleUpdateLocucionTitle = async (locId: string, newTitle: string) => {
     try {
       await supabase.from('locuciones').update({ script_title: newTitle }).eq('id', locId);
@@ -4622,12 +4918,14 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
 
   useEffect(() => {
     async function fetchAll() {
-      const [{ data: reports }, { data: locs }] = await Promise.all([
+      const [{ data: reports }, { data: locs }, { data: voces }] = await Promise.all([
         supabase.from('reportes_audio').select('*').order('created_at', { ascending: false }),
-        supabase.from('locuciones').select('*').order('created_at', { ascending: false })
+        supabase.from('locuciones').select('*').order('created_at', { ascending: false }),
+        supabase.from('voces_camara').select('*').order('created_at', { ascending: false })
       ]);
       if (reports) setAudioReports(reports);
       if (locs) setLocuciones(locs);
+      if (voces) setVocesCamara(voces);
     }
     fetchAll();
   }, []);
@@ -5397,6 +5695,63 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                         </button>
                       </div>
                     </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* === VOCES EN OFF — GUIONES A CÁMARA === */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-[#142d53] rounded-xl flex items-center justify-center">
+                    <Video size={14} className="text-[#48c1d2]" />
+                  </div>
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Voces en Off — Guiones a Cámara</h3>
+                </div>
+                <span className="text-[9px] font-black text-[#48c1d2] bg-[#48c1d2]/10 px-3 py-1 rounded-full">{vocesCamara.length} audio{vocesCamara.length !== 1 ? 's' : ''}</span>
+              </div>
+              <p className="text-[10px] font-bold text-slate-500 leading-relaxed px-1">
+                Voces en off grabadas dentro de los guiones de producción a cámara (escenas específicas que requieren audio separado).
+              </p>
+
+              {vocesCamara.length === 0 ? (
+                <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 text-center">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aún no hay voces grabadas</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                  {vocesCamara.map((voz: any) => {
+                    const usado = voz.usado_en_video === true;
+                    return (
+                      <div key={voz.id} className={`p-4 rounded-[2rem] border space-y-3 transition-all ${usado ? 'bg-[#48c1d2]/20 border-[#48c1d2]' : 'bg-[#142d53] border-[#48c1d2]/10'}`}>
+                        <div className="flex items-start justify-between px-1">
+                          <div className="flex-1 min-w-0">
+                            <span className={`text-[10px] font-black uppercase tracking-widest block mb-0.5 ${usado ? 'text-[#142d53]' : 'text-[#48c1d2]'}`}>Voz en Off · Cámara</span>
+                            <p className={`text-[11px] font-black uppercase truncate ${usado ? 'text-[#142d53]' : 'text-white'}`}>{voz.scene_title || voz.script_title || 'Sin título'}</p>
+                            <p className={`text-[9px] font-bold uppercase mt-0.5 ${usado ? 'text-[#142d53]/50' : 'text-white/40'}`}>{new Date(voz.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                          </div>
+                          <button onClick={() => handleDeleteVozCamara(voz.id, voz.audio_url)} className="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center transition-all border border-red-500/20 shrink-0 ml-2">
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                        <CustomAudioPlayer title={voz.scene_title || 'Voz en Off'} src={voz.audio_url} light={usado} />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => toggleUsadoVozCamara(voz.id, usado)}
+                            className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border ${usado ? 'bg-[#48c1d2]/20 text-[#142d53] border-[#48c1d2]/40 hover:bg-[#48c1d2]/30' : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'}`}
+                          >
+                            <CheckCircle size={12} /> {usado ? '✓ Usado en video' : 'Marcar como usado'}
+                          </button>
+                          <button
+                            onClick={() => forceDownload(voz.audio_url, `VozCamara_${voz.id}.wav`)}
+                            className={`px-4 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border ${usado ? 'bg-[#142d53]/10 text-[#142d53] border-[#142d53]/20 hover:bg-[#142d53]/20' : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'}`}
+                          >
+                            <Download size={12} />
+                          </button>
+                        </div>
+                      </div>
                     );
                   })}
                 </div>

@@ -23,6 +23,7 @@ export interface ScriptScene {
   title: string;
   talent: SceneInstruction;
   camera: CameraInstruction;
+  videoUrl?: string;
 }
 
 export interface ScriptStep {
