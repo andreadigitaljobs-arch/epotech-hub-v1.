@@ -1915,14 +1915,16 @@ export default function ContenidoPage() {
                               ? raw.split('shorts/')[1]?.split('?')[0]
                               : raw.split('v=')[1]?.split('&')[0];
                             return videoId ? (
-                              <div className="rounded-[2rem] overflow-hidden border border-white/10">
-                                <iframe
-                                  src={`https://www.youtube-nocookie.com/embed/${videoId}`}
-                                  title="Video de instrucción"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
-                                  className="w-full aspect-video"
-                                />
+                              <div className="flex justify-center">
+                                <div className="rounded-[2rem] overflow-hidden border border-white/10 w-full max-w-[280px] aspect-[9/16]">
+                                  <iframe
+                                    src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+                                    title="Video de instrucción"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="w-full h-full"
+                                  />
+                                </div>
                               </div>
                             ) : null;
                           })()}
