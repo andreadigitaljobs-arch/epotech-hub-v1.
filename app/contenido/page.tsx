@@ -5195,7 +5195,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aún no hay reportes enviados</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                   {audioReports.map((report: any) => {
                     const status = report.estado || 'pendiente';
                     const statusStyles = 
@@ -5312,7 +5312,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                       'VOZ ENVIADA';
 
                     return (
-                    <div key={loc.id} className={`p-4 rounded-[2rem] border space-y-3 transition-all ${usado ? 'bg-violet-900/60 border-violet-500/40' : 'bg-[#142d53] border-[#48c1d2]/10'}`}>
+                    <div key={loc.id} className={`p-4 rounded-[2rem] border space-y-3 transition-all ${usado ? 'bg-[#0a2a2e] border-[#48c1d2]/50' : 'bg-[#142d53] border-[#48c1d2]/10'}`}>
                       <div className="flex items-center justify-between px-1">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
@@ -5372,7 +5372,7 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
                       <div className="flex gap-2">
                         <button
                           onClick={() => toggleUsadoEnVideo(loc.id, usado)}
-                          className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border ${usado ? 'bg-violet-500/20 text-violet-300 border-violet-500/30 hover:bg-violet-500/30' : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'}`}
+                          className={`flex-1 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all border ${usado ? 'bg-[#48c1d2]/20 text-[#48c1d2] border-[#48c1d2]/40 hover:bg-[#48c1d2]/30' : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'}`}
                         >
                           <CheckCircle size={12} /> {usado ? '✓ Usado en video' : 'Marcar como usado'}
                         </button>
