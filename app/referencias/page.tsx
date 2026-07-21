@@ -96,15 +96,15 @@ export default function ReferenciasPage() {
          <div className="flex bg-slate-100 p-1.5 rounded-[2rem] max-w-md border border-slate-200">
             <button 
                onClick={() => setActiveSubTab('videos')}
-               className={`flex-1 py-3 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'videos' ? 'bg-white text-[#142d53] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
+               className={`flex-1 py-3 px-2 rounded-[2rem] text-[10px] font-black uppercase tracking-wide transition-all flex items-center justify-center gap-2 ${activeSubTab === 'videos' ? 'bg-white text-[#142d53] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
             >
-               <Zap size={14} /> Videos de Referencia
+               <Zap size={16} /> Videos de Referencia
             </button>
             <button 
                onClick={() => setActiveSubTab('cuentas')}
-               className={`flex-1 py-3 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${activeSubTab === 'cuentas' ? 'bg-white text-[#142d53] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
+               className={`flex-1 py-3 px-2 rounded-[2rem] text-[10px] font-black uppercase tracking-wide transition-all flex items-center justify-center gap-2 ${activeSubTab === 'cuentas' ? 'bg-white text-[#142d53] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
             >
-               <ShieldCheck size={14} /> Referentes Top
+               <ShieldCheck size={16} /> Referentes Top
             </button>
          </div>
 
