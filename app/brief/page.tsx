@@ -51,7 +51,7 @@ export default function BrandBriefPage() {
   const CARD_STYLE = "p-6 md:p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-xl relative overflow-hidden group";
 
   return (
-    <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24">
+    <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-16">
       <div className="space-y-6">
         
         {/* 2. HERO ESTRATÉGICO */}
@@ -200,7 +200,7 @@ export default function BrandBriefPage() {
         </div>
 
         {/* 6. CIERRE */}
-        <footer className="bg-transparent p-12 md:p-20 text-center relative overflow-hidden">
+        <footer className="bg-transparent pt-8 pb-4 text-center relative overflow-hidden">
            <div className="relative z-10 space-y-6">
               <div className="bg-white p-4 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-sm border border-slate-100">
                  <ShieldCheck size={28} className="text-[#0a192f]" />
