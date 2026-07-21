@@ -5407,147 +5407,199 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
 
         {historialSubTab === 'stats' ? (
           <div className="space-y-8">
+            {/* Cabecera del Reporte Consolidado */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="space-y-1">
                 <h3 className="text-3xl font-black text-[#142d53] tracking-tighter">LABORATORIO DE ÉXITO</h3>
                 <p className="text-[11px] font-bold text-slate-400 tracking-widest uppercase">
-                  {selectedAnalyticsMonth === 'Abril' ? 'rango: 30 mar - 29 abr' : 'reporte estratégico mensual'}
+                  CONSOLIDADO DE INSTAGRAM • ÚLTIMOS 90 DÍAS
                 </p>
               </div>
-
-              <div className="flex bg-slate-100 p-1 rounded-xl">
-                {['Abril', 'Mayo', 'Junio'].map(m => (
-                  <button
-                    key={m}
-                    onClick={() => handleSetMonth(m)}
-                    className={`flex-1 px-4 py-3 rounded-xl text-[11px] font-black tracking-[2px] transition-all ${selectedAnalyticsMonth === m ? 'bg-[#142d53] text-[#48c1d2] shadow-lg scale-105' : 'text-slate-400 hover:text-slate-600'}`}
-                  >
-                    {m.toUpperCase()}
-                  </button>
-                ))}
+              <div className="px-4 py-2 bg-slate-100 rounded-full border border-slate-200">
+                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                  Rango: 21 Abr - 20 Jul 2026
+                </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 items-start">
-              {/* Visualizador de Galería Vertical */}
-              <div
-                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={handleDrop}
-                className={`relative group bg-white rounded-[3rem] p-4 border-8 transition-all duration-300 ${isDragging ? 'border-[#48c1d2] scale-[1.02] shadow-[0_0_50px_rgba(72,193,210,0.3)]' : 'border-slate-50 shadow-2xl'}`}
-              >
-                {analytics[0].images_reels?.length > 0 ? (
-                  <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 group/img">
-                    <img
-                      src={analytics[0].images_reels[0]}
-                      alt="Reporte Oficial"
-                      className="w-full h-auto block"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex flex-col justify-end p-8 gap-3">
-                      <label className="w-full py-4 bg-[#48c1d2] text-[#142d53] text-[10px] font-black rounded-2xl tracking-widest shadow-xl cursor-pointer text-center hover:scale-105 transition-all">
-                        actualizar captura
-                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                      </label>
-                      <button
-                        onClick={handleDeleteImage}
-                        className="w-full py-4 bg-red-500/80 backdrop-blur-md text-white text-[10px] font-black rounded-2xl tracking-widest shadow-xl hover:bg-red-600 transition-all"
-                      >
-                        eliminar captura
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center text-slate-400 p-12 text-center">
-                    <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mb-6">
-                      <TrendingUp size={40} className="opacity-30" />
-                    </div>
-                    <h5 className="text-sm font-black text-slate-500 mb-2">reporte estratégico semanal</h5>
-                    <label className="px-8 py-4 bg-[#142d53] text-[#48c1d2] text-[10px] font-black rounded-2xl tracking-widest shadow-2xl cursor-pointer hover:scale-105 transition-all flex items-center gap-3">
-                      <Plus size={16} /> subir captura
-                      <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                    </label>
-                  </div>
-                )}
+            {/* Métrica Principales de Crecimiento */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <TrendingUp size={40} className="text-[#142d53]" />
+                </div>
+                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">reproducciones reels</span>
+                <p className="text-3xl font-black text-[#142d53] tracking-tighter">56 mil</p>
+                <div className="mt-2 text-xs font-bold text-slate-400 leading-tight tracking-widest uppercase">
+                  impacto visual total
+                </div>
               </div>
 
-              {/* Datos Editables */}
-              <div className="space-y-6 flex flex-col">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <Video size={40} className="text-[#142d53]" />
+              <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Video size={40} className="text-[#48c1d2]" />
+                </div>
+                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">visualizaciones</span>
+                <p className="text-3xl font-black text-[#48c1d2] tracking-tighter">34 mil</p>
+                <div className="mt-2 text-xs font-bold text-green-600 leading-tight tracking-widest uppercase">
+                  alcance de cuenta
+                </div>
+              </div>
+
+              <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Heart size={40} className="text-rose-500" />
+                </div>
+                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">interacciones</span>
+                <p className="text-3xl font-black text-rose-500 tracking-tighter">1.3 mil</p>
+                <div className="mt-2 text-xs font-bold text-rose-400 leading-tight tracking-widest uppercase">
+                  me gusta recibidos
+                </div>
+              </div>
+
+              <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Users size={40} className="text-blue-500" />
+                </div>
+                <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">comunidad total</span>
+                <p className="text-3xl font-black text-blue-500 tracking-tighter">112</p>
+                <div className="mt-2 text-xs font-bold text-blue-400 leading-tight tracking-widest uppercase">
+                  seguidores activos
+                </div>
+              </div>
+            </div>
+
+            {/* Métricas Secundarias de Retención */}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {[
+                { label: "comentarios", value: "104", color: "text-[#142d53]" },
+                { label: "reposts", value: "106", color: "text-indigo-500" },
+                { label: "veces compartido", value: "52", color: "text-purple-500" },
+                { label: "veces guardado", value: "29", color: "text-amber-500" },
+                { label: "reels subidos", value: "22", color: "text-[#48c1d2]" }
+              ].map((m, idx) => (
+                <div key={idx} className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-center shadow-sm">
+                  <span className="text-[8px] font-black text-slate-400 tracking-widest uppercase block mb-1">{m.label}</span>
+                  <p className={`text-xl font-black ${m.color} tracking-tight`}>{m.value}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Desglose de Audiencia y Geografía (2 Columnas) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Columna A: Demografía (Género y Edad) */}
+              <div className="p-6 md:p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-xl space-y-6">
+                <div>
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Perfil Demográfico</h4>
+                  
+                  {/* Género */}
+                  <div className="space-y-2 mb-6">
+                    <div className="flex justify-between text-xs font-bold text-slate-600">
+                      <span>♂ Hombres (72.2%)</span>
+                      <span>♀ Mujeres (27.8%)</span>
                     </div>
-                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">impacto visual</span>
-                    <p className="text-2xl font-black text-[#142d53] tracking-tighter">{analytics[0].totalViews}</p>
-                    <div className="mt-2 text-xs font-bold text-slate-400 leading-tight tracking-widest uppercase">
-                      reproducciones totales
+                    <div className="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden flex">
+                      <div className="h-full bg-blue-500 transition-all" style={{ width: '72.2%' }} />
+                      <div className="h-full bg-pink-400 transition-all" style={{ width: '27.8%' }} />
                     </div>
                   </div>
 
-                  <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <Users size={40} className="text-[#48c1d2]" />
-                    </div>
-                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">alcance real</span>
-                    <p className="text-2xl font-black text-[#48c1d2] tracking-tighter">{analytics[0].alcance}</p>
-                    <div className="mt-2 text-xs font-bold text-green-600 leading-tight tracking-widest uppercase">
-                      personas únicas
-                    </div>
+                  {/* Edades */}
+                  <div className="space-y-3">
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Distribución de Edad</span>
+                    {[
+                      { age: "25-34 años", pct: "41.4%", bar: "w-[41.4%]", active: true },
+                      { age: "35-44 años", pct: "25.2%", bar: "w-[25.2%]", active: true },
+                      { age: "18-24 años", pct: "18.0%", bar: "w-[18.0%]", active: false },
+                      { age: "45-54 años", pct: "10.8%", bar: "w-[10.8%]", active: false },
+                      { age: "55-64 años", pct: "3.6%", bar: "w-[3.6%]", active: false },
+                      { age: "65+ años", pct: "0.9%", bar: "w-[1.0%]", active: false }
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center justify-between text-xs gap-3">
+                        <span className={`w-20 font-semibold text-left ${item.active ? 'text-[#142d53] font-bold' : 'text-slate-400'}`}>{item.age}</span>
+                        <div className="flex-1 h-2 bg-slate-50 rounded-full overflow-hidden">
+                          <div className={`h-full ${item.active ? 'bg-[#48c1d2]' : 'bg-slate-300'} rounded-full`} style={{ width: item.pct }} />
+                        </div>
+                        <span className={`w-10 text-right ${item.active ? 'text-[#142d53] font-bold' : 'text-slate-400'}`}>{item.pct}</span>
+                      </div>
+                    ))}
                   </div>
+                </div>
+              </div>
 
-                  <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <User size={40} className="text-blue-500" />
+              {/* Columna B: Distribución Geográfica (Países y Ciudades) */}
+              <div className="p-6 md:p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-xl space-y-6">
+                <div>
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Alcance Geográfico</h4>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+                    {/* Países */}
+                    <div className="space-y-3">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Países Principales</span>
+                      {[
+                        { name: "Estados Unidos", val: "48.6%", active: true },
+                        { name: "Colombia", val: "17.1%", active: false },
+                        { name: "Chile", val: "13.5%", active: false },
+                        { name: "Venezuela", val: "7.2%", active: false },
+                        { name: "España", val: "3.6%", active: false }
+                      ].map((p, i) => (
+                        <div key={i} className="flex justify-between items-center text-xs border-b border-slate-50 pb-1.5">
+                          <span className={p.active ? 'text-[#142d53] font-bold' : 'text-slate-500 font-medium'}>{p.name}</span>
+                          <span className={p.active ? 'text-[#48c1d2] font-black' : 'text-slate-400 font-bold'}>{p.val}</span>
+                        </div>
+                      ))}
                     </div>
-                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">interés comercial</span>
-                    <p className="text-2xl font-black text-blue-500 tracking-tighter">{analytics[0].interacciones}</p>
-                    <div className="mt-2 text-xs font-bold text-blue-400 leading-tight tracking-widest uppercase">
-                      visitas al perfil
-                    </div>
-                  </div>
 
-                  <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <Share2 size={40} className="text-purple-500" />
-                    </div>
-                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">factor viral</span>
-                    <p className="text-2xl font-black text-purple-500 tracking-tighter">{parseInt(analytics[0].compartidos) + parseInt(analytics[0].guardados) || 0}</p>
-                    <div className="mt-2 text-xs font-bold text-purple-400 leading-tight tracking-widest uppercase">
-                      recomendaciones
+                    {/* Ciudades */}
+                    <div className="space-y-3">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Ciudades Clave</span>
+                      {[
+                        { name: "Cali", val: "14.8%", label: "CO" },
+                        { name: "Santiago de Chile", val: "14.8%", label: "CL" },
+                        { name: "Magna (Utah)", val: "4.5%", label: "USA", active: true },
+                        { name: "Salt Lake City", val: "4.5%", label: "USA", active: true },
+                        { name: "Herriman", val: "3.4%", label: "USA", active: true }
+                      ].map((c, i) => (
+                        <div key={i} className="flex justify-between items-center text-xs border-b border-slate-50 pb-1.5">
+                          <span className={c.active ? 'text-[#142d53] font-bold' : 'text-slate-500 font-medium'}>
+                            {c.name} <span className="text-[9px] text-slate-400">({c.label})</span>
+                          </span>
+                          <span className={c.active ? 'text-[#48c1d2] font-black' : 'text-slate-400 font-bold'}>{c.val}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="p-10 bg-[#142d53] rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden group">
-                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#48c1d2]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
-                        <Sparkles size={24} />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-black text-[#48c1d2] tracking-[0.2em] uppercase">análisis de la estratega</h4>
-                        <p className="text-[10px] font-bold text-white/30 tracking-[0.4em] mt-1 uppercase">foco: prospección masiva</p>
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      {analytics[0].insights ? analytics[0].insights.split('\n').map((line, i) => (
-                        <p key={i} className="text-xl font-bold text-white leading-tight flex gap-3 text-left">
-                          <span className="text-[#48c1d2] shrink-0">•</span>
-                          <span>{line.replace(/^•\s*/, '')}</span>
-                        </p>
-                      )) : (
-                        <p className="text-sm font-bold text-white/40 ">pendiente de análisis estratégico...</p>
-                      )}
-                    </div>
+            {/* Tarjeta de Insights Estratégicos */}
+            <div className="p-8 bg-[#142d53] rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden group">
+              <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#48c1d2]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
+                    <Sparkles size={24} />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-xs font-black text-[#48c1d2] tracking-[0.2em] uppercase">conclusiones de la estratega</h4>
+                    <p className="text-[9px] font-bold text-white/30 tracking-[0.3em] mt-1 uppercase">foco: retención y conversión local</p>
                   </div>
                 </div>
-
-                <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-black text-slate-400 tracking-widest block mb-1 uppercase">crecimiento de comunidad</span>
-                    <p className="text-2xl font-black text-[#48c1d2] tracking-tighter">+{analytics[0].seguidores} seguidores ganados</p>
-                  </div>
+                
+                <div className="space-y-4 text-left">
+                  <p className="text-base font-bold text-white/95 leading-relaxed flex gap-3">
+                    <span className="text-[#48c1d2] shrink-0">•</span>
+                    <span><strong>Foco en Audiencia de Alto Valor:</strong> El 72.2% de la audiencia es masculina y el 66.6% del total de seguidores se concentra entre los 25 y 44 años. Esta es la demografía ideal para contratar proyectos premium (pisos epóxicos, lavado de techos y casas).</span>
+                  </p>
+                  <p className="text-base font-bold text-white/95 leading-relaxed flex gap-3">
+                    <span className="text-[#48c1d2] shrink-0">•</span>
+                    <span><strong>Penetración en Utah Lograda:</strong> Los seguidores en Magna (4.5%), Salt Lake City (4.5%) y Herriman (3.4%) confirman que el algoritmo entrega el contenido local en tus zonas de servicio prioritarias.</span>
+                  </p>
+                  <p className="text-base font-bold text-white/95 leading-relaxed flex gap-3">
+                    <span className="text-[#48c1d2] shrink-0">•</span>
+                    <span><strong>Rendimiento de Reels:</strong> Con 56K reproducciones en 22 videos, promedias 2.5K vistas por post. Los formatos cortos, dinámicos (clips &lt; 1s) con sonidos reales de lavado y acabados de pisos siguen siendo tu mayor gancho orgánico.</span>
+                  </p>
                 </div>
               </div>
             </div>
