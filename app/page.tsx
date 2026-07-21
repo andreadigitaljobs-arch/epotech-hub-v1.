@@ -796,7 +796,7 @@ export default function Home() {
 
               </div>
 
-              <h1 className="text-2xl md:text-5xl font-black text-[#142d53] tracking-tighter mb-8 overflow-visible max-w-4xl leading-[1.1]">
+              <h1 className="text-lg sm:text-xl md:text-5xl font-black text-[#142d53] tracking-tighter mb-8 overflow-visible max-w-4xl leading-[1.1]">
 
                 Centro de mando: <br /> <span className="text-[#48c1d2] italic">Tu guía de vuelo&nbsp;</span>
 
