@@ -3169,7 +3169,7 @@ export default function ContenidoPage() {
 
                 
                 {/* Tarjeta de Instrucciones Dinámica */}
-                {guionTab !== 'historias' && guionTab !== 'checklist' && (
+                {guionTab !== 'historias' && guionTab !== 'checklist' && guionTab !== 'ideas' && (
                   <div className="bg-white/60 backdrop-blur-md p-4 rounded-2xl border border-[#142d53]/5 mb-6 flex items-start gap-3 shadow-sm">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     guionTab === 'reels' ? 'bg-[#142d53] text-[#48c1d2]' : 'bg-[#48c1d2] text-[#142d53]'
