@@ -52,15 +52,6 @@ export default function BrandBriefPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24">
-      {/* 1. INSTRUCCIONES PREMIUM */}
-      <div className="mb-4">
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[#48c1d2]">Arquitectura de Marca:</span> Este es el ADN de Epotech. Consulta tu misión, visión y perfil de cliente para que tu comunicación sea siempre coherente y profesional.
-          </p>
-        </div>
-      </div>
-
       <div className="space-y-6">
         
         {/* 2. HERO ESTRATÉGICO */}

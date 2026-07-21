@@ -694,21 +694,7 @@ export default function Home() {
 
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 md:pb-8">
 
-      {/* 1. INSTRUCCIONES PREMIUM */}
-
       <div className="mb-4 space-y-4">
-
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
-
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-
-            <span className="text-[#48c1d2]">Academia Epotech:</span> Aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. Mira el tutorial para empezar.
-
-          </p>
-
-        </div>
-
-
 
         {/* Card de Firma Digital - Acceso Rápido */}
 
@@ -794,7 +780,7 @@ export default function Home() {
 
                 </div>
 
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Academia Epotech</span>
+                <span className="text-[10px] font-black tracking-[0.15em] text-slate-400 uppercase">Academia Epotech</span>
 
                 
 
@@ -866,7 +852,7 @@ export default function Home() {
 
           </div>
 
-          <p className="text-slate-500 text-lg max-w-2xl font-medium leading-relaxed">
+          <p className="text-slate-500 text-lg max-w-2xl font-medium leading-relaxed text-left">
 
             Hola Sebastián, aquí tienes todo lo necesario para dominar tu plataforma y llevar Epotech al siguiente nivel. ¡Llevas una racha de {streakDays} {streakDays === 1 ? 'día' : 'días'} consecutivos! ¿Qué quieres lograr hoy?
 
@@ -874,7 +860,7 @@ export default function Home() {
 
           
 
-          <div className="flex flex-col md:flex-row items-center gap-6 mt-10 mb-4">
+          <div className="flex flex-col md:flex-row items-start gap-6 mt-10 mb-4">
 
             <button 
 
@@ -884,7 +870,7 @@ export default function Home() {
 
                 isSubscribed 
 
-                ? "bg-slate-100 text-[#48c1d2] border-slate-200 cursor-default" 
+                ? "bg-slate-100 text-emerald-500 border-slate-200 cursor-default" 
 
                 : "bg-[#48c1d2] hover:bg-[#35a5b5] text-[#142d53] border-[#2d8c9a] hover:scale-105 active:scale-95 shadow-[#48c1d2]/30"
 
@@ -892,24 +878,11 @@ export default function Home() {
 
             >
 
-              {isSubscribed ? <ShieldCheck size={20} /> : <Bell size={20} fill="currentColor" />}
+              {isSubscribed ? <ShieldCheck size={20} className="text-emerald-500" /> : <Bell size={20} fill="currentColor" />}
 
               {isSubscribed ? "Notificaciones Activas" : "Activar Notificaciones"}
 
             </button>
-
-            <div className="flex items-center gap-3">
-
-              <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${isSubscribed ? 'bg-green-500 shadow-green-500/50' : 'bg-[#48c1d2] shadow-[#48c1d2]/50'}`}></div>
-
-              <span className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em] italic">
-
-                {isSubscribed ? "Notificaciones activas" : "Sin notificaciones"}
-
-              </span>
-
-            </div>
-
           </div>
 
         </div>

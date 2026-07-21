@@ -2747,7 +2747,7 @@ export default function ContenidoPage() {
               ) : (
                 /* Contenido Selector Real de Misiones */
                 <div className="space-y-6 text-left">
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wide leading-relaxed">
+                  <p className="text-xs font-bold text-slate-500 tracking-wide leading-relaxed">
                     Selecciona una tarea para comenzar. La interfaz se adaptará para mostrarte únicamente las herramientas que necesitas.
                   </p>
                   
@@ -2897,15 +2897,6 @@ export default function ContenidoPage() {
 
         {!activeMision && (
           <>
-            {/* Texto Tutorial Contextual Premium */}
-            <div className="mb-8">
-              <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-                  <span className="text-[#48c1d2]">Estudio de Producción:</span> Aquí es donde ocurre la magia. Envíanos tu reporte de audio al final del día y nosotros generaremos tus guiones estratégicos. También podrás grabar tu voz en off aquí mismo.
-                </p>
-              </div>
-            </div>
-
             <div className="mb-6 animate-in fade-in slide-in-from-bottom-3 duration-400 content-transition flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <h1 className="text-2xl md:text-5xl font-black text-[#142d53] leading-[1.1] tracking-tighter">

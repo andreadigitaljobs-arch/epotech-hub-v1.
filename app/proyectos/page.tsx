@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
@@ -364,12 +364,6 @@ export default function ProyectosPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-6">
       <div className="space-y-6 pb-20">
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] mb-4">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[var(--accent)]">Progreso de Proyectos:</span> Aquí puedes ver exactamente en qué estamos trabajando para ti, qué tan avanzado está cada proyecto y qué hemos logrado hasta ahora. Tócale a cualquier servicio para ver el detalle.
-          </p>
-        </div>
-
         {/* Header */}
         <header className="mb-8">
           <div className="flex items-center gap-3 mb-1">
@@ -378,7 +372,7 @@ export default function ProyectosPage() {
                ¡Hola, {client.name}! 👋🏻
              </h1>
           </div>
-          <p className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[0.2em] ml-5">
+          <p className="text-[10px] font-black text-[#48c1d2] tracking-[0.1em] ml-5 uppercase">
             Hoy es un gran día para hacer crecer a Epotech Solutions
           </p>
         </header>

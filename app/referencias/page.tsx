@@ -72,15 +72,6 @@ export default function ReferenciasPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24">
-      {/* 1. INSTRUCCIONES PREMIUM */}
-      <div className="mb-4">
-        <div className="bg-white/50 border border-slate-200 p-6 rounded-[2rem] w-full shadow-sm">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed text-left">
-            <span className="text-[#48c1d2]">Motor de Inspiración:</span> Mira los videos y tendencias que usamos como referencia para tus Reels. No inventamos la rueda, la hacemos girar más rápido para Epotech.
-          </p>
-        </div>
-      </div>
-
       <div className="text-left space-y-6">
         {/* 2. HERO COMPACTO */}
         <header className="relative p-4 md:p-6 overflow-visible group">
