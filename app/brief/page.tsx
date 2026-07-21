@@ -15,9 +15,13 @@ import {
   Droplets,
   Paintbrush,
   Sparkles,
-  MapPin
+  MapPin,
+  PenTool,
+  ArrowRight
 } from "lucide-react";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
+import { SignatureModal } from "@/components/ui/SignatureModal";
+import { Toast, ToastType } from "@/components/ui/Toast";
 
 export default function BrandBriefPage() {
   useThemeColor("#f8fafc");
@@ -32,6 +36,17 @@ export default function BrandBriefPage() {
     mensajes_clave: ["HACEMOS QUE TU HOGAR SE VEA COMO NUEVO", "COTIZACIÓN GRATIS", "SERVICIO RÁPIDO Y CONFIABLE", "SALT LAKE CITY / UTAH"]
   });
   const [loading, setLoading] = useState(true);
+  const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
+  const [savedSignature, setSavedSignature] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
+    message: "",
+    type: "success",
+    isVisible: false
+  });
+
+  const showToast = (message: string, type: ToastType = "success") => {
+    setToast({ message, type, isVisible: true });
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -46,7 +61,59 @@ export default function BrandBriefPage() {
       setLoading(false);
     }
     fetchData();
+
+    // Cargar firma: primero desde Supabase con fallback a localStorage
+    const loadSignature = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('firma_sebastian')
+          .select('signature_data')
+          .order('updated_at', { ascending: false })
+          .limit(1);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          setSavedSignature(data[0].signature_data);
+          localStorage.setItem('epotech_signature', data[0].signature_data);
+        } else {
+          localStorage.removeItem('epotech_signature');
+          setSavedSignature(null);
+        }
+      } catch (err) {
+        const saved = localStorage.getItem('epotech_signature');
+        if (saved) setSavedSignature(saved);
+      }
+    };
+    loadSignature();
   }, []);
+
+  const handleSaveSignature = async (base64Data: string) => {
+    localStorage.setItem('epotech_signature', base64Data);
+    setSavedSignature(base64Data);
+    showToast("Guardando firma...", "info");
+
+    try {
+      await supabase.from('firma_sebastian').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      const { error } = await supabase.from('firma_sebastian').insert({ signature_data: base64Data });
+      if (error) throw error;
+      showToast("¡Firma guardada y sincronizada!", "success");
+    } catch (err) {
+      showToast("Firma guardada localmente.", "success");
+    }
+  };
+
+  const handleResetSignature = async () => {
+    localStorage.removeItem('epotech_signature');
+    setSavedSignature(null);
+
+    try {
+      await supabase.from('firma_sebastian').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    } catch (err) {
+    }
+
+    showToast("Firma eliminada.", "success");
+  };
 
   const CARD_STYLE = "p-6 md:p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-xl relative overflow-hidden group";
 
@@ -199,20 +266,67 @@ export default function BrandBriefPage() {
            </div>
         </div>
 
-        {/* 6. CIERRE */}
-        <footer className="bg-transparent pt-8 pb-4 text-center relative overflow-hidden">
-           <div className="relative z-10 space-y-6">
-              <div className="bg-white p-4 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-sm border border-slate-100">
-                 <ShieldCheck size={28} className="text-[#0a192f]" />
-              </div>
-              <h4 className="text-2xl md:text-4xl font-black italic text-[#142d53]">
-                 Este brief es <span className="text-[#48c1d2]">tu brújula</span>
-              </h4>
-              <p className="text-slate-500 text-sm font-bold italic max-w-lg mx-auto">
-                 &quot;Si no construye confianza o transformación real, no pertenece a Epotech.&quot;
-              </p>
+        {/* 5.5 FIRMA DIGITAL DE SEBASTIÁN - ACTIVO DE MARCA */}
+     <div 
+       onClick={() => setIsSignatureModalOpen(true)}
+       className="bg-gradient-to-br from-[#142d53] to-[#1e3a8a] p-6 rounded-[2.5rem] shadow-xl border border-white/10 flex items-center justify-between group cursor-pointer hover:scale-[1.01] transition-all overflow-hidden relative mt-8"
+     >
+       {/* Fondo decorativo */}
+       <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
+         <PenTool size={120} className="text-[#48c1d2]" />
+       </div>
+
+       <div className="flex items-center gap-6 relative z-10">
+         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${savedSignature ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-[#48c1d2] text-[#142d53] shadow-lg shadow-[#48c1d2]/20'}`}>
+           {savedSignature ? <ShieldCheck size={28} /> : <PenTool size={28} />}
+         </div>
+         <div className="text-left">
+           <h3 className="text-white text-lg font-black tracking-tight leading-none mb-2">
+             {savedSignature ? "Tu Firma está Lista" : "Registra tu Firma Digital"}
+           </h3>
+           <p className="text-[#48c1d2] text-[10px] font-black uppercase tracking-widest opacity-80">
+             {savedSignature ? "Protegida y lista para descargar" : "Click aquí para firmar ahora"}
+           </p>
+         </div>
+       </div>
+
+       <div className="hidden sm:flex items-center gap-3 relative z-10">
+         <span className="text-[9px] font-black uppercase text-white/40 tracking-[0.2em]">Activos de Marca</span>
+         <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:translate-x-1 transition-transform">
+           <ArrowRight size={16} />
+         </div>
+       </div>
+     </div>
+
+     {/* 6. CIERRE */}
+     <footer className="bg-transparent pt-8 pb-4 text-center relative overflow-hidden">
+        <div className="relative z-10 space-y-6">
+           <div className="bg-white p-4 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-sm border border-slate-100">
+              <ShieldCheck size={28} className="text-[#0a192f]" />
            </div>
-        </footer>
+           <h4 className="text-2xl md:text-4xl font-black italic text-[#142d53]">
+              Este brief es <span className="text-[#48c1d2]">tu brújula</span>
+           </h4>
+           <p className="text-slate-500 text-sm font-bold italic max-w-lg mx-auto">
+              &quot;Si no construye confianza o transformación real, no pertenece a Epotech.&quot;
+           </p>
+        </div>
+     </footer>
+
+     <Toast 
+       message={toast.message}
+       type={toast.type}
+       isVisible={toast.isVisible}
+       onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+     />
+
+     <SignatureModal 
+       isOpen={isSignatureModalOpen}
+       onClose={() => setIsSignatureModalOpen(false)}
+       onSave={handleSaveSignature}
+       onReset={handleResetSignature}
+       savedSignature={savedSignature}
+     />
 
       </div>
     </div>

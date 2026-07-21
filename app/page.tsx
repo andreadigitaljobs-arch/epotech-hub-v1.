@@ -12,7 +12,7 @@ import {
 
   Sparkles, HelpCircle, ArrowRight, Mic,
 
-  Search, Smartphone, Zap, Bell, ShieldCheck, PenTool,
+  Search, Smartphone, Zap, Bell, ShieldCheck,
 
   Camera, Flame, CalendarDays
 
@@ -22,11 +22,9 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 
-import { useThemeColor } from "@/components/layout/ThemeColorHandler";
-
 import { Toast, ToastType } from "@/components/ui/Toast";
 
-import { SignatureModal } from "@/components/ui/SignatureModal";
+import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 
 import { supabase } from "@/lib/supabase";
 
@@ -113,10 +111,6 @@ export default function Home() {
 
   const [notificationStatus, setNotificationStatus] = useState<NotificationPermission | 'unsupported'>('default');
 
-  const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
-
-  const [savedSignature, setSavedSignature] = useState<string | null>(null);
-
   const [streakDays, setStreakDays] = useState(1);
 
   const [toast, setToast] = useState<{ message: string, type: ToastType, isVisible: boolean }>({
@@ -189,37 +183,6 @@ export default function Home() {
 
 
 
-    // Cargar firma: primero desde Supabase (fuente de verdad compartida), con fallback a localStorage
-    const loadSignature = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('firma_sebastian')
-          .select('signature_data')
-          .order('updated_at', { ascending: false })
-          .limit(1);
-
-        if (error) throw error; // Error de red → caer al catch
-
-        if (data && data.length > 0) {
-          // Supabase tiene firma → mostrarla y cachear localmente
-          setSavedSignature(data[0].signature_data);
-          localStorage.setItem('epotech_signature', data[0].signature_data);
-        } else {
-          // Supabase está vacío → limpiar caché local también (la firma fue eliminada)
-          localStorage.removeItem('epotech_signature');
-          setSavedSignature(null);
-        }
-      } catch (err) {
-        // Solo en error de red real → usar localStorage como respaldo offline
-        const saved = localStorage.getItem('epotech_signature');
-        if (saved) setSavedSignature(saved);
-      }
-    };
-
-    loadSignature();
-
-
-
     // Cargar racha diaria
 
     const savedStreak = parseInt(localStorage.getItem('epotech_streak') || '1', 10);
@@ -227,41 +190,6 @@ export default function Home() {
     setStreakDays(savedStreak);
 
   }, []);
-
-
-
-  const handleSaveSignature = async (data: string) => {
-    // Guardar localmente primero (respuesta inmediata)
-    localStorage.setItem('epotech_signature', data);
-    setSavedSignature(data);
-    showToast("Guardando firma...", "info");
-
-    try {
-      // Borrar la firma anterior y guardar la nueva en Supabase
-      await supabase.from('firma_sebastian').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-      const { error } = await supabase.from('firma_sebastian').insert({ signature_data: data });
-      if (error) throw error;
-      showToast("¡Firma guardada y sincronizada!", "success");
-    } catch (err) {
-      // Si falla Supabase, la firma igual queda guardada localmente
-      showToast("Firma guardada localmente.", "success");
-    }
-  };
-
-
-
-  const handleResetSignature = async () => {
-    localStorage.removeItem('epotech_signature');
-    setSavedSignature(null);
-
-    try {
-      await supabase.from('firma_sebastian').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-    } catch (err) {
-      // Ignorar errores de red al eliminar
-    }
-
-    showToast("Firma eliminada.", "success");
-  };
 
 
 
@@ -694,72 +622,6 @@ export default function Home() {
 
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 pb-24 md:pb-8">
 
-      <div className="mb-4 space-y-4">
-
-        {/* Card de Firma Digital - Acceso Rápido */}
-
-        <div 
-
-          onClick={() => setIsSignatureModalOpen(true)}
-
-          className="bg-gradient-to-br from-[#142d53] to-[#1e3a8a] p-6 rounded-[2.5rem] shadow-xl border border-white/10 flex items-center justify-between group cursor-pointer hover:scale-[1.01] transition-all overflow-hidden relative"
-
-        >
-
-          {/* Fondo decorativo */}
-
-          <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
-
-            <PenTool size={120} className="text-[#48c1d2]" />
-
-          </div>
-
-
-
-          <div className="flex items-center gap-6 relative z-10">
-
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${savedSignature ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-[#48c1d2] text-[#142d53] shadow-lg shadow-[#48c1d2]/20'}`}>
-
-              {savedSignature ? <ShieldCheck size={28} /> : <PenTool size={28} />}
-
-            </div>
-
-            <div>
-
-              <h3 className="text-white text-lg font-black tracking-tight leading-none mb-2">
-
-                {savedSignature ? "Tu Firma está Lista" : "Registra tu Firma Digital"}
-
-              </h3>
-
-              <p className="text-[#48c1d2] text-[10px] font-black uppercase tracking-widest opacity-80">
-
-                {savedSignature ? "Protegida y lista para descargar" : "Click aquí para firmar ahora"}
-
-              </p>
-
-            </div>
-
-          </div>
-
-
-
-          <div className="hidden sm:flex items-center gap-3 relative z-10">
-
-            <span className="text-[9px] font-black uppercase text-white/40 tracking-[0.2em]">Identidad de Marca</span>
-
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:translate-x-1 transition-transform">
-
-              <ArrowRight size={16} />
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
 
 
       {/* Header Premium - Light */}
@@ -975,19 +837,7 @@ export default function Home() {
 
 
 
-      <SignatureModal 
 
-        isOpen={isSignatureModalOpen}
-
-        onClose={() => setIsSignatureModalOpen(false)}
-
-        onSave={handleSaveSignature}
-
-        onReset={handleResetSignature}
-
-        savedSignature={savedSignature}
-
-      />
 
 
 
