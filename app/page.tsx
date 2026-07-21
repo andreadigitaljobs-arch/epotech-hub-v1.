@@ -812,7 +812,7 @@ export default function Home() {
 
               <div className="relative shrink-0">
 
-                <div className="w-14 h-14 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_15px_rgba(72,193,210,0.2)] overflow-hidden">
+                <div className="w-14 h-14 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_15px_rgba(72,193,210,0.2)] overflow-hidden bg-[#142d53]">
 
                   <img
 

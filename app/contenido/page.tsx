@@ -2556,7 +2556,7 @@ export default function ContenidoPage() {
 
               {/* Avatar de Sebastián */}
               <div className="relative z-10 shrink-0 ml-4 mr-4 md:mr-2">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_20px_rgba(72,193,210,0.25)] overflow-hidden">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-full border-2 border-[#48c1d2]/50 shadow-[0_0_20px_rgba(72,193,210,0.25)] overflow-hidden bg-[#142d53]">
                   <img
                     src="/sebastian.jpg"
                     alt="Sebastián"
@@ -2814,27 +2814,7 @@ export default function ContenidoPage() {
                     })}
                   </div>
                   
-                  {/* Reset Onboarding Button */}
-                  <div className="pt-4 border-t border-slate-100 flex justify-center">
-                    <button
-                      onClick={() => {
-                        localStorage.removeItem('epotech_onboarding_done');
-                        localStorage.removeItem('epotech_onboarding_progress');
-                        setOnboardingDone(false);
-                        setOnboardingProgress({ voiceDone: false, reportDone: false });
-                        setIsOnboardingTour(false);
-                        setTourStep(0);
-                        setTourSubStep(0);
-                        setSelectedScript(null);
-                        setMergedVoiceoverUrl(null);
-                        setActiveMision(null);
-                        showToast("¡Entrenamiento restablecido! 🔄", "info");
-                      }}
-                      className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center gap-1.5 shadow-sm border border-slate-200"
-                    >
-                      🔄 Reiniciar Entrenamiento de Bienvenida
-                    </button>
-                  </div>
+
                 </div>
               )}
             </div>

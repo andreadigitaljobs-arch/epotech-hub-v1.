@@ -43,6 +43,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="preload" href="/sebastian.jpg" as="image" />
       </head>
       <body className={inter.className}>
         <ThemeColorProvider>
