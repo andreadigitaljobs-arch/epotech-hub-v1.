@@ -5422,6 +5422,19 @@ function HistorialSection({ contentDB, onSelect, showToast, activeTab, requestCo
               </div>
             </div>
 
+            {/* Banner de Victoria Comercial */}
+            <div className="p-6 bg-emerald-500/10 border border-emerald-500/30 rounded-[2rem] flex flex-col sm:flex-row items-center gap-4 animate-in zoom-in duration-500 text-left">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-500/20">
+                <span className="text-xl">🏆</span>
+              </div>
+              <div className="flex-1">
+                <span className="text-[9px] font-black text-emerald-600 uppercase tracking-[2px] block mb-1">¡Victoria Real Detectada!</span>
+                <p className="text-sm font-bold text-[#142d53] leading-relaxed">
+                  Ya llegó el primer cliente directamente a través de <strong>Google Maps</strong>, impulsado por el posicionamiento estratégico y la consistencia de nuestras publicaciones orgánicas. ¡La fórmula funciona! 🚀
+                </p>
+              </div>
+            </div>
+
             {/* Métrica Principales de Crecimiento */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-6 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl text-left relative overflow-hidden group">
