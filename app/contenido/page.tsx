@@ -6,7 +6,6 @@ import { createPortal } from "react-dom";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useThemeColor } from "@/components/layout/ThemeColorHandler";
 import { supabase } from "@/lib/supabase";
-import CalendarioTab from "./CalendarioTab";
 import Tesseract from 'tesseract.js';
 import { motion, AnimatePresence } from "framer-motion";
 import {
