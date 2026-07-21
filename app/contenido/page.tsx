@@ -458,6 +458,16 @@ const MISIONES = [
     colorClasses: { bg: 'bg-emerald-500', bgLight: 'bg-emerald-500/10', text: 'text-emerald-600', border: 'border-emerald-500/30', hoverBorder: 'group-hover:border-emerald-500/40' }
   },
   {
+    id: 'ideas',
+    title: "💡 Bloc de Ideas",
+    desc: "Anota tus próximas ideas virales rápidamente. Se inyectan de forma automática a tu plan de producción.",
+    icon: Lightbulb,
+    tag: "Ideas",
+    tab: 'guiones',
+    sub: 'ideas',
+    colorClasses: { bg: 'bg-amber-500', bgLight: 'bg-amber-500/10', text: 'text-amber-700', border: 'border-amber-500/30', hoverBorder: 'group-hover:border-amber-500/40' }
+  },
+  {
     id: 'historial',
     title: "📂 Historial de Contenido",
     desc: "Accede al registro completo y archivo de todos tus audios, guiones aprobados e ideas del pasado.",
