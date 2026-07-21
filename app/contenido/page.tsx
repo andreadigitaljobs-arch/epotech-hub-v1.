@@ -686,7 +686,14 @@ export default function ContenidoPage() {
       }
     });
   };
-  const [guionTab, setGuionTab] = useState<'reels' | 'historias' | 'checklist' | 'presentacion'>('reels');
+  const [guionTab, setGuionTab] = useState<'reels' | 'historias' | 'checklist' | 'presentacion' | 'ideas'>('reels');
+
+  // --- ESTADOS DEL BLOC DE NOTAS DE IDEAS ---
+  const [localIdeas, setLocalIdeas] = useState<any[]>([]);
+  const [newIdeaTitle, setNewIdeaTitle] = useState('');
+  const [newIdeaDesc, setNewIdeaDesc] = useState('');
+  const [newIdeaType, setNewIdeaType] = useState('Reel');
+  const [isAddingIdea, setIsAddingIdea] = useState(false);
 
   // --- ESTADOS INTEGRADOS DEL CHECKLIST DE OBRA ---
   const [checklistActivePhase, setChecklistActivePhase] = useState("antes");
@@ -947,7 +954,7 @@ export default function ContenidoPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleGuionTabChange = (tabId: 'reels' | 'historias' | 'checklist' | 'presentacion') => {
+  const handleGuionTabChange = (tabId: 'reels' | 'historias' | 'checklist' | 'presentacion' | 'ideas') => {
     setGuionTab(tabId);
     setSelectedWeek("");
     localStorage.setItem('epotech_guion_tab', tabId);
@@ -1658,6 +1665,10 @@ export default function ContenidoPage() {
           .select('*')
           .order('created_at', { ascending: false });
 
+        if (ideas) {
+          setLocalIdeas(ideas);
+        }
+
         if (ideas && ideas.length > 0) {
           const mappedPlan: any = {};
           const now = new Date();
@@ -1686,6 +1697,87 @@ export default function ContenidoPage() {
     }
     fetchProductionPlan();
   }, []);
+
+  const reloadProductionPlan = async () => {
+    try {
+      const { data: ideas } = await supabase
+        .from('ideas_contenido')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (ideas) {
+        setLocalIdeas(ideas);
+        if (ideas.length > 0) {
+          const mappedPlan: any = {};
+          const now = new Date();
+          const currentMonthShort = now.toLocaleString('es-ES', { month: 'short' });
+          ideas.forEach((idea, index) => {
+            const day = (index + 1).toString().padStart(2, '0');
+            mappedPlan[day] = {
+              status: idea.status || 'Pendiente',
+              title: idea.titulo,
+              type: idea.tipo || 'Reel',
+              objetivo: 'Branding',
+              desc: idea.descripcion,
+              copy: 'Cargando texto estratégico...',
+              hashtags: '#EpotechSolutions #PisosEpoxy',
+              date: `${day} ${currentMonthShort}`
+            };
+          });
+          setContentDB(mappedPlan);
+          localStorage.setItem('epotech_production_plan', JSON.stringify(mappedPlan));
+        } else {
+          setContentDB({});
+          localStorage.removeItem('epotech_production_plan');
+        }
+      }
+    } catch (err) {
+      console.error("Error al recargar plan de producción:", err);
+    }
+  };
+
+  const handleAddIdea = async () => {
+    if (!newIdeaTitle.trim()) return;
+    showToast("Agregando idea...", "info");
+    try {
+      const { error } = await supabase
+        .from('ideas_contenido')
+        .insert({
+          titulo: newIdeaTitle,
+          descripcion: newIdeaDesc,
+          tipo: newIdeaType,
+          status: 'Pendiente'
+        });
+      
+      if (error) throw error;
+      
+      setNewIdeaTitle('');
+      setNewIdeaDesc('');
+      setIsAddingIdea(false);
+      await reloadProductionPlan();
+      showToast("¡Idea agregada al bloc!", "success");
+    } catch(e) {
+      console.error(e);
+      showToast("Error al agregar la idea", "error");
+    }
+  };
+
+  const handleDeleteIdea = async (id: string) => {
+    showToast("Eliminando idea...", "info");
+    try {
+      const { error } = await supabase
+        .from('ideas_contenido')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      await reloadProductionPlan();
+      showToast("Idea eliminada", "success");
+    } catch(e) {
+      console.error(e);
+      showToast("Error al eliminar la idea", "error");
+    }
+  };
 
   const [selectedProduction, setSelectedProduction] = useState<any>(null);
 
@@ -3012,8 +3104,8 @@ export default function ContenidoPage() {
           <div className="space-y-4">
             {/* Navegación del Estudio de Producción Compacta pero Espaciada */}
             {/* Navegación del Estudio de Producción - Ahora Simplificada */}
-            {!activeMision && (
-              <div className="grid grid-cols-2 md:grid-cols-4 bg-[#0a192f]/5 p-1.5 rounded-[2rem] mb-6 gap-2 border border-slate-200/60">
+             {!activeMision && (
+              <div className="grid grid-cols-2 md:grid-cols-5 bg-[#0a192f]/5 p-1.5 rounded-[2rem] mb-6 gap-2 border border-slate-200/60">
                 <button
                   onClick={() => handleGuionTabChange('reels')}
                   className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'reels'
@@ -3049,6 +3141,15 @@ export default function ContenidoPage() {
                     }`}
                 >
                   <Clapperboard size={15} /> Grabación Pro
+                </button>
+                <button
+                  onClick={() => handleGuionTabChange('ideas')}
+                  className={`py-3 px-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${guionTab === 'ideas'
+                      ? 'bg-[#142d53] text-[#48c1d2] scale-[1.02]'
+                      : 'text-slate-500 hover:text-[#142d53] hover:bg-white/70'
+                    }`}
+                >
+                  <Lightbulb size={15} /> Mis Ideas 💡
                 </button>
               </div>
             )}
@@ -3277,6 +3378,149 @@ export default function ContenidoPage() {
                         );
                       })()}
                     </>
+                  ) : guionTab === 'ideas' ? (
+                    <div className="space-y-6 text-left animate-in fade-in duration-300">
+                      {/* Cabecera del Bloc de Notas */}
+                      <div className="bg-gradient-to-br from-[#142d53] to-[#1e3a8a] rounded-[2.5rem] p-8 mb-6 border border-white/10 shadow-2xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-700">
+                          <Lightbulb size={120} className="text-[#48c1d2]" />
+                        </div>
+                        <div className="relative z-10 space-y-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-[#48c1d2] flex items-center justify-center text-[#142d53] shadow-lg shadow-[#48c1d2]/20">
+                              <Lightbulb size={24} />
+                            </div>
+                            <div>
+                              <h5 className="text-[10px] font-black text-[#48c1d2] uppercase tracking-[3px] mb-0.5">Contenido Creativo</h5>
+                              <h4 className="text-xl font-black text-white tracking-tighter">Mi Bloc de Ideas Virales</h4>
+                            </div>
+                          </div>
+                          <p className="text-xs font-semibold text-slate-200/80 leading-relaxed max-w-xl">
+                            ¿Se te ocurrió un video o una historia en medio de una obra? Anótala aquí rápido. Cualquier idea que guardes se inyectará automáticamente en tu plan de producción.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Grid principal: Formulario + Notas */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+                        {/* Formulario de Nueva Idea (Sticky Note Amarillo) */}
+                        <div className="p-6 bg-amber-50 border-2 border-amber-200 rounded-[2rem] shadow-md relative overflow-hidden flex flex-col gap-4">
+                          <div className="absolute top-0 right-0 p-3 opacity-10">
+                            <Plus size={40} className="text-amber-800" />
+                          </div>
+                          
+                          <div>
+                            <span className="text-[9px] font-black text-amber-800 uppercase tracking-widest block mb-2">📌 Nueva Nota adhesiva</span>
+                            <h4 className="text-sm font-black text-[#142d53] tracking-tight">Capturar Idea</h4>
+                          </div>
+
+                          <div className="space-y-3">
+                            <div>
+                              <label className="text-[8px] font-black text-amber-800 uppercase tracking-wider block mb-1">Título de la Idea</label>
+                              <input
+                                type="text"
+                                placeholder="Ej: ASMR Limpieza de Tejas"
+                                value={newIdeaTitle}
+                                onChange={(e) => setNewIdeaTitle(e.target.value)}
+                                className="w-full bg-white/70 border border-amber-300 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:border-amber-500 focus:bg-white text-slate-800 placeholder-slate-400"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[8px] font-black text-amber-800 uppercase tracking-wider block mb-1">Detalle o Concepto</label>
+                              <textarea
+                                placeholder="¿De qué trata? Qué clips grabar, qué audio usar..."
+                                value={newIdeaDesc}
+                                onChange={(e) => setNewIdeaDesc(e.target.value)}
+                                rows={3}
+                                className="w-full bg-white/70 border border-amber-300 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-amber-500 focus:bg-white text-slate-800 placeholder-slate-400 resize-none"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[8px] font-black text-amber-800 uppercase tracking-wider block mb-1">Formato</label>
+                              <div className="flex bg-white/50 p-0.5 rounded-lg border border-amber-300">
+                                {['Reel', 'Historia', 'Tip'].map(type => (
+                                  <button
+                                    key={type}
+                                    type="button"
+                                    onClick={() => setNewIdeaType(type)}
+                                    className={`flex-1 py-1 rounded text-[9px] font-black uppercase transition-all ${newIdeaType === type ? 'bg-amber-200 text-amber-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                  >
+                                    {type}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={handleAddIdea}
+                            disabled={!newIdeaTitle.trim()}
+                            className="w-full py-3 bg-[#142d53] hover:bg-[#0a192f] disabled:bg-slate-300 text-[#48c1d2] disabled:text-slate-500 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95"
+                          >
+                            + Pegar Nota en el Tablero
+                          </button>
+                        </div>
+
+                        {/* Contenedor de Notas Adhesivas existentes */}
+                        <div className="md:col-span-2">
+                          {localIdeas.length === 0 ? (
+                            <div className="p-12 bg-white rounded-[2rem] border border-slate-100 text-center flex flex-col items-center justify-center">
+                              <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 text-slate-300">
+                                <Lightbulb size={32} />
+                              </div>
+                              <h5 className="text-sm font-black text-slate-500 mb-1">Tu tablero está vacío</h5>
+                              <p className="text-xs text-slate-400 font-medium">Usa la nota de la izquierda para agregar tus primeras ideas.</p>
+                            </div>
+                          ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              {localIdeas.map((idea) => {
+                                // Definir colores según formato
+                                const noteStyles = 
+                                  idea.tipo === 'Reel'
+                                    ? { bg: 'bg-cyan-50/60 border-cyan-200 text-cyan-900', badge: 'bg-cyan-100 text-cyan-800 border-cyan-300/30' }
+                                    : idea.tipo === 'Historia'
+                                      ? { bg: 'bg-rose-50/60 border-rose-200 text-rose-900', badge: 'bg-rose-100 text-rose-800 border-rose-300/30' }
+                                      : { bg: 'bg-purple-50/60 border-purple-200 text-purple-900', badge: 'bg-purple-100 text-purple-800 border-purple-300/30' };
+
+                                return (
+                                  <div
+                                    key={idea.id}
+                                    className={`p-5 rounded-[2rem] border-2 shadow-sm flex flex-col justify-between min-h-[160px] relative overflow-hidden transition-all hover:shadow-md ${noteStyles.bg}`}
+                                  >
+                                    <div>
+                                      <div className="flex justify-between items-center mb-3">
+                                        <span className={`text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border ${noteStyles.badge}`}>
+                                          📌 {idea.tipo || 'Idea'}
+                                        </span>
+                                        <button
+                                          onClick={() => handleDeleteIdea(idea.id)}
+                                          className="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-lg hover:bg-black/5"
+                                        >
+                                          <Trash2 size={14} />
+                                        </button>
+                                      </div>
+                                      
+                                      <h4 className="text-sm font-black tracking-tight leading-snug mb-1 text-slate-800">
+                                        {idea.titulo}
+                                      </h4>
+                                      <p className="text-[11px] font-semibold text-slate-500 leading-relaxed">
+                                        {idea.descripcion}
+                                      </p>
+                                    </div>
+
+                                    <div className="mt-4 pt-3 border-t border-slate-100/50 flex justify-between items-center text-[8px] font-bold text-slate-400 uppercase tracking-widest">
+                                      <span>Creado: {idea.created_at ? new Date(idea.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : 'Hoy'}</span>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   ) : guionTab === 'presentacion' ? (
                     <div className="grid gap-4">
                       {enCamaraSubTab === 'pinned' ? (
