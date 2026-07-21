@@ -64,7 +64,7 @@ export default function BrandBriefPage() {
           <div className="relative z-10 text-left flex flex-col items-start">
 
             <h1 className="text-2xl md:text-5xl font-black tracking-tighter mb-6 leading-[1.1] text-[#142d53] max-w-2xl">
-              El Brief maestro <span className="text-[#48c1d2]">Epotech Hub</span>
+              El Brief maestro <br /> <span className="text-[#48c1d2]">Epotech Hub</span>
             </h1>
             <p className="text-lg text-slate-500 font-medium italic max-w-2xl">
               "Consulta esta brújula para que tu tono y mensajes sean siempre coherentes."
