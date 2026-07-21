@@ -140,7 +140,7 @@ export default function BrandBriefPage() {
         </header>
 
         {/* 2. PROPUESTA Y DIFERENCIADOR */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div className={CARD_STYLE}>
             <div className="absolute -right-10 -bottom-10 text-[#48c1d2]/5 group-hover:scale-110 transition-transform duration-1000">
                <Target size={200} />
@@ -173,7 +173,7 @@ export default function BrandBriefPage() {
         </div>
 
         {/* 3. AUDIENCIA Y TONO */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div className={CARD_STYLE}>
             <div className="absolute top-0 right-0 p-10 opacity-20">
                <div className="grid grid-cols-5 gap-2">
@@ -217,7 +217,7 @@ export default function BrandBriefPage() {
               <div className="h-px flex-1 bg-slate-200"></div>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div className={CARD_STYLE}>
                  <div className="absolute top-0 right-0 p-8 opacity-[0.03]">
                     <Droplets size={100} className="text-[#48c1d2]" />
